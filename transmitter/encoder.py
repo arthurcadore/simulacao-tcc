@@ -51,35 +51,59 @@ class Encoder:
         # Canal I original
         axs[0].step(x, Ie_up, where='post', label=r"Canal I $(X_n)$", color='blue', linewidth=2)
         for i, bit in enumerate(Ie):
-            axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=14)
+            axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[0].set_ylabel(r"$X_n$")
-        axs[0].legend(loc='upper right')
+        leg0 = axs[0].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg0.get_frame().set_facecolor('white')
+        leg0.get_frame().set_edgecolor('black')
+        leg0.get_frame().set_alpha(1.0)
         setup_grid(axs[0])
 
         # NRZ
         axs[1].step(x, Xnrz, where='post', label=r"I codificado $(NRZ)$", color='navy', linewidth=2)
         for i in range(len(Ie)):
             pair = ''.join(str(b) for b in Xnrz[2 * i:2 * i + 2])
-            axs[1].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=14)
+            axs[1].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[1].set_ylabel(r"$X_{NRZ}[n]$")
-        axs[1].legend(loc='upper right')
+        leg1 = axs[1].legend( 
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg1.get_frame().set_facecolor('white')
+        leg1.get_frame().set_edgecolor('black')
+        leg1.get_frame().set_alpha(1.0)
         setup_grid(axs[1])
 
         # Canal Q original
         axs[2].step(x, Qe_up, where='post', label=r"Canal Q $(Y_n)$", color='green', linewidth=2)
         for i, bit in enumerate(Qe):
-            axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=14)
+            axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[2].set_ylabel(r"$Y_n$")
-        axs[2].legend(loc='upper right')
+        leg2 = axs[2].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg2.get_frame().set_facecolor('white')
+        leg2.get_frame().set_edgecolor('black')
+        leg2.get_frame().set_alpha(1.0)
         setup_grid(axs[2])
 
         # Manchester
-        axs[3].step(x, Ym, where='post', label=r"Q codificado $(Manchester)$", color='darkgreen', linewidth=2)
+        axs[3].step(x, Ym, where='post', label=r"Q codificado $(MAN)$", color='darkgreen', linewidth=2)
         for i in range(len(Qe)):
             pair = ''.join(str(b) for b in Ym[2 * i:2 * i + 2])
-            axs[3].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=14)
+            axs[3].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[3].set_ylabel(r"$Y_M[n]$")
-        axs[3].legend(loc='upper right')
+        leg3 = axs[3].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg3.get_frame().set_facecolor('white')
+        leg3.get_frame().set_edgecolor('black')
+        leg3.get_frame().set_alpha(1.0)
         setup_grid(axs[3])
 
         plt.xlabel('Amostras')
