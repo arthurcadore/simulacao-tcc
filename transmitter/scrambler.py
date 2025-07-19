@@ -55,17 +55,23 @@ class Scrambler:
                 ax.text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=12)
             for pos in bit_edges:
                 ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
-            ax.legend(loc='upper right', fontsize=10)
+            leg = ax.legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+            leg.get_frame().set_facecolor('white')
+            leg.get_frame().set_edgecolor('black')
+            leg.get_frame().set_alpha(1.0)
         
         fig, axs = plt.subplots(2, 2, figsize=(12, 6), sharex=True)
 
         # Top: Antes
-        superplot(axs[0, 0], I_before, "I antes", "navy")
-        superplot(axs[0, 1], Q_before, "Q antes", "darkred")
+        superplot(axs[0, 0], I_before, r"$vt^{(0)}$", "navy")
+        superplot(axs[0, 1], Q_before, r"$vt^{(1)}$", "darkred")
 
         # Bottom: Depois
-        superplot(axs[1, 0], I_after, "I após", "navy")
-        superplot(axs[1, 1], Q_after, "Q após", "darkred")
+        superplot(axs[1, 0], I_after, r"$X_n$", "navy")
+        superplot(axs[1, 1], Q_after, r"$Y_n$", "darkred")
 
         axs[1, 0].set_xlabel("Bits")
         axs[1, 1].set_xlabel("Bits")
@@ -74,7 +80,6 @@ class Scrambler:
 
         plt.tight_layout()
         plt.subplots_adjust(top=0.9)
-        plt.suptitle("Sinais I e Q antes e após embaralhamento", fontsize=16)
 
         if save_path:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -130,17 +135,23 @@ class Descrambler:
                 ax.text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=12)
             for pos in bit_edges:
                 ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
-            ax.legend(loc='upper right', fontsize=10)
+            leg = ax.legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+            leg.get_frame().set_facecolor('white')
+            leg.get_frame().set_edgecolor('black')
+            leg.get_frame().set_alpha(1.0)
         
         fig, axs = plt.subplots(2, 2, figsize=(12, 6), sharex=True)
 
         # Top: Antes
-        superplot(axs[0, 0], I_before, "I antes", "navy")
-        superplot(axs[0, 1], Q_before, "Q antes", "darkred")
+        superplot(axs[0, 0], I_before, r"$X_n$", "navy")
+        superplot(axs[0, 1], Q_before, r"$Y'_n$", "darkred")
 
         # Bottom: Depois
-        superplot(axs[1, 0], I_after, "I após", "navy")
-        superplot(axs[1, 1], Q_after, "Q após", "darkred")
+        superplot(axs[1, 0], I_after, r"$vt^{(0)}$", "navy")
+        superplot(axs[1, 1], Q_after, r"$vt^{(1)}$", "darkred")
 
         axs[1, 0].set_xlabel("Bits")
         axs[1, 1].set_xlabel("Bits")
@@ -149,7 +160,6 @@ class Descrambler:
 
         plt.tight_layout()
         plt.subplots_adjust(top=0.9)
-        plt.suptitle("Sinais I e Q antes e após desembaralhamento", fontsize=16)
 
         if save_path:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
