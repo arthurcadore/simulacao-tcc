@@ -12,6 +12,7 @@ jedi==0.19.2
 jupyter_client==8.6.3
 jupyter_core==5.7.2
 kiwisolver==1.4.8
+komm==0.24.0
 matplotlib==3.10.1
 matplotlib-inline==0.1.7
 nest-asyncio==1.6.0
@@ -19,6 +20,7 @@ numpy==2.2.4
 packaging==24.2
 parso==0.8.4
 pexpect==4.9.0
+pillow==11.3.0
 platformdirs==4.3.6
 prompt_toolkit==3.0.50
 psutil==6.1.1
@@ -33,5 +35,8 @@ scipy==1.15.2
 six==1.17.0
 stack-data==0.6.3
 tornado==6.4.2
+tqdm==4.67.1
 traitlets==5.14.3
+typeguard==4.4.4
+typing_extensions==4.14.1
 wcwidth==0.2.13
