@@ -21,19 +21,30 @@ class Scrambler:
 
     def scramble(self, X, Y):
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
-        assert len(X) % 3 == 0, "O comprimento dos vetores deve ser múltiplo de 3"
-
         X_scrambled = []
         Y_scrambled = []
 
         for i in range(0, len(X), 3):
-            # bloco de 3 bits
-            x1, x2, x3 = X[i:i+3]
-            y1, y2, y3 = Y[i:i+3]
+            # bloco de até 3 bits
+            x_blk = X[i:i+3]
+            y_blk = Y[i:i+3]
+            n = len(x_blk)
 
-            # saída embaralhada
-            X_scrambled += [y1, x2, y2]
-            Y_scrambled += [x1, x3, y3]
+            if n == 3:
+                x1, x2, x3 = x_blk
+                y1, y2, y3 = y_blk
+                X_scrambled += [y1, x2, y2]
+                Y_scrambled += [x1, x3, y3]
+            elif n == 2:
+                x1, x2 = x_blk
+                y1, y2 = y_blk
+                X_scrambled += [y1, x2]
+                Y_scrambled += [x1, y2]
+            elif n == 1:
+                x1 = x_blk[0]
+                y1 = y_blk[0]
+                X_scrambled += [y1]
+                Y_scrambled += [x1]
 
         return X_scrambled, Y_scrambled
 
@@ -93,27 +104,37 @@ class Descrambler:
 
     def descramble(self, X_scrambled, Y_scrambled):
         assert len(X_scrambled) == len(Y_scrambled), "Vetores devem ter o mesmo comprimento"
-        assert len(X_scrambled) % 3 == 0, "O comprimento dos vetores deve ser múltiplo de 3"
-
         X_original = []
         Y_original = []
 
         for i in range(0, len(X_scrambled), 3):
-            # Pega blocos de 3
-            x_ = X_scrambled[i:i+3]  # [y1, x2, y2]
-            y_ = Y_scrambled[i:i+3]  # [x1, x3, y3]
+            x_ = X_scrambled[i:i+3]
+            y_ = Y_scrambled[i:i+3]
+            n = len(x_)
 
-            # Reconstrói os valores originais
-            x1 = y_[0]
-            x2 = x_[1]
-            x3 = y_[1]
-
-            y1 = x_[0]
-            y2 = x_[2]
-            y3 = y_[2]
-
-            X_original += [x1, x2, x3]
-            Y_original += [y1, y2, y3]
+            if n == 3:
+                # [y1, x2, y2], [x1, x3, y3]
+                x1 = y_[0]
+                x2 = x_[1]
+                x3 = y_[1]
+                y1 = x_[0]
+                y2 = x_[2]
+                y3 = y_[2]
+                X_original += [x1, x2, x3]
+                Y_original += [y1, y2, y3]
+            elif n == 2:
+                # [y1, x2], [x1, y2]
+                x1 = y_[0]
+                x2 = x_[1]
+                y1 = x_[0]
+                y2 = y_[1]
+                X_original += [x1, x2]
+                Y_original += [y1, y2]
+            elif n == 1:
+                x1 = y_[0]
+                y1 = x_[0]
+                X_original += [x1]
+                Y_original += [y1]
 
         return X_original, Y_original
     
@@ -172,8 +193,8 @@ if __name__ == "__main__":
     scrambler = Scrambler()
     descrambler = Descrambler()
     
-    vt0 = np.random.randint(0, 2, 21)
-    vt1 = np.random.randint(0, 2, 21)
+    vt0 = np.random.randint(0, 2, 30)
+    vt1 = np.random.randint(0, 2, 30)
     print("vt0: ", ''.join(str(b) for b in vt0))
     print("vt1: ", ''.join(str(b) for b in vt1))
 
