@@ -22,18 +22,33 @@ class Encoder:
         self.method = method.lower()
 
     def encode(self):
+        out = np.empty(self.bitstream.size * 2, dtype=int)
+
         if self.method == "nrz":
-            return np.repeat(self.bitstream, 2)
+            for i, bit in enumerate(self.bitstream):
+                if bit == 0:
+                    out[2*i] = 0
+                    out[2*i + 1] = 0
+                elif bit == 1:
+                    out[2*i] = 1
+                    out[2*i + 1] = 1
+
         elif self.method == "manchester":
-            out = np.empty(self.bitstream.size * 2, dtype=int)
-            out[::2] = 1 - self.bitstream
-            out[1::2] = self.bitstream
-            return out
+            for i, bit in enumerate(self.bitstream):
+                if bit == 0:
+                    out[2*i] = 0
+                    out[2*i + 1] = 1
+                elif bit == 1:
+                    out[2*i] = 1
+                    out[2*i + 1] = 0
+
         else:
-            raise ValueError(f"Metodo de codificação não implementado: {self.method}")
+            raise ValueError(f"Método de codificação não implementado: {self.method}")
+
+        return out
 
     @staticmethod
-    def plot_signals(Ie, Qe, Xnrz, Ym, save_path=None):
+    def plot_encode(Ie, Qe, Xnrz, Ym, save_path=None):
         Ie_up = np.repeat(Ie, 2)
         Qe_up = np.repeat(Qe, 2)
         x = np.arange(len(Ie_up))
@@ -116,6 +131,43 @@ class Encoder:
         else:
             plt.show()
 
+class Decoder:
+    def __init__(self, bitstream, method):
+        self.bitstream = np.array(bitstream)
+        self.method = method.lower()
+
+    def decode(self, encoded_stream):
+        if encoded_stream.size % 2 != 0:
+            raise ValueError("Tamanho do vetor codificado inválido. Deve ser múltiplo de 2.")
+
+        n = encoded_stream.size // 2
+        decoded = np.empty(n, dtype=int)
+
+        if self.method == "nrz":
+            for i in range(n):
+                pair = encoded_stream[2*i:2*i + 2]
+                if np.array_equal(pair, [0, 0]):
+                    decoded[i] = 0
+                elif np.array_equal(pair, [1, 1]):
+                    decoded[i] = 1
+                else:
+                    raise ValueError(f"Padrão NRZ inválido no índice {i}: {pair}")
+
+        elif self.method == "manchester":
+            for i in range(n):
+                pair = encoded_stream[2*i:2*i + 2]
+                if np.array_equal(pair, [0, 1]):
+                    decoded[i] = 0
+                elif np.array_equal(pair, [1, 0]):
+                    decoded[i] = 1
+                else:
+                    raise ValueError(f"Padrão Manchester inválido no índice {i}: {pair}")
+
+        else:
+            raise ValueError(f"Método de decodificação não implementado: {self.method}")
+
+        return decoded
+
 
 if __name__ == "__main__":
     Xn = np.random.randint(0, 2, 30)
@@ -123,10 +175,15 @@ if __name__ == "__main__":
     print("Canal I (Xn):", Xn)
     print("Canal Q (Yn):", Yn)
 
-    encoded_I = Encoder(Xn, "NRZ").encode()
-    print("Canal I X(NRZ)[n]:", encoded_I)
-    encoded_Q = Encoder(Yn, "Manchester").encode()
-    print("Canal Q Y(MAN)[n]:", encoded_Q)
+    Xnrz = Encoder(Xn, "NRZ").encode()
+    print("Canal I X(NRZ)[n]:", Xnrz)
+    Yman = Encoder(Yn, "Manchester").encode()
+    print("Canal Q Y(MAN)[n]:", Yman)
 
     output_path = os.path.join("out", "example_nrz_man.pdf")
-    Encoder.plot_signals(Xn, Yn, encoded_I, encoded_Q, save_path=output_path)
+    Encoder.plot_encode(Xn, Yn, Xnrz, Yman, save_path=output_path)
+
+    Xn_prime = Decoder(Xn, "NRZ").decode(Xnrz)
+    print("Canal I X(NRZ)[n] decodificado:", Xn_prime)
+    Yn_prime = Decoder(Yn, "Manchester").decode(Yman)
+    print("Canal Q Y(MAN)[n] decodificado:", Yn_prime)
