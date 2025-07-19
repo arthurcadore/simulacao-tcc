@@ -180,7 +180,7 @@ if __name__ == "__main__":
     print("vt1 = vt1': ", np.array_equal(vt1, vt1_prime))
 
     output_scrambling = os.path.join("out", "example_scrambling.pdf")
-    scrambler.plot_scrambler(vt1, vt0, Xn, Yn, save_path=output_scrambling)
+    scrambler.plot_scrambler(vt0, vt1, Xn, Yn, save_path=output_scrambling)
 
     output_descrambling = os.path.join("out", "example_descrambling.pdf")
     descrambler.plot_descrambler(Xn, Yn, vt0, vt1, save_path=output_descrambling)
