@@ -34,12 +34,11 @@ class Preamble:
         # Get the odd bits of the preamble
         return np.array([int(bit) for bit in self.preamble_bits[1::2]])
 
-    @staticmethod
-    def plot_preamble(SI, SQ, save_path=None):
+    def plot_preamble(self, save_path=None):
 
         # Superamostragem do sinal para o plot
-        SI_up = np.repeat(SI, 2)
-        SQ_up = np.repeat(SQ, 2)
+        SI_up = np.repeat(self.i_channel(), 2)
+        SQ_up = np.repeat(self.q_channel(), 2)
         x = np.arange(len(SI_up))
         bit_edges = np.arange(0, len(SI_up) + 1, 2)
 
@@ -54,7 +53,7 @@ class Preamble:
         
         # Canal I
         axs[0].step(x, SI_up, where='post', label=r"Canal I $(S_I)$", color='navy', linewidth=3)
-        for i, bit in enumerate(SI):
+        for i, bit in enumerate(self.i_channel()):
             axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[0].set_ylabel(r"$S_I$")
         leg0 = axs[0].legend(
@@ -69,7 +68,7 @@ class Preamble:
 
         # Canal Q
         axs[1].step(x, SQ_up, where='post', label=r"Canal Q $(S_Q)$", color='darkred', linewidth=3)
-        for i, bit in enumerate(SQ):
+        for i, bit in enumerate(self.q_channel()):
             axs[1].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[1].set_ylabel(r"$S_Q$")
         leg1 = axs[1].legend(
@@ -107,4 +106,4 @@ if __name__ == "__main__":
     print("Preamble (S_q):", ''.join(str(int(b)) for b in S_q))
 
     output_path = os.path.join("out", "example_preamble.pdf")
-    Preamble.plot_preamble(S_i, S_q, save_path=output_path)
+    preamble.plot_preamble(save_path=output_path)
