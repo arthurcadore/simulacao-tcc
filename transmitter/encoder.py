@@ -49,7 +49,7 @@ class Encoder:
                 ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
         # Canal I original
-        axs[0].step(x, Ie_up, where='post', label=r"Canal I $(X_n)$", color='blue', linewidth=2)
+        axs[0].step(x, Ie_up, where='post', label=r"Canal I $(X_n)$", color='navy', linewidth=3)
         for i, bit in enumerate(Ie):
             axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[0].set_ylabel(r"$X_n$")
@@ -63,7 +63,7 @@ class Encoder:
         setup_grid(axs[0])
 
         # NRZ
-        axs[1].step(x, Xnrz, where='post', label=r"I codificado $(NRZ)$", color='navy', linewidth=2)
+        axs[1].step(x, Xnrz, where='post', label=r"Canal I ($X_{NRZ}[n]$)", color='navy', linewidth=3)
         for i in range(len(Ie)):
             pair = ''.join(str(b) for b in Xnrz[2 * i:2 * i + 2])
             axs[1].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
@@ -78,7 +78,7 @@ class Encoder:
         setup_grid(axs[1])
 
         # Canal Q original
-        axs[2].step(x, Qe_up, where='post', label=r"Canal Q $(Y_n)$", color='green', linewidth=2)
+        axs[2].step(x, Qe_up, where='post', label=r"Canal Q $(Y_n)$", color='darkred', linewidth=3)
         for i, bit in enumerate(Qe):
             axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[2].set_ylabel(r"$Y_n$")
@@ -92,11 +92,11 @@ class Encoder:
         setup_grid(axs[2])
 
         # Manchester
-        axs[3].step(x, Ym, where='post', label=r"Q codificado $(MAN)$", color='darkgreen', linewidth=2)
+        axs[3].step(x, Ym, where='post', label=r"Canal Q ($Y_{MAN}[n]$)", color='darkred', linewidth=3)
         for i in range(len(Qe)):
             pair = ''.join(str(b) for b in Ym[2 * i:2 * i + 2])
             axs[3].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
-        axs[3].set_ylabel(r"$Y_M[n]$")
+        axs[3].set_ylabel(r"$Y_{MAN}[n]$")
         leg3 = axs[3].legend(
                     loc='upper right', frameon=True, edgecolor='black',
                     facecolor='white', fontsize=12, fancybox=True
@@ -106,7 +106,7 @@ class Encoder:
         leg3.get_frame().set_alpha(1.0)
         setup_grid(axs[3])
 
-        plt.xlabel('Amostras')
+        plt.xlabel('Bits')
         plt.tight_layout()
         plt.subplots_adjust(top=0.92)
 
@@ -118,15 +118,15 @@ class Encoder:
 
 
 if __name__ == "__main__":
-    Ie = np.random.randint(0, 2, 20)
-    Qe = np.random.randint(0, 2, 20)
-    print("Canal I (Xn):", Ie)
-    print("Canal Q (Yn):", Qe)
+    Xn = np.random.randint(0, 2, 30)
+    Yn = np.random.randint(0, 2, 30)
+    print("Canal I (Xn):", Xn)
+    print("Canal Q (Yn):", Yn)
 
-    encoded_I = Encoder(Ie, "NRZ").encode()
+    encoded_I = Encoder(Xn, "NRZ").encode()
     print("Canal I X(NRZ)[n]:", encoded_I)
-    encoded_Q = Encoder(Qe, "Manchester").encode()
+    encoded_Q = Encoder(Yn, "Manchester").encode()
     print("Canal Q Y(MAN)[n]:", encoded_Q)
 
     output_path = os.path.join("out", "example_nrz_man.pdf")
-    Encoder.plot_signals(Ie, Qe, encoded_I, encoded_Q, save_path=output_path)
+    Encoder.plot_signals(Xn, Yn, encoded_I, encoded_Q, save_path=output_path)
