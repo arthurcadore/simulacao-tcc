@@ -63,8 +63,8 @@ class Encoder:
             for pos in bit_edges:
                 ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
-        # Canal I original
-        axs[0].step(x, Ie_up, where='post', label=r"Canal I $(X_n)$", color='navy', linewidth=3)
+        # Channel I original
+        axs[0].step(x, Ie_up, where='post', label=r"Channel I $(X_n)$", color='navy', linewidth=3)
         for i, bit in enumerate(Ie):
             axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[0].set_ylabel(r"$X_n$")
@@ -78,7 +78,7 @@ class Encoder:
         setup_grid(axs[0])
 
         # NRZ
-        axs[1].step(x, Xnrz, where='post', label=r"Canal I ($X_{NRZ}[n]$)", color='navy', linewidth=3)
+        axs[1].step(x, Xnrz, where='post', label=r"Channel I ($X_{NRZ}[n]$)", color='navy', linewidth=3)
         for i in range(len(Ie)):
             pair = ''.join(str(b) for b in Xnrz[2 * i:2 * i + 2])
             axs[1].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
@@ -92,8 +92,8 @@ class Encoder:
         leg1.get_frame().set_alpha(1.0)
         setup_grid(axs[1])
 
-        # Canal Q original
-        axs[2].step(x, Qe_up, where='post', label=r"Canal Q $(Y_n)$", color='darkred', linewidth=3)
+        # Channel Q original
+        axs[2].step(x, Qe_up, where='post', label=r"Channel Q $(Y_n)$", color='darkred', linewidth=3)
         for i, bit in enumerate(Qe):
             axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[2].set_ylabel(r"$Y_n$")
@@ -107,7 +107,7 @@ class Encoder:
         setup_grid(axs[2])
 
         # Manchester
-        axs[3].step(x, Ym, where='post', label=r"Canal Q ($Y_{MAN}[n]$)", color='darkred', linewidth=3)
+        axs[3].step(x, Ym, where='post', label=r"Channel Q ($Y_{MAN}[n]$)", color='darkred', linewidth=3)
         for i in range(len(Qe)):
             pair = ''.join(str(b) for b in Ym[2 * i:2 * i + 2])
             axs[3].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
@@ -172,18 +172,21 @@ class Decoder:
 if __name__ == "__main__":
     Xn = np.random.randint(0, 2, 30)
     Yn = np.random.randint(0, 2, 30)
-    print("Canal I (Xn):", Xn)
-    print("Canal Q (Yn):", Yn)
+    print("Channel I (Xn):", ''.join(str(int(b)) for b in Xn))
+    print("Channel Q (Yn):", ''.join(str(int(b)) for b in Yn))
 
     Xnrz = Encoder(Xn, "NRZ").encode()
-    print("Canal I X(NRZ)[n]:", Xnrz)
+    print("Channel I X(NRZ)[n]:", ''.join(str(int(b)) for b in Xnrz))
     Yman = Encoder(Yn, "Manchester").encode()
-    print("Canal Q Y(MAN)[n]:", Yman)
+    print("Channel Q Y(MAN)[n]:", ''.join(str(int(b)) for b in Yman))
 
     output_path = os.path.join("out", "example_nrz_man.pdf")
     Encoder.plot_encode(Xn, Yn, Xnrz, Yman, save_path=output_path)
 
     Xn_prime = Decoder(Xn, "NRZ").decode(Xnrz)
-    print("Canal I X(NRZ)[n] decodificado:", Xn_prime)
+    print("Channel I (X'n):", ''.join(str(int(b)) for b in Xn_prime))
     Yn_prime = Decoder(Yn, "Manchester").decode(Yman)
-    print("Canal Q Y(MAN)[n] decodificado:", Yn_prime)
+    print("Channel Q (Y'n):", ''.join(str(int(b)) for b in Yn_prime))
+
+    print("Xn = Y'n: ", np.array_equal(Xn, Xn_prime))
+    print("Yn = X'n: ", np.array_equal(Yn, Yn_prime))

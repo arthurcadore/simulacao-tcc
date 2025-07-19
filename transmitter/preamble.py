@@ -103,8 +103,8 @@ if __name__ == "__main__":
     S_i = preamble.i_channel()
     S_q = preamble.q_channel()
 
-    print("Preambulo S_i:", S_i)
-    print("Preambulo S_q:", S_q)
+    print("Preamble (S_i):", ''.join(str(int(b)) for b in S_i))
+    print("Preamble (S_q):", ''.join(str(int(b)) for b in S_q))
 
     output_path = os.path.join("out", "example_preamble.pdf")
     Preamble.plot_preamble(S_i, S_q, save_path=output_path)

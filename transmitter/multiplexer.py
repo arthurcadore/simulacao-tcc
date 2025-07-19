@@ -45,7 +45,7 @@ class Multiplexer:
             for pos in bit_edges:
                 ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
-        # --- Canal I ---
+        # --- Channel I ---
         sep_I = len(I1) * 2
         x_I1 = x[:sep_I]
         x_I2 = x[sep_I - 1:]  # Inclui o último ponto anterior
@@ -54,7 +54,7 @@ class Multiplexer:
         y_I2 = SI_up[sep_I - 1:]
 
         axs[0].step(x_I1, y_I1, where='post', color='navy', linewidth=3, label=r'Preambulo $S_I$')
-        axs[0].step(x_I2, y_I2, where='post', color='darkred', linewidth=3, label=r'Canal $X_n$')
+        axs[0].step(x_I2, y_I2, where='post', color='darkred', linewidth=3, label=r'Channel $X_n$')
 
         for i, bit in enumerate(SI):
             axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
@@ -71,7 +71,7 @@ class Multiplexer:
         axs[0].set_yticks([0, 1])
         setup_grid(axs[0])
 
-        # --- Canal Q ---
+        # --- Channel Q ---
         sep_Q = len(Q1) * 2
         x_Q1 = x[:sep_Q]
         x_Q2 = x[sep_Q - 1:]
@@ -80,7 +80,7 @@ class Multiplexer:
         y_Q2 = SQ_up[sep_Q - 1:]
 
         axs[1].step(x_Q1, y_Q1, where='post', color='navy', linewidth=3, label=r'Preambulo $S_Q$')
-        axs[1].step(x_Q2, y_Q2, where='post', color='darkred', linewidth=3, label=r'Canal $Y_n$')
+        axs[1].step(x_Q2, y_Q2, where='post', color='darkred', linewidth=3, label=r'Channel $Y_n$')
 
         for i, bit in enumerate(SQ):
             axs[1].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
@@ -122,18 +122,18 @@ if __name__ == "__main__":
     mux = Multiplexer()
 
     SI = np.random.randint(0, 2, 10)
-    print("Preamble SI:", SI)
+    print("Preamble (S_i):", ''.join(str(int(b)) for b in SI))
     SQ = np.random.randint(0, 2, 10)
-    print("Preamble SQ:", SQ)
+    print("Preamble (S_q):", ''.join(str(int(b)) for b in SQ))
     Xn = np.random.randint(0, 2, 40)
-    print("Canal I (Xn):", Xn)
+    print("Channel I (Xn):", ''.join(str(int(b)) for b in Xn))
     Yn = np.random.randint(0, 2, 40)
-    print("Canal Q (Yn):", Yn)
+    print("Channel Q (Yn):", ''.join(str(int(b)) for b in Yn))
 
     Xn, Yn = mux.concatenate(SI, SQ, Xn, Yn)
 
     output_path = os.path.join("out", "example_multiplexing.pdf")
     mux.plot_concatenation(SI, SQ, Xn, Yn, save_path=output_path)
 
-    print("Canal I (Xn):", Xn)
-    print("Canal Q (Yn):", Yn)
+    print("Channel I (Xn):", ''.join(str(int(b)) for b in Xn))
+    print("Channel Q (Yn):", ''.join(str(int(b)) for b in Yn))
