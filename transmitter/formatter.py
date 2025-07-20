@@ -33,12 +33,23 @@ class Formatter:
 
     @staticmethod
     def rrc_pulse(t, Tb, alpha):
-        num = np.sinc(t / Tb)
-        den = 1 - (2 * alpha * t / Tb) ** 2
-        with np.errstate(divide='ignore', invalid='ignore'):
-            rc = num * np.cos(np.pi * alpha * t / Tb) / den
-            rc[np.isnan(rc)] = 0
-            rc[np.isinf(rc)] = 0
+        t = np.array(t, dtype=float)
+        rc = np.zeros_like(t)
+        for i, ti in enumerate(t):
+            if np.isclose(ti, 0.0):
+                rc[i] = 1.0 + alpha * (4/np.pi - 1)
+            elif alpha != 0 and np.isclose(np.abs(ti), Tb/(4*alpha)):
+                rc[i] = (alpha/np.sqrt(2)) * (
+                    (1 + 2/np.pi) * np.sin(np.pi/(4*alpha)) +
+                    (1 - 2/np.pi) * np.cos(np.pi/(4*alpha))
+                )
+            else:
+                num = np.sin(np.pi * ti * (1 - alpha) / Tb) + \
+                      4 * alpha * (ti / Tb) * np.cos(np.pi * ti * (1 + alpha) / Tb)
+                den = np.pi * ti * (1 - (4 * alpha * ti / Tb) ** 2) / Tb
+                rc[i] = num / den
+        # Normaliza energia para 1
+        rc = rc / np.sqrt(np.sum(rc**2))
         return rc
 
     def format(self, symbols, pulse=None, sps=None):
