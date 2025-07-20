@@ -193,6 +193,63 @@ class Modulator:
         else:
             plt.show()
 
+    @staticmethod
+    def plot_frequency(dI, dQ, s, fs, fc, save_path=None):
+        def mag2db(signal):
+            mag = np.abs(signal)
+            mag /= np.max(mag)
+            return 20 * np.log10(mag + 1e-12)
+
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(s), d=1/fs))
+
+        fft_s = np.fft.fftshift(np.fft.fft(s))
+        fft_dI = np.fft.fftshift(np.fft.fft(dI))
+        fft_dQ = np.fft.fftshift(np.fft.fft(dQ))
+
+        fig = plt.figure(figsize=(16, 10))
+        gs = gridspec.GridSpec(2, 2)
+
+        # Linha 1 - espectro de s(t)
+        ax1 = fig.add_subplot(gs[0, :])
+        ax1.plot(freqs, mag2db(fft_s), color='darkred', label='s(t)')
+        ax1.set_title(r'Domínio da Frequência - $s(t)$')
+        ax1.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax1.set_ylim(-80, 5)
+        ax1.set_ylabel('Magnitude (dB)')
+        ax1.grid(True)
+        ax1.legend()
+
+        # Linha 2 - espectro de dI(t)
+        ax2 = fig.add_subplot(gs[1, 0])
+        ax2.plot(freqs, mag2db(fft_dI), color='navy', label=r'$d_I(t)$')
+        ax2.set_title(r'Domínio da Frequência - $d_I(t)$')
+        ax2.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax2.set_ylim(-80, 5)
+        ax2.set_ylabel('Magnitude (dB)')
+        ax2.set_xlabel('Frequência (Hz)')
+        ax2.grid(True)
+        ax2.legend()
+
+        # Linha 2 - espectro de dQ(t)
+        ax3 = fig.add_subplot(gs[1, 1])
+        ax3.plot(freqs, mag2db(fft_dQ), color='darkgreen', label=r'$d_Q(t)$')
+        ax3.set_title(r'Domínio da Frequência - $d_Q(t)$')
+        ax3.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax3.set_ylim(-80, 5)
+        ax3.set_ylabel('Magnitude (dB)')
+        ax3.set_xlabel('Frequência (Hz)')
+        ax3.grid(True)
+        ax3.legend()
+
+        plt.tight_layout()
+        if save_path:
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            plt.savefig(save_path)
+            plt.close(fig)
+        else:
+            plt.show()
+
+
 if __name__ == "__main__":
 
     fs = 128_000
@@ -226,4 +283,8 @@ if __name__ == "__main__":
 
     output_constellation = os.path.join("out", "example_constellation.pdf")
     Modulator.plot_iq(dI, dQ, save_path=output_constellation)
+
+    output_frequency = os.path.join("out", "example_frequency.pdf")
+    Modulator.plot_frequency(dI, dQ, s, fs=fs, fc=fc, save_path=output_frequency)
+    
     
