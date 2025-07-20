@@ -16,29 +16,25 @@ plt.rc('figure', titlesize=22)
 plt.rc('legend', frameon=True, edgecolor='black', facecolor='white', fancybox=True, fontsize=12)
 
 class Preamble:
-    def __init__(self, preamble_hex):
+    def __init__(self, preamble_hex="2BEEEEBF"):
         self.preamble_hex = preamble_hex
         self.preamble_bits = self.hex_to_bits(self.preamble_hex)
 
     def hex_to_bits(self, hex_string):
-
         # Retorna a string de bits com 32 bits - 2 (30bits)
         return format(int(hex_string, 16), '032b')[2:] 
-
     
-    def i_channel(self):
-        # Get the even bits of the preamble
-        return np.array([int(bit) for bit in self.preamble_bits[::2]])
-    
-    def q_channel(self):
-        # Get the odd bits of the preamble
-        return np.array([int(bit) for bit in self.preamble_bits[1::2]])
+    def generate_preamble(self):
+        Si = np.array([int(bit) for bit in self.preamble_bits[::2]])
+        Sq = np.array([int(bit) for bit in self.preamble_bits[1::2]])
+        return Si, Sq
 
-    def plot_preamble(self, save_path=None):
+    @staticmethod
+    def plot_preamble(Si, Sq, save_path=None):
 
         # Superamostragem do sinal para o plot
-        SI_up = np.repeat(self.i_channel(), 2)
-        SQ_up = np.repeat(self.q_channel(), 2)
+        SI_up = np.repeat(Si, 2)
+        SQ_up = np.repeat(Sq, 2)
         x = np.arange(len(SI_up))
         bit_edges = np.arange(0, len(SI_up) + 1, 2)
 
@@ -53,7 +49,7 @@ class Preamble:
         
         # Canal I
         axs[0].step(x, SI_up, where='post', label=r"Canal I $(S_I)$", color='navy', linewidth=3)
-        for i, bit in enumerate(self.i_channel()):
+        for i, bit in enumerate(Si):
             axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[0].set_ylabel(r"$S_I$")
         leg0 = axs[0].legend(
@@ -68,7 +64,7 @@ class Preamble:
 
         # Canal Q
         axs[1].step(x, SQ_up, where='post', label=r"Canal Q $(S_Q)$", color='darkred', linewidth=3)
-        for i, bit in enumerate(self.q_channel()):
+        for i, bit in enumerate(Sq):
             axs[1].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
         axs[1].set_ylabel(r"$S_Q$")
         leg1 = axs[1].legend(
@@ -99,11 +95,10 @@ if __name__ == "__main__":
     preamble_hex = "2BEEEEBF"
 
     preamble = Preamble(preamble_hex=preamble_hex)
-    S_i = preamble.i_channel()
-    S_q = preamble.q_channel()
+    S_i, S_q = preamble.generate_preamble()
 
     print("Preamble (S_i):", ''.join(str(int(b)) for b in S_i))
     print("Preamble (S_q):", ''.join(str(int(b)) for b in S_q))
 
     output_path = os.path.join("out", "example_preamble.pdf")
-    preamble.plot_preamble(save_path=output_path)
+    Preamble.plot_preamble(S_i, S_q, save_path=output_path)

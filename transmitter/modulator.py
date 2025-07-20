@@ -40,7 +40,7 @@ class Modulator:
         carrier_sin = np.sin(2 * np.pi * self.fc * t)
         
         modulated_signal = i_signal * carrier_cos - q_signal * carrier_sin
-        return modulated_signal
+        return t, modulated_signal
 
     @staticmethod
     def plot_modulation_signals(dI, dQ, s, fs, t_xlim=0.05, save_path=None):
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
     
     modulator = Modulator(fc=fc, fs=fs)
-    s = modulator.modulate(dI, dQ)
+    t, s = modulator.modulate(dI, dQ)
     
     print("s:", ''.join(str(b) for b in s[:5]))
     

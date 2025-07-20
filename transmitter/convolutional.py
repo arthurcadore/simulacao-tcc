@@ -20,7 +20,7 @@ plt.rc('legend', frameon=True, edgecolor='black', facecolor='white', fancybox=Tr
 
 
 class ConvolutionalEncoder: 
-    def __init__(self, G):
+    def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
