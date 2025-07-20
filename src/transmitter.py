@@ -10,12 +10,13 @@ from encoder import Encoder
 
 
 class Transmitter: 
-    def __init__(self, pcdid, numblocks, fc=4000, fs=128_000, Rb=400): 
+    def __init__(self, pcdid, numblocks, fc=4000, fs=128_000, Rb=400, output_print=True): 
         self.pcdid = pcdid
         self.numblocks = numblocks
         self.fc = fc
         self.fs = fs
         self.Rb = Rb
+        self.output_print = output_print
     
     def transmit(self):
         
@@ -23,24 +24,30 @@ class Transmitter:
         datagram = Datagram(self.pcdid, self.numblocks)
         ut = datagram.bits
         print("Datagrama: ", ''.join(str(b) for b in ut))
-        output_path = os.path.join("out", "transmitter_datagram.pdf")
-        datagram.plot_datagram(output_path)
+        
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_datagram.pdf")
+            datagram.plot_datagram(output_path)
 
         # Codificação convolucional
         encoder = ConvolutionalEncoder()
         vt0, vt1 = encoder.encode(ut)
         print("Saída vt0: ", ''.join(str(b) for b in vt0))
         print("Saída vt1: ", ''.join(str(b) for b in vt1))
-        output_path = os.path.join("out", "transmitter_encoder.pdf")
-        ConvolutionalEncoder.plot_encode(ut, vt0, vt1, output_path)
+
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_encoder.pdf")
+            ConvolutionalEncoder.plot_encode(ut, vt0, vt1, output_path)
 
         # Embaralhamento
         scrambler = Scrambler()
         X, Y = scrambler.scramble(vt0, vt1)
         print("Xn embaralhado: ", ''.join(str(b) for b in X))
         print("Yn embaralhado: ", ''.join(str(b) for b in Y))  
-        output_path = os.path.join("out", "transmitter_scrambler.pdf")
-        scrambler.plot_scrambler(vt0, vt1, X, Y, output_path)
+        
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_scrambler.pdf")
+            scrambler.plot_scrambler(vt0, vt1, X, Y, output_path)
 
         # Preambulo
         sI, sQ = Preamble().generate_preamble()
@@ -52,8 +59,10 @@ class Transmitter:
         Xn, Yn = multiplexer.concatenate(sI, sQ, X, Y)
         print("Xn concatenado: ", ''.join(str(b) for b in Xn))
         print("Yn concatenado: ", ''.join(str(b) for b in Yn))
-        output_path = os.path.join("out", "transmitter_multiplexer.pdf")
-        multiplexer.plot_concatenation(sI, sQ, X, Y, output_path)
+
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_multiplexer.pdf")
+            multiplexer.plot_concatenation(sI, sQ, X, Y, output_path)
 
         # Codificação de linha
         Xnrz = Encoder(Xn, "nrz").encode()
@@ -69,28 +78,31 @@ class Transmitter:
 
         print("dI(t):", ''.join(str(b) for b in dI[:5]), "...")
         print("dQ(t):", ''.join(str(b) for b in dQ[:5]), "...")
-        output_path = os.path.join("out", "transmitter_formatter.pdf")
-        formatter.plot_format(dI, dQ, output_path)
+
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_formatter.pdf")
+            formatter.plot_format(dI, dQ, output_path)
 
         # Modulação
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
         print("s(t) :", ''.join(str(b) for b in s[:5]), "...")
-        output_path = os.path.join("out", "transmitter_modulator.pdf")
-        modulator.plot_modulation(dI, dQ, s, self.fs, t_xlim = 0.10, save_path=output_path)
 
-        # Diagrama de olho
-        output_path = os.path.join("out", "transmitter_eye_diagram.pdf")
-        modulator.plot_eye_diagrams(dI, dQ, self.fs, self.Rb, output_path)
+        if self.output_print:
+            output_path = os.path.join("out", "transmitter_modulator.pdf")
+            modulator.plot_modulation(dI, dQ, s, self.fs, t_xlim = 0.10, save_path=output_path)
+        
+            output_path = os.path.join("out", "transmitter_eye_diagram.pdf")
+            modulator.plot_eye_diagrams(dI, dQ, self.fs, self.Rb, output_path)
 
-        output_path = os.path.join("out", "transmitter_constellation.pdf")
-        modulator.plot_iq(dI, dQ, output_path)
+            output_path = os.path.join("out", "transmitter_constellation.pdf")
+            modulator.plot_iq(dI, dQ, output_path)
 
         return t, s
 
 if __name__ == "__main__":
 
-    transmitter = Transmitter(pcdid=1234, numblocks=2)
+    transmitter = Transmitter(pcdid=1234, numblocks=2, output_print=True)
     t, s = transmitter.transmit()
 
     
