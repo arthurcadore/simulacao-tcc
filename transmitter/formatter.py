@@ -124,12 +124,18 @@ class Formatter:
 
 if __name__ == "__main__":
 
+    fs = 128_000
+    fc = 4000
+    Rb = 400
+    alpha = 0.8
+    span = 8
+
     Xnrz = np.random.randint(0, 2, 30)
     Yman = np.random.randint(0, 2, 30)
     print("Xnrz:", ''.join(str(b) for b in Xnrz))
     print("Yman:", ''.join(str(b) for b in Yman))
 
-    formatter = Formatter(alpha=0.8, fs=128_000, Rb=400, span=8)
+    formatter = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span)
     dI = formatter.format(Xnrz)
     dQ = formatter.format(Yman)
     
