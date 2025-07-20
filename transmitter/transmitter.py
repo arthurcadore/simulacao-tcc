@@ -10,11 +10,12 @@ from encoder import Encoder
 
 
 class Transmitter: 
-    def __init__(self, pcdid, numblocks, fc=4000, fs=128_000): 
+    def __init__(self, pcdid, numblocks, fc=4000, fs=128_000, Rb=400): 
         self.pcdid = pcdid
         self.numblocks = numblocks
         self.fc = fc
         self.fs = fs
+        self.Rb = Rb
     
     def transmit(self):
         
@@ -77,6 +78,10 @@ class Transmitter:
         print("s(t) :", ''.join(str(b) for b in s[:5]), "...")
         output_path = os.path.join("out", "transmitter_modulator.pdf")
         modulator.plot_modulation(dI, dQ, s, self.fs, t_xlim = 0.10, save_path=output_path)
+
+        # Diagrama de olho
+        output_path = os.path.join("out", "transmitter_eye_diagram.pdf")
+        modulator.plot_eye_diagrams(dI, dQ, self.fs, self.Rb, output_path)
 
         output_path = os.path.join("out", "transmitter_constellation.pdf")
         modulator.plot_iq(dI, dQ, output_path)
