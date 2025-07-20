@@ -43,7 +43,7 @@ class Modulator:
         return t, modulated_signal
 
     @staticmethod
-    def plot_modulation_signals(dI, dQ, s, fs, t_xlim=0.05, save_path=None):
+    def plot_modulation(dI, dQ, s, fs=128_000, t_xlim=0.05, save_path=None):
         import matplotlib.pyplot as plt
         import matplotlib.gridspec as gridspec
         t = np.arange(len(dI)) / fs
@@ -126,7 +126,7 @@ class Modulator:
             plt.show()
 
     @staticmethod
-    def plot_iq_and_constellation(dI, dQ, save_path=None, amplitude=None):
+    def plot_iq(dI, dQ, save_path=None, amplitude=None):
         # Centralizar sinais para o plot
         dI_c = dI - np.mean(dI)
         dQ_c = dQ - np.mean(dQ)
@@ -219,11 +219,11 @@ if __name__ == "__main__":
     print("s:", ''.join(str(b) for b in s[:5]))
     
     output_path = os.path.join("out", "example_modulator.pdf")
-    Modulator.plot_modulation_signals(dI, dQ, s, fs=fs, save_path=output_path)
+    Modulator.plot_modulation(dI, dQ, s, fs=fs, save_path=output_path)
     
     output_eye = os.path.join("out", "example_eye.pdf")
     Modulator.plot_eye_diagrams(dI, dQ, fs=fs, Rb=Rb, save_path=output_eye)
 
     output_constellation = os.path.join("out", "example_constellation.pdf")
-    Modulator.plot_iq_and_constellation(dI, dQ, save_path=output_constellation)
+    Modulator.plot_iq(dI, dQ, save_path=output_constellation)
     

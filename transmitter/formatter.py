@@ -61,7 +61,7 @@ class Formatter:
         upsampled[::sps] = symbols
         return np.convolve(upsampled, pulse, mode='same')
 
-    def plot_rrc_and_signals(self, d_I, d_Q, save_path=None, t_xlim=0.05):
+    def plot_format(self, d_I, d_Q, save_path=None, t_xlim=0.05):
 
         t_interp = np.arange(len(d_I)) / self.fs
 
@@ -143,5 +143,5 @@ if __name__ == "__main__":
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
     
     output_path = os.path.join("out", "example_formatter.pdf")
-    formatter.plot_rrc_and_signals(dI, dQ, output_path)
+    formatter.plot_format(dI, dQ, output_path)
     

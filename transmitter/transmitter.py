@@ -1,7 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import os
-import scienceplots
 from formatter import Formatter
 from convolutional import ConvolutionalEncoder
 from datagram import Datagram
@@ -11,17 +8,6 @@ from scrambler import Scrambler
 from multiplexer import Multiplexer
 from encoder import Encoder
 
-# Estilo science
-plt.style.use('science')
-plt.rcParams["figure.figsize"] = (16, 9)
-plt.rc('font', size=16)
-plt.rc('axes', titlesize=22)
-plt.rc('axes', labelsize=22)
-plt.rc('xtick', labelsize=16)
-plt.rc('ytick', labelsize=16)
-plt.rc('legend', fontsize=16)
-plt.rc('figure', titlesize=22)
-plt.rc('legend', frameon=True, edgecolor='black', facecolor='white', fancybox=True, fontsize=12)
 
 class Transmitter: 
     def __init__(self, pcdid, numblocks, fc=4000, fs=128_000): 
@@ -32,20 +18,28 @@ class Transmitter:
     
     def transmit(self):
         
-        datagram = Datagram(self.pcdid, self.numblocks).bits
-        print("Datagrama: ", ''.join(str(b) for b in datagram))
+        # Datagrama
+        datagram = Datagram(self.pcdid, self.numblocks)
+        ut = datagram.bits
+        print("Datagrama: ", ''.join(str(b) for b in ut))
+        output_path = os.path.join("out", "transmitter_datagram.pdf")
+        datagram.plot_datagram(output_path)
 
         # Codificação convolucional
         encoder = ConvolutionalEncoder()
-        vt0, vt1 = encoder.encode(datagram)
+        vt0, vt1 = encoder.encode(ut)
         print("Saída vt0: ", ''.join(str(b) for b in vt0))
         print("Saída vt1: ", ''.join(str(b) for b in vt1))
+        output_path = os.path.join("out", "transmitter_encoder.pdf")
+        ConvolutionalEncoder.plot_encode(ut, vt0, vt1, output_path)
 
         # Embaralhamento
         scrambler = Scrambler()
-        Xn, Yn = scrambler.scramble(vt0, vt1)
-        print("Xn embaralhado: ", ''.join(str(b) for b in Xn))
-        print("Yn embaralhado: ", ''.join(str(b) for b in Yn))  
+        X, Y = scrambler.scramble(vt0, vt1)
+        print("Xn embaralhado: ", ''.join(str(b) for b in X))
+        print("Yn embaralhado: ", ''.join(str(b) for b in Y))  
+        output_path = os.path.join("out", "transmitter_scrambler.pdf")
+        scrambler.plot_scrambler(vt0, vt1, X, Y, output_path)
 
         # Preambulo
         sI, sQ = Preamble().generate_preamble()
@@ -54,9 +48,11 @@ class Transmitter:
 
         # Multiplexação
         multiplexer = Multiplexer()
-        Xn, Yn = multiplexer.concatenate(sI, sQ, Xn, Yn)
+        Xn, Yn = multiplexer.concatenate(sI, sQ, X, Y)
         print("Xn concatenado: ", ''.join(str(b) for b in Xn))
         print("Yn concatenado: ", ''.join(str(b) for b in Yn))
+        output_path = os.path.join("out", "transmitter_multiplexer.pdf")
+        multiplexer.plot_concatenation(sI, sQ, X, Y, output_path)
 
         # Codificação de linha
         Xnrz = Encoder(Xn, "nrz").encode()
@@ -72,17 +68,24 @@ class Transmitter:
 
         print("dI(t):", ''.join(str(b) for b in dI[:5]), "...")
         print("dQ(t):", ''.join(str(b) for b in dQ[:5]), "...")
+        output_path = os.path.join("out", "transmitter_formatter.pdf")
+        formatter.plot_format(dI, dQ, output_path)
 
         # Modulação
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
         print("s(t) :", ''.join(str(b) for b in s[:5]), "...")
+        output_path = os.path.join("out", "transmitter_modulator.pdf")
+        modulator.plot_modulation(dI, dQ, s, self.fs, t_xlim = 0.10, save_path=output_path)
+
+        output_path = os.path.join("out", "transmitter_constellation.pdf")
+        modulator.plot_iq(dI, dQ, output_path)
 
         return t, s
 
 if __name__ == "__main__":
 
-    transmitter = Transmitter(pcdid=1234, numblocks=1)
+    transmitter = Transmitter(pcdid=1234, numblocks=2)
     t, s = transmitter.transmit()
 
     

@@ -125,15 +125,15 @@ if __name__ == "__main__":
     print("Preamble (S_i):", ''.join(str(int(b)) for b in SI))
     SQ = np.random.randint(0, 2, 10)
     print("Preamble (S_q):", ''.join(str(int(b)) for b in SQ))
-    Xn = np.random.randint(0, 2, 40)
-    print("Channel I (Xn):", ''.join(str(int(b)) for b in Xn))
-    Yn = np.random.randint(0, 2, 40)
-    print("Channel Q (Yn):", ''.join(str(int(b)) for b in Yn))
+    X = np.random.randint(0, 2, 40)
+    print("Channel I (Xn):", ''.join(str(int(b)) for b in X))
+    Y = np.random.randint(0, 2, 40)
+    print("Channel Q (Yn):", ''.join(str(int(b)) for b in Y))
 
-    Xn, Yn = mux.concatenate(SI, SQ, Xn, Yn)
+    Xn, Yn = mux.concatenate(SI, SQ, X, Y)
 
     output_path = os.path.join("out", "example_multiplexing.pdf")
-    mux.plot_concatenation(SI, SQ, Xn, Yn, save_path=output_path)
+    mux.plot_concatenation(SI, SQ, X, Y, save_path=output_path)
 
     print("Channel I (Xn):", ''.join(str(int(b)) for b in Xn))
     print("Channel Q (Yn):", ''.join(str(int(b)) for b in Yn))
