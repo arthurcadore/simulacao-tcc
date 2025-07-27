@@ -2,7 +2,7 @@ import numpy as np
 from plots import Plotter
 from transmitter import Transmitter
 
-class AddNoise:
+class Noise:
     def __init__(self, snr=10):
         self.snr = snr
     
@@ -15,7 +15,7 @@ class AddNoise:
 
 if __name__ == "__main__":
     snr_db = 15
-    add_noise = AddNoise(snr=snr_db)
+    add_noise = Noise(snr=snr_db)
     plotter = Plotter()
 
     transmitter = Transmitter(pcdid=1234, numblocks=2, output_print=False)
