@@ -97,12 +97,16 @@ class Transmitter:
 
             output_path = os.path.join("out", "transmitter_constellation.pdf")
             modulator.plot_iq(dI, dQ, output_path)
+        
+            output_path = os.path.join("out", "transmitter_frequency.pdf")
+            modulator.plot_frequency(dI, dQ, s, self.fs, self.fc, output_path)
+
 
         return t, s
 
 if __name__ == "__main__":
 
-    transmitter = Transmitter(pcdid=1234, numblocks=2, output_print=True)
+    transmitter = Transmitter(pcdid=1234, numblocks=8, output_print=True)
     t, s = transmitter.transmit()
 
     
