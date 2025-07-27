@@ -22,6 +22,31 @@ def mag2db(signal):
     mag /= np.max(mag)
     return 20 * np.log10(mag + 1e-12)
 
+def superplot(ax, signal, label, color):
+    sig_up = np.repeat(signal, 2)
+    x = np.arange(0, len(signal) * 2) / 2
+    bit_edges = np.arange(0, len(signal) + 1)
+
+    ax.step(x, sig_up, where='post', label=label, color=color, linewidth=2)
+    ax.set_xlim(0, len(signal))
+    ax.set_ylim(-0.2, 1.4)
+    ax.set_yticks([0, 1])
+    ax.grid(False)
+
+    for i, bit in enumerate(signal):
+        ax.text(i + 0.5, 1.15, str(bit), ha='center', va='bottom', fontsize=12)
+    for pos in bit_edges:
+        ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
+
+    leg = ax.legend(
+        loc='upper right', frameon=True, edgecolor='black',
+        facecolor='white', fontsize=12, fancybox=True
+    )
+    leg.get_frame().set_facecolor('white')
+    leg.get_frame().set_edgecolor('black')
+    leg.get_frame().set_alpha(1.0)
+
+
 class Plotter:
     def __init__(self):
         pass
@@ -343,6 +368,29 @@ class Plotter:
         for t in range(num_steps+1):
             for state in states_per_time[t]:
                 ax.plot(state_to_x[state], t, 'o', color='k', markersize=8)
+
+        self._save_or_show(fig, save_path)
+
+    def plot_scrambler(self, s1, s2, s3, s4, s5, s6, label1, label2, label3, label4, label5, label6, save_path=None):
+        
+        fig, axs = plt.subplots(3, 2, figsize=(16, 9), sharex=True)
+
+        superplot(axs[0, 0], s1, label1, "navy")
+        superplot(axs[0, 1], s2, label2, "darkred")
+        superplot(axs[1, 0], s3, label3, "navy")
+        superplot(axs[1, 1], s4, label4, "darkred")
+        superplot(axs[2, 0], s5, label5, "navy")
+        superplot(axs[2, 1], s6, label6, "darkred")
+
+        axs[2, 0].set_xlabel("Bits")
+        axs[2, 1].set_xlabel("Bits")
+        axs[0, 0].set_ylabel("Original")
+        axs[1, 0].set_ylabel("Embaralhado")
+        axs[2, 0].set_ylabel("Desembaralhado")
+        
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.9)
 
         self._save_or_show(fig, save_path)
 
