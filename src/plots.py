@@ -141,9 +141,8 @@ class Plotter:
         else:
             ax.step(x, bits_up, where='post', color='black', linewidth=1.5, label='Bits')
 
-        ax.set_xlabel('Index do Bit')
-        ax.set_ylabel('Valor do Bit')
-        ax.set_title('Sequência de Bits')
+        ax.set_xlabel('Index')
+        ax.set_ylabel('Valor')
         leg = ax.legend(
                     loc='upper right', frameon=True, edgecolor='black',
                     facecolor='white', fontsize=12, fancybox=True
@@ -229,7 +228,7 @@ class Plotter:
 
         self._save_or_show(fig, save_path)
 
-    def plot_encode(self, s1, s2, s3, label1, label2, label3, title1, title2, title3, save_path=None):
+    def plot_conv(self, s1, s2, s3, label1, label2, label3, title1, title2, title3, save_path=None):
 
         s1_up = np.repeat(s1, 2)
         s2_up = np.repeat(s2, 2)

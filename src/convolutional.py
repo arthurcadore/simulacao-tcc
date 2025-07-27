@@ -110,15 +110,15 @@ if __name__ == "__main__":
     print("vt1: ", ''.join(str(b) for b in vt1))
 
     plotter = Plotter()
-    plotter.plot_encode(ut, 
+    plotter.plot_conv(ut, 
                       vt0, 
                       vt1, 
                       "Entrada $u_t$", 
                       "Canal I $v_t^{(0)}$", 
                       "Canal Q $v_t^{(1)}$", 
-                      "Entrada $u_t$", 
-                      "Canal I $v_t^{(0)}$", 
-                      "Canal Q $v_t^{(1)}$", 
+                      "$u_t$", 
+                      "$v_t^{(0)}$", 
+                      "$v_t^{(1)}$", 
                       save_path="../out/example_convolutional.pdf"
     )
     
