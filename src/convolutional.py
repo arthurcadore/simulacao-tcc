@@ -18,6 +18,9 @@ class EncoderConvolutional:
         taps = [i for i, b in enumerate(bin_str) if b == '1']
         return taps
 
+    def calc_free_distance(self):
+        return self.komm.free_distance()
+
     def encode(self, input_bits):
         input_bits = np.array(input_bits, dtype=int)
         vt0 = []
@@ -32,8 +35,6 @@ class EncoderConvolutional:
 
         return np.array(vt0, dtype=int), np.array(vt1, dtype=int)
 
-    def calc_free_distance(self):
-        return self.komm.free_distance()
 
 class DecoderViterbi:
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
@@ -98,8 +99,7 @@ class DecoderViterbi:
 if __name__ == "__main__":
 
     encoder = EncoderConvolutional()
-    distance = encoder.calc_free_distance()
-    print("Distância livre:", distance)
+    print("Distância livre:", encoder.calc_free_distance())
     print("G0:  ", format(encoder.G0, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g0_taps))
     print("G1:  ", format(encoder.G1, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g1_taps))
 
