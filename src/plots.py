@@ -103,6 +103,57 @@ class Plotter:
         leg2.get_frame().set_alpha(1.0)
 
         self._save_or_show(fig, save_path)
+    
+    def plot_bits(self, bits_list, sections=None, colors=None, save_path=None):
+        all_bits = np.concatenate(bits_list)
+        bits_up = np.repeat(all_bits, 2)
+        x = np.arange(len(bits_up))
+
+        fig, ax = plt.subplots(figsize=(16, 4))
+        ax.set_xlim(0, len(bits_up))
+        ax.set_ylim(-0.2, 1.2)
+        ax.grid(False)
+        ax.set_yticks([0, 1])
+        bit_edges = np.arange(0, len(bits_up) + 1, 2)
+        for pos in bit_edges:
+            ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
+
+        if sections:
+            start_bit = 0
+            for i, (sec_name, sec_len) in enumerate(sections):
+                bit_start = start_bit * 2
+                bit_end = (start_bit + sec_len) * 2
+                color = colors[i] if colors else 'black'
+
+                if i > 0:
+                    bit_start -= 1
+
+                ax.step(
+                    x[bit_start:bit_end],
+                    bits_up[bit_start:bit_end],
+                    where='post',
+                    color=color,
+                    linewidth=1.5,
+                    label=sec_name if i == 0 or sec_name not in sections[:i] else None
+                )
+                start_bit += sec_len
+        else:
+            ax.step(x, bits_up, where='post', color='black', linewidth=1.5, label='Bits')
+
+        ax.set_xlabel('Index do Bit')
+        ax.set_ylabel('Valor do Bit')
+        ax.set_title('Sequência de Bits')
+        leg = ax.legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg.get_frame().set_facecolor('white')
+        leg.get_frame().set_edgecolor('black')
+        leg.get_frame().set_alpha(1.0)
+
+        self._save_or_show(fig, save_path)
+
+
 
     def _save_or_show(self, fig, path):
         if path:

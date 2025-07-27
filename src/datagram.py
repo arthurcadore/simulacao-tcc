@@ -1,20 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import json
-import os
-import scienceplots
-
-# Estilo science
-plt.style.use('science')
-plt.rcParams["figure.figsize"] = (16, 9)
-plt.rc('font', size=16)
-plt.rc('axes', titlesize=22)
-plt.rc('axes', labelsize=22)
-plt.rc('xtick', labelsize=16)
-plt.rc('ytick', labelsize=16)
-plt.rc('legend', fontsize=16)
-plt.rc('figure', titlesize=22)
-plt.rc('legend', frameon=True, edgecolor='black', facecolor='white', fancybox=True, fontsize=12)
+from plots import Plotter
 
 class Datagram: 
     def __init__(self, pcdnum, numblocks):
@@ -93,71 +79,6 @@ class Datagram:
             data[bloco_nome] = sensors
 
         return json.dumps(data, indent=2)
-
-    def plot_datagram(self, save_path=None):
-        # Concatenação dos campos
-        all_bits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
-        sections = [len(self.msglength), len(self.pcdid), len(self.blocks), len(self.tail)]
-        section_names = ["Message Length", "PCD ID", "Blocks", "Tail"]
-        section_colors = ["green", "orange", "red", "blue"]
-
-        # Superamostragem para degrau
-        bits_up = np.repeat(all_bits, 2)
-        x = np.arange(len(bits_up))
-        bit_edges = np.arange(0, len(bits_up) + 1, 2)
-
-        fig, ax = plt.subplots(1, 1)
-        ax.set_xlim(0, len(bits_up))
-        ax.set_ylim(-0.2, 1.4)
-        # Grade bit a bit
-        ax.grid(False)
-        for pos in bit_edges:
-            ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
-        start_bit = 0
-        legend_handles = []
-        for i, (sec_len, sec_name, sec_color) in enumerate(zip(sections, section_names, section_colors)):
-            bit_start = start_bit * 2
-            bit_end = (start_bit + sec_len) * 2
-
-            # Inclui o último ponto da seção anterior para manter continuidade
-            if i > 0:
-                bit_start -= 1
-
-            x_sec = x[bit_start:bit_end]
-            y_sec = bits_up[bit_start:bit_end]
-
-            handle, = ax.step(x_sec, y_sec, where='post', color=sec_color, linewidth=3, label=sec_name)
-            legend_handles.append(handle)
-
-            start_bit += sec_len
-
-        # Adiciona os valores dos bits
-        for i, bit in enumerate(all_bits):
-            ax.text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=14, fontweight='bold')
-
-        ax.set_ylabel("Datagrama")
-        ax.set_yticks([0, 1])
-        ax.set_xlabel('Bits')
-        leg = ax.legend(handles=legend_handles, loc='upper right', frameon=True, edgecolor='black', facecolor='white', fontsize=12, fancybox=True)
-
-        leg.get_frame().set_facecolor('white')
-        leg.get_frame().set_edgecolor('black')
-        leg.get_frame().set_alpha(1.0)
-
-        # Eixo X com marcações de bits
-        num_bits = len(all_bits)
-        step = max(1, num_bits // 16)
-        ax.set_xticks(np.arange(0, num_bits * 2, step * 2))
-        ax.set_xticklabels(np.arange(0, num_bits, step))
-
-        plt.tight_layout()
-        plt.subplots_adjust(top=0.92)
-
-        if save_path:
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            plt.savefig(save_path)
-        else:
-            plt.show()
 
 
 class Assembler:
@@ -245,14 +166,24 @@ class Assembler:
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=123456, numblocks=2)
+
     print("PCD ID Bits:", ''.join(str(b) for b in datagram.pcdid))
     print("Message Length Bits:", ''.join(str(b) for b in datagram.msglength))
     print("Blocks Bits:", ''.join(str(b) for b in datagram.blocks))
     print("Tail Bits:", ''.join(str(b) for b in datagram.tail))
     print(datagram.blocks_json)
 
-    output_path = os.path.join("out", "example_datagram.pdf")
-    datagram.plot_datagram(output_path)
+    plotter = Plotter()
+    plotter.plot_bits([datagram.msglength, 
+                       datagram.pcdid, 
+                       datagram.blocks, 
+                       datagram.tail],
+                       sections=[("Message Length", len(datagram.msglength)),
+                                 ("PCD ID", len(datagram.pcdid)),
+                                 ("Dados de App.", len(datagram.blocks)),
+                                 ("Tail", len(datagram.tail))],
+                       colors=["green", "orange", "red", "blue"],
+                       save_path="../out/example_datagram.pdf")
 
     assambling = Assembler(datagram.bits)
     print("PCD Number (Decoded):", assambling.pcdnum)
