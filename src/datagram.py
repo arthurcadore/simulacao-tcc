@@ -77,8 +77,8 @@ class Datagram:
         data = {
             "msglength": numblocks,
             "pcdid": pcdnum,
-            "tail": tail_length,
-            "data": {}
+            "data": {},
+            "tail": tail_length
         }
 
         index = 0
