@@ -153,7 +153,80 @@ class Plotter:
 
         self._save_or_show(fig, save_path)
 
+    def plot_encode(self, s1, s2, s3, s4, label1, label2, label3, label4, title1, title2, title3, title4, save_path=None):
+        s1_up = np.repeat(s1, 2)
+        s2_up = np.repeat(s2, 2)
+        x = np.arange(len(s1_up))
+        bit_edges = np.arange(0, len(s1_up) + 1, 2)
 
+        fig, axs = plt.subplots(4, 1, sharex=True)
+
+        def setup_grid(ax):
+            ax.set_xlim(0, len(s1_up))
+            ax.set_ylim(-0.2, 1.4)
+            ax.grid(False)
+            for pos in bit_edges:
+                ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
+
+        axs[0].step(x, s1_up, where='post', label=label1, color='navy', linewidth=3)
+        for i, bit in enumerate(s1):
+            axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[0].set_ylabel(title1)
+        leg0 = axs[0].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg0.get_frame().set_facecolor('white')
+        leg0.get_frame().set_edgecolor('black')
+        leg0.get_frame().set_alpha(1.0)
+        setup_grid(axs[0])
+
+        axs[1].step(x, s3, where='post', label=label3, color='darkred', linewidth=3)
+        for i in range(len(s1)):
+            pair = ''.join(str(b) for b in s3[2 * i:2 * i + 2])
+            axs[1].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[1].set_ylabel(title3)
+        leg1 = axs[1].legend( 
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg1.get_frame().set_facecolor('white')
+        leg1.get_frame().set_edgecolor('black')
+        leg1.get_frame().set_alpha(1.0)
+        setup_grid(axs[1])
+
+        axs[2].step(x, s2_up, where='post', label=label2, color='navy', linewidth=3)
+        for i, bit in enumerate(s2):
+            axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[2].set_ylabel(title2)
+        leg2 = axs[2].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg2.get_frame().set_facecolor('white')
+        leg2.get_frame().set_edgecolor('black')
+        leg2.get_frame().set_alpha(1.0)
+        setup_grid(axs[2])
+
+        axs[3].step(x, s4, where='post', label=label4, color='darkred', linewidth=3)
+        for i in range(len(s2)):
+            pair = ''.join(str(b) for b in s4[2 * i:2 * i + 2])
+            axs[3].text(i * 2 + 1, 1.15, pair, ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[3].set_ylabel(title4)
+        leg3 = axs[3].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg3.get_frame().set_facecolor('white')
+        leg3.get_frame().set_edgecolor('black')
+        leg3.get_frame().set_alpha(1.0)
+        setup_grid(axs[3])
+
+        plt.xlabel('Bits')
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.92)
+
+        self._save_or_show(fig, save_path)
 
     def _save_or_show(self, fig, path):
         if path:
