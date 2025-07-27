@@ -1,6 +1,6 @@
 import os
 from formatter import Formatter
-from convolutional import ConvolutionalEncoder
+from convolutional import EncoderConvolutional
 from datagram import Datagram
 from modulator import Modulator
 from preamble import Preamble
@@ -30,14 +30,14 @@ class Transmitter:
             datagram.plot_datagram(output_path)
 
         # Codificação convolucional
-        encoder = ConvolutionalEncoder()
+        encoder = EncoderConvolutional()
         vt0, vt1 = encoder.encode(ut)
         print("Saída vt0: ", ''.join(str(b) for b in vt0))
         print("Saída vt1: ", ''.join(str(b) for b in vt1))
 
         if self.output_print:
             output_path = os.path.join("out", "transmitter_encoder.pdf")
-            ConvolutionalEncoder.plot_encode(ut, vt0, vt1, output_path)
+            EncoderConvolutional.plot_encode(ut, vt0, vt1, output_path)
 
         # Embaralhamento
         scrambler = Scrambler()

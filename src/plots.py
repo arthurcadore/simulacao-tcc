@@ -2,6 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import scienceplots
+from collections import defaultdict
 import __main__
 
 
@@ -225,6 +226,124 @@ class Plotter:
         plt.xlabel('Bits')
         plt.tight_layout()
         plt.subplots_adjust(top=0.92)
+
+        self._save_or_show(fig, save_path)
+
+    def plot_encode(self, s1, s2, s3, label1, label2, label3, title1, title2, title3, save_path=None):
+
+        s1_up = np.repeat(s1, 2)
+        s2_up = np.repeat(s2, 2)
+        s3_up = np.repeat(s3, 2)
+        x = np.arange(len(s2_up))
+        bit_edges = np.arange(0, len(s2_up) + 1, 2)
+
+        # Configuração do gráfico
+        fig, axs = plt.subplots(3, 1, sharex=True)
+        def setup_grid(ax):
+            ax.set_xlim(0, len(s2_up))
+            ax.set_ylim(-0.2, 1.4)
+            ax.grid(False)
+            for pos in bit_edges:
+                ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
+        
+        # Canal I
+        axs[0].step(x, s1_up, where='post', label=label1, color='darkgreen', linewidth=3)
+        for i, bit in enumerate(s1):
+            axs[0].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[0].set_ylabel(title1)
+        leg0 = axs[0].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg0.get_frame().set_facecolor('white')
+        leg0.get_frame().set_edgecolor('black')
+        leg0.get_frame().set_alpha(1.0)
+        axs[0].set_yticks([0, 1])
+        setup_grid(axs[0])
+
+        # Canal I
+        axs[1].step(x, s2_up, where='post', label=label2, color='navy', linewidth=3)
+        for i, bit in enumerate(s2):
+            axs[1].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[1].set_ylabel(title2)
+        leg0 = axs[1].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg0.get_frame().set_facecolor('white')
+        leg0.get_frame().set_edgecolor('black')
+        leg0.get_frame().set_alpha(1.0)
+        axs[1].set_yticks([0, 1])
+        setup_grid(axs[1])
+
+        # Canal Q
+        axs[2].step(x, s3_up, where='post', label=label3, color='darkred', linewidth=3)
+        for i, bit in enumerate(s3):
+            axs[2].text(i * 2 + 1, 1.15, str(bit), ha='center', va='bottom', fontsize=16, fontweight='bold')
+        axs[2].set_ylabel(title3)
+        leg1 = axs[2].legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg1.get_frame().set_facecolor('white')
+        leg1.get_frame().set_edgecolor('black')
+        leg1.get_frame().set_alpha(1.0)
+        axs[2].set_yticks([0, 1])
+        setup_grid(axs[2])
+
+        # Configuração do layout
+        plt.xlabel('Bits')
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.92)
+
+        # Salvar ou mostrar o gráfico
+        self._save_or_show(fig, save_path)
+
+    def plot_trellis(self, trellis, num_steps=5, initial_state=0, save_path=None):
+        states_per_time = defaultdict(set)
+        states_per_time[0].add(initial_state)
+        branches = []
+        for t in range(num_steps):
+            for state in states_per_time[t]:
+                for bit in [0, 1]:
+                    next_state, out = trellis[state][bit]
+                    module = sum(np.abs(out))
+                    branches.append((t, state, bit, next_state, module, out))
+                    states_per_time[t+1].add(next_state)
+
+        all_states = sorted(set(s for states in states_per_time.values() for s in states))
+        state_to_x = {s: i for i, s in enumerate(all_states)}
+        num_states = len(all_states)
+
+        fig = plt.figure(figsize=(0.50*num_states, 1*num_steps))
+        ax = fig.gca()
+        ax.set_xlabel('Estado')
+        ax.set_ylabel('Intervalo de tempo')
+        ax.set_xticks(range(num_states))
+
+        # Formata os labels do eixo x com dois dígitos hexadecimais
+        ax.set_xticklabels([f"{hex(s)[2:].upper():0>2}" for s in all_states])
+        ax.set_yticks(range(num_steps+1))
+        ax.grid(True, axis='x', linestyle='--', alpha=0.3)
+        ax.grid(True, axis='y', linestyle=':', alpha=0.2)
+        ax.invert_yaxis()
+
+        for t, state, bit, next_state, module, out in branches:
+            x = [state_to_x[state], state_to_x[next_state]]
+            y = [t, t+1]
+            color = 'C0' if bit == 0 else 'C1'
+            ax.plot(x, y, color=color, lw=2, alpha=0.8)
+
+        from matplotlib.lines import Line2D
+        legend_elements = [
+            Line2D([0], [0], color='C0', lw=2, label='Bit de entrada 0'),
+            Line2D([0], [0], color='C1', lw=2, label='Bit de entrada 1')
+        ]
+        ax.legend(handles=legend_elements, loc='upper right', frameon=True, fontsize=20)
+
+        for t in range(num_steps+1):
+            for state in states_per_time[t]:
+                ax.plot(state_to_x[state], t, 'o', color='k', markersize=8)
 
         self._save_or_show(fig, save_path)
 
