@@ -26,11 +26,20 @@ if __name__ == "__main__":
     plotter.time_domain(s, 
                         s_noisy, 
                         t, 
-                        "s(t)", 
-                        "s(t) + AWGN", 
+                        r'$s(t)$', 
+                        r'$s(t) + AWGN$', 
                         "Domínio do Tempo - Sem Ruído", 
                         f"Domínio do Tempo - Com Ruído (SNR = {snr_db} dB)", 
                         save_path="../out/receiver_add_noise_time.pdf"
     )
-    plotter.frequency_domain(s, s_noisy, transmitter.fs, transmitter.fc, save_path="../out/receiver_add_noise_frequency.pdf")
+    plotter.frequency_domain(s,
+                             s_noisy,
+                             transmitter.fs,
+                             transmitter.fc,
+                             r'$S(f)$',
+                             r'$S(f) + AWGN$',
+                             "Domínio da Frequência - Sem Ruído",
+                             "Domínio da Frequência - Com Ruído",
+                             save_path="../out/receiver_add_noise_frequency.pdf"
+    )
     

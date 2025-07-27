@@ -57,35 +57,55 @@ class Plotter:
 
         self._save_or_show(fig, save_path)
 
-    def frequency_domain(self, signal, signal_noise, fs, fc, save_path=None):
+    def frequency_domain(self, s1, s2, fs, fc, label1, label2, title1, title2, save_path=None):
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 8))
-        freqs = np.fft.fftshift(np.fft.fftfreq(len(signal), d=1/fs))
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(s1), d=1/fs))
+        
+        if fc > 1000:
+            freqs = freqs / 1000
+            x_label = "Frequência (kHz)"
+            x_limit = (-2.5 * fc / 1000, 2.5 * fc / 1000)
+        else:
+            x_label = "Frequência (Hz)"
+            x_limit = (-2.5 * fc, 2.5 * fc)
 
-        fft_clean = np.fft.fftshift(np.fft.fft(signal))
+        fft_clean = np.fft.fftshift(np.fft.fft(s1))
         fft_clean_db = mag2db(fft_clean)
-        ax1.plot(freqs, fft_clean_db, color='blue')
-        ax1.set_title("Domínio da Frequência - Sem Ruído")
+        ax1.plot(freqs, fft_clean_db, color='blue', label=label1)
+        ax1.set_title(title1)
         ax1.set_ylim(-80, 5)
-        ax1.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax1.set_xlim(*x_limit)
         ax1.set_ylabel("Magnitude (dB)")
         ax1.grid(True)
+        leg1 = ax1.legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg1.get_frame().set_facecolor('white')
+        leg1.get_frame().set_edgecolor('black')
+        leg1.get_frame().set_alpha(1.0)
 
-        fft_noisy = np.fft.fftshift(np.fft.fft(signal_noise))
+        fft_noisy = np.fft.fftshift(np.fft.fft(s2))
         fft_noisy_db = mag2db(fft_noisy)
-        ax2.plot(freqs, fft_noisy_db, color='red')
-        title = "Domínio da Frequência - Com Ruído"
-        ax2.set_title(title)
+        ax2.plot(freqs, fft_noisy_db, color='red', label=label2)
+        ax2.set_title(title2)
         ax2.set_ylim(-80, 5)
-        ax2.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax2.set_xlim(*x_limit)
         ax2.set_ylabel("Magnitude (dB)")
-        ax2.set_xlabel("Frequência (Hz)")
+        ax2.set_xlabel(x_label)
         ax2.grid(True)
+        leg2 = ax2.legend(
+                    loc='upper right', frameon=True, edgecolor='black',
+                    facecolor='white', fontsize=12, fancybox=True
+                )
+        leg2.get_frame().set_facecolor('white')
+        leg2.get_frame().set_edgecolor('black')
+        leg2.get_frame().set_alpha(1.0)
 
         self._save_or_show(fig, save_path)
 
     def _save_or_show(self, fig, path):
         if path:
-            # Caminho baseado no diretório do script principal
             base_dir = os.path.dirname(os.path.abspath(__main__.__file__))
             full_path = os.path.join(base_dir, path)
 
