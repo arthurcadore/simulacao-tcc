@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scienceplots
 from collections import defaultdict
+import matplotlib.gridspec as gridspec
 import __main__
 
 
@@ -391,6 +392,64 @@ class Plotter:
 
         plt.tight_layout()
         plt.subplots_adjust(top=0.9)
+
+        self._save_or_show(fig, save_path)
+
+    def plot_filter(self, h, t_rc, tb, span, fs, s1, s2, label_h, label1, label2, title_h, title1, title2, t_xlim, save_path=None):
+
+        t_interp = np.arange(len(s1)) / fs
+
+        fig = plt.figure(figsize=(16, 9))
+        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+
+        # Pulso RRC
+        ax_rcc = fig.add_subplot(gs[0, :])
+        ax_rcc.plot(t_rc, h, label=label_h, color='red', linewidth=2)
+        ax_rcc.set_title(title_h)
+        ax_rcc.set_ylabel('Amplitude')
+        ax_rcc.grid(True)
+        leg_rcc = ax_rcc.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_rcc.get_frame().set_facecolor('white')
+        leg_rcc.get_frame().set_edgecolor('black')
+        leg_rcc.get_frame().set_alpha(1.0)
+        ax_rcc.set_xlim(-span*tb, span*tb)
+
+        # Sinal I
+        ax_I = fig.add_subplot(gs[1, 0])
+        ax_I.plot(t_interp, s1, label= label1, color='navy', linewidth=2)
+        ax_I.set_title(title1)
+        ax_I.set_xlabel('Tempo (s)')
+        ax_I.set_ylabel('Amplitude')
+        ax_I.set_xlim(0, t_xlim)
+        ax_I.grid(True)
+        leg_I = ax_I.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_I.get_frame().set_facecolor('white')
+        leg_I.get_frame().set_edgecolor('black')
+        leg_I.get_frame().set_alpha(1.0)
+
+        # Sinal Q
+        ax_Q = fig.add_subplot(gs[1, 1])
+        ax_Q.plot(t_interp, s2, label=label2, color='darkgreen', linewidth=2)
+        ax_Q.set_title(title2)
+        ax_Q.set_xlabel('Tempo (s)')
+        ax_Q.set_xlim(0, t_xlim)
+        ax_Q.grid(True)
+        leg_Q = ax_Q.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_Q.get_frame().set_facecolor('white')
+        leg_Q.get_frame().set_edgecolor('black')
+        leg_Q.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.92, hspace=0.4)
 
         self._save_or_show(fig, save_path)
 
