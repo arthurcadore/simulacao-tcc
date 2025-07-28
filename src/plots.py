@@ -371,6 +371,7 @@ class Plotter:
 
         self._save_or_show(fig, save_path)
 
+    # TODO: adicionar indexes pra o plot do embaralhador.
     def plot_scrambler(self, s1, s2, s3, s4, s5, s6, label1, label2, label3, label4, label5, label6, save_path=None):
         
         fig, axs = plt.subplots(3, 2, figsize=(16, 9), sharex=True)
