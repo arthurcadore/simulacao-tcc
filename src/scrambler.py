@@ -5,7 +5,7 @@ Implementação do embaralhador e desembaralhador compatível com o padrão PPT-
 
 Autor: Arthur Cadore
 
-Data: 2025-07-28
+Data: 28-07-2025
 """
 
 import numpy as np

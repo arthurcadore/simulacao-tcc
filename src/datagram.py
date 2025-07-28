@@ -1,9 +1,33 @@
+"""
+Datagram
+
+Implementação do datagrama compatível com o padrão PPT-A3.
+
+Autor: Arthur Cadore
+
+Data: 28-07-2025
+"""
+
 import numpy as np
 import json
 from plots import Plotter
 
 class Datagram: 
+    """
+    Implementa o datagrama compatível com o padrão PPT-A3.
+
+    Referência:
+        AS3-SP-516-274-CNES (3.1.4)
+    """
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
+        """
+        Inicializa o datagrama.
+
+        Args:
+            pcdnum (int): Número PCD, usado no construtor TX.
+            numblocks (int): Número de blocos, usado no construtor TX.
+            streambits (np.ndarray): Stream de bits, usado no construtor RX.
+        """
 
         # construtor TX
         if pcdnum is not None and numblocks is not None:
@@ -29,11 +53,29 @@ class Datagram:
             raise ValueError("Você deve fornecer ou (pcdnum e numblocks) ou streambits")
 
     def generate_blocks(self):
+        """
+        Gera os blocos de dados, contendo valores alatórios falsos, com base no número de blocos.
+
+        Referência:
+            AS3-SP-516-274-CNES (3.1.4.2)
+
+        Returns:
+            np.ndarray: Blocos de dados.
+        """
         length = [24] + [32] * (self.numblocks - 1)
         total_length = sum(length)
         return np.random.randint(0, 2, size=total_length, dtype=np.uint8)
 
     def generate_pcdid(self):
+        """
+        Gera o PCD ID, com base no número da PCD, e adiciona o checksum de 8bits.
+
+        Referência:
+            AS3-SP-516-274-CNES (3.1.4.2)
+
+        Returns:
+            np.ndarray: PCD ID.
+        """
         bin_str = format(self.pcdnum, '020b')
         pcd_bits = np.array([int(b) for b in bin_str], dtype=np.uint8)
 
@@ -42,6 +84,15 @@ class Datagram:
         return np.concatenate((pcd_bits, checksum_bits))
 
     def generate_msglength(self):
+        """
+        Gera o Message Length, com base no número de blocos, e adiciona a paridade de 1bit.
+
+        Referência:
+            AS3-SP-516-274-CNES (3.1.4.2)
+
+        Returns:
+            np.ndarray: Message Length.
+        """
         n = self.numblocks - 1
         bin_str = format(n, '03b')
         bits = np.array([int(b) for b in bin_str], dtype=np.uint8)
@@ -49,11 +100,26 @@ class Datagram:
         return np.append(bits, paridade)
     
     def generate_tail(self):
+        """
+        Gera o Tail (cauda), utilizado para zerar o registrador de bits do codificador convolucional. 
+
+        Referência:
+            AS3-SP-516-274-CNES (3.1.4.3)
+
+        Returns:
+            np.ndarray: Tail.
+        """
         tail_pad = [7, 8, 9]
         tail_length = tail_pad[(self.numblocks - 1) % 3]
         return np.zeros(tail_length, dtype=np.uint8)
 
     def parse_datagram(self):
+        """
+        Monta o datagrama, com base no stream de bits e retorna um json com os dados do datagrama formatados. 
+
+        Returns:
+            str[json]: Datagrama parseado.
+        """
         msglength_bits = self.streambits[:4]
         value_bits = msglength_bits[:3]
         paridade_bit = msglength_bits[3]
