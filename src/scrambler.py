@@ -1,3 +1,8 @@
+# Scrambler
+# Autor: Arthur Cadore
+# Data: 2025-07-28
+# Ref: AS3-SP-516-274-CNES (3.1.4.5)
+
 import numpy as np
 from plots import Plotter
 
@@ -70,15 +75,14 @@ class Scrambler:
 
 
 if __name__ == "__main__":
-    scrambler = Scrambler()
 
     vt0 = np.random.randint(0, 2, 30)
     vt1 = np.random.randint(0, 2, 30)
-
     idx_vt0 = [f"X{i+1}" for i in range(len(vt0))]
     idx_vt1 = [f"Y{i+1}" for i in range(len(vt1))]
 
     # Embaralha o conteúdo dos vetores e os indices
+    scrambler = Scrambler()
     Xn, Yn = scrambler.scramble(vt0, vt1)
     idx_Xn, idx_Yn = scrambler.scramble(idx_vt0, idx_vt1)
 
@@ -94,14 +98,20 @@ if __name__ == "__main__":
     print("idx_Xn: ", idx_Xn[:12])
     print("idx_Yn: ", idx_Yn[:12])
 
+    # Desembaralha o conteúdo dos vetores e os indices
     vt0_prime, vt1_prime = scrambler.descramble(Xn, Yn)
+    idx_vt0_prime, idx_vt1_prime = scrambler.descramble(idx_Xn, idx_Yn)
 
     print("\nVerificação:")
     print("vt0':", ''.join(str(int(b)) for b in vt0_prime))
     print("vt1':", ''.join(str(int(b)) for b in vt1_prime))
+    print("idx_vt0': ", idx_vt0_prime[:12])
+    print("idx_vt1': ", idx_vt1_prime[:12])
     print("vt0 = vt0': ", np.array_equal(vt0, vt0_prime))
     print("vt1 = vt1': ", np.array_equal(vt1, vt1_prime))
-
+    print("idx_vt0 = idx_vt0': ", np.array_equal(idx_vt0, idx_vt0_prime))
+    print("idx_vt1 = idx_vt1': ", np.array_equal(idx_vt1, idx_vt1_prime))
+    
     plotter = Plotter()
     plotter.plot_scrambler(vt0, 
                            vt1, 
