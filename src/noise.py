@@ -14,25 +14,25 @@ class Noise:
         return signal + noise
 
 if __name__ == "__main__":
-    snr_db = 15
-    add_noise = Noise(snr=snr_db)
-    plotter = Plotter()
 
-    transmitter = Transmitter(pcdid=1234, numblocks=2, output_print=False)
+    transmitter = Transmitter(pcdid=1234, numblocks=8, output_print=False)
     t, s = transmitter.transmit()
 
+    snr_db = 15
+    add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
 
-    plotter.time_domain(s, 
+    plotter = Plotter()
+    plotter.plot_time_domain(s, 
                         s_noisy, 
                         t, 
                         r'$s(t)$', 
                         r'$s(t) + AWGN$', 
                         "Domínio do Tempo - Sem Ruído", 
                         f"Domínio do Tempo - Com Ruído (SNR = {snr_db} dB)", 
-                        save_path="../out/receiver_add_noise_time.pdf"
+                        save_path="../out/example_addnoise_time.pdf"
     )
-    plotter.frequency_domain(s,
+    plotter.plot_frequency_domain(s,
                              s_noisy,
                              transmitter.fs,
                              transmitter.fc,
@@ -40,6 +40,6 @@ if __name__ == "__main__":
                              r'$S(f) + AWGN$',
                              "Domínio da Frequência - Sem Ruído",
                              "Domínio da Frequência - Com Ruído",
-                             save_path="../out/receiver_add_noise_frequency.pdf"
+                             save_path="../out/example_addnoise_frequency.pdf"
     )
     
