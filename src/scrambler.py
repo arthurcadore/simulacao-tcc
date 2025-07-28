@@ -1,15 +1,22 @@
-# Scrambler
-# Autor: Arthur Cadore
-# Data: 2025-07-28
-# Ref: AS3-SP-516-274-CNES (3.1.4.5)
+"""
+Scrambler
+
+Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
+
+Autor: Arthur Cadore
+
+Data: 2025-07-28
+"""
 
 import numpy as np
 from plots import Plotter
 
 class Scrambler:
     """
-    Classe que implementa o embaralhador de dados PPT-A3. 
-    Ref: AS3-SP-516-274-CNES (3.1.4.5)
+    Implementa o embaralhador e desembaralhador de dados compatível com o padrão PPT-A3.
+
+    Referência:
+        AS3-SP-516-274-CNES (3.1.4.5)
     """
     def __init__(self):
         pass
@@ -19,11 +26,11 @@ class Scrambler:
         Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados.
 
         Args:
-            X (numpy.ndarray): Vetor X.
-            Y (numpy.ndarray): Vetor Y.
-        
+            X (np.ndarray): Vetor de entrada X.
+            Y (np.ndarray): Vetor de entrada Y.
+
         Returns:
-            tuple: Tupla contendo os vetores X e Y embaralhados.
+            tuple[np.ndarray, np.ndarray]: Vetores X e Y embaralhados.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
@@ -57,14 +64,14 @@ class Scrambler:
 
     def descramble(self, X, Y):
         """
-        Desembaralha os vetores X e Y de mesmo comprimento, retornando os vetores desembaralhados.
+        Restaura os vetores X e Y embaralhados ao seu estado original.
 
         Args:
-            X (numpy.ndarray): Vetor X.
-            Y (numpy.ndarray): Vetor Y.
-        
+            X (np.ndarray): Vetor X embaralhado.
+            Y (np.ndarray): Vetor Y embaralhado.
+
         Returns:
-            tuple: Tupla contendo os vetores X e Y desembaralhados.
+            tuple[np.ndarray, np.ndarray]: Vetores X e Y restaurados.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_original = []

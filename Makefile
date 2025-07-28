@@ -15,3 +15,8 @@ clean:
 	rm -rf .venv
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+
+doc: 
+	@echo "Gerando documentação..."
+	PYTHONPATH=$(PWD)/src .venv/bin/pdoc src -o docs/ 
+		
