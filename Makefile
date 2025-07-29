@@ -18,5 +18,10 @@ clean:
 
 doc: 
 	@echo "Gerando documentação..."
-	PYTHONPATH=$(PWD)/src .venv/bin/pdoc src -o docs/ 
+	mkdocs build
+	mkdocs serve
 		
+freeze: 
+	@echo "Congelando dependências..."
+	.venv/bin/pip freeze > requirements.txt
+	@echo "Dependências congeladas em requirements.txt"
