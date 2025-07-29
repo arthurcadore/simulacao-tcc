@@ -30,7 +30,8 @@ class Scrambler:
             Y (np.ndarray): Vetor de entrada Y.
 
         Returns:
-            tuple[np.ndarray, np.ndarray]: Vetores X e Y embaralhados.
+            X_scrambled (np.ndarray): Vetor X embaralhado.
+            Y_scrambled (np.ndarray): Vetor Y embaralhado.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
@@ -71,7 +72,8 @@ class Scrambler:
             Y (np.ndarray): Vetor Y embaralhado.
 
         Returns:
-            tuple[np.ndarray, np.ndarray]: Vetores X e Y restaurados.
+            X_original (np.ndarray): Vetor X restaurado.
+            Y_original (np.ndarray): Vetor Y restaurado.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_original = []
@@ -106,6 +108,9 @@ class Scrambler:
 
 
 if __name__ == "__main__":
+    """
+    Chamada de exemplo do embaralhador
+    """
 
     vt0 = np.random.randint(0, 2, 30)
     vt1 = np.random.randint(0, 2, 30)

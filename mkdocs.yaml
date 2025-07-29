@@ -3,24 +3,33 @@ site_url: "https://github.com/arthurcadore/eng-telecom-tcc"
 theme:
   name: material
   palette:
-    - scheme: slate
-      primary: green
-      accent: green
+    - scheme: white
+      primary: navy
+      accent: navy
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Início: index.md
-  - Referência da API:
-      - Codificador: api/encoder.md
-      - Modulador: api/modulator.md
+  - Classes:
+      - Datagrama: api/datagram.md
+      - Codificador Convolutional: api/convolutional.md
+      - Embaralhador: api/scrambler.md
+      - Preâmbulo: api/preamble.md
       - Multiplexador: api/multiplexer.md
-      - Preamble: api/preamble.md
+      - Codificador NRZ e MAN: api/encoder.md
+      - Formatador RRC: api/formatter.md
+      - Modulador: api/modulator.md
+  - Transmissão: 
       - Transmissor: api/transmitter.md
-      - Convolutional: api/convolutional.md
-      - Datagram: api/datagram.md
-      - Formatter: api/formatter.md
+  - Recepção:
       - Noise: api/noise.md
-      - Plots: api/plots.md
-      - Scrambler: api/scrambler.md
+  - Plots: api/plots.md
 
 plugins:
   - search
