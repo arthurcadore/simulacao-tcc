@@ -1,9 +1,30 @@
+"""
+Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2,
+utilizado no sistema PTT-A3.
+
+Referência:
+    AS3-SP-516-274-CNES (seção 3.1.4.4)
+
+Inclui:
+- EncoderConvolutional: codificador convolucional com G0 e G1.
+- DecoderViterbi: decodificador Viterbi baseado em treliça.
+
+Autor: Arthur Cadore
+Data: 28-07-2025
+"""
+
 import numpy as np
 import komm 
 from plots import Plotter
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
+        """
+        Inicializa o codificador convolucional com matriz de geradores.
+
+        Args:
+            G (np.ndarray): Matriz de polinômios geradores em formato binário (por padrão: [1111001, 1011011]).
+        """
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
@@ -14,14 +35,39 @@ class EncoderConvolutional:
         self.komm = komm.ConvolutionalCode(G)
 
     def calc_taps(self, poly):
+        """
+        Calcula os índices ("taps") dos bits ativos (1s) no polinômio gerador.
+
+        Args:
+            poly (int): Polinômio em formato inteiro (ex: 0b1111001).
+
+        Returns:
+            list[int]: Lista com os índices dos taps ativos.
+        """
         bin_str = f"{poly:0{self.K}b}"
         taps = [i for i, b in enumerate(bin_str) if b == '1']
         return taps
 
     def calc_free_distance(self):
+        """
+        Calcula a distância livre do código convolucional, definida como a menor
+        distância de Hamming entre quaisquer duas sequências de saída distintas.
+
+        Returns:
+            int: Distância livre do código.
+        """
         return self.komm.free_distance()
 
     def encode(self, input_bits):
+        """
+        Codifica uma sequência binária de entrada utilizando os registradores deslizantes e os taps.
+
+        Args:
+            input_bits (np.ndarray): Vetor de bits (0s e 1s) a serem codificados.
+
+        Returns:
+            tuple[np.ndarray, np.ndarray]: Tupla com os dois canais de saída (vt0 e vt1).
+        """
         input_bits = np.array(input_bits, dtype=int)
         vt0 = []
         vt1 = []
@@ -37,7 +83,19 @@ class EncoderConvolutional:
 
 
 class DecoderViterbi:
+    """
+    Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.
+
+    Referência:
+        AS3-SP-516-274-CNES (3.1.4.4)
+    """
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
+        """
+        Inicializa o decodificador Viterbi.
+
+        Args:
+            G (np.ndarray): Matriz de polinômios geradores.
+        """
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
@@ -46,6 +104,12 @@ class DecoderViterbi:
         self.trellis = self.build_trellis()
 
     def build_trellis(self):
+        """
+        Constroi a trelica do decodificador Viterbi.
+
+        Returns:
+            dict: Trelica do decodificador Viterbi.
+        """
         trellis = {}
         for state in range(self.num_states):
             trellis[state] = {}
@@ -62,6 +126,16 @@ class DecoderViterbi:
         return trellis
 
     def decode(self, vt0, vt1):
+        """
+        Decodifica os bits de entrada.
+
+        Args:
+            vt0 (np.ndarray): Bits de entrada do canal I.
+            vt1 (np.ndarray): Bits de entrada do canal Q.
+
+        Returns:
+            np.ndarray: Bits decodificados.
+        """
         vt0 = np.array(vt0, dtype=int)
         vt1 = np.array(vt1, dtype=int)
         T = len(vt0)

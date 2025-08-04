@@ -22,8 +22,23 @@ class Scrambler:
         pass
 
     def scramble(self, X, Y):
-        """
+        r"""
         Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados.
+
+        $$
+        X_n =
+        \begin{cases}
+        A, & \text{se } n \equiv 0 \pmod{3} \\\\
+        B, & \text{se } n \equiv 1 \pmod{3} \\\\
+        C, & \text{se } n \equiv 2 \pmod{3}
+        \end{cases}, \quad
+        Y_n =
+        \begin{cases}
+        A, & \text{se } n \equiv 0 \pmod{3} \\\\
+        B, & \text{se } n \equiv 1 \pmod{3} \\\\
+        C, & \text{se } n \equiv 2 \pmod{3}
+        \end{cases}
+        $$
 
         Args:
             X (np.ndarray): Vetor de entrada X.
@@ -64,7 +79,7 @@ class Scrambler:
         return X_scrambled, Y_scrambled
 
     def descramble(self, X, Y):
-        """
+        r"""
         Restaura os vetores X e Y embaralhados ao seu estado original.
 
         Args:

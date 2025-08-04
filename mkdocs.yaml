@@ -19,6 +19,7 @@ nav:
   - Classes:
       - Datagrama: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
+      - Decodificador Viterbi: api/viterbi.md
       - Embaralhador: api/scrambler.md
       - Preâmbulo: api/preamble.md
       - Multiplexador: api/multiplexer.md
