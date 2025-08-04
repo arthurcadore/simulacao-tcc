@@ -1,11 +1,37 @@
 site_name: Simulador ARGOS-3
 site_url: "https://github.com/arthurcadore/eng-telecom-tcc"
+
 theme:
   name: material
   palette:
     - scheme: white
       primary: navy
       accent: navy
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.tabs
+    - header.autohide
+    - search.suggest
+    - search.highlight
+    - toc.integrate
+    - content.code.copy
+    - content.tooltips
+    - content.code.annotate
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - content.code.highlight
+    - content.code.fold
+    - repository.icon 
+  icon:
+    repo: fontawesome/brands/github 
+
+repo_name: arthurcadore/eng-telecom-tcc
+repo_url: https://github.com/arthurcadore/eng-telecom-tcc
+edit_uri: edit/main/docs/
 
 markdown_extensions:
   - pymdownx.arithmatex:
@@ -13,6 +39,12 @@ markdown_extensions:
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/arthurcadore/eng-telecom-tcc
+      name: GitHub
 
 nav:
   - Início: index.md
