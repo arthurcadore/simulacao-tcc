@@ -3,10 +3,23 @@ site_url: "https://github.com/arthurcadore/eng-telecom-tcc"
 
 theme:
   name: material
+  logo: assets/icon.svg
   palette:
-    - scheme: white
-      primary: navy
-      accent: navy
+    - scheme: slate
+      primary: darkblue
+      accent: darkblue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: darkblue
+      accent: darkblue
+      scheme: slate
+    - scheme: default
+      primary: darkblue
+      accent: darkblue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
   features:
     - navigation.instant
     - navigation.tracking
@@ -32,6 +45,11 @@ theme:
 repo_name: arthurcadore/eng-telecom-tcc
 repo_url: https://github.com/arthurcadore/eng-telecom-tcc
 edit_uri: edit/main/docs/
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/arthurcadore/eng-telecom-tcc
+      name: GitHub
 
 markdown_extensions:
   - pymdownx.arithmatex:
@@ -39,6 +57,8 @@ markdown_extensions:
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+extra_css:
+  - assets/styles.css
 
 extra:
   social:

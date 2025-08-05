@@ -1,7 +1,7 @@
 # Scrambler
 
-<p align="center">
-  <img src="../assets/embaralhador.png" alt="Diagrama de blocos do embaralhador" width="800">
+<p align="center" class="image-container">
+  <img src="../assets/embaralhador.png" alt="Diagrama de blocos do embaralhador" class="responsive-image">
 </p>
 
 O processo de embaralhamento pode ser expresso como:
