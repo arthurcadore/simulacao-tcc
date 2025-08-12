@@ -1,10 +1,10 @@
 """
-Scrambler
-
 Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
 
-Autor: Arthur Cadore
+Referência:
+    AS3-SP-516-274-CNES (3.1.4.5)
 
+Autor: Arthur Cadore
 Data: 28-07-2025
 """
 
@@ -12,12 +12,6 @@ import numpy as np
 from plots import Plotter
 
 class Scrambler:
-    """
-    Implementa o embaralhador e desembaralhador de dados compatível com o padrão PPT-A3.
-
-    Referência:
-        AS3-SP-516-274-CNES (3.1.4.5)
-    """
     def __init__(self):
         pass
 
@@ -41,12 +35,15 @@ class Scrambler:
         $$
 
         Args:
-            X (np.ndarray): Vetor de entrada X.
-            Y (np.ndarray): Vetor de entrada Y.
+            X (np.ndarray): Vetor de entrada $v_t^{(0)}$.
+            Y (np.ndarray): Vetor de entrada $v_t^{(1)}$.
 
         Returns:
-            X_scrambled (np.ndarray): Vetor X embaralhado.
-            Y_scrambled (np.ndarray): Vetor Y embaralhado.
+            X_scrambled (np.ndarray): Vetor $X_n$ embaralhado.
+            Y_scrambled (np.ndarray): Vetor $Y_n$ embaralhado.
+
+        Raises:
+            AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
@@ -83,12 +80,18 @@ class Scrambler:
         Restaura os vetores X e Y embaralhados ao seu estado original.
 
         Args:
-            X (np.ndarray): Vetor X embaralhado.
-            Y (np.ndarray): Vetor Y embaralhado.
+            X (np.ndarray): Vetor $X'_{n}$ embaralhado.
+            Y (np.ndarray): Vetor $Y'_{n}$ embaralhado.
 
         Returns:
-            X_original (np.ndarray): Vetor X restaurado.
-            Y_original (np.ndarray): Vetor Y restaurado.
+           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
+
+        Returns:
+            X_original (np.ndarray): Vetor $v_t^{(0)}$ restaurado.
+            Y_original (np.ndarray): Vetor $v_t^{(1)}$ restaurado.
+        
+        Raises:
+            AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_original = []
@@ -123,10 +126,6 @@ class Scrambler:
 
 
 if __name__ == "__main__":
-    """
-    Chamada de exemplo do embaralhador
-    """
-
     vt0 = np.random.randint(0, 2, 30)
     vt1 = np.random.randint(0, 2, 30)
     idx_vt0 = [f"X{i+1}" for i in range(len(vt0))]
