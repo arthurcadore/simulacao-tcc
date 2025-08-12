@@ -13,7 +13,7 @@ import json
 from plots import Plotter
 
 class Datagram: 
-    def __init__(self, pcdnum=1234, numblocks=2, streambits=None):
+    def __init__(self, pcdnum=None, numblocks=None, streambits=None):
         r"""
         Inicializa uma instância do datagrama.
         
