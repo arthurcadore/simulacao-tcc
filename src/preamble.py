@@ -14,10 +14,10 @@ class Preamble:
 
     def __init__(self, preamble_hex="2BEEEEBF"):
         r"""
-        Inicializa uma instância de palavra de sincronismo.
+        Inicializa uma instância de palavra de sincronismo. A palavra de sincronismo $S$ é composta por 30 bits, $S = 2BEEEEBF_{16}$, conforme o padrão PPT-A3.
 
-        Nota: 
-            - A palavra de sincronismo $S$ é composta por 30 bits, $S = 2BEEEEBF_{16}$, conforme o padrão PPT-A3.
+        Referência:
+            AS3-SP-516-274-CNES (seção 3.1.4.6)
 
         Args:
             preamble_hex (str, opcional): Hexadecimal da palavra de sincronismo.
