@@ -1,13 +1,8 @@
 """
-Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2,
-utilizado no sistema PTT-A3.
+Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2, utilizado no sistema PTT-A3.
 
 Referência:
     AS3-SP-516-274-CNES (seção 3.1.4.4)
-
-Inclui:
-- EncoderConvolutional: codificador convolucional com G0 e G1.
-- DecoderViterbi: decodificador Viterbi baseado em treliça.
 
 Autor: Arthur Cadore
 Data: 28-07-2025
@@ -19,11 +14,21 @@ from plots import Plotter
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
-        """
+        r"""
         Inicializa o codificador convolucional com matriz de geradores.
 
+        Referência:
+            - AS3-SP-516-274-CNES (seção 3.1.4.4)
+            - CCSDS 131.1-G-2
+
         Args:
-            G (np.ndarray): Matriz de polinômios geradores em formato binário (por padrão: [1111001, 1011011]).
+            G (np.ndarray): Matriz de polinômios geradores em formato binário.
+        
+        Nota: 
+            - O polinômio gerador $G_0$ é representado por `G[0][0]` e $G_1$ por `G[0][1]`.
+            - $G_0$ é definido como $1111001_{2}$ ou $121_{10}$
+            - $G_1$ é definido como $1011011_{2}$ ou $91_{10}$
+
         """
         self.G = G
         self.G0 = int(G[0][0])
@@ -35,38 +40,38 @@ class EncoderConvolutional:
         self.komm = komm.ConvolutionalCode(G)
 
     def calc_taps(self, poly):
-        """
-        Calcula os índices ("taps") dos bits ativos (1s) no polinômio gerador.
+        r"""
+        Calcula os índices ("taps") dos bits ativos (ou seja, bits $'1'$) no polinômio gerador.
 
         Args:
-            poly (int): Polinômio em formato inteiro (ex: 0b1111001).
+            poly (int): Polinômio em formato binário. 
 
         Returns:
-            list[int]: Lista com os índices dos taps ativos.
+            taps (int): Lista com os índices dos taps ativos.
         """
         bin_str = f"{poly:0{self.K}b}"
         taps = [i for i, b in enumerate(bin_str) if b == '1']
         return taps
 
     def calc_free_distance(self):
-        """
+        r"""
         Calcula a distância livre do código convolucional, definida como a menor
         distância de Hamming entre quaisquer duas sequências de saída distintas.
 
         Returns:
-            int: Distância livre do código.
+            dist (int): Distância livre do código.
         """
         return self.komm.free_distance()
 
     def encode(self, input_bits):
-        """
-        Codifica uma sequência binária de entrada utilizando os registradores deslizantes e os taps.
+        r"""
+        Codifica uma sequência binária de entrada $u_t$ utilizando os registradores deslizantes e os taps.
 
         Args:
-            input_bits (np.ndarray): Vetor de bits (0s e 1s) a serem codificados.
+            input_bits (np.ndarray): Vetor de bits $u_t$ de entrada a serem codificados.
 
         Returns:
-            tuple[np.ndarray, np.ndarray]: Tupla com os dois canais de saída (vt0 e vt1).
+            tuple (np.ndarray, np.ndarray): Tupla com os dois canais de saída $v_t^{(0)}$ e $v_t^{(1)}$.
         """
         input_bits = np.array(input_bits, dtype=int)
         vt0 = []
