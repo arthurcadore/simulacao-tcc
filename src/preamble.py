@@ -25,9 +25,11 @@ class Preamble:
         Raises:
             ValueError: Se a palavra de sincronismo não contiver 30 bits.
             ValueError: Se o hexadecimal não for válido ou não puder ser convertido para 30 bits
-        
-        
         """
+
+        if not isinstance(preamble_hex, str) or len(preamble_hex) != 8:
+            raise ValueError("O hexadecimal da palavra de sincronismo deve ser uma string de 8 caracteres.")
+
         self.preamble_hex = preamble_hex
         self.preamble_bits = self.hex_to_bits(self.preamble_hex)
 
@@ -44,7 +46,7 @@ class Preamble:
             hex_string (str): String hexadecimal a ser convertida.
 
         Returns:
-            str: String de bits de 30 bits.
+            bin_str (str): String de bits de 30 bits.
         """
         return format(int(hex_string, 16), '032b')[2:] 
     
@@ -74,14 +76,15 @@ class Preamble:
 if __name__ == "__main__":
 
     preamble = Preamble(preamble_hex="2BEEEEBF")
-    S_i, S_q = preamble.generate_preamble()
+    Si = preamble.preamble_sI
+    Sq = preamble.preamble_sQ
 
-    print("S_i: ", ''.join(str(int(b)) for b in S_i))
-    print("S_q: ", ''.join(str(int(b)) for b in S_q))
+    print("Si: ", ''.join(str(int(b)) for b in Si))
+    print("Sq: ", ''.join(str(int(b)) for b in Sq))
 
     plot = Plotter()
-    plot.plot_preamble(S_i, 
-                       S_q, 
+    plot.plot_preamble(Si, 
+                       Sq, 
                        r"$S_i$", 
                        r"$S_q$", 
                        r"Canal $I$", 

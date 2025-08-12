@@ -11,9 +11,6 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
-      primary: darkblue
-      accent: darkblue
-      scheme: slate
     - scheme: default
       primary: darkblue
       accent: darkblue
@@ -30,14 +27,11 @@ theme:
     - search.highlight
     - toc.integrate
     - content.code.copy
+    # - content.code.annotate
+    - content.code.highlight
     - content.tooltips
-    - content.code.annotate
     - navigation.expand
     - navigation.top
-    - content.code.copy
-    - content.code.annotate
-    - content.code.highlight
-    - content.code.fold
     - repository.icon 
   icon:
     repo: fontawesome/brands/github 
@@ -45,26 +39,12 @@ theme:
 repo_name: arthurcadore/eng-telecom-tcc
 repo_url: https://github.com/arthurcadore/eng-telecom-tcc
 edit_uri: edit/main/docs/
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/arthurcadore/eng-telecom-tcc
-      name: GitHub
-
-markdown_extensions:
-  - pymdownx.arithmatex:
-      generic: true
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
 extra_css:
   - assets/styles.css
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/arthurcadore/eng-telecom-tcc
-      name: GitHub
 
 nav:
   - Início: index.md
@@ -93,3 +73,9 @@ plugins:
           options:
             show_source: true
             show_submodules: true
+
+markdown_extensions:
+  - pymdownx.arithmatex:  
+      generic: true
+  - toc:  
+  - admonition:
