@@ -4,14 +4,9 @@ Implementa um datagrama compatível com o padrão PPT-A3.
 Referência:
     AS3-SP-516-274-CNES (seção 3.1.4)
 
-A classe pode ser instanciada em dois modos:
-- Transmissor (TX): utilizando os parâmetros `pcdnum` e `numblocks`;
-- Receptor (RX): utilizando o parâmetro `streambits`.
-
 Autor: Arthur Cadore
 Data: 28-07-2025
 """
-
 
 import numpy as np
 import json
@@ -19,16 +14,22 @@ from plots import Plotter
 
 class Datagram: 
     def __init__(self, pcdnum=1234, numblocks=2, streambits=None):
-        """
+        r"""
         Inicializa uma instância do datagrama.
         
+        Referência:
+            AS3-SP-516-274-CNES (seção 3.1.4).
+
         Args:
-            pcdnum (int, opcional): Número identificador da PCD. Necessário para o modo TX.
-            numblocks (int, opcional): Quantidade de blocos de dados (1 a 8). Necessário para o modo TX.
-            streambits (np.ndarray, opcional): Sequência de bits do datagrama. Necessário para o modo RX.
+            pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
+            numblocks (int): Quantidade de blocos de dados (1 a 8). Necessário para o modo TX.
+            streambits (np.ndarray): Sequência de bits do datagrama. Necessário para o modo RX.
         
         Raises:
-            ValueError: Se os parâmetros forem inválidos ou inconsistentes com os modos de uso.
+            ValueError: Se o número de blocos não estiver entre 1 e 8.
+            ValueError: Se o número PCD não estiver entre 0 e 1048575 $(2^{20} - 1)$.
+            ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
+
         """
 
         # construtor TX
@@ -55,14 +56,14 @@ class Datagram:
             raise ValueError("Você deve fornecer ou (pcdnum e numblocks) ou streambits")
 
     def generate_blocks(self):
-        """
+        r"""
         Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos.
 
         Referência:
             AS3-SP-516-274-CNES (seção 3.1.4.2)
 
         Returns:
-            np.ndarray: Vetor de bits representando os blocos de dados.
+            blocks (np.ndarray): Vetor de bits representando os blocos de dados.
         """
 
         length = [24] + [32] * (self.numblocks - 1)
@@ -70,14 +71,14 @@ class Datagram:
         return np.random.randint(0, 2, size=total_length, dtype=np.uint8)
 
     def generate_pcdid(self):
-        """
+        r"""
         Gera o campo PCD ID a partir do número PCD, incluindo um checksum de 8 bits.
 
         Referência:
             AS3-SP-516-274-CNES (seção 3.1.4.2)
 
         Returns:
-            np.ndarray: Vetor de bits contendo o PCD ID e o checksum.
+            pcd_id (np.ndarray): Vetor de bits contendo o PCD ID e o checksum.
         """
 
         bin_str = format(self.pcdnum, '020b')
@@ -88,14 +89,14 @@ class Datagram:
         return np.concatenate((pcd_bits, checksum_bits))
 
     def generate_msglength(self):
-        """
+        r"""
         Gera o campo Message Length com base na quantidade de blocos e calcula o bit de paridade.
 
         Referência:
             AS3-SP-516-274-CNES (seção 3.1.4.2)
 
         Returns:
-            np.ndarray: Vetor de 4 bits representando o campo Message Length.
+           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
         """
 
         n = self.numblocks - 1
@@ -105,14 +106,14 @@ class Datagram:
         return np.append(bits, paridade)
     
     def generate_tail(self):
-        """
+        r"""
         Gera o campo Tail (cauda), utilizado para esvaziar o registrador do codificador convolucional.
 
         Referência:
             AS3-SP-516-274-CNES (seção 3.1.4.3)
 
         Returns:
-            np.ndarray: Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).
+            tail (np.ndarray): Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).
         """
 
         tail_pad = [7, 8, 9]
@@ -120,18 +121,39 @@ class Datagram:
         return np.zeros(tail_length, dtype=np.uint8)
 
     def parse_datagram(self):
-        """
+        r"""
         Faz o parsing da sequência de bits do datagrama, extraindo campos e validando integridade.
         
-        Valida:
-        - Bit de paridade no campo Message Length;
-        - Checksum do campo PCD ID.
-        
         Returns:
-            str: Objeto JSON contendo a representação estruturada do datagrama.
+            str (json): Objeto JSON contendo a representação estruturada do datagrama.
         
         Raises:
-            ValueError: Caso haja falha nas validações de paridade ou checksum.
+            ValueError: Caso haja falha nas validações de paridade de Message Length.
+            ValueError: Caso haja falha no checksum do campo PCD ID.
+            ValueError: Se a sequência de bits não for válida ou não puder ser convertida para json.
+
+        Examples:
+
+                >>> datagram = Datagram(streambits=bits)
+                >>> print(datagram.parse_datagram())
+                    {
+                      "msglength": 2,
+                      "pcdid": 1234,
+                      "data": {
+                        "bloco_1": {
+                          "sensor_1": 42,
+                          "sensor_2": 147,
+                          "sensor_3": 75
+                        },
+                        "bloco_2": {
+                          "sensor_1": 138,
+                          "sensor_2": 7,
+                          "sensor_3": 134,
+                          "sensor_4": 182
+                        }
+                      },
+                      "tail": 8
+                    }
         """
 
         msglength_bits = self.streambits[:4]
