@@ -84,7 +84,7 @@ class Formatter:
         rc = rc / np.sqrt(np.sum(rc**2))
         return rc
 
-    def format(self, symbols):
+    def apply_format(self, symbols):
         r"""
         Formata os símbolos de entrada usando o pulso inicializado. O processo de formatação é dado por: 
 
@@ -117,8 +117,8 @@ if __name__ == "__main__":
     Yman = np.random.randint(0, 2, 50)
 
     formatter = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC")
-    dI = formatter.format(Xnrz)
-    dQ = formatter.format(Yman)
+    dI = formatter.apply_format(Xnrz)
+    dQ = formatter.apply_format(Yman)
     
     print("Xnrz:", ''.join(str(b) for b in Xnrz))
     print("Yman:", ''.join(str(b) for b in Yman))

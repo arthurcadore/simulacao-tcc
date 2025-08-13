@@ -33,8 +33,8 @@ if __name__ == "__main__":
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
     formatter = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span)
-    dI = formatter.format(Xnrz)
-    dQ = formatter.format(Yman)
+    dI = formatter.apply_format(Xnrz)
+    dQ = formatter.apply_format(Yman)
     print("dI:", ''.join(str(b) for b in dI[:5]))
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
     

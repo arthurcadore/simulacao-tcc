@@ -139,8 +139,8 @@ class Transmitter:
 
         # Formatação: 
         formatter = Formatter()
-        dI = formatter.format(Xnrz)
-        dQ = formatter.format(Yman)
+        dI = formatter.apply_format(Xnrz)
+        dQ = formatter.apply_format(Yman)
 
         if self.output_print:
             print("dI: ", ''.join(str(b) for b in dI[:20]))
