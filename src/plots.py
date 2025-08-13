@@ -18,11 +18,28 @@ plt.rc('figure', titlesize=22)
 plt.rc('legend', frameon=True, edgecolor='black', facecolor='white', fancybox=True, fontsize=12)
 
 def mag2db(signal):
+    r"""
+    Converte a magnitude do sinal para escala logarítmica (dB), seguindo a expressão: 
+
+    $$
+    Signal_{DB} = 20 \cdot \log_{10}(|signal| + 10^{-12})
+    $$
+
+    Nota: 
+        O termo $10^{-12}$ é adicionado para evitar logaritmo de zero, que é indefinido.
+    """
     mag = np.abs(signal)
     mag /= np.max(mag)
     return 20 * np.log10(mag + 1e-12)
 
 def superplot(ax, signal, label, color):
+    r""" Plota um sinal no eixo especificado, com superamostragem para melhor visualização.
+    Args:
+        ax (matplotlib.axes.Axes): Eixo onde o sinal será plotado.
+        signal (np.ndarray): Sinal a ser plotado.
+        label (str): Rótulo do sinal.
+        color (str): Cor do sinal.
+    """
     sig_up = np.repeat(signal, 2)
     x = np.arange(0, len(signal) * 2) / 2
     bit_edges = np.arange(0, len(signal) + 1)
@@ -49,9 +66,25 @@ def superplot(ax, signal, label, color):
 
 class Plotter:
     def __init__(self):
+        r""" 
+        Inicializa uma instância do plotter de gráficos.        
+        """
         pass
 
     def plot_time_domain(self, s1, s2, t, label1, label2, title1, title2, save_path=None):
+        r"""
+        Plota os sinais no domínio do tempo.
+
+        Args:
+            s1 (np.ndarray): Primeiro sinal a ser plotado.
+            s2 (np.ndarray): Segundo sinal a ser plotado.
+            t (np.ndarray): Vetor de tempo correspondente aos sinais.
+            label1 (str): Rótulo do primeiro sinal.
+            label2 (str): Rótulo do segundo sinal.
+            title1 (str): Título do primeiro gráfico.
+            title2 (str): Título do segundo gráfico.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 8))
         ax1.plot(t, s1, label=label1, color='blue')
         ax1.set_title(title1)
