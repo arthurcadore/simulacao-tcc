@@ -1,13 +1,54 @@
+"""
+Implementação de um modulador IQ para transmissão de sinais digitais.
+
+Autor: Arthur Cadore
+Data: 28-07-2025
+"""
 import numpy as np
 from formatter import Formatter
 from plots import Plotter
 
 class Modulator:
+    r"""
+    Inicializa uma instância do modulador IQ.
+    O modulador IQ é responsável por modular os sinais I e Q em uma portadora de frequência específica.
+
+    Args:
+        fc (float): Frequência da portadora.
+        fs (int): Frequência de amostragem.
+
+    Raises:
+        ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
+    """
     def __init__(self, fc, fs):
+        if fc <= 0:
+            raise ValueError("A frequência da portadora deve ser maior que zero.")
+        
+        if fs <= fc*2:
+            raise ValueError("A frequência de amostragem deve ser maior que o dobro da frequência da portadora.")
+        
         self.fc = fc
         self.fs = fs
 
     def modulate(self, i_signal, q_signal):
+        r"""
+        Modula os sinais I e Q em uma portadora de frequência específica. O processo de modulação é dado pela expressão:
+
+        $$
+            s(t) = I(t) \cdot \cos(2\pi f_c t) - Q(t) \cdot \sin(2\pi f_c t)
+        $$
+
+        Args:
+            i_signal (np.ndarray): Sinal I a ser modulado.
+            q_signal (np.ndarray): Sinal Q a ser modulado.
+
+        Returns:
+            t (np.ndarray): Vetor de tempo $t$ correspondente ao sinal modulado.
+            modulated_signal (np.ndarray): Sinal modulado $s(t)$ resultante.
+
+        Raises:
+            ValueError: Se os sinais I e Q não tiverem o mesmo tamanho.
+        """
         n = len(i_signal)
         if len(q_signal) != n:
             raise ValueError("i_signal e q_signal devem ter o mesmo tamanho.")
