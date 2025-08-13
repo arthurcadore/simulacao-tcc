@@ -7,6 +7,7 @@ Referência:
 Autor: Arthur Cadore
 Data: 28-07-2025
 """
+
 import numpy as np
 from plots import Plotter
 
