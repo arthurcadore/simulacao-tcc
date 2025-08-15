@@ -179,12 +179,12 @@ class Receiver:
 
 
 if __name__ == "__main__":
-    datagramTX = Datagram(pcdnum=1234, numblocks=1)
+    datagramTX = Datagram(pcdnum=1234, numblocks=8)
     bitsTX = datagramTX.streambits  
     transmitter = Transmitter(datagramTX, output_print=True)
     t, s = transmitter.run()
 
-    snr_db = -21
+    snr_db = 0
     add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
     
