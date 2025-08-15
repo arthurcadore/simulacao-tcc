@@ -1082,6 +1082,65 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig_fft_prod, save_path)
 
+    def plot_freq_receiver(self, y_I, y_Q, fs, fc, save_path=None):
+        """
+        Plota os espectros de frequência dos canais I e Q após a demodulação.
+
+        Args:
+            y_I (np.ndarray): Sinal do canal I no domínio do tempo
+            y_Q (np.ndarray): Sinal do canal Q no domínio do tempo
+            fs (float): Frequência de amostragem (Hz)
+            fc (float): Frequência da portadora (Hz)
+            save_path (str, optional): Caminho para salvar a figura. Se None, mostra a figura.
+        """
+        fig = plt.figure(figsize=(16, 8))
+        gs = gridspec.GridSpec(2, 1)
+
+        # FFT do canal I
+        YI_f = np.fft.fftshift(np.fft.fft(y_I))
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(y_I), d=1/fs))
+        YI_db = mag2db(YI_f)  # Normalizado
+
+        ax_i = fig.add_subplot(gs[0])
+        ax_i.plot(freqs, YI_db, color='blue', label=r"$|Y_I(f)|$")
+        ax_i.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_i.set_ylim(-60, 5)
+        ax_i.set_title(r"Espectro do canal I - $y_I(t)$")
+        ax_i.set_xlabel("Frequência (Hz)")
+        ax_i.set_ylabel("Magnitude (dB)")
+        ax_i.grid(True)
+        leg_i = ax_i.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_i.get_frame().set_facecolor('white')
+        leg_i.get_frame().set_edgecolor('black')
+        leg_i.get_frame().set_alpha(1.0)
+
+        # FFT do canal Q
+        YQ_f = np.fft.fftshift(np.fft.fft(y_Q))
+        YQ_db = mag2db(YQ_f)  # Normalizado
+
+        ax_q = fig.add_subplot(gs[1])
+        ax_q.plot(freqs, YQ_db, color='green', label=r"$|Y_Q(f)|$")
+        ax_q.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_q.set_ylim(-60, 5)
+        ax_q.set_title(r"Espectro do canal Q - $y_Q(t)$")
+        ax_q.set_xlabel("Frequência (Hz)")
+        ax_q.set_ylabel("Magnitude (dB)")
+        ax_q.grid(True)
+        leg_q = ax_q.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_q.get_frame().set_facecolor('white')
+        leg_q.get_frame().set_edgecolor('black')
+        leg_q.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        self._save_or_show(fig, save_path)
+
+
     def plot_impulse_response(self, t_imp, impulse_response, label_imp, t_unit="ms", xlim=None, save_path=None):
         """
         Plota apenas a resposta ao impulso de um filtro.
