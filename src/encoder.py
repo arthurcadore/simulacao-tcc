@@ -94,20 +94,17 @@ class Encoder:
                 pair = encoded_stream[2*i:2*i + 2]
                 if np.array_equal(pair, [0, 0]):
                     decoded[i] = 0
-                elif np.array_equal(pair, [1, 1]):
-                    decoded[i] = 1
                 else:
-                    raise ValueError(f"Padrão NRZ inválido no índice {i}: {pair}")
+                    decoded[i] = 1
+
 
         elif self.method == 1:  # Manchester
             for i in range(n):
                 pair = encoded_stream[2*i:2*i + 2]
                 if np.array_equal(pair, [0, 1]):
                     decoded[i] = 0
-                elif np.array_equal(pair, [1, 0]):
-                    decoded[i] = 1
                 else:
-                    raise ValueError(f"Padrão Manchester inválido no índice {i}: {pair}")
+                    decoded[i] = 1
 
         else:
             raise ValueError(f"Método de decodificação não implementado: {self.method}")

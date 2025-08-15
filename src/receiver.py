@@ -160,10 +160,6 @@ class Receiver:
         conv_decoder = DecoderViterbi()
         u = conv_decoder.decode(vt0, vt1)
         return u
-
-    def datagram(self, u):
-        datagram = Datagram(streambits=u)
-        return datagram.parse_datagram()
     
     def run(self, s, t, fc=4000):
         
@@ -178,22 +174,36 @@ class Receiver:
         i, q = self.remove_preamble(i_decoded, q_decoded)
         i, q = self.descrambler(i, q)
         u = self.conv_decoder(i, q)
-
-        datagram = self.datagram(u)
-        print(datagram)
-
+        return u 
     
 
 
 if __name__ == "__main__":
-    datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=True)
+    datagramTX = Datagram(pcdnum=1234, numblocks=1)
+    bitsTX = datagramTX.streambits  
+    transmitter = Transmitter(datagramTX, output_print=True)
     t, s = transmitter.run()
 
-    snr_db = 15
+    snr_db = -21
     add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
     
     receiver = Receiver(output_print=True)
-    receiver.run(s_noisy, t)
-    
+    bitsRX = receiver.run(s_noisy, t)
+
+    try:
+        datagramRX = Datagram(streambits=bitsRX)
+        print(datagramRX.parse_datagram())
+    except Exception as e:
+        print("Bits TX: ", ''.join(str(b) for b in bitsTX))
+        print("Bits RX: ", ''.join(str(b) for b in bitsRX))
+        
+        # verifica quantos bits tem diferentes entre TX e RX
+        # Verifica quantos bits são diferentes entre TX e RX
+        num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
+        
+        # Calcula a Taxa de Erro de Bit (BER)
+        ber = num_errors / len(bitsTX)
+        
+        print(f"Número de erros: {num_errors}")
+        print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
