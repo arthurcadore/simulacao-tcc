@@ -49,6 +49,17 @@ class Receiver:
                 q_signal_filtered,
                 save_path="../out/receiver_lowpass_filter.pdf"
             )
+            self.plotter.plot_lowpass_freq(
+                t_impulse,
+                impulse_response,
+                i_signal,
+                q_signal,
+                i_signal_filtered,
+                q_signal_filtered,
+                self.fs,
+                self.fc,
+                save_path="../out/receiver_lowpass_freq.pdf"
+            )
 
         return i_signal_filtered, q_signal_filtered
 
@@ -61,7 +72,7 @@ class Receiver:
         self.fc = fc
 
         i, q = self.demodulate(s)
-        i_filt, q_filt= self.lowpassfilter(self.fc, i, q, t)
+        i_filt, q_filt= self.lowpassfilter(self.fc*0.6, i, q, t)
         
 
 if __name__ == "__main__":

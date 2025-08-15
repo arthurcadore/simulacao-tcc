@@ -1316,6 +1316,123 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig_filt, save_path)
 
+    def plot_lowpass_freq(self, t_imp, impulse_response,
+                                       y_I_, y_Q_, d_I_rec, d_Q_rec,
+                                       fs, fc, save_path=None):
+        """
+        Plota a resposta ao impulso de um filtro passa-baixa e os espectros
+        antes e depois da filtragem para os canais I e Q.
+
+        Args:
+            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso (em segundos).
+            impulse_response (np.ndarray): Resposta ao impulso do filtro.
+            y_I_ (np.ndarray): Sinal I antes da filtragem.
+            y_Q_ (np.ndarray): Sinal Q antes da filtragem.
+            d_I_rec (np.ndarray): Sinal I após filtragem.
+            d_Q_rec (np.ndarray): Sinal Q após filtragem.
+            fs (float): Frequência de amostragem (Hz).
+            fc (float): Frequência central para o plot (Hz).
+            save_path (str, optional): Caminho para salvar a figura. Se None, exibe na tela.
+        """
+        fig_spec = plt.figure(figsize=(16, 10))
+        gs_spec = gridspec.GridSpec(3, 2, height_ratios=[1, 1, 1])
+
+        # Linha 1 (0, :) - Resposta ao impulso
+        ax_impulse = fig_spec.add_subplot(gs_spec[0, :])
+        ax_impulse.plot(t_imp * 1000, impulse_response, color='red', linewidth=2, label='Resposta ao Impulso - FPB')
+        ax_impulse.set_title("Resposta ao Impulso do Filtro Passa-Baixa")
+        ax_impulse.set_xlabel("Tempo (ms)")
+        ax_impulse.set_xlim(0, 2)
+        ax_impulse.set_ylabel("Amplitude")
+        ax_impulse.grid(True)
+        leg_impulse = ax_impulse.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_impulse.get_frame().set_facecolor('white')
+        leg_impulse.get_frame().set_edgecolor('black')
+        leg_impulse.get_frame().set_alpha(1.0)
+
+        # Frequências
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(y_I_), d=1/fs))
+
+        # FFT antes da filtragem (y'_I)
+        YI_db = mag2db(np.fft.fftshift(np.fft.fft(y_I_)))
+        ax_yi = fig_spec.add_subplot(gs_spec[1, 0])
+        ax_yi.plot(freqs, YI_db, color='blue', label=r"$|X'_I(f)|$")
+        ax_yi.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_yi.set_ylim(-80, 5)
+        ax_yi.set_title(r"Espectro de $x'_I(t)$ (Antes do FPB)")
+        ax_yi.set_xlabel("Frequência (Hz)")
+        ax_yi.set_ylabel("Magnitude (dB)")
+        ax_yi.grid(True)
+        leg_yi = ax_yi.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_yi.get_frame().set_facecolor('white')
+        leg_yi.get_frame().set_edgecolor('black')
+        leg_yi.get_frame().set_alpha(1.0)
+
+        # FFT depois da filtragem (d_I)
+        DI_db = mag2db(np.fft.fftshift(np.fft.fft(d_I_rec)))
+        ax_di = fig_spec.add_subplot(gs_spec[1, 1])
+        ax_di.plot(freqs, DI_db, color='darkblue', label=r"$|d'_I(f)|$")
+        ax_di.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_di.set_ylim(-80, 5)
+        ax_di.set_title(r"Espectro de $d'_I(t)$ (Após FPB)")
+        ax_di.set_xlabel("Frequência (Hz)")
+        ax_di.set_ylabel("Magnitude (dB)")
+        ax_di.grid(True)
+        leg_di = ax_di.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_di.get_frame().set_facecolor('white')
+        leg_di.get_frame().set_edgecolor('black')
+        leg_di.get_frame().set_alpha(1.0)
+
+        # FFT antes da filtragem (y'_Q)
+        YQ_db = mag2db(np.fft.fftshift(np.fft.fft(y_Q_)))
+        ax_yq = fig_spec.add_subplot(gs_spec[2, 0])
+        ax_yq.plot(freqs, YQ_db, color='green', label=r"$|Y'_Q(f)|$")
+        ax_yq.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_yq.set_ylim(-90, 5)
+        ax_yq.set_title(r"Espectro de $y'_Q(t)$ (Antes do FPB)")
+        ax_yq.set_xlabel("Frequência (Hz)")
+        ax_yq.set_ylabel("Magnitude (dB)")
+        ax_yq.grid(True)
+        leg_yq = ax_yq.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_yq.get_frame().set_facecolor('white')
+        leg_yq.get_frame().set_edgecolor('black')
+        leg_yq.get_frame().set_alpha(1.0)
+
+        # FFT depois da filtragem (d_Q)
+        DQ_db = mag2db(np.fft.fftshift(np.fft.fft(d_Q_rec)))
+        ax_dq = fig_spec.add_subplot(gs_spec[2, 1])
+        ax_dq.plot(freqs, DQ_db, color='darkgreen', label=r"$|d_Q(f)|$")
+        ax_dq.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_dq.set_ylim(-90, 5)
+        ax_dq.set_title(r"Espectro de $d'_Q(t)$ (Após FPB)")
+        ax_dq.set_xlabel("Frequência (Hz)")
+        ax_dq.set_ylabel("Magnitude (dB)")
+        ax_dq.grid(True)
+        leg_dq = ax_dq.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_dq.get_frame().set_facecolor('white')
+        leg_dq.get_frame().set_edgecolor('black')
+        leg_dq.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.92, hspace=0.4)
+        self._save_or_show(fig_spec, save_path)
+
+
 
     def _save_or_show(self, fig, path):
         if path:
