@@ -9,6 +9,7 @@ from encoder import Encoder
 from plots import Plotter
 from transmitter import Transmitter
 from noise import Noise
+from lowpassfilter import LPF
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -32,12 +33,35 @@ class Receiver:
                 self.fc,
                 save_path="../out/receiver_freq.pdf"
             )
+        return i_signal, q_signal
+    
+    def lowpassfilter(self, cut_off, i_signal, q_signal, t):
+        lpf = LPF(cut_off=cut_off, order=6, fs=self.fs, type="butter")
+        impulse_response, t_impulse = lpf.calc_impulse_response()
+        i_signal_filtered = lpf.apply_filter(i_signal)
+        q_signal_filtered = lpf.apply_filter(q_signal)
+        if self.output_plot:
+            self.plotter.plot_lowpass_filter(
+                t_impulse,
+                impulse_response,
+                t,
+                i_signal_filtered,
+                q_signal_filtered,
+                save_path="../out/receiver_lowpass_filter.pdf"
+            )
 
-        
+        return i_signal_filtered, q_signal_filtered
+
+    def matchedfilter(self):
+        pass
     
     def run(self, s, t, fc=4000):
+        
+        # TODO: Adicionar detecção de portadora;
         self.fc = fc
-        self.demodulate(s)
+
+        i, q = self.demodulate(s)
+        i_filt, q_filt= self.lowpassfilter(self.fc, i, q, t)
         
 
 if __name__ == "__main__":

@@ -1249,6 +1249,72 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig_filt, save_path)
 
+    def plot_lowpass_filter(self, t_imp, impulse_response, t_interp, d_I_rec, d_Q_rec, t_xlim=0.1, save_path=None):
+        """
+        Plota a resposta ao impulso de um filtro passa-baixa e os sinais I e Q após filtragem.
+
+        Args:
+            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso (em segundos).
+            impulse_response (np.ndarray): Amostras da resposta ao impulso.
+            t_interp (np.ndarray): Vetor de tempo dos sinais filtrados (em segundos).
+            d_I_rec (np.ndarray): Sinal I filtrado.
+            d_Q_rec (np.ndarray): Sinal Q filtrado.
+            t_xlim (float): Limite do eixo X (em segundos) para os sinais filtrados.
+            save_path (str, optional): Caminho para salvar a figura. Se None, exibe na tela.
+        """
+        fig_filt = plt.figure(figsize=(16, 10))
+        gs_filt = gridspec.GridSpec(3, 1)
+
+        # Resposta ao impulso
+        ax_imp = fig_filt.add_subplot(gs_filt[0])
+        ax_imp.plot(t_imp * 1000, impulse_response, color='red', label='Resposta ao Impulso - FPB', linewidth=2)
+        ax_imp.set_title("Resposta ao Impulso do Filtro Passa-Baixa")
+        ax_imp.set_xlim(0, 2)
+        ax_imp.set_xlabel("Tempo (ms)")
+        ax_imp.set_ylabel("Amplitude")
+        ax_imp.grid(True)
+        leg_imp = ax_imp.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_imp.get_frame().set_facecolor('white')
+        leg_imp.get_frame().set_edgecolor('black')
+        leg_imp.get_frame().set_alpha(1.0)
+
+        # I filtrado
+        ax_fi = fig_filt.add_subplot(gs_filt[1])
+        ax_fi.plot(t_interp, d_I_rec, color='blue', label=r"$d_I(t)$ filtrado")
+        ax_fi.set_title("Canal I após filtragem passa-baixa")
+        ax_fi.set_xlim(0, t_xlim)
+        ax_fi.set_xlabel("Tempo (s)")
+        ax_fi.set_ylabel("Amplitude")
+        ax_fi.grid(True)
+        leg_fi = ax_fi.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_fi.get_frame().set_facecolor('white')
+        leg_fi.get_frame().set_edgecolor('black')
+        leg_fi.get_frame().set_alpha(1.0)
+
+        # Q filtrado
+        ax_fq = fig_filt.add_subplot(gs_filt[2])
+        ax_fq.plot(t_interp, d_Q_rec, color='green', label=r"$d_Q(t)$ filtrado")
+        ax_fq.set_title("Canal Q após filtragem passa-baixa")
+        ax_fq.set_xlim(0, t_xlim)
+        ax_fq.set_xlabel("Tempo (s)")
+        ax_fq.set_ylabel("Amplitude")
+        ax_fq.grid(True)
+        leg_fq = ax_fq.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_fq.get_frame().set_facecolor('white')
+        leg_fq.get_frame().set_edgecolor('black')
+        leg_fq.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        self._save_or_show(fig_filt, save_path)
 
 
     def _save_or_show(self, fig, path):
