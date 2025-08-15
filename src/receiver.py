@@ -1,16 +1,15 @@
-from formatter import Formatter
-from convolutional import EncoderConvolutional
 from datagram import Datagram
 from modulator import Modulator
-from preamble import Preamble
 from scrambler import Scrambler
-from multiplexer import Multiplexer
 from encoder import Encoder
 from plots import Plotter
 from transmitter import Transmitter
 from noise import Noise
 from lowpassfilter import LPF
 from matchedfilter import MatchedFilter
+from sampler import Sampler
+import numpy as np
+from convolutional import DecoderViterbi
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -108,6 +107,63 @@ class Receiver:
                 save_path="../out/receiver_matched_filter_freq.pdf"
             )
         return i_signal_filtered, q_signal_filtered
+
+    def sampler(self, i_signal, q_signal, t):
+        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t)
+        i_signal_sampled = sampler.sample(i_signal)
+        q_signal_sampled = sampler.sample(q_signal)
+        t_sampled = sampler.sample(t)
+
+        i_signal_quantized = sampler.quantize(i_signal_sampled)
+        q_signal_quantized = sampler.quantize(q_signal_sampled)
+        
+        if self.output_plot:
+            self.plotter.plot_sampled_signals(t,
+                                 i_signal,
+                                 q_signal,
+                                 t_sampled,
+                                 i_signal_sampled,
+                                 q_signal_sampled,                                 
+                                 "Amostragem",
+                                 "Canal I",
+                                 "Canal Q",
+                                 "Amostragem",
+                                 "Canal I - Amostragem",
+                                 "Canal Q - Amostragem",
+                                 0.1,
+                                 save_path="../out/receiver_sampler.pdf"
+            )
+        return i_signal_quantized, q_signal_quantized
+
+    def decode(self, i_signal_quantized, q_signal_quantized):
+        decoderNRZ = Encoder("nrz")
+        decoderManchester = Encoder("manchester")
+        i_quantized = np.array(i_signal_quantized)
+        q_quantized = np.array(q_signal_quantized)
+        
+        i_signal_decoded = decoderNRZ.decode(i_quantized)
+        q_signal_decoded = decoderManchester.decode(q_quantized)
+        return i_signal_decoded, q_signal_decoded
+
+    def remove_preamble(self, i_signal_decoded, q_signal_decoded):
+        # remove the first 15 bits from each signal
+        i = i_signal_decoded[15:]
+        q = q_signal_decoded[15:]
+        return i, q
+
+    def descrambler(self, X, Y):
+        descrambler = Scrambler()
+        vt0, vt1 = descrambler.descramble(X, Y)
+        return vt0, vt1
+
+    def conv_decoder(self, vt0, vt1):
+        conv_decoder = DecoderViterbi()
+        u = conv_decoder.decode(vt0, vt1)
+        return u
+
+    def datagram(self, u):
+        datagram = Datagram(streambits=u)
+        return datagram.parse_datagram()
     
     def run(self, s, t, fc=4000):
         
@@ -117,7 +173,17 @@ class Receiver:
         i, q = self.demodulate(s)
         i_filt, q_filt= self.lowpassfilter(self.fc*0.6, i, q, t)
         i_filt, q_filt = self.matchedfilter(i_filt, q_filt, t)
-        
+        i_quantized, q_quantized = self.sampler(i_filt, q_filt, t)
+        i_decoded, q_decoded = self.decode(i_quantized, q_quantized)
+        i, q = self.remove_preamble(i_decoded, q_decoded)
+        i, q = self.descrambler(i, q)
+        u = self.conv_decoder(i, q)
+
+        datagram = self.datagram(u)
+        print(datagram)
+
+    
+
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
