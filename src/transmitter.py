@@ -114,8 +114,11 @@ class Transmitter:
 
 
         # Codificação
-        Xnrz = Encoder(Xn, "nrz").encode()
-        Yman = Encoder(Yn, "manchester").encode()
+        encoderNRZ = Encoder("nrz")
+        encoderManchester = Encoder("manchester")
+        
+        Xnrz = encoderNRZ.encode(Xn)
+        Yman = encoderManchester.encode(Yn)
 
         if self.output_print:
             print("Xnrz: ", ''.join(str(b) for b in Xnrz))
