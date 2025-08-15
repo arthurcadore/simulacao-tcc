@@ -1082,6 +1082,112 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig_fft_prod, save_path)
 
+    def plot_impulse_response(self, t_imp, impulse_response, label_imp, t_unit="ms", save_path=None):
+        """
+        Plota apenas a resposta ao impulso de um filtro.
+
+        Args:
+            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso.
+            impulse_response (np.ndarray): Amostras da resposta ao impulso.
+            label_imp (str): Rótulo da resposta ao impulso.
+            title_imp (str): Título do gráfico.
+            t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms".
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
+        fig = plt.figure(figsize=(12, 6))
+        ax = fig.add_subplot(1, 1, 1)
+
+        if t_unit == "ms":
+            t_plot = t_imp * 1000
+            x_label = "Tempo (ms)"
+        else:
+            t_plot = t_imp
+            x_label = "Tempo (s)"
+
+        ax.plot(t_plot, impulse_response, color='red', label=label_imp, linewidth=2)
+        ax.set_xlabel(x_label)
+        ax.set_ylabel("Amplitude")
+        ax.grid(True)
+
+        leg = ax.legend(loc='upper right', frameon=True, edgecolor='black',
+                        facecolor='white', fontsize=12, fancybox=True)
+        leg.get_frame().set_facecolor('white')
+        leg.get_frame().set_edgecolor('black')
+        leg.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        self._save_or_show(fig, save_path)
+
+    def plot_filtered_signals(self, t_imp, impulse_response, t_interp, d_I_rec, d_Q_rec,
+                              label_imp, label_I, label_Q,
+                              title_imp, title_I, title_Q, t_xlim, save_path=None):
+        """
+        Plota a resposta ao impulso do filtro passa-baixa e os sinais I e Q filtrados.
+
+        Args:
+            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso.
+            impulse_response (np.ndarray): Amostras da resposta ao impulso.
+            t_interp (np.ndarray): Vetor de tempo dos sinais filtrados.
+            d_I_rec (np.ndarray): Sinal I filtrado.
+            d_Q_rec (np.ndarray): Sinal Q filtrado.
+            label_imp (str): Rótulo da resposta ao impulso.
+            label_I (str): Rótulo do canal I filtrado.
+            label_Q (str): Rótulo do canal Q filtrado.
+            title_imp (str): Título do gráfico da resposta ao impulso.
+            title_I (str): Título do gráfico do canal I.
+            title_Q (str): Título do gráfico do canal Q.
+            t_xlim (float): Limite do eixo X para os canais I e Q.
+            save_path (str, optional): Caminho para salvar o gráfico.
+        """
+
+        fig_filt = plt.figure(figsize=(16, 10))
+        gs_filt = gridspec.GridSpec(3, 1)
+
+        # Resposta ao impulso
+        ax_imp = fig_filt.add_subplot(gs_filt[0])
+        ax_imp.plot(t_imp * 1000, impulse_response, color='red', label=label_imp, linewidth=2)
+        ax_imp.set_title(title_imp)
+        ax_imp.set_xlabel("Tempo (ms)")
+        ax_imp.set_ylabel("Amplitude")
+        ax_imp.grid(True)
+        leg_imp = ax_imp.legend(loc='upper right', frameon=True, edgecolor='black',
+                                facecolor='white', fontsize=12, fancybox=True)
+        leg_imp.get_frame().set_facecolor('white')
+        leg_imp.get_frame().set_edgecolor('black')
+        leg_imp.get_frame().set_alpha(1.0)
+
+        # I filtrado
+        ax_fi = fig_filt.add_subplot(gs_filt[1])
+        ax_fi.plot(t_interp, d_I_rec, color='blue', label=label_I)
+        ax_fi.set_title(title_I)
+        ax_fi.set_xlim(0, t_xlim)
+        ax_fi.set_xlabel("Tempo (s)")
+        ax_fi.set_ylabel("Amplitude")
+        ax_fi.grid(True)
+        leg_fi = ax_fi.legend(loc='upper right', frameon=True, edgecolor='black',
+                              facecolor='white', fontsize=12, fancybox=True)
+        leg_fi.get_frame().set_facecolor('white')
+        leg_fi.get_frame().set_edgecolor('black')
+        leg_fi.get_frame().set_alpha(1.0)
+
+        # Q filtrado
+        ax_fq = fig_filt.add_subplot(gs_filt[2])
+        ax_fq.plot(t_interp, d_Q_rec, color='green', label=label_Q)
+        ax_fq.set_title(title_Q)
+        ax_fq.set_xlim(0, t_xlim)
+        ax_fq.set_xlabel("Tempo (s)")
+        ax_fq.set_ylabel("Amplitude")
+        ax_fq.grid(True)
+        leg_fq = ax_fq.legend(loc='upper right', frameon=True, edgecolor='black',
+                              facecolor='white', fontsize=12, fancybox=True)
+        leg_fq.get_frame().set_facecolor('white')
+        leg_fq.get_frame().set_edgecolor('black')
+        leg_fq.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        self._save_or_show(fig_filt, save_path)
+
+
 
     def _save_or_show(self, fig, path):
         if path:
