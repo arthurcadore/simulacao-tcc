@@ -1,3 +1,10 @@
+"""
+Implementa uma classe de filtro passa baixa para remover a componente de frequência alta do sinal recebido.
+
+Autor: Arthur Cadore
+Data: 28-07-2025
+"""
+
 import numpy as np
 from plots import Plotter
 from scipy.signal import butter, filtfilt, lfilter

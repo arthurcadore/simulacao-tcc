@@ -1082,7 +1082,7 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig_fft_prod, save_path)
 
-    def plot_impulse_response(self, t_imp, impulse_response, label_imp, t_unit="ms", save_path=None):
+    def plot_impulse_response(self, t_imp, impulse_response, label_imp, t_unit="ms", xlim=None, save_path=None):
         """
         Plota apenas a resposta ao impulso de um filtro.
 
@@ -1108,6 +1108,9 @@ class Plotter:
         ax.set_xlabel(x_label)
         ax.set_ylabel("Amplitude")
         ax.grid(True)
+
+        if xlim is not None:
+            ax.set_xlim(-xlim, xlim)
 
         leg = ax.legend(loc='upper right', frameon=True, edgecolor='black',
                         facecolor='white', fontsize=12, fancybox=True)
