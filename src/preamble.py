@@ -67,8 +67,6 @@ class Preamble:
         \end{align}
         $$
 
-        ![Embaralhador.](../assets/transmitter_preamble.svg)
-
         Returns:
             tuple (np.ndarray, np.ndarray): Vetores $S_I$ e $S_Q$.
         """

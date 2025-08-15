@@ -18,6 +18,7 @@ clean:
 
 doc: 
 	@echo "Gerando documentação..."
+	.venv/bin/python -m pdf2svg
 	mkdocs build
 	mkdocs serve
 		

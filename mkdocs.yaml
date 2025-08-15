@@ -9,18 +9,9 @@ theme:
   name: material
   logo: assets/icon.svg
   palette:
-    - scheme: slate
+    - scheme: white
       primary: darkblue
       accent: darkblue
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
-    - scheme: default
-      primary: darkblue
-      accent: darkblue
-      toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to dark mode
   features:
     - navigation.instant
     - navigation.tracking
@@ -71,6 +62,7 @@ plugins:
           options:
             show_source: true
             show_submodules: true
+            members_order: source
 
 markdown_extensions:
   - pymdownx.arithmatex:  

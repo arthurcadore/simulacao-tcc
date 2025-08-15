@@ -75,6 +75,8 @@ class Plotter:
         r"""
         Plota os sinais no domínio do tempo.
 
+        ![timed](assets/transmitter_modulator_time.svg)
+
         Args:
             s1 (np.ndarray): Primeiro sinal a ser plotado.
             s2 (np.ndarray): Segundo sinal a ser plotado.
@@ -85,6 +87,7 @@ class Plotter:
             title2 (str): Título do segundo gráfico.
             save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
         """
+
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 8))
         ax1.plot(t, s1, label=label1, color='blue')
         ax1.set_title(title1)
@@ -117,6 +120,23 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_frequency_domain(self, s1, s2, fs, fc, label1, label2, title1, title2, save_path=None):
+        r"""
+        Plota os sinais no domínio da frequência.
+
+        ![freqd](assets/transmitter_modulator_freq.svg)
+
+        Args:
+            s1 (np.ndarray): Primeiro sinal a ser plotado.
+            s2 (np.ndarray): Segundo sinal a ser plotado.
+            fs (float): Frequência de amostragem dos sinais.
+            fc (float): Frequência central para o eixo x.
+            label1 (str): Rótulo do primeiro sinal.
+            label2 (str): Rótulo do segundo sinal.
+            title1 (str): Título do primeiro gráfico.
+            title2 (str): Título do segundo gráfico.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
+
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 8))
         freqs = np.fft.fftshift(np.fft.fftfreq(len(s1), d=1/fs))
         
@@ -164,6 +184,17 @@ class Plotter:
         self._save_or_show(fig, save_path)
     
     def plot_bits(self, bits_list, sections=None, colors=None, save_path=None):
+        r"""
+        Plota uma sequência de bits, com a opção de destacar seções específicas.
+
+        ![bits](assets/transmitter_datagram.svg)
+
+        Args:
+            bits_list (list of np.ndarray): Lista de arrays de bits a serem plotados.
+            sections (list of tuples, optional): Lista de seções a destacar, cada uma como (nome, comprimento).
+            colors (list of str, optional): Cores para as seções destacadas.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
         all_bits = np.concatenate(bits_list)
         bits_up = np.repeat(all_bits, 2)
         x = np.arange(len(bits_up))
@@ -212,6 +243,25 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_encode(self, s1, s2, s3, s4, label1, label2, label3, label4, title1, title2, title3, title4, save_path=None):
+        r"""
+        Plota os sinais de entrada e saída do codificador.
+        ![encode](assets/transmitter_encoder.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal de entrada I.
+            s2 (np.ndarray): Sinal de entrada Q.
+            s3 (np.ndarray): Sinal de saída I codificado.
+            s4 (np.ndarray): Sinal de saída Q codificado.
+            label1 (str): Rótulo do sinal I de entrada.
+            label2 (str): Rótulo do sinal Q de entrada.
+            label3 (str): Rótulo do sinal I codificado.
+            label4 (str): Rótulo do sinal Q codificado.
+            title1 (str): Título do sinal I de entrada.
+            title2 (str): Título do sinal Q de entrada.
+            title3 (str): Título do sinal I codificado.
+            title4 (str): Título do sinal Q codificado.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
         s1_up = np.repeat(s1, 2)
         s2_up = np.repeat(s2, 2)
         x = np.arange(len(s1_up))
@@ -287,6 +337,23 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_conv(self, s1, s2, s3, label1, label2, label3, title1, title2, title3, save_path=None):
+        r"""
+        Plota os sinais de entrada e saída do codificador convolucional.
+
+        ![conv](assets/transmitter_convolutional.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal de entrada I.
+            s2 (np.ndarray): Sinal de entrada Q.
+            s3 (np.ndarray): Sinal de saída codificado.
+            label1 (str): Rótulo do sinal I de entrada.
+            label2 (str): Rótulo do sinal Q de entrada.
+            label3 (str): Rótulo do sinal codificado.
+            title1 (str): Título do sinal I de entrada.
+            title2 (str): Título do sinal Q de entrada.
+            title3 (str): Título do sinal codificado.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
 
         s1_up = np.repeat(s1, 2)
         s2_up = np.repeat(s2, 2)
@@ -357,6 +424,18 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_trellis(self, trellis, num_steps=5, initial_state=0, save_path=None):
+        r"""
+        Plota o diagrama de treliça de um codificador convolucional.
+
+        ![trellis'](assets/example_trelica.svg)
+        
+        Args:
+            trellis (dict): Dicionário representando o treliça, onde as chaves são estados e os valores são tuplas (próximo_estado, saída).
+            num_steps (int): Número de passos no tempo a serem plotados.
+            initial_state (int): Estado inicial do treliça.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        
+        """
         states_per_time = defaultdict(set)
         states_per_time[0].add(initial_state)
         branches = []
@@ -406,6 +485,26 @@ class Plotter:
 
     # TODO: adicionar indexes pra o plot do embaralhador.
     def plot_scrambler(self, s1, s2, s3, s4, s5, s6, label1, label2, label3, label4, label5, label6, save_path=None):
+        r"""
+        Plota os sinais de entrada e saída do embaralhador.
+        
+        ![scrambler](assets/example_scrambling.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal de entrada I.
+            s2 (np.ndarray): Sinal de entrada Q.
+            s3 (np.ndarray): Sinal embaralhado I.
+            s4 (np.ndarray): Sinal embaralhado Q.
+            s5 (np.ndarray): Sinal desembaralhado I.
+            s6 (np.ndarray): Sinal desembaralhado Q.
+            label1 (str): Rótulo do sinal I de entrada.
+            label2 (str): Rótulo do sinal Q de entrada.
+            label3 (str): Rótulo do sinal embaralhado I.
+            label4 (str): Rótulo do sinal embaralhado Q.
+            label5 (str): Rótulo do sinal desembaralhado I.
+            label6 (str): Rótulo do sinal desembaralhado Q.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
         
         fig, axs = plt.subplots(3, 2, figsize=(16, 9), sharex=True)
 
@@ -429,6 +528,20 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_preamble(self, s1, s2, label1, label2, title1, title2, save_path=None):
+        r"""
+        Plota o preâmbulo do transmissor, mostrando os sinais I e Q.
+
+        ![preamble.](assets/transmitter_preamble.svg)
+        
+        Args:
+            s1 (np.ndarray): Sinal I do preâmbulo.
+            s2 (np.ndarray): Sinal Q do preâmbulo.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
 
         # Superamostragem do sinal para o plot
         s1_up = np.repeat(s1, 2)
@@ -484,6 +597,24 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_mux(self, s1, s2, s3, s4, label1, label2, label3, label4, title1, title2, save_path=None):
+        r"""
+        Plota o multiplexador do transmissor, mostrando os sinais I e Q.
+
+        ![mux](assets/transmitter_multiplexing.svg)
+        
+        Args:
+            s1 (np.ndarray): Sinal I do canal I.
+            s2 (np.ndarray): Sinal Q do canal I.
+            s3 (np.ndarray): Sinal I do canal Q.
+            s4 (np.ndarray): Sinal Q do canal Q.
+            label1 (str): Rótulo do sinal I do canal I.
+            label2 (str): Rótulo do sinal Q do canal I.
+            label3 (str): Rótulo do sinal I do canal Q.
+            label4 (str): Rótulo do sinal Q do canal Q.
+            title1 (str): Título do sinal I do canal I.
+            title2 (str): Título do sinal Q do canal I.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
         # Concatenação
         s5 = np.concatenate((s1, s3))
         s6 = np.concatenate((s2, s4))
@@ -569,6 +700,29 @@ class Plotter:
 
     def plot_filter(self, h, t_rc, tb, span, fs, s1, s2, label_h, label1, label2, title_h, title1, title2, t_xlim, save_path=None):
 
+        r"""
+        Plota o filtro RRC e os sinais I e Q após a filtragem.
+
+        ![filter](assets/transmitter_filter.svg)
+
+        Args:
+            h (np.ndarray): Resposta ao impulso do filtro RRC.
+            t_rc (np.ndarray): Tempo correspondente à resposta ao impulso.
+            tb (float): Tempo de símbolo.
+            span (int): Número de spans do filtro.
+            fs (float): Frequência de amostragem.
+            s1 (np.ndarray): Sinal I filtrado.
+            s2 (np.ndarray): Sinal Q filtrado.
+            label_h (str): Rótulo do filtro.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            title_h (str): Título do filtro.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            t_xlim (float): Limite do eixo x para os sinais I e Q.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
+
         t_interp = np.arange(len(s1)) / fs
 
         fig = plt.figure(figsize=(16, 9))
@@ -626,6 +780,25 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_modulation_time(self, s1, s2, s3, label1, label2, label3, title1, title2, fs, t_xlim, save_path=None):
+        r"""
+        Plota os sinais de modulação no domínio do tempo.
+
+        ![modulation_time](assets/transmitter_modulator_time.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal I modulado.
+            s2 (np.ndarray): Sinal Q modulado.
+            s3 (np.ndarray): Sinal de modulação resultante.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            label3 (str): Rótulo do sinal de modulação.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            fs (float): Frequência de amostragem.
+            t_xlim (float): Limite do eixo x para os sinais I e Q.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
+
         t = np.arange(len(s1)) / fs
         fig = plt.figure(figsize=(16, 8))
         gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1])
@@ -660,6 +833,23 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_modulation_eye(self, s1, s2, label1, label2, title1, title2, fs, Rb, save_path=None):
+        r"""
+        Plota o diagrama de olho dos sinais I e Q após a modulação.
+
+        ![modulation_eye](assets/example_eye.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal I modulado.
+            s2 (np.ndarray): Sinal Q modulado.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            fs (float): Frequência de amostragem.
+            Rb (float): Taxa de bits.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
+
         sps = int(fs / Rb)
         eye_len = 2 * sps
         n_traces = (len(s1) - eye_len) // sps
@@ -692,6 +882,22 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_modulation_iq(self, s1, s2, label1, label2, title1, title2, save_path=None, amplitude=None):
+
+        r"""
+        Plota o diagrama IQ dos sinais I e Q após a modulação.
+
+        ![modulation_iq](assets/transmitter_modulator_iq.svg)
+        
+        Args:
+            s1 (np.ndarray): Sinal I modulado.
+            s2 (np.ndarray): Sinal Q modulado.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+            amplitude (float, optional): Amplitude dos pontos QPSK. Se None, a amplitude é calculada automaticamente.
+        """
 
         s1_c = s1 - np.mean(s1)
         s2_c = s2 - np.mean(s2)
@@ -751,6 +957,25 @@ class Plotter:
         self._save_or_show(fig, save_path)
 
     def plot_modulation_freq(self, s1, s2, s3, label1, label2, label3, title1, title2, title3, fs, fc, save_path=None):
+        r"""
+        Plota o espectro dos sinais I, Q e o sinal modulado no domínio da frequência.
+
+        ![modulation_freq](assets/transmitter_modulator_freq.svg)
+
+        Args:
+            s1 (np.ndarray): Sinal I modulado.
+            s2 (np.ndarray): Sinal Q modulado.
+            s3 (np.ndarray): Sinal modulado resultante.
+            label1 (str): Rótulo do sinal I.
+            label2 (str): Rótulo do sinal Q.
+            label3 (str): Rótulo do sinal modulado.
+            title1 (str): Título do sinal I.
+            title2 (str): Título do sinal Q.
+            title3 (str): Título do sinal modulado.
+            fs (float): Frequência de amostragem.
+            fc (float): Frequência de portadora.
+            save_path (str, optional): Caminho para salvar o gráfico. Se None, o gráfico será exibido na tela.
+        """
 
         freqs = np.fft.fftshift(np.fft.fftfreq(len(s3), d=1/fs))
         fft_dI = np.fft.fftshift(np.fft.fft(s1))
