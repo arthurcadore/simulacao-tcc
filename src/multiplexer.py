@@ -32,7 +32,7 @@ class Multiplexer:
         Raises:
             AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.
         """
-        assert len(I1) == len(Q1) == len(I2) == len(Q2), "Os vetores I e Q devem ter o mesmo comprimento em ambos os canais."
+        assert len(I1) == len(Q1) and len(I2) == len(Q2), "Os vetores I e Q devem ter o mesmo comprimento em ambos os canais."
 
         I = np.concatenate((I1, I2))
         Q = np.concatenate((Q1, Q2))
