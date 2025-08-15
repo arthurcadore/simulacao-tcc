@@ -286,11 +286,12 @@ class Transmitter:
         Xnrz, Yman = self.encode_channels(Xn, Yn)
         dI, dQ = self.format_signals(Xnrz, Yman)
         t, s = self.modulate(dI, dQ)
-        return TransmissionResult(t, s)
+        return t, s
 
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(datagram, output_print=True)
-    result = transmitter.run()
+    t, s = transmitter.run()
+    result = TransmissionResult(t, s)
     result.save("../out/transmitter")

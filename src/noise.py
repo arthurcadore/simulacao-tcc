@@ -1,5 +1,6 @@
 import numpy as np
 from plots import Plotter
+from datagram import Datagram
 from transmitter import Transmitter
 
 class Noise:
@@ -15,8 +16,9 @@ class Noise:
 
 if __name__ == "__main__":
 
-    transmitter = Transmitter(pcdid=1234, numblocks=8, output_print=False)
-    t, s = transmitter.transmit()
+    datagram = Datagram(pcdnum=1234, numblocks=1)
+    transmitter = Transmitter(datagram, output_print=False)
+    t, s = transmitter.run()
 
     snr_db = 15
     add_noise = Noise(snr=snr_db)
