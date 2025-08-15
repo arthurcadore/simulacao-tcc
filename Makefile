@@ -11,6 +11,10 @@ install:
 	.venv/bin/pip install -r requirements.txt
 	@echo "Instalação concluída!"
 
+install-additional:
+	@sudo apt update
+	@sudo apt install texlive-latex-extra texlive-fonts-recommended dvipng cm-super -y
+
 clean:
 	rm -rf .venv
 	find . -name "*.pyc" -delete
