@@ -1641,6 +1641,66 @@ class Plotter:
 
         self._save_or_show(fig_match_spec, save_path)
 
+    def plot_sampled_signals(self, t_matched, d_I_matched, d_Q_matched,
+                             t_samples, I_samples, Q_samples,
+                             label_I, label_I_samples,
+                             label_Q, label_Q_samples,
+                             title_I, title_Q,
+                             t_xlim=0.1, save_path=None):
+        """
+        Plota os sinais I e Q após o filtro casado com os pontos de amostragem.
+    
+        Args:
+            t_matched (np.ndarray): Vetor de tempo dos sinais filtrados.
+            d_I_matched (np.ndarray): Sinal I após o filtro casado.
+            d_Q_matched (np.ndarray): Sinal Q após o filtro casado.
+            t_samples (np.ndarray): Instantes de amostragem.
+            I_samples (np.ndarray): Amostras do canal I.
+            Q_samples (np.ndarray): Amostras do canal Q.
+            label_I (str): Rótulo do sinal I filtrado.
+            label_I_samples (str): Rótulo das amostras I.
+            label_Q (str): Rótulo do sinal Q filtrado.
+            label_Q_samples (str): Rótulo das amostras Q.
+            title_I (str): Título do gráfico do canal I.
+            title_Q (str): Título do gráfico do canal Q.
+            t_xlim (float, optional): Limite do eixo X para ambos os gráficos.
+            save_path (str, optional): Caminho para salvar o gráfico.
+        """
+        fig_sample = plt.figure(figsize=(16, 8))
+        gs_sample = gridspec.GridSpec(2, 1)
+    
+        # Canal I
+        ax_si = fig_sample.add_subplot(gs_sample[0])
+        ax_si.plot(t_matched, d_I_matched, color='blue', label=label_I)
+        ax_si.stem(t_samples, I_samples, linefmt='k-', markerfmt='ko', basefmt=" ", label=label_I_samples)
+        ax_si.set_title(title_I)
+        ax_si.set_xlabel("Tempo (s)")
+        ax_si.set_ylabel("Amplitude")
+        ax_si.set_xlim(0, t_xlim)
+        ax_si.grid(True)
+        leg_si = ax_si.legend(loc='upper right', frameon=True, edgecolor='black',
+                              facecolor='white', fontsize=12, fancybox=True)
+        leg_si.get_frame().set_facecolor('white')
+        leg_si.get_frame().set_edgecolor('black')
+        leg_si.get_frame().set_alpha(1.0)
+    
+        # Canal Q
+        ax_sq = fig_sample.add_subplot(gs_sample[1])
+        ax_sq.plot(t_matched, d_Q_matched, color='green', label=label_Q)
+        ax_sq.stem(t_samples, Q_samples, linefmt='k-', markerfmt='ko', basefmt=" ", label=label_Q_samples)
+        ax_sq.set_title(title_Q)
+        ax_sq.set_xlabel("Tempo (s)")
+        ax_sq.set_ylabel("Amplitude")
+        ax_sq.set_xlim(0, t_xlim)
+        ax_sq.grid(True)
+        leg_sq = ax_sq.legend(loc='upper right', frameon=True, edgecolor='black',
+                              facecolor='white', fontsize=12, fancybox=True)
+        leg_sq.get_frame().set_facecolor('white')
+        leg_sq.get_frame().set_edgecolor('black')
+        leg_sq.get_frame().set_alpha(1.0)
+    
+        plt.tight_layout()
+        self._save_or_show(fig_sample, save_path)
 
     def _save_or_show(self, fig, path):
         if path:
