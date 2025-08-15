@@ -4,10 +4,25 @@ from datagram import Datagram
 from transmitter import Transmitter
 
 class Noise:
+    r"""
+    Adiciona ruído branco gaussiano (AWGN) a um sinal.
+
+    Args:
+        snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.
+    """
     def __init__(self, snr=10):
         self.snr = snr
     
     def add_noise(self, signal):
+        r"""
+        Adiciona ruído AWGN ao sinal fornecido.
+
+        Args:
+            signal (np.ndarray): Sinal ao qual o ruído será adicionado.
+        
+        Returns:
+            np.ndarray: Sinal com ruído adicionado.
+        """
         signal_power = np.mean(np.abs(signal) ** 2)
         snr_linear = 10 ** (self.snr / 10)
         noise_power = signal_power / snr_linear
@@ -15,7 +30,6 @@ class Noise:
         return signal + noise
 
 if __name__ == "__main__":
-
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(datagram, output_print=False)
     t, s = transmitter.run()

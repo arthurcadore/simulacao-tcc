@@ -59,6 +59,56 @@ class Modulator:
         
         modulated_signal = i_signal * carrier_cos - q_signal * carrier_sin
         return t, modulated_signal
+    
+    def demodulate(self, modulated_signal):
+        r"""
+        Demodula o sinal modulado para recuperar os sinais I e Q originais. 
+
+        Para o processo de demodulação, utilizamos os sinais de portadora $x_I(t)$ e $y_Q(t)$ definidos como:
+
+        $$
+            x_I(t) = 2 \cos(2\pi f_c t)
+        $$
+
+        $$
+            y_Q(t) = 2 \sin(2\pi f_c t)
+        $$
+
+        Nota: 
+            - A constante 2 é utilizada para manter a amplitude do sinal original, devido a translação do sinal modulado.
+        
+        O processo resulta em dois sinais, contendo uma componente em banda base e outra em banda $2f_c$: 
+
+        $$
+        x_I'(t) = s(t) \cdot x_I(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
+        $$
+
+        $$
+        y_Q'(t) = -s(t) \cdot y_Q(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
+        $$
+
+        Args:
+            modulated_signal (np.ndarray): Sinal modulado $s(t)$ a ser demodulado.
+
+        Returns:
+            i_signal (np.ndarray): Sinal I recuperado.
+            q_signal (np.ndarray): Sinal Q recuperado.
+        
+        Raises:
+            ValueError: Se o sinal modulado estiver vazio.
+        """
+        n = len(modulated_signal)
+        if n == 0:
+            raise ValueError("O sinal modulado não pode estar vazio.")
+        
+        t = np.arange(n) / self.fs
+        carrier_cos = 2 * np.cos(2 * np.pi * self.fc * t)
+        carrier_sin = 2 * np.sin(2 * np.pi * self.fc * t)
+        
+        i_signal = modulated_signal * carrier_cos
+        q_signal = -modulated_signal * carrier_sin
+        
+        return i_signal, q_signal
 
 if __name__ == "__main__":
 
@@ -132,5 +182,34 @@ if __name__ == "__main__":
     )
     
 
+    # Demodulação
+    i_signal, q_signal = modulator.demodulate(s)
+    print("i_signal:", ''.join(str(b) for b in i_signal[:5]))
+    print("q_signal:", ''.join(str(b) for b in q_signal[:5]))
+
+    plot.plot_modulation_time(i_signal,
+                              q_signal, 
+                              s, 
+                              "Sinal I Demodulado", 
+                              "Sinal Q Demodulado",
+                              "Sinal Modulado $IQ$",
+                              "Sinais Demodulados $I$ e $Q$",
+                              "Sinal Modulado $IQ$",
+                              fs=fs, 
+                              t_xlim=0.10, 
+                              save_path="../out/example_demodulation_time.pdf"
+    )
     
-    
+    plot.plot_modulation_freq(i_signal,
+                              q_signal,
+                              s,
+                              "Sinal I Demodulado",
+                              "Sinal Q Demodulado",
+                              "Sinal Modulado $IQ$",
+                              "Sinal Banda Base - Componente $I$",
+                              "Sinal Banda Base - Componente $Q$",
+                              "Sinal Modulado $IQ$",
+                              fs=fs, 
+                              fc=fc, 
+                              save_path="../out/example_demodulation_frequency.pdf"
+    )
