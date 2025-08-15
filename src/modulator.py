@@ -113,7 +113,7 @@ class Modulator:
 if __name__ == "__main__":
 
     fs = 128_000
-    fc = 4000
+    fc = 2000
     Rb = 400
     alpha = 0.8
     span = 8
@@ -200,16 +200,13 @@ if __name__ == "__main__":
                               save_path="../out/example_demodulation_time.pdf"
     )
     
-    plot.plot_modulation_freq(i_signal,
-                              q_signal,
-                              s,
-                              "Sinal I Demodulado",
-                              "Sinal Q Demodulado",
-                              "Sinal Modulado $IQ$",
-                              "Sinal Banda Base - Componente $I$",
-                              "Sinal Banda Base - Componente $Q$",
-                              "Sinal Modulado $IQ$",
-                              fs=fs, 
-                              fc=fc, 
-                              save_path="../out/example_demodulation_frequency.pdf"
+    plot.plot_demodulation_freq(i_signal,
+                                q_signal,
+                                "$I(f)$",
+                                "$Q(f)$",
+                                "Sinal Demodulado - Componente $I$",
+                                "Sinal Demodulado - Componente $Q$",
+                                fs,
+                                fc,
+                                save_path="../out/example_demodulation_frequency.pdf"
     )

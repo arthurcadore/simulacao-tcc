@@ -1032,6 +1032,56 @@ class Plotter:
         plt.tight_layout()
         self._save_or_show(fig, save_path)
 
+    def plot_demodulation_freq(self, s1, s2, label1, label2, title1, title2, fs, fc, save_path=None):
+        fig_fft_prod = plt.figure(figsize=(16, 8))
+        gs_fft = gridspec.GridSpec(2, 1)
+
+        # FFT de y_I_
+        YI_f = np.fft.fftshift(np.fft.fft(s1))
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(YI_f), d=1/fs))
+        YI_db = mag2db(YI_f)
+
+        ax_fft_i = fig_fft_prod.add_subplot(gs_fft[0])
+        ax_fft_i.plot(freqs, YI_db, color='blue', label=r"$|X_I(f)|$")
+        ax_fft_i.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_fft_i.set_ylim(-60, 5)
+        ax_fft_i.set_title(r"Espectro do canal I - $x_I(t)$")
+        ax_fft_i.set_xlabel("Frequência (Hz)")
+        ax_fft_i.set_ylabel("Magnitude (dB)")
+        ax_fft_i.grid(True)
+        ax_fft_i.legend()
+        leg_fft_i = ax_fft_i.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_fft_i.get_frame().set_facecolor('white')
+        leg_fft_i.get_frame().set_edgecolor('black')
+        leg_fft_i.get_frame().set_alpha(1.0)
+
+        # FFT de y_Q_
+        YQ_f = np.fft.fftshift(np.fft.fft(s2))
+        YQ_db = mag2db(YQ_f)
+
+        ax_fft_q = fig_fft_prod.add_subplot(gs_fft[1])
+        ax_fft_q.plot(freqs, YQ_db, color='green', label=r"$|Y_Q(f)|$")
+        ax_fft_q.set_xlim(-2.5 * fc, 2.5 * fc)
+        ax_fft_q.set_ylim(-60, 5)
+        ax_fft_q.set_title(r"Espectro do canal Q - $y_Q(t)$")
+        ax_fft_q.set_xlabel("Frequência (Hz)")
+        ax_fft_q.set_ylabel("Magnitude (dB)")
+        ax_fft_q.grid(True)
+        ax_fft_q.legend()
+        leg_fft_q = ax_fft_q.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_fft_q.get_frame().set_facecolor('white')
+        leg_fft_q.get_frame().set_edgecolor('black')
+        leg_fft_q.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        self._save_or_show(fig_fft_prod, save_path)
+
 
     def _save_or_show(self, fig, path):
         if path:
