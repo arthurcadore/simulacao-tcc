@@ -10,6 +10,7 @@ from plots import Plotter
 from transmitter import Transmitter
 from noise import Noise
 from lowpassfilter import LPF
+from matchedfilter import MatchedFilter
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -63,8 +64,50 @@ class Receiver:
 
         return i_signal_filtered, q_signal_filtered
 
-    def matchedfilter(self):
-        pass
+    def matchedfilter(self, i_signal, q_signal, t):
+        matched_filter = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted")
+
+        i_signal_filtered = matched_filter.apply_filter(i_signal)
+        q_signal_filtered = matched_filter.apply_filter(q_signal)
+        
+        if self.output_plot:
+            self.plotter.plot_matched_filter(
+                matched_filter.t_impulse,
+                matched_filter.impulse_response,
+                t,
+                i_signal_filtered,
+                q_signal_filtered,
+                "Resposta ao Impulso - Filtro Casado",
+                "Canal I - Filtro Casado",
+                "Canal Q - Filtro Casado",
+                "Resposta ao Impulso - Filtro Casado",
+                "Canal I - Filtro Casado",
+                "Canal Q - Filtro Casado",
+                0.1,
+                save_path="../out/receiver_matched_filter.pdf"
+            )
+            self.plotter.plot_matched_filter_freq(
+                matched_filter.t_impulse,
+                matched_filter.impulse_response,
+                i_signal,
+                q_signal,
+                i_signal_filtered,
+                q_signal_filtered,
+                self.fs,
+                self.fc,
+                "Resposta ao Impulso - Filtro Casado",
+                "Canal I - Antes do Filtro Casado",
+                "Canal Q - Antes do Filtro Casado",
+                "Canal I - Depois do Filtro Casado",
+                "Canal Q - Depois do Filtro Casado",
+                "Resposta ao Impulso - Filtro Casado",
+                "Canal I - Antes do Filtro Casado",
+                "Canal Q - Antes do Filtro Casado",
+                "Canal I - Depois do Filtro Casado",
+                "Canal Q - Depois do Filtro Casado",
+                save_path="../out/receiver_matched_filter_freq.pdf"
+            )
+        return i_signal_filtered, q_signal_filtered
     
     def run(self, s, t, fc=4000):
         
@@ -73,6 +116,7 @@ class Receiver:
 
         i, q = self.demodulate(s)
         i_filt, q_filt= self.lowpassfilter(self.fc*0.6, i, q, t)
+        i_filt, q_filt = self.matchedfilter(i_filt, q_filt, t)
         
 
 if __name__ == "__main__":

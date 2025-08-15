@@ -1432,6 +1432,214 @@ class Plotter:
         plt.subplots_adjust(top=0.92, hspace=0.4)
         self._save_or_show(fig_spec, save_path)
 
+    def plot_matched_filter(self, t_rc, g_matched, t_matched, d_I_matched, d_Q_matched,
+                            label_imp, label_I, label_Q,
+                            title_imp, title_I, title_Q,
+                            t_xlim=0.1, save_path=None):
+        """
+        Plota a resposta ao impulso do filtro casado e os sinais I e Q após a filtragem.
+
+        Args:
+            t_rc (np.ndarray): Vetor de tempo da resposta ao impulso do filtro casado.
+            g_matched (np.ndarray): Amostras da resposta ao impulso.
+            t_matched (np.ndarray): Vetor de tempo dos sinais filtrados.
+            d_I_matched (np.ndarray): Sinal I filtrado.
+            d_Q_matched (np.ndarray): Sinal Q filtrado.
+            label_imp (str): Rótulo da resposta ao impulso.
+            label_I (str): Rótulo do canal I filtrado.
+            label_Q (str): Rótulo do canal Q filtrado.
+            title_imp (str): Título do gráfico da resposta ao impulso.
+            title_I (str): Título do gráfico do canal I.
+            title_Q (str): Título do gráfico do canal Q.
+            t_xlim (float, optional): Limite do eixo X para os canais I e Q.
+            save_path (str, optional): Caminho para salvar o gráfico.
+        """
+        fig_match = plt.figure(figsize=(16, 10))
+        gs_match = gridspec.GridSpec(3, 1)
+
+        # Resposta ao impulso do filtro casado
+        ax_mh = fig_match.add_subplot(gs_match[0])
+        ax_mh.plot(t_rc * 1000, g_matched, color='red', label=label_imp)
+        ax_mh.set_title(title_imp)
+        ax_mh.set_xlim(-15, 15)
+        ax_mh.set_xlabel("Tempo (ms)")
+        ax_mh.set_ylabel("Amplitude")
+        ax_mh.grid(True)
+        leg_mh = ax_mh.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_mh.get_frame().set_facecolor('white')
+        leg_mh.get_frame().set_edgecolor('black')
+        leg_mh.get_frame().set_alpha(1.0)
+
+        # Canal I após filtro casado
+        ax_i_m = fig_match.add_subplot(gs_match[1])
+        ax_i_m.plot(t_matched, d_I_matched, color='blue', label=label_I)
+        ax_i_m.set_title(title_I)
+        ax_i_m.set_xlim(0, t_xlim)
+        ax_i_m.set_xlabel("Tempo (s)")
+        ax_i_m.set_ylabel("Amplitude")
+        ax_i_m.grid(True)
+        leg_i_m = ax_i_m.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_i_m.get_frame().set_facecolor('white')
+        leg_i_m.get_frame().set_edgecolor('black')
+        leg_i_m.get_frame().set_alpha(1.0)
+
+        # Canal Q após filtro casado
+        ax_q_m = fig_match.add_subplot(gs_match[2])
+        ax_q_m.plot(t_matched, d_Q_matched, color='green', label=label_Q)
+        ax_q_m.set_title(title_Q)
+        ax_q_m.set_xlim(0, t_xlim)
+        ax_q_m.set_xlabel("Tempo (s)")
+        ax_q_m.set_ylabel("Amplitude")
+        ax_q_m.grid(True)
+        leg_q_m = ax_q_m.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg_q_m.get_frame().set_facecolor('white')
+        leg_q_m.get_frame().set_edgecolor('black')
+        leg_q_m.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.92, hspace=0.4)
+
+        self._save_or_show(fig_match, save_path)
+
+    def plot_matched_filter_freq(self, t_rc, g_matched,
+                                     d_I_rec, d_Q_rec,
+                                     d_I_matched, d_Q_matched,
+                                     fs, fc,
+                                     label_imp, label_I_before, label_I_after,
+                                     label_Q_before, label_Q_after,
+                                     title_imp, title_I_before, title_I_after,
+                                     title_Q_before, title_Q_after,
+                                     save_path=None):
+        """
+        Plota o espectro dos sinais I e Q antes e depois da filtragem casada,
+        junto com a resposta ao impulso do filtro casado.
+
+        Args:
+            t_rc (np.ndarray): Vetor de tempo da resposta ao impulso do filtro casado.
+            g_matched (np.ndarray): Resposta ao impulso do filtro casado.
+            d_I_rec (np.ndarray): Sinal I antes do filtro casado.
+            d_Q_rec (np.ndarray): Sinal Q antes do filtro casado.
+            d_I_matched (np.ndarray): Sinal I após o filtro casado.
+            d_Q_matched (np.ndarray): Sinal Q após o filtro casado.
+            fs (float): Frequência de amostragem (Hz).
+            fc (float): Frequência central para o plot (Hz).
+            label_imp (str): Rótulo da resposta ao impulso.
+            label_I_before (str): Rótulo do canal I antes do filtro casado.
+            label_I_after (str): Rótulo do canal I após o filtro casado.
+            label_Q_before (str): Rótulo do canal Q antes do filtro casado.
+            label_Q_after (str): Rótulo do canal Q após o filtro casado.
+            title_imp (str): Título do gráfico da resposta ao impulso.
+            title_I_before (str): Título do espectro do canal I antes do filtro casado.
+            title_I_after (str): Título do espectro do canal I após o filtro casado.
+            title_Q_before (str): Título do espectro do canal Q antes do filtro casado.
+            title_Q_after (str): Título do espectro do canal Q após o filtro casado.
+            save_path (str, optional): Caminho para salvar a figura.
+        """
+        # FFT antes do filtro casado
+        DI_f = np.fft.fftshift(np.fft.fft(d_I_rec))
+        DQ_f = np.fft.fftshift(np.fft.fft(d_Q_rec))
+
+        # FFT após o filtro casado
+        DIM_f = np.fft.fftshift(np.fft.fft(d_I_matched))
+        DQM_f = np.fft.fftshift(np.fft.fft(d_Q_matched))
+
+        freqs = np.fft.fftshift(np.fft.fftfreq(len(d_I_rec), d=1/fs))
+
+        DI_db = mag2db(DI_f)
+        DQ_db = mag2db(DQ_f)
+        DIM_db = mag2db(DIM_f)
+        DQM_db = mag2db(DQM_f)
+
+        fig_match_spec = plt.figure(figsize=(16, 10))
+        gs_match_spec = gridspec.GridSpec(3, 2, height_ratios=[1, 1, 1])
+
+        # Resposta ao impulso
+        ax_imp_m = fig_match_spec.add_subplot(gs_match_spec[0, :])
+        ax_imp_m.plot(t_rc * 1000, g_matched, color='red', linewidth=2, label=label_imp)
+        ax_imp_m.set_title(title_imp)
+        ax_imp_m.set_xlim(-15, 15)
+        ax_imp_m.set_xlabel("Tempo (ms)")
+        ax_imp_m.set_ylabel("Amplitude")
+        ax_imp_m.grid(True)
+        leg_imp = ax_imp_m.legend(loc='upper right', frameon=True, edgecolor='black',
+                                  facecolor='white', fontsize=12, fancybox=True)
+        leg_imp.get_frame().set_facecolor('white')
+        leg_imp.get_frame().set_edgecolor('black')
+        leg_imp.get_frame().set_alpha(1.0)
+
+        # Canal I antes
+        ax_i_before = fig_match_spec.add_subplot(gs_match_spec[1, 0])
+        ax_i_before.plot(freqs, DI_db, color='navy', label=label_I_before)
+        ax_i_before.set_title(title_I_before)
+        ax_i_before.set_xlabel("Frequência (Hz)")
+        ax_i_before.set_ylabel("Magnitude (dB)")
+        ax_i_before.set_xlim(-fc, fc)
+        ax_i_before.set_ylim(-90, 5)
+        ax_i_before.grid(True)
+        leg_ib = ax_i_before.legend(loc='upper right', frameon=True, edgecolor='black',
+                                    facecolor='white', fontsize=12, fancybox=True)
+        leg_ib.get_frame().set_facecolor('white')
+        leg_ib.get_frame().set_edgecolor('black')
+        leg_ib.get_frame().set_alpha(1.0)
+
+        # Canal I após
+        ax_i_after = fig_match_spec.add_subplot(gs_match_spec[1, 1])
+        ax_i_after.plot(freqs, DIM_db, color='navy', label=label_I_after)
+        ax_i_after.set_title(title_I_after)
+        ax_i_after.set_xlabel("Frequência (Hz)")
+        ax_i_after.set_ylabel("Magnitude (dB)")
+        ax_i_after.set_xlim(-fc, fc)
+        ax_i_after.set_ylim(-90, 5)
+        ax_i_after.grid(True)
+        leg_ia = ax_i_after.legend(loc='upper right', frameon=True, edgecolor='black',
+                                   facecolor='white', fontsize=12, fancybox=True)
+        leg_ia.get_frame().set_facecolor('white')
+        leg_ia.get_frame().set_edgecolor('black')
+        leg_ia.get_frame().set_alpha(1.0)
+
+        # Canal Q antes
+        ax_q_before = fig_match_spec.add_subplot(gs_match_spec[2, 0])
+        ax_q_before.plot(freqs, DQ_db, color='darkgreen', label=label_Q_before)
+        ax_q_before.set_title(title_Q_before)
+        ax_q_before.set_xlabel("Frequência (Hz)")
+        ax_q_before.set_ylabel("Magnitude (dB)")
+        ax_q_before.set_xlim(-fc, fc)
+        ax_q_before.set_ylim(-90, 5)
+        ax_q_before.grid(True)
+        leg_qb = ax_q_before.legend(loc='upper right', frameon=True, edgecolor='black',
+                                    facecolor='white', fontsize=12, fancybox=True)
+        leg_qb.get_frame().set_facecolor('white')
+        leg_qb.get_frame().set_edgecolor('black')
+        leg_qb.get_frame().set_alpha(1.0)
+
+        # Canal Q após
+        ax_q_after = fig_match_spec.add_subplot(gs_match_spec[2, 1])
+        ax_q_after.plot(freqs, DQM_db, color='green', label=label_Q_after)
+        ax_q_after.set_title(title_Q_after)
+        ax_q_after.set_xlabel("Frequência (Hz)")
+        ax_q_after.set_ylabel("Magnitude (dB)")
+        ax_q_after.set_xlim(-fc, fc)
+        ax_q_after.set_ylim(-90, 5)
+        ax_q_after.grid(True)
+        leg_qa = ax_q_after.legend(loc='upper right', frameon=True, edgecolor='black',
+                                   facecolor='white', fontsize=12, fancybox=True)
+        leg_qa.get_frame().set_facecolor('white')
+        leg_qa.get_frame().set_edgecolor('black')
+        leg_qa.get_frame().set_alpha(1.0)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.93, hspace=0.4)
+
+        self._save_or_show(fig_match_spec, save_path)
 
 
     def _save_or_show(self, fig, path):
