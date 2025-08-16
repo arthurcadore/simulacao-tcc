@@ -24,7 +24,7 @@ doc:
 	@echo "Gerando documentação..."
 	.venv/bin/python -m pdf2svg
 	mkdocs build
-	mkdocs serve
+	mkdocs serve -a 0.0.0.0:8000
 		
 freeze: 
 	@echo "Congelando dependências..."

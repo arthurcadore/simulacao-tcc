@@ -10,7 +10,7 @@ from receiver import Receiver
 from noise import Noise
 
 def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
-    """
+    r"""
     Simula o BER para um dado SNR em dB.
     """
     datagramTX = Datagram(pcdnum=1234, numblocks=numblocks)
@@ -31,6 +31,9 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
     return ber
 
 if __name__ == "__main__":
+    r"""
+    Simulação de BER em função do SNR.
+    """
     SNR_values = np.arange(-30, 0, 0.5)  # -30 até 0 dB
     repetitions = 16666
     numblocks = 8

@@ -51,6 +51,8 @@ nav:
   - Recepção:
       - Noise: api/noise.md
   - Plots: api/plots.md
+  - Extras: 
+      - BER vs SNR: api/bersnr.md
 
 plugins:
   - search
