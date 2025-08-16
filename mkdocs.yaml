@@ -37,7 +37,7 @@ extra_css:
 
 nav:
   - Início: index.md
-  - Classes:
+  - Componentes:
       - Datagrama: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
       - Embaralhador: api/scrambler.md
@@ -46,10 +46,9 @@ nav:
       - Codificador NRZ e MAN: api/encoder.md
       - Formatador RRC: api/formatter.md
       - Modulador: api/modulator.md
-  - Transmissão: 
-      - Transmissor: api/transmitter.md
-  - Recepção:
       - Noise: api/noise.md
+  - Transmissor: api/transmitter.md
+  - Receptor: api/receiver.md
   - Plots: api/plots.md
   - Extras: 
       - BER vs SNR: api/bersnr.md

@@ -20,9 +20,13 @@ clean:
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
+doc-images:
+	@echo "Gerando imagens para a documentação..."
+	.venv/bin/python -m pdf2svg
+	@echo "Imagens geradas!"
+
 doc: 
 	@echo "Gerando documentação..."
-	.venv/bin/python -m pdf2svg
 	mkdocs build
 	mkdocs serve -a 0.0.0.0:8000
 		
