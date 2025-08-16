@@ -887,15 +887,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bersnr" class="md-nav__link">
-    <span class="md-ellipsis">
-      bersnr
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#bersnr.simulate_ber" class="md-nav__link">
     <span class="md-ellipsis">
       simulate_ber
@@ -969,45 +960,12 @@
 <h1 id="ber-vs-snr">BER vs SNR</h1>
 
 
-<div class="doc doc-object doc-module">
-
-
-
-<a id="bersnr"></a>
-    <div class="doc doc-contents first">
-
-        <p>Implementação de simulação para curva BER vs SNR. </p>
-<p>Autor: Arthur Cadore
-Data: 28-07-2025</p>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
 <div class="doc doc-object doc-function">
 
 
-<h2 id="bersnr.simulate_ber" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">simulate_ber</span><span class="p">(</span><span class="n">snr_db</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></code>
 
-</h2>
-
-
-    <div class="doc doc-contents ">
+<a id="bersnr.simulate_ber"></a>
+    <div class="doc doc-contents first">
 
         <p>Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado SNR.</p>
 
@@ -1121,13 +1079,9 @@ Data: 28-07-2025</p>
 <div class="doc doc-object doc-function">
 
 
-<h2 id="bersnr.run_simulation" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">run_simulation</span><span class="p">(</span><span class="n">SNR_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">repetitions</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span></code>
 
-</h2>
-
-
-    <div class="doc doc-contents ">
+<a id="bersnr.run_simulation"></a>
+    <div class="doc doc-contents first">
 
         <p>Executa a simulação completa de BER vs SNR. Retorna a tupla BER vs SNR.</p>
 
@@ -1240,13 +1194,9 @@ Data: 28-07-2025</p>
 <div class="doc doc-object doc-function">
 
 
-<h2 id="bersnr.save_results" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">save_results</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;../out/snr_vs_ber.txt&#39;</span><span class="p">)</span></code>
 
-</h2>
-
-
-    <div class="doc doc-contents ">
+<a id="bersnr.save_results"></a>
+    <div class="doc doc-contents first">
 
         <p>Salva os resultados de simulação em um arquivo .txt </p>
 
@@ -1305,13 +1255,9 @@ Data: 28-07-2025</p>
 <div class="doc doc-object doc-function">
 
 
-<h2 id="bersnr.plot_from_file" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">plot_from_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;../out/snr_vs_ber.txt&#39;</span><span class="p">,</span> <span class="n">out_pdf</span><span class="o">=</span><span class="s1">&#39;../out/snr_vs_ber.pdf&#39;</span><span class="p">)</span></code>
 
-</h2>
-
-
-    <div class="doc doc-contents ">
+<a id="bersnr.plot_from_file"></a>
+    <div class="doc doc-contents first">
 
         <p>Lê os resultados do arquivo TXT (relativo ao diretório do script) e gera o gráfico BER vs SNR em PDF.</p>
 
@@ -1363,14 +1309,6 @@ Data: 28-07-2025</p>
     </table>
         <p><img alt="bersnr" src="../assets/snr_vs_ber.svg" /></p>
 
-
-    </div>
-
-</div>
-
-
-
-  </div>
 
     </div>
 
