@@ -15,7 +15,7 @@ output_dir = script_dir / "api" / "assets"
 # Cria o diretório de saída se não existir
 output_dir.mkdir(parents=True, exist_ok=True)
 
-MAX_SVG_SIZE = 1 * 1024 * 1024  # 1 MB
+MAX_SVG_SIZE = 4 * 1024 * 1024  # 1 MB
 N_CORES = 12
 
 
