@@ -9,18 +9,18 @@ from formatter import Formatter
 from plots import Plotter
 
 class Modulator:
-    r"""
-    Inicializa uma instância do modulador IQ.
-    O modulador IQ é responsável por modular os sinais I e Q em uma portadora de frequência específica.
-
-    Args:
-        fc (float): Frequência da portadora.
-        fs (int): Frequência de amostragem.
-
-    Raises:
-        ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
-    """
     def __init__(self, fc, fs):
+        r"""
+        Inicializa uma instância do modulador IQ.
+        O modulador IQ é responsável por modular os sinais I e Q em uma portadora de frequência específica.
+
+        Args:
+            fc (float): Frequência da portadora.
+            fs (int): Frequência de amostragem.
+
+        Raises:
+            ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
+        """
         if fc <= 0:
             raise ValueError("A frequência da portadora deve ser maior que zero.")
         

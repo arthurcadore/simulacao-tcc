@@ -88,15 +88,15 @@ class EncoderConvolutional:
 
 
 class DecoderViterbi:
-    """
+    r"""
     Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.
 
     Referência:
         AS3-SP-516-274-CNES (3.1.4.4)
     """
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
-        """
-        Inicializa o decodificador Viterbi.
+        r"""
+        Inicializa o decodificador Convolucional.
 
         Args:
             G (np.ndarray): Matriz de polinômios geradores.
@@ -109,7 +109,7 @@ class DecoderViterbi:
         self.trellis = self.build_trellis()
 
     def build_trellis(self):
-        """
+        r"""
         Constroi a trelica do decodificador Viterbi.
 
         Returns:
@@ -131,7 +131,7 @@ class DecoderViterbi:
         return trellis
 
     def decode(self, vt0, vt1):
-        """
+        r"""
         Decodifica os bits de entrada.
 
         Args:

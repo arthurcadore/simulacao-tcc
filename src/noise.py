@@ -1,16 +1,23 @@
+"""
+Implementação de um canal para aplicação de ruido AWGN.
+
+Autor: Arthur Cadore
+Data: 16-08-2025
+"""
+
 import numpy as np
 from plots import Plotter
 from datagram import Datagram
 from transmitter import Transmitter
 
 class Noise:
-    r"""
-    Adiciona ruído branco gaussiano (AWGN) a um sinal.
-
-    Args:
-        snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.
-    """
     def __init__(self, snr=10):
+        r"""
+        Implementação de canal para aplicação de ruido AWGN no sinal transmitido.
+
+        Args:
+            snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.
+        """
         self.snr = snr
     
     def add_noise(self, signal):

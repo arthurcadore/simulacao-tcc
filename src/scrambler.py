@@ -13,6 +13,9 @@ from plots import Plotter
 
 class Scrambler:
     def __init__(self):
+        r"""
+        Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
+        """
         pass
 
     def scramble(self, X, Y):

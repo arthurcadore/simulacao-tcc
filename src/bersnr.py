@@ -83,6 +83,7 @@ def run_simulation(SNR_values=np.arange(-30, 31, 1), repetitions=10, numblocks=1
 
     return results
 
+# TODO: Implementar salvamento dos dados em formato binário para diminuir o tamanho do arquivo e facilitar a leitura posterior.
 def save_results(results, filename="../out/snr_vs_ber.txt"):
     r"""
     Salva os resultados de simulação em um arquivo .txt 

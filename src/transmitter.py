@@ -1,3 +1,10 @@
+"""
+Implementação de um transmissor PTT-A3 com seus componentes.
+
+Autor: Arthur Cadore
+Data: 16-08-2025
+"""
+
 from formatter import Formatter
 from convolutional import EncoderConvolutional
 from datagram import Datagram
@@ -29,20 +36,20 @@ class TransmissionResult:
 
 
 class Transmitter:
-    r"""
-    Classe que encapsula todo o processo de transmissão, desde a preparação do datagrama até a
-    modulação do sinal.
-
-    Args:
-        datagram (Datagram): Instância do datagrama a ser transmitido.
-        fc (float): Frequência da portadora em Hz. Default é 4000 Hz
-        fs (float): Frequência de amostragem em Hz. Default é 128000 Hz.
-        Rb (float): Taxa de bits em bps. Default é 400 b
-        output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.
-        output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários.
-    """
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
                  output_print=True, output_plot=True):
+        r"""
+        Classe que encapsula todo o processo de transmissão, desde a preparação do datagrama até a
+        modulação do sinal.
+    
+        Args:
+            datagram (Datagram): Instância do datagrama a ser transmitido.
+            fc (float): Frequência da portadora em Hz. Default é 4000 Hz
+            fs (float): Frequência de amostragem em Hz. Default é 128000 Hz.
+            Rb (float): Taxa de bits em bps. Default é 400 b
+            output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.
+            output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários.
+        """
         self.datagram = datagram
         self.fc = fc
         self.fs = fs

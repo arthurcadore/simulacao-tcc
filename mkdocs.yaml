@@ -47,6 +47,9 @@ nav:
       - Formatador RRC: api/formatter.md
       - Modulador: api/modulator.md
       - Noise: api/noise.md
+      - Filtro Passa-Baixa: api/lpf.md
+      - Filtro Casado: api/matchedfilter.md
+      - Decisor: api/sampler.md
   - Transmissor: api/transmitter.md
   - Receptor: api/receiver.md
   - Plots: api/plots.md
