@@ -32,9 +32,9 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
 
 if __name__ == "__main__":
     SNR_values = np.arange(-30, 0, 0.5)  # -30 até 0 dB
-    repetitions = 100
+    repetitions = 16666
     numblocks = 8
-    num_workers = 16  
+    num_workers = 24  
 
     results = []
     total_tasks = len(SNR_values) * repetitions
