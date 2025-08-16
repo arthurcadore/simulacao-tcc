@@ -985,159 +985,6 @@
 
 
 
-              <details class="quote">
-                <summary>Source code in <code>src/lowpassfilter.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">LPF</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128_000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Inicializa o LPF (Low-Pass Filter).</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            cut_off (float): Frequência de corte do filtro.</span>
-<span class="sd">            order (int): Ordem do filtro.</span>
-<span class="sd">            fs (int, opcional): Frequência de amostragem. Padrão é 128000.</span>
-<span class="sd">            type (str, opcional): Tipo de filtro. Padrão é &quot;butter&quot;.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">cut_off</span> <span class="o">=</span> <span class="n">cut_off</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
-
-        <span class="nb">type</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">!=</span> <span class="s2">&quot;butter&quot;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tipo de filtro inválido. Use &#39;butter&#39;.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Coeficientes b (numerador) e a (denominador) do filtro</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">butterworth_filter</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_impulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_impulse_response</span><span class="p">()</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">butterworth_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fNyquist</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calcula os coeficientes do filtro Butterworth.</span>
-
-<span class="sd">        Args: </span>
-<span class="sd">            fNyquist (float): Fator de Nyquist. Padrão é 0.5 * fs.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            tuple: Coeficientes b e a do filtro Butterworth.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cut_off</span> <span class="o">/</span> <span class="p">(</span><span class="n">fNyquist</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">calc_impulse_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">impulse_len</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calcula a resposta ao impulso do filtro.</span>
-
-<span class="sd">        Args: </span>
-<span class="sd">            impulse_len (int): Comprimento do vetor de impulso. Padrão é 512.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            tuple: Resposta ao impulso e vetor de tempo.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Impulso unitário</span>
-        <span class="n">impulse_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">impulse_len</span><span class="p">)</span>
-        <span class="n">impulse_input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="c1"># Resposta ao impulso</span>
-        <span class="n">impulse_response</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">impulse_input</span><span class="p">)</span>
-        <span class="n">t_impulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">impulse_len</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
-        <span class="k">return</span> <span class="n">impulse_response</span><span class="p">,</span> <span class="n">t_impulse</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Aplica o filtro passa-baixa ao sinal de entrada.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            signal (np.ndarray): Sinal de entrada a ser filtrado.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: Sinal filtrado.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">signal_filtered</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
-
-        <span class="c1"># Remover offset DC</span>
-        <span class="n">signal_filtered</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal_filtered</span><span class="p">)</span>
-
-        <span class="c1"># Normalizar amplitude</span>
-        <span class="n">signal_filtered</span> <span class="o">*=</span> <span class="mi">2</span>
-
-        <span class="k">return</span> <span class="n">signal_filtered</span>
-</code></pre></div></td></tr></table></div>
-              </details>
 
 
 
@@ -1244,53 +1091,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/lowpassfilter.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128_000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Inicializa o LPF (Low-Pass Filter).</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        cut_off (float): Frequência de corte do filtro.</span>
-<span class="sd">        order (int): Ordem do filtro.</span>
-<span class="sd">        fs (int, opcional): Frequência de amostragem. Padrão é 128000.</span>
-<span class="sd">        type (str, opcional): Tipo de filtro. Padrão é &quot;butter&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">cut_off</span> <span class="o">=</span> <span class="n">cut_off</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
-
-    <span class="nb">type</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">type</span> <span class="o">!=</span> <span class="s2">&quot;butter&quot;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tipo de filtro inválido. Use &#39;butter&#39;.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Coeficientes b (numerador) e a (denominador) do filtro</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">butterworth_filter</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_impulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_impulse_response</span><span class="p">()</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
@@ -1362,33 +1162,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/lowpassfilter.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">butterworth_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fNyquist</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calcula os coeficientes do filtro Butterworth.</span>
-
-<span class="sd">    Args: </span>
-<span class="sd">        fNyquist (float): Fator de Nyquist. Padrão é 0.5 * fs.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: Coeficientes b e a do filtro Butterworth.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cut_off</span> <span class="o">/</span> <span class="p">(</span><span class="n">fNyquist</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
@@ -1460,45 +1233,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/lowpassfilter.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calc_impulse_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">impulse_len</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calcula a resposta ao impulso do filtro.</span>
-
-<span class="sd">    Args: </span>
-<span class="sd">        impulse_len (int): Comprimento do vetor de impulso. Padrão é 512.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: Resposta ao impulso e vetor de tempo.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Impulso unitário</span>
-    <span class="n">impulse_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">impulse_len</span><span class="p">)</span>
-    <span class="n">impulse_input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="c1"># Resposta ao impulso</span>
-    <span class="n">impulse_response</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">impulse_input</span><span class="p">)</span>
-    <span class="n">t_impulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">impulse_len</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
-    <span class="k">return</span> <span class="n">impulse_response</span><span class="p">,</span> <span class="n">t_impulse</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
@@ -1570,47 +1304,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/lowpassfilter.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Aplica o filtro passa-baixa ao sinal de entrada.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        signal (np.ndarray): Sinal de entrada a ser filtrado.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: Sinal filtrado.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">signal_filtered</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
-
-    <span class="c1"># Remover offset DC</span>
-    <span class="n">signal_filtered</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal_filtered</span><span class="p">)</span>
-
-    <span class="c1"># Normalizar amplitude</span>
-    <span class="n">signal_filtered</span> <span class="o">*=</span> <span class="mi">2</span>
-
-    <span class="k">return</span> <span class="n">signal_filtered</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>

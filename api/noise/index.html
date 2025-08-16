@@ -967,59 +967,6 @@
 
 
 
-              <details class="quote">
-                <summary>Source code in <code>src/noise.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Noise</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snr</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Implementação de canal para aplicação de ruido AWGN no sinal transmitido.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snr</span> <span class="o">=</span> <span class="n">snr</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adiciona ruído AWGN ao sinal fornecido.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            signal (np.ndarray): Sinal ao qual o ruído será adicionado.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: Sinal com ruído adicionado.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">signal_power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">snr_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">snr</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
-        <span class="n">noise_power</span> <span class="o">=</span> <span class="n">signal_power</span> <span class="o">/</span> <span class="n">snr_linear</span>
-        <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_power</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">signal</span> <span class="o">+</span> <span class="n">noise</span>
-</code></pre></div></td></tr></table></div>
-              </details>
 
 
 
@@ -1078,25 +1025,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/noise.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snr</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implementação de canal para aplicação de ruido AWGN no sinal transmitido.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">snr</span> <span class="o">=</span> <span class="n">snr</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
@@ -1168,39 +1096,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/noise.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Adiciona ruído AWGN ao sinal fornecido.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        signal (np.ndarray): Sinal ao qual o ruído será adicionado.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: Sinal com ruído adicionado.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">signal_power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">snr_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">snr</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">noise_power</span> <span class="o">=</span> <span class="n">signal_power</span> <span class="o">/</span> <span class="n">snr_linear</span>
-    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_power</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">signal</span> <span class="o">+</span> <span class="n">noise</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>

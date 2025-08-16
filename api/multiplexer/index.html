@@ -967,69 +967,6 @@
 
 
 
-              <details class="quote">
-                <summary>Source code in <code>src/multiplexer.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Multiplexer</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Inicializa uma instância do multiplexador.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">I1</span><span class="p">,</span> <span class="n">Q1</span><span class="p">,</span> <span class="n">I2</span><span class="p">,</span> <span class="n">Q2</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Concatena os vetores I e Q de dois canais, retornando os vetores concatenados.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            I1 (np.ndarray): Vetor I do primeiro canal.</span>
-<span class="sd">            Q1 (np.ndarray): Vetor Q do primeiro canal.</span>
-<span class="sd">            I2 (np.ndarray): Vetor I do segundo canal.</span>
-<span class="sd">            Q2 (np.ndarray): Vetor Q do segundo canal.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            I (np.ndarray): Vetor I concatenado.</span>
-<span class="sd">            Q (np.ndarray): Vetor Q concatenado.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">I1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">I2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q2</span><span class="p">),</span> <span class="s2">&quot;Os vetores I e Q devem ter o mesmo comprimento em ambos os canais.&quot;</span>
-
-        <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">I1</span><span class="p">,</span> <span class="n">I2</span><span class="p">))</span>
-        <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Q1</span><span class="p">,</span> <span class="n">Q2</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">I</span><span class="p">,</span> <span class="n">Q</span>
-</code></pre></div></td></tr></table></div>
-              </details>
 
 
 
@@ -1057,19 +994,6 @@
         <p>Inicializa uma instância do multiplexador.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/multiplexer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Inicializa uma instância do multiplexador.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
@@ -1223,55 +1147,6 @@
     </table>
 
 
-            <details class="quote">
-              <summary>Source code in <code>src/multiplexer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">I1</span><span class="p">,</span> <span class="n">Q1</span><span class="p">,</span> <span class="n">I2</span><span class="p">,</span> <span class="n">Q2</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Concatena os vetores I e Q de dois canais, retornando os vetores concatenados.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        I1 (np.ndarray): Vetor I do primeiro canal.</span>
-<span class="sd">        Q1 (np.ndarray): Vetor Q do primeiro canal.</span>
-<span class="sd">        I2 (np.ndarray): Vetor I do segundo canal.</span>
-<span class="sd">        Q2 (np.ndarray): Vetor Q do segundo canal.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        I (np.ndarray): Vetor I concatenado.</span>
-<span class="sd">        Q (np.ndarray): Vetor Q concatenado.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">I1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">I2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q2</span><span class="p">),</span> <span class="s2">&quot;Os vetores I e Q devem ter o mesmo comprimento em ambos os canais.&quot;</span>
-
-    <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">I1</span><span class="p">,</span> <span class="n">I2</span><span class="p">))</span>
-    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Q1</span><span class="p">,</span> <span class="n">Q2</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">I</span><span class="p">,</span> <span class="n">Q</span>
-</code></pre></div></td></tr></table></div>
-            </details>
     </div>
 
 </div>
