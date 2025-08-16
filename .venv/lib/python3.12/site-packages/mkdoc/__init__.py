@@ -1,0 +1,1 @@
+from .mkdoc import main

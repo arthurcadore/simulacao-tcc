@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {%- block htmltitle %}
+        <title>{% if page and page.title and not page.is_homepage %}{{ page.title }} - {% endif %}{{ config.site_name }}</title>
+    {%- endblock %}
+
+    {%- block site_meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% if page and page.is_homepage %}<meta name="description" content="{{ config['site_description'] }}">{% endif %}
+        {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+        {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
+    {%- endblock %}
+
+    {%- block styles %}
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        {%- if config.theme.highlight_css %}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/{{config.theme.highlight_css|default('atom-one-dark.min.css')}}">
+        {% else %}
+            <link rel="stylesheet" href="{{ 'assets/css/darcula-highlight.min.css'|url }}">
+        {%- endif %}
+
+        <link rel="stylesheet" href="{{ 'assets/css/bootstrap.min.css'|url }}">
+        <link rel="stylesheet" href="{{ 'assets/css/dracula-ui.min.css'|url }}">
+        <link rel="stylesheet" href="{{ 'assets/css/mkdocs.min.css'|url }}">
+
+        {%- for path in extra_css %}
+            <link href="{{ path }}" rel="stylesheet">
+        {%- endfor %}
+
+        {% if config.theme.favicon %}
+            <link  rel="icon" type="image/x-icon" href="{{ config.theme.favicon|url }}">
+        {% else %}
+            <link  rel="icon" type="image/x-icon" href="{{ 'assets/img/favicon.ico'|url }}">
+        {% endif %}
+
+    {%- endblock %}
+
+    {%- block libs %}
+
+        {%- if config.theme.highlightjs %}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/{{config.theme.highlight_js|default('highlight.min.js')}}"></script>
+
+            {%- for lang in config.theme.hljs_languages %}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/{{lang}}.min.js"></script>
+            {%- endfor %}
+                <script>hljs.initHighlightingOnLoad();</script>
+        {%- endif %}
+
+    {%- endblock %}
+
+</head>
+
+<body class="drac-bg-black-secondary drac-text-grey-ternary drac-text drac-scrollbar-purple">
+
+    <main class="d-flex">
+
+        <!-- block sidebar -->
+        {%- block sidebar %}
+            {% include "/modules/sidebar.html" %}
+        {%- endblock %}
+        <!-- endblock -->
+
+        <nav class="divider drac-bg-purple-cyan"></nav>
+
+        <div class="content">
+            <!-- block header -->
+            {%- block header %}
+                {% include "/modules/header.html" %}
+            {%- endblock %}
+            <!-- endblock -->
+
+            <!-- block content -->
+            {%- block content %}
+                {% include "/modules/content.html" %}
+            {%- endblock %}
+            <!-- endblock -->
+
+            <!-- block footer -->
+            {%- block footer %}
+                {% include "/modules/footer.html" %}
+            {%- endblock %}
+            <!-- endblock -->
+        </div>
+
+    </main>
+
+    {%- block scripts %}
+
+        <script>var base_url = '{{ base_url }}';</script>
+        <script src="{{ 'assets/js/jquery-3.3.1.slim.min.js'|url }}"></script>
+        <script src="{{ 'assets/js/bootstrap.bundle.min.js'|url }}"></script>
+        <script src="{{ 'assets/js/mkdocs.js'|url }}"></script>
+
+        {%- for path in extra_javascript %}
+			<script src="{{ path }}" defer></script>
+        {%- endfor %}
+
+    {%- endblock %}
+
+</body>
+
+</html>

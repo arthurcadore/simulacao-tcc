@@ -1,0 +1,3416 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/arthurcadore/eng-telecom-tcc/api/receiver/">
+      
+      
+        <link rel="prev" href="../transmitter/">
+      
+      
+        <link rel="next" href="../plots/">
+      
+      
+      <link rel="icon" href="../../api/assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Receptor - Simulador ARGOS-3</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../api/assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../api/assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../api/assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../api/assets/styles.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="white" data-md-color-primary="darkblue" data-md-color-accent="darkblue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#receptor" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Simulador ARGOS-3" class="md-header__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+      
+  <img src="../../api/assets/icon.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simulador ARGOS-3
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Receptor
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="white" data-md-color-primary="darkblue" data-md-color-accent="darkblue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/arthurcadore/eng-telecom-tcc" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    arthurcadore/eng-telecom-tcc
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../datagram/" class="md-tabs__link">
+          
+  
+  
+  Componentes
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../transmitter/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Transmissor
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Receptor
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../plots/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Plots
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../bersnr/" class="md-tabs__link">
+          
+  
+  
+  Extras
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Simulador ARGOS-3" class="md-nav__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+      
+  <img src="../../api/assets/icon.svg" alt="logo">
+
+    </a>
+    Simulador ARGOS-3
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/arthurcadore/eng-telecom-tcc" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    arthurcadore/eng-telecom-tcc
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Componentes
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Componentes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../datagram/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Datagrama
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convolutional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Codificador Convolutional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scrambler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Embaralhador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preamble/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Preâmbulo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiplexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multiplexador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Codificador NRZ e MAN
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../formatter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Formatador RRC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modulador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Noise
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lpf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Filtro Passa-Baixa
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matchedfilter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Filtro Casado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sampler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transmitter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transmissor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Receptor
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Receptor
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver" class="md-nav__link">
+    <span class="md-ellipsis">
+      Receiver
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.demodulate" class="md-nav__link">
+    <span class="md-ellipsis">
+      demodulate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.lowpassfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      lowpassfilter
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.matchedfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      matchedfilter
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      sampler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      decode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.remove_preamble" class="md-nav__link">
+    <span class="md-ellipsis">
+      remove_preamble
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.descrambler" class="md-nav__link">
+    <span class="md-ellipsis">
+      descrambler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.conv_decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      conv_decoder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plots
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Extras
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Extras
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bersnr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    BER vs SNR
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="receptor">Receptor</h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="receiver.Receiver"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/receiver.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Receiver</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128_000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fs (int): Frequência de amostragem em Hz. Default é 128000 Hz.</span>
+<span class="sd">            Rb (int): Taxa de bits em bps. Default é 400 bps.</span>
+<span class="sd">            output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.</span>
+<span class="sd">            output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários. Default é True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rb</span> <span class="o">=</span> <span class="n">Rb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span> <span class="o">=</span> <span class="n">output_print</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span> <span class="o">=</span> <span class="n">output_plot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">demodulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Demodula o sinal $s&#39;(t)$ com ruído recebido, recuperando os sinais $x&#39;_{I}(t)$ e $y&#39;_{Q}(t)$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            s (np.ndarray): Sinal $s&#39;(t)$ a ser demodulado.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            xI_prime (np.ndarray): Sinal $x&#39;_{I}(t)$ demodulado.</span>
+<span class="sd">            yQ_prime (np.ndarray): Sinal $y&#39;_{Q}(t)$ demodulado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">demodulator</span> <span class="o">=</span> <span class="n">Modulator</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+        <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span> <span class="o">=</span> <span class="n">demodulator</span><span class="o">.</span><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DEMODULADOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&#39;I(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y&#39;Q(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_freq_receiver</span><span class="p">(</span>
+                <span class="n">xI_prime</span><span class="p">,</span>
+                <span class="n">yQ_prime</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+                <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_freq.pdf&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">lowpassfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x&#39;_{I}(t)$ e $y&#39;_{Q}(t)$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cut_off (float): Frequência de corte do filtro.</span>
+<span class="sd">            xI_prime (np.ndarray): Sinal $x&#39;_{I}(t)$ a ser filtrado.</span>
+<span class="sd">            yQ_prime (np.ndarray): Sinal $y&#39;_{Q}(t)$ a ser filtrado.</span>
+<span class="sd">            t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dI_prime (np.ndarray): Sinal $d&#39;_{I}(t)$ filtrado.</span>
+<span class="sd">            dQ_prime (np.ndarray): Sinal $d&#39;_{Q}(t)$ filtrado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lpf</span> <span class="o">=</span> <span class="n">LPF</span><span class="p">(</span><span class="n">cut_off</span><span class="o">=</span><span class="n">cut_off</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
+        <span class="n">impulse_response</span><span class="p">,</span> <span class="n">t_impulse</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">calc_impulse_response</span><span class="p">()</span>
+        <span class="n">dI_prime</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">xI_prime</span><span class="p">)</span>
+        <span class="n">dQ_prime</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">yQ_prime</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== FILTRAGEM PASSA-BAIXA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;d&#39;I(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">dI_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;d&#39;Q(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_lowpass_filter</span><span class="p">(</span>
+                <span class="n">t_impulse</span><span class="p">,</span>
+                <span class="n">impulse_response</span><span class="p">,</span>
+                <span class="n">t</span><span class="p">,</span>
+                <span class="n">dI_prime</span><span class="p">,</span>
+                <span class="n">dQ_prime</span><span class="p">,</span>
+                <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_lowpass_filter.pdf&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_lowpass_freq</span><span class="p">(</span>
+                <span class="n">t_impulse</span><span class="p">,</span>
+                <span class="n">impulse_response</span><span class="p">,</span>
+                <span class="n">xI_prime</span><span class="p">,</span>
+                <span class="n">yQ_prime</span><span class="p">,</span>
+                <span class="n">dI_prime</span><span class="p">,</span>
+                <span class="n">dQ_prime</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+                <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_lowpass_freq.pdf&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">matchedfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aplica o filtro casado com resposta ao impuslo $h(t)$ aos sinais $d&#39;_{I}(t)$ e $d&#39;_{Q}(t)$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dI_prime (np.ndarray): Sinal $d&#39;_{I}(t)$ a ser filtrado.</span>
+<span class="sd">            dQ_prime (np.ndarray): Sinal $d&#39;_{Q}(t)$ a ser filtrado.</span>
+<span class="sd">            t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It_prime (np.ndarray): Sinal $I&#39;(t)$ filtrado.</span>
+<span class="sd">            Qt_prime (np.ndarray): Sinal $Q&#39;(t)$ filtrado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">matched_filter</span> <span class="o">=</span> <span class="n">MatchedFilter</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rb</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC-Inverted&quot;</span><span class="p">)</span>
+        <span class="n">It_prime</span> <span class="o">=</span> <span class="n">matched_filter</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">)</span>
+        <span class="n">Qt_prime</span> <span class="o">=</span> <span class="n">matched_filter</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dQ_prime</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== FILTRAGEM CASADA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I&#39;(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">It_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Q&#39;(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_matched_filter</span><span class="p">(</span>
+                <span class="n">matched_filter</span><span class="o">.</span><span class="n">t_impulse</span><span class="p">,</span>
+                <span class="n">matched_filter</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span>
+                <span class="n">t</span><span class="p">,</span>
+                <span class="n">It_prime</span><span class="p">,</span>
+                <span class="n">Qt_prime</span><span class="p">,</span>
+                <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="mf">0.1</span><span class="p">,</span>
+                <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_matched_filter.pdf&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_matched_filter_freq</span><span class="p">(</span>
+                <span class="n">matched_filter</span><span class="o">.</span><span class="n">t_impulse</span><span class="p">,</span>
+                <span class="n">matched_filter</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span>
+                <span class="n">dI_prime</span><span class="p">,</span>
+                <span class="n">dQ_prime</span><span class="p">,</span>
+                <span class="n">It_prime</span><span class="p">,</span>
+                <span class="n">Qt_prime</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+                <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal I - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Canal Q - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+                <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_matched_filter_freq.pdf&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Realiza a decisão (amostragem e quantização) dos sinais $I&#39;(t)$ e $Q&#39;(t)$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            It_prime (np.ndarray): Sinal $I&#39;(t)$ a ser amostrado e quantizado.</span>
+<span class="sd">            Qt_prime (np.ndarray): Sinal $Q&#39;(t)$ a ser amostrado e quantizado.</span>
+<span class="sd">            t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Xnrz_prime (np.ndarray): Sinal $X&#39;_{NRZ}[n]$ amostrado e quantizado.</span>
+<span class="sd">            Yman_prime (np.ndarray): Sinal $Y&#39;_{MAN}[n]$ amostrado e quantizado.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">Sampler</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rb</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">i_signal_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">It_prime</span><span class="p">)</span>
+        <span class="n">q_signal_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">Qt_prime</span><span class="p">)</span>
+        <span class="n">t_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="n">Xnrz_prime</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">i_signal_sampled</span><span class="p">)</span>
+        <span class="n">Yman_prime</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">q_signal_sampled</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECISOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;nrz:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xnrz_prime</span><span class="p">[:</span><span class="mi">80</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;man:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">[:</span><span class="mi">80</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_sampled_signals</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>
+                                 <span class="n">It_prime</span><span class="p">,</span>
+                                 <span class="n">Qt_prime</span><span class="p">,</span>
+                                 <span class="n">t_sampled</span><span class="p">,</span>
+                                 <span class="n">i_signal_sampled</span><span class="p">,</span>
+                                 <span class="n">q_signal_sampled</span><span class="p">,</span>                                 
+                                 <span class="s2">&quot;Amostragem&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Canal I&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Canal Q&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Amostragem&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Canal I - Amostragem&quot;</span><span class="p">,</span>
+                                 <span class="s2">&quot;Canal Q - Amostragem&quot;</span><span class="p">,</span>
+                                 <span class="mf">0.1</span><span class="p">,</span>
+                                 <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_sampler.pdf&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Decodifica os sinais quantizados $X&#39;_{NRZ}[n]$ e $Y&#39;_{MAN}[n]$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            Xnrz_prime (np.ndarray): Sinal $X&#39;_{NRZ}[n]$ quantizado.</span>
+<span class="sd">            Yman_prime (np.ndarray): Sinal $Y&#39;_{MAN}[n]$ quantizado.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Xn_prime (np.ndarray): Sinal $X&#39;n$ decodificado.</span>
+<span class="sd">            Yn_prime (np.ndarray): Sinal $Y&#39;n$ decodificado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">decoderNRZ</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="s2">&quot;nrz&quot;</span><span class="p">)</span>
+        <span class="n">decoderManchester</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="s2">&quot;manchester&quot;</span><span class="p">)</span>
+        <span class="n">i_quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">)</span>
+        <span class="n">q_quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Yman_prime</span><span class="p">)</span>
+
+        <span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">decoderNRZ</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">i_quantized</span><span class="p">)</span>
+        <span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">decoderManchester</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">q_quantized</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECODIFICADOR DE LINHA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_preamble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove os 15 primeiros bits de cada sinal.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            Xn_prime (np.ndarray): Sinal $X&#39;n$ decodificado.</span>
+<span class="sd">            Yn_prime (np.ndarray): Sinal $Y&#39;n$ decodificado.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Xn_prime (np.ndarray): Sinal $X&#39;n$ sem preâmbulo.</span>
+<span class="sd">            Yn_prime (np.ndarray): Sinal $Y&#39;n$ sem preâmbulo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># remove the first 15 bits from each signal</span>
+        <span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">Xn_prime</span><span class="p">[</span><span class="mi">15</span><span class="p">:]</span>
+        <span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">Yn_prime</span><span class="p">[</span><span class="mi">15</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== REMOÇÃO DO PREÂMBULO ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">descrambler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Desembaralha os vetores de bits dos canais I e Q.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            Xn_prime (np.ndarray): Vetor de bits $X&#39;n$ embaralhados.</span>
+<span class="sd">            Yn_prime (np.ndarray): Vetor de bits $Y&#39;n$ embaralhados.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            vt0 (np.ndarray): Vetor de bits $v_{t}^{0}&#39;$ desembaralhado.</span>
+<span class="sd">            vt1 (np.ndarray): Vetor de bits $v_{t}^{1}&#39;$ desembaralhado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">descrambler</span> <span class="o">=</span> <span class="n">Scrambler</span><span class="p">()</span>
+        <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span> <span class="o">=</span> <span class="n">descrambler</span><span class="o">.</span><span class="n">descramble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DESEMBARALHADOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vt0&#39;:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">vt0</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vt1&#39;:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">conv_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Decodifica os vetores de bits dos canais I e Q.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vt0 (np.ndarray): Vetor de bits $v_{t}^{0}&#39;$ desembaralhado.</span>
+<span class="sd">            vt1 (np.ndarray): Vetor de bits $v_{t}^{1}&#39;$ desembaralhado.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ut (np.ndarray): Vetor de bits $u_{t}&#39;$ decodificado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conv_decoder</span> <span class="o">=</span> <span class="n">DecoderViterbi</span><span class="p">()</span>
+        <span class="n">ut</span> <span class="o">=</span> <span class="n">conv_decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECODIFICADOR VITERBI ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;u&#39;t:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ut</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">ut</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Executa o processo de recepção, retornando o resultado da recepção.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            s (np.ndarray): Sinal $s(t)$ recebido.</span>
+<span class="sd">            t (np.ndarray): Vetor de tempo.</span>
+<span class="sd">            fc (float): Frequência de portadora.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ut (np.ndarray): Vetor de bits $u_{t}&#39;$ decodificado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: Adicionar detecção de portadora;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span>
+
+        <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lowpassfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="o">*</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matchedfilter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">)</span>
+        <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_preamble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+        <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descrambler</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+        <span class="n">ut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_decoder</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ut</span> 
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de amostragem em Hz. Default é 128000 Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>128000</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Rb</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Taxa de bits em bps. Default é 400 bps.</p>
+              </div>
+            </td>
+            <td>
+                  <code>400</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_print</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se True, imprime os vetores intermediários no console. Default é True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_plot</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se True, gera e salva os gráficos dos processos intermediários. Default é True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128_000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fs (int): Frequência de amostragem em Hz. Default é 128000 Hz.</span>
+<span class="sd">        Rb (int): Taxa de bits em bps. Default é 400 bps.</span>
+<span class="sd">        output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.</span>
+<span class="sd">        output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários. Default é True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Rb</span> <span class="o">=</span> <span class="n">Rb</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span> <span class="o">=</span> <span class="n">output_print</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span> <span class="o">=</span> <span class="n">output_plot</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.demodulate" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, recuperando os sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>s</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(s'(t)\)</span> a ser demodulado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>xI_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(x'_{I}(t)\)</span> demodulado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>yQ_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(y'_{Q}(t)\)</span> demodulado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">demodulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Demodula o sinal $s&#39;(t)$ com ruído recebido, recuperando os sinais $x&#39;_{I}(t)$ e $y&#39;_{Q}(t)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (np.ndarray): Sinal $s&#39;(t)$ a ser demodulado.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        xI_prime (np.ndarray): Sinal $x&#39;_{I}(t)$ demodulado.</span>
+<span class="sd">        yQ_prime (np.ndarray): Sinal $y&#39;_{Q}(t)$ demodulado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">demodulator</span> <span class="o">=</span> <span class="n">Modulator</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+    <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span> <span class="o">=</span> <span class="n">demodulator</span><span class="o">.</span><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DEMODULADOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&#39;I(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y&#39;Q(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_freq_receiver</span><span class="p">(</span>
+            <span class="n">xI_prime</span><span class="p">,</span>
+            <span class="n">yQ_prime</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_freq.pdf&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.lowpassfilter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">lowpassfilter</span><span class="p">(</span><span class="n">cut_off</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Aplica o filtro passa-baixa com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cut_off</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de corte do filtro.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xI_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(x'_{I}(t)\)</span> a ser filtrado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>yQ_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(y'_{Q}(t)\)</span> a ser filtrado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>dI_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(d'_{I}(t)\)</span> filtrado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>dQ_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(d'_{Q}(t)\)</span> filtrado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">lowpassfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut_off</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x&#39;_{I}(t)$ e $y&#39;_{Q}(t)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cut_off (float): Frequência de corte do filtro.</span>
+<span class="sd">        xI_prime (np.ndarray): Sinal $x&#39;_{I}(t)$ a ser filtrado.</span>
+<span class="sd">        yQ_prime (np.ndarray): Sinal $y&#39;_{Q}(t)$ a ser filtrado.</span>
+<span class="sd">        t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dI_prime (np.ndarray): Sinal $d&#39;_{I}(t)$ filtrado.</span>
+<span class="sd">        dQ_prime (np.ndarray): Sinal $d&#39;_{Q}(t)$ filtrado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lpf</span> <span class="o">=</span> <span class="n">LPF</span><span class="p">(</span><span class="n">cut_off</span><span class="o">=</span><span class="n">cut_off</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
+    <span class="n">impulse_response</span><span class="p">,</span> <span class="n">t_impulse</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">calc_impulse_response</span><span class="p">()</span>
+    <span class="n">dI_prime</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">xI_prime</span><span class="p">)</span>
+    <span class="n">dQ_prime</span> <span class="o">=</span> <span class="n">lpf</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">yQ_prime</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== FILTRAGEM PASSA-BAIXA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;d&#39;I(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">dI_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;d&#39;Q(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_lowpass_filter</span><span class="p">(</span>
+            <span class="n">t_impulse</span><span class="p">,</span>
+            <span class="n">impulse_response</span><span class="p">,</span>
+            <span class="n">t</span><span class="p">,</span>
+            <span class="n">dI_prime</span><span class="p">,</span>
+            <span class="n">dQ_prime</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_lowpass_filter.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_lowpass_freq</span><span class="p">(</span>
+            <span class="n">t_impulse</span><span class="p">,</span>
+            <span class="n">impulse_response</span><span class="p">,</span>
+            <span class="n">xI_prime</span><span class="p">,</span>
+            <span class="n">yQ_prime</span><span class="p">,</span>
+            <span class="n">dI_prime</span><span class="p">,</span>
+            <span class="n">dQ_prime</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_lowpass_freq.pdf&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.matchedfilter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">matchedfilter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dI_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(d'_{I}(t)\)</span> a ser filtrado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dQ_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(d'_{Q}(t)\)</span> a ser filtrado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>It_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> filtrado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>Qt_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> filtrado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matchedfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aplica o filtro casado com resposta ao impuslo $h(t)$ aos sinais $d&#39;_{I}(t)$ e $d&#39;_{Q}(t)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dI_prime (np.ndarray): Sinal $d&#39;_{I}(t)$ a ser filtrado.</span>
+<span class="sd">        dQ_prime (np.ndarray): Sinal $d&#39;_{Q}(t)$ a ser filtrado.</span>
+<span class="sd">        t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        It_prime (np.ndarray): Sinal $I&#39;(t)$ filtrado.</span>
+<span class="sd">        Qt_prime (np.ndarray): Sinal $Q&#39;(t)$ filtrado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matched_filter</span> <span class="o">=</span> <span class="n">MatchedFilter</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rb</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC-Inverted&quot;</span><span class="p">)</span>
+    <span class="n">It_prime</span> <span class="o">=</span> <span class="n">matched_filter</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">)</span>
+    <span class="n">Qt_prime</span> <span class="o">=</span> <span class="n">matched_filter</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dQ_prime</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== FILTRAGEM CASADA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I&#39;(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">It_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Q&#39;(t):&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">[:</span><span class="mi">5</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_matched_filter</span><span class="p">(</span>
+            <span class="n">matched_filter</span><span class="o">.</span><span class="n">t_impulse</span><span class="p">,</span>
+            <span class="n">matched_filter</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span>
+            <span class="n">t</span><span class="p">,</span>
+            <span class="n">It_prime</span><span class="p">,</span>
+            <span class="n">Qt_prime</span><span class="p">,</span>
+            <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_matched_filter.pdf&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_matched_filter_freq</span><span class="p">(</span>
+            <span class="n">matched_filter</span><span class="o">.</span><span class="n">t_impulse</span><span class="p">,</span>
+            <span class="n">matched_filter</span><span class="o">.</span><span class="n">impulse_response</span><span class="p">,</span>
+            <span class="n">dI_prime</span><span class="p">,</span>
+            <span class="n">dQ_prime</span><span class="p">,</span>
+            <span class="n">It_prime</span><span class="p">,</span>
+            <span class="n">Qt_prime</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span>
+            <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Resposta ao Impulso - Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Antes do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal I - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Canal Q - Depois do Filtro Casado&quot;</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_matched_filter_freq.pdf&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.sampler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Realiza a decisão (amostragem e quantização) dos sinais <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>It_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> a ser amostrado e quantizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Qt_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> a ser amostrado e quantizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>Xnrz_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> amostrado e quantizado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>Yman_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> amostrado e quantizado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Realiza a decisão (amostragem e quantização) dos sinais $I&#39;(t)$ e $Q&#39;(t)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        It_prime (np.ndarray): Sinal $I&#39;(t)$ a ser amostrado e quantizado.</span>
+<span class="sd">        Qt_prime (np.ndarray): Sinal $Q&#39;(t)$ a ser amostrado e quantizado.</span>
+<span class="sd">        t (np.ndarray): Vetor de tempo.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Xnrz_prime (np.ndarray): Sinal $X&#39;_{NRZ}[n]$ amostrado e quantizado.</span>
+<span class="sd">        Yman_prime (np.ndarray): Sinal $Y&#39;_{MAN}[n]$ amostrado e quantizado.</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">sampler</span> <span class="o">=</span> <span class="n">Sampler</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rb</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">i_signal_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">It_prime</span><span class="p">)</span>
+    <span class="n">q_signal_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">Qt_prime</span><span class="p">)</span>
+    <span class="n">t_sampled</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">Xnrz_prime</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">i_signal_sampled</span><span class="p">)</span>
+    <span class="n">Yman_prime</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">q_signal_sampled</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECISOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;nrz:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xnrz_prime</span><span class="p">[:</span><span class="mi">80</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;man:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">[:</span><span class="mi">80</span><span class="p">])),</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_plot</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">plot_sampled_signals</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>
+                             <span class="n">It_prime</span><span class="p">,</span>
+                             <span class="n">Qt_prime</span><span class="p">,</span>
+                             <span class="n">t_sampled</span><span class="p">,</span>
+                             <span class="n">i_signal_sampled</span><span class="p">,</span>
+                             <span class="n">q_signal_sampled</span><span class="p">,</span>                                 
+                             <span class="s2">&quot;Amostragem&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;Canal I&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;Canal Q&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;Amostragem&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;Canal I - Amostragem&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;Canal Q - Amostragem&quot;</span><span class="p">,</span>
+                             <span class="mf">0.1</span><span class="p">,</span>
+                             <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;../out/receiver_sampler.pdf&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.decode" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Decodifica os sinais quantizados <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>Xnrz_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> quantizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Yman_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> quantizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>Xn_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(X'n\)</span> decodificado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>Yn_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Y'n\)</span> decodificado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decodifica os sinais quantizados $X&#39;_{NRZ}[n]$ e $Y&#39;_{MAN}[n]$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Xnrz_prime (np.ndarray): Sinal $X&#39;_{NRZ}[n]$ quantizado.</span>
+<span class="sd">        Yman_prime (np.ndarray): Sinal $Y&#39;_{MAN}[n]$ quantizado.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Xn_prime (np.ndarray): Sinal $X&#39;n$ decodificado.</span>
+<span class="sd">        Yn_prime (np.ndarray): Sinal $Y&#39;n$ decodificado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">decoderNRZ</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="s2">&quot;nrz&quot;</span><span class="p">)</span>
+    <span class="n">decoderManchester</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="s2">&quot;manchester&quot;</span><span class="p">)</span>
+    <span class="n">i_quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">)</span>
+    <span class="n">q_quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Yman_prime</span><span class="p">)</span>
+
+    <span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">decoderNRZ</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">i_quantized</span><span class="p">)</span>
+    <span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">decoderManchester</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">q_quantized</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECODIFICADOR DE LINHA ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.remove_preamble" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">remove_preamble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Remove os 15 primeiros bits de cada sinal.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>Xn_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(X'n\)</span> decodificado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Yn_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Y'n\)</span> decodificado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>Xn_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(X'n\)</span> sem preâmbulo.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>Yn_prime</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Y'n\)</span> sem preâmbulo.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_preamble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove os 15 primeiros bits de cada sinal.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Xn_prime (np.ndarray): Sinal $X&#39;n$ decodificado.</span>
+<span class="sd">        Yn_prime (np.ndarray): Sinal $Y&#39;n$ decodificado.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Xn_prime (np.ndarray): Sinal $X&#39;n$ sem preâmbulo.</span>
+<span class="sd">        Yn_prime (np.ndarray): Sinal $Y&#39;n$ sem preâmbulo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># remove the first 15 bits from each signal</span>
+    <span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">Xn_prime</span><span class="p">[</span><span class="mi">15</span><span class="p">:]</span>
+    <span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">Yn_prime</span><span class="p">[</span><span class="mi">15</span><span class="p">:]</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== REMOÇÃO DO PREÂMBULO ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Y&#39;n:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.descrambler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">descrambler</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Desembaralha os vetores de bits dos canais I e Q.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>Xn_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(X'n\)</span> embaralhados.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Yn_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(Y'n\)</span> embaralhados.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>vt0</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{0}'\)</span> desembaralhado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>vt1</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{1}'\)</span> desembaralhado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">descrambler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Desembaralha os vetores de bits dos canais I e Q.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Xn_prime (np.ndarray): Vetor de bits $X&#39;n$ embaralhados.</span>
+<span class="sd">        Yn_prime (np.ndarray): Vetor de bits $Y&#39;n$ embaralhados.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        vt0 (np.ndarray): Vetor de bits $v_{t}^{0}&#39;$ desembaralhado.</span>
+<span class="sd">        vt1 (np.ndarray): Vetor de bits $v_{t}^{1}&#39;$ desembaralhado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">descrambler</span> <span class="o">=</span> <span class="n">Scrambler</span><span class="p">()</span>
+    <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span> <span class="o">=</span> <span class="n">descrambler</span><span class="o">.</span><span class="n">descramble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DESEMBARALHADOR ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vt0&#39;:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">vt0</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vt1&#39;:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.conv_decoder" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">conv_decoder</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Decodifica os vetores de bits dos canais I e Q.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>vt0</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{0}'\)</span> desembaralhado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>vt1</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{1}'\)</span> desembaralhado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>ut</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">conv_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decodifica os vetores de bits dos canais I e Q.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        vt0 (np.ndarray): Vetor de bits $v_{t}^{0}&#39;$ desembaralhado.</span>
+<span class="sd">        vt1 (np.ndarray): Vetor de bits $v_{t}^{1}&#39;$ desembaralhado.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ut (np.ndarray): Vetor de bits $u_{t}&#39;$ decodificado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conv_decoder</span> <span class="o">=</span> <span class="n">DecoderViterbi</span><span class="p">()</span>
+    <span class="n">ut</span> <span class="o">=</span> <span class="n">conv_decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> ==== DECODIFICADOR VITERBI ==== </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;u&#39;t:&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ut</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">ut</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Executa o processo de recepção, retornando o resultado da recepção.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>s</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(s(t)\)</span> recebido.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fc</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de portadora.</p>
+              </div>
+            </td>
+            <td>
+                  <code>4000</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>ut</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/receiver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Executa o processo de recepção, retornando o resultado da recepção.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (np.ndarray): Sinal $s(t)$ recebido.</span>
+<span class="sd">        t (np.ndarray): Vetor de tempo.</span>
+<span class="sd">        fc (float): Frequência de portadora.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ut (np.ndarray): Vetor de bits $u_{t}&#39;$ decodificado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: Adicionar detecção de portadora;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span>
+
+    <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lowpassfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="o">*</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matchedfilter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">)</span>
+    <span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_preamble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+    <span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descrambler</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span>
+    <span class="n">ut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_decoder</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ut</span> 
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.tabs", "header.autohide", "search.suggest", "search.highlight", "toc.integrate", "content.code.copy", "content.code.highlight", "content.tooltips", "navigation.expand", "repository.icon"], "search": "../../api/assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../api/assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
