@@ -836,7 +836,7 @@ class Plotter:
         r"""
         Plota o diagrama de olho dos sinais I e Q após a modulação.
 
-        ![modulation_eye](assets/example_eye.svg)
+        ![modulation_eye](assets/example_eye.png)
 
         Args:
             s1 (np.ndarray): Sinal I modulado.
@@ -886,7 +886,7 @@ class Plotter:
         r"""
         Plota o diagrama IQ dos sinais I e Q após a modulação.
 
-        ![modulation_iq](assets/transmitter_modulator_iq.svg)
+        ![modulation_iq](assets/transmitter_modulator_iq.png)
         
         Args:
             s1 (np.ndarray): Sinal I modulado.

@@ -34,3 +34,13 @@ freeze:
 	@echo "Congelando dependências..."
 	.venv/bin/pip freeze > requirements.txt
 	@echo "Dependências congeladas em requirements.txt"
+
+deploy-docs:
+	@echo "Gerando documentação..."
+	@if ! command -v mkdocs &> /dev/null; then \
+		echo "MkDocs não encontrado. Instalando..."; \
+		.venv/bin/pip install mkdocs mkdocs-material; \
+	fi
+	@echo "Fazendo deploy para o GitHub Pages..."
+	@mkdocs gh-deploy --force
+	@echo "Documentação publicada com sucesso no GitHub Pages!"

@@ -1,30 +1,83 @@
-import fitz  # PyMuPDF
+import fitz
 import os
 import xml.etree.ElementTree as ET
+from scour import scour
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from tqdm import tqdm
 
 input_dir = "./out"
 output_dir = "./docs/api/assets"
 
 os.makedirs(output_dir, exist_ok=True)
 
-def remove_white_background(svg_path):
-    tree = ET.parse(svg_path)
-    root = tree.getroot()
-    for elem in list(root):
-        # Remove retângulo de fundo branco
-        if elem.tag.endswith("rect") and elem.attrib.get("fill", "").lower() in ("#ffffff", "white"):
-            root.remove(elem)
-    tree.write(svg_path)
+MAX_SVG_SIZE = 1 * 1024 * 1024  # 1 MB
+N_CORES = 4
 
-for filename in os.listdir(input_dir):
-    if filename.lower().endswith(".pdf"):
+
+def remove_white_background(svg_path):
+    try:
+        tree = ET.parse(svg_path)
+        root = tree.getroot()
+        for elem in list(root):
+            if elem.tag.endswith("rect") and elem.attrib.get("fill", "").lower() in ("#ffffff", "white"):
+                root.remove(elem)
+        tree.write(svg_path)
+    except Exception as e:
+        print(f"Erro ao limpar fundo do {svg_path}: {e}")
+
+
+def optimize_svg(svg_code):
+    options = scour.sanitizeOptions()
+    options.remove_metadata = True
+    options.strip_comments = True
+    options.simple_colors = True
+    options.shorten_ids = True
+    options.digits = 8
+    return scour.scourString(svg_code, options=options)
+
+
+def process_file(filename):
+    try:
         pdf_path = os.path.join(input_dir, filename)
-        svg_path = os.path.join(output_dir, os.path.splitext(filename)[0] + ".svg")
+        base_name = os.path.splitext(filename)[0]
+        svg_path = os.path.join(output_dir, base_name + ".svg")
 
         doc = fitz.open(pdf_path)
-        page = doc[0]  # primeira página
-        svg_code = page.get_svg_image()  # gera SVG vetorial
-        with open(svg_path, "w", encoding="utf-8") as f:
-            f.write(svg_code)
-        remove_white_background(svg_path)
-        print(f"Convertido: {filename} -> {svg_path}")
+        page = doc[0]
+
+        # Exporta SVG com texto como <text>
+        svg_code = page.get_svg_image(text_as_path=False)
+
+        # Otimiza SVG (em memória)
+        optimized_svg = optimize_svg(svg_code)
+        svg_size = len(optimized_svg.encode("utf-8"))
+
+        if svg_size > MAX_SVG_SIZE:
+            # Se já ultrapassar 1MB em memória, gera direto PNG
+            zoom = 4  # aumenta/diminui resolução conforme necessário
+            mat = fitz.Matrix(zoom, zoom)
+            pix = page.get_pixmap(matrix=mat, alpha=False)
+            png_path = os.path.join(output_dir, base_name + ".png")
+            pix.save(png_path)
+
+            return f"Convertido para PNG: {filename} -> {png_path} ({svg_size/1024/1024:.2f} MB em SVG)"
+        else:
+            # Salva SVG otimizado
+            with open(svg_path, "w", encoding="utf-8") as f:
+                f.write(optimized_svg)
+
+            remove_white_background(svg_path)
+            return f"Convertido para SVG: {filename} ({svg_size/1024:.2f} KB)"
+
+    except Exception as e:
+        return f"Erro ao processar {filename}: {e}"
+
+
+if __name__ == "__main__":
+    pdf_files = [f for f in os.listdir(input_dir) if f.lower().endswith(".pdf")]
+
+    with ProcessPoolExecutor(max_workers=N_CORES) as executor:
+        futures = {executor.submit(process_file, f): f for f in pdf_files}
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Convertendo"):
+            print(future.result())
