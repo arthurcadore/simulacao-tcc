@@ -302,7 +302,8 @@ class Transmitter:
         Executa o processo de transmissão, retornando o resultado da transmissão.
 
         Returns:
-            TransmissionResult: Instância contendo o vetor de tempo e o sinal modulado.
+            t (np.ndarray): Vetor de tempo.
+            s (np.ndarray): Sinal modulado $s(t)$.
         """
         ut = self.prepare_datagram()
         vt0, vt1 = self.encode_convolutional(ut)
