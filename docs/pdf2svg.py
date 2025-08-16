@@ -1,14 +1,19 @@
 import fitz
 import os
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from scour import scour
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 
-input_dir = "./out"
-output_dir = "./docs/api/assets"
+# Obtém o diretório do script atual
+script_dir = Path(__file__).parent.absolute()
+# Define os diretórios de entrada e saída
+input_dir = script_dir.parent / "out"
+output_dir = script_dir / "api" / "assets"
 
-os.makedirs(output_dir, exist_ok=True)
+# Cria o diretório de saída se não existir
+output_dir.mkdir(parents=True, exist_ok=True)
 
 MAX_SVG_SIZE = 1 * 1024 * 1024  # 1 MB
 N_CORES = 12
@@ -38,9 +43,9 @@ def optimize_svg(svg_code):
 
 def process_file(filename):
     try:
-        pdf_path = os.path.join(input_dir, filename)
+        pdf_path = input_dir / filename
         base_name = os.path.splitext(filename)[0]
-        svg_path = os.path.join(output_dir, base_name + ".svg")
+        svg_path = output_dir / f"{base_name}.svg"
 
         doc = fitz.open(pdf_path)
         page = doc[0]
@@ -57,7 +62,7 @@ def process_file(filename):
             zoom = 8
             mat = fitz.Matrix(zoom, zoom)
             pix = page.get_pixmap(matrix=mat, alpha=False)
-            png_path = os.path.join(output_dir, base_name + ".png")
+            png_path = output_dir / f"{base_name}.png"
             pix.save(png_path)
 
             return f"Convertido para PNG: {filename} -> {png_path} ({svg_size/1024/1024:.2f} MB em SVG)"
@@ -74,7 +79,7 @@ def process_file(filename):
 
 
 if __name__ == "__main__":
-    pdf_files = [f for f in os.listdir(input_dir) if f.lower().endswith(".pdf")]
+    pdf_files = [f.name for f in input_dir.glob("*.pdf")]
 
     with ProcessPoolExecutor(max_workers=N_CORES) as executor:
         futures = {executor.submit(process_file, f): f for f in pdf_files}

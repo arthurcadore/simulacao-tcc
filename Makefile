@@ -22,7 +22,7 @@ clean:
 
 doc-images:
 	@echo "Gerando imagens para a documentação..."
-	.venv/bin/python -m pdf2svg
+	.venv/bin/python docs/pdf2svg.py
 	@echo "Imagens geradas!"
 
 doc: 
