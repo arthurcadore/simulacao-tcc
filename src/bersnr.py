@@ -1,5 +1,7 @@
 import numpy as np
 import concurrent.futures
+import matplotlib
+matplotlib.use("Agg")  # Evita abrir janelas gráficas
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from datagram import Datagram
@@ -14,7 +16,7 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
     datagramTX = Datagram(pcdnum=1234, numblocks=numblocks)
     bitsTX = datagramTX.streambits
 
-    transmitter = Transmitter(datagramTX, output_print=False)
+    transmitter = Transmitter(datagramTX, output_print=False, output_plot=False)
     t, s = transmitter.run()
 
     add_noise = Noise(snr=snr_db)
@@ -29,9 +31,9 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
     return ber
 
 if __name__ == "__main__":
-    SNR_values = np.arange(-30, 31, 1)  # -30 até 30 dB
-    repetitions = 5
-    numblocks = 1
+    SNR_values = np.arange(-30, 0, 0.5)  # -30 até 0 dB
+    repetitions = 100
+    numblocks = 8
     num_workers = 16  
 
     results = []
@@ -39,23 +41,7 @@ if __name__ == "__main__":
 
     ber_accumulator = {snr: [] for snr in SNR_values}
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = [
-            executor.submit(simulate_ber, snr, numblocks)
-            for snr in SNR_values
-            for _ in range(repetitions)
-        ]
-
-        for future in tqdm(concurrent.futures.as_completed(futures), total=total_tasks, desc="Simulando"):
-            try:
-                ber = future.result()
-                snr = SNR_values[len(ber_accumulator[snr]) % len(SNR_values)]
-                # Este mapeamento simples vai ser refeito abaixo
-            except Exception as e:
-                print(f"Erro: {e}")
-
-    # Melhor forma: mapear SNR diretamente junto com cada future
-    ber_accumulator = {snr: [] for snr in SNR_values}
+    # Executa simulações em paralelo
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
             executor.submit(simulate_ber, snr, numblocks): snr
@@ -81,13 +67,13 @@ if __name__ == "__main__":
         for snr, ber in results:
             f.write(f"{snr}\t{ber:.8e}\n")
 
-    # Plota
+    # Gera gráfico final único
     snr_list, ber_list = zip(*results)
-    plt.figure()
-    plt.semilogy(snr_list, ber_list, marker='o')
-    plt.grid(True, which="both", ls="--")
-    plt.xlabel("SNR (dB)")
-    plt.ylabel("BER")
-    plt.title("SNR vs BER")
+    fig, ax = plt.subplots()
+    ax.semilogy(snr_list, ber_list, marker='o')
+    ax.grid(True, which="both", ls="--")
+    ax.set_xlabel("SNR (dB)")
+    ax.set_ylabel("BER")
+    ax.set_title("SNR vs BER")
     plt.savefig("snr_vs_ber.png", dpi=300)
-    plt.show()
+    plt.close(fig)
