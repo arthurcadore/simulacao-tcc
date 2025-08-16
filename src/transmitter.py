@@ -67,7 +67,9 @@ class Transmitter:
         """
         ut = self.datagram.streambits
         if self.output_print:
+            print("\n ==== MONTAGEM DATAGRAMA ==== \n")
             print(self.datagram.parse_datagram())
+            print("\nut:", ''.join(map(str, ut)))
         if self.output_plot:
             self.plotter.plot_bits(
                 [self.datagram.msglength, self.datagram.pcdid, self.datagram.blocks, self.datagram.tail],
@@ -96,6 +98,7 @@ class Transmitter:
         encoder = EncoderConvolutional()
         vt0, vt1 = encoder.encode(ut)
         if self.output_print:
+            print("\n ==== CODIFICADOR CONVOLUCIONAL ==== \n")
             print("vt0:", ''.join(map(str, vt0)))
             print("vt1:", ''.join(map(str, vt1)))
         if self.output_plot:
@@ -116,14 +119,15 @@ class Transmitter:
             vt1 (np.ndarray): Vetor de bits do canal Q.
 
         Returns:
-            X (np.ndarray): Vetor embaralhado do canal I.
-            Y (np.ndarray): Vetor embaralhado do canal Q.
+            Xn (np.ndarray): Vetor embaralhado do canal I.
+            Yn (np.ndarray): Vetor embaralhado do canal Q.
         """
         scrambler = Scrambler()
         X, Y = scrambler.scramble(vt0, vt1)
         if self.output_print:
-            print("X:", ''.join(map(str, X)))
-            print("Y:", ''.join(map(str, Y)))
+            print("\n ==== EMBARALHADOR ==== \n")
+            print("Xn:", ''.join(map(str, X)))
+            print("Yn:", ''.join(map(str, Y)))
         return X, Y
 
     def generate_preamble(self):
@@ -136,6 +140,7 @@ class Transmitter:
         """
         sI, sQ = Preamble().generate_preamble()
         if self.output_print:
+            print("\n ==== MONTAGEM PREAMBULO ==== \n")
             print("sI:", ''.join(map(str, sI)))
             print("sQ:", ''.join(map(str, sQ)))
         if self.output_plot:
@@ -164,6 +169,7 @@ class Transmitter:
         multiplexer = Multiplexer()
         Xn, Yn = multiplexer.concatenate(sI, sQ, X, Y)
         if self.output_print:
+            print("\n ==== MULTIPLEXADOR ==== \n")
             print("Xn:", ''.join(map(str, Xn)))
             print("Yn:", ''.join(map(str, Yn)))
         if self.output_plot:
@@ -194,8 +200,9 @@ class Transmitter:
         Xnrz = encoderNRZ.encode(Xn)
         Yman = encoderManchester.encode(Yn)
         if self.output_print:
-            print("Xnrz:", ''.join(map(str, Xnrz)))
-            print("Yman:", ''.join(map(str, Yman)))
+            print("\n ==== CODIFICAÇÃO DE LINHA ==== \n")
+            print("Xnrz:", ''.join(map(str, Xnrz[:80])),"...")
+            print("Yman:", ''.join(map(str, Yman[:80])),"...")
         if self.output_plot:
             self.plotter.plot_encode(
                 Xn, Yn, Xnrz, Yman,
@@ -222,8 +229,9 @@ class Transmitter:
         dI = formatter.apply_format(Xnrz)
         dQ = formatter.apply_format(Yman)
         if self.output_print:
-            print("dI:", ''.join(map(str, dI[:20])))
-            print("dQ:", ''.join(map(str, dQ[:20])))
+            print("\n ==== FORMATADOR ==== \n")
+            print("dI:", ''.join(map(str, dI[:5])),"...")
+            print("dQ:", ''.join(map(str, dQ[:5])),"...")
         if self.output_plot:
             self.plotter.plot_filter(
                 formatter.g, formatter.t_rc, formatter.Tb,
@@ -252,8 +260,9 @@ class Transmitter:
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
         if self.output_print:
-            print("s:", ''.join(map(str, s[:20])))
-            print("t:", t[:20])
+            print("\n ==== MODULADOR ==== \n")
+            print("s(t):", ''.join(map(str, s[:5])),"...")
+            print("t:   ", ''.join(map(str, t[:5])),"...")
         if self.output_plot:
             self.plotter.plot_modulation_time(
                 dI, dQ, s, "dI(t)", "dQ(t)", "s(t)",
@@ -298,7 +307,7 @@ class Transmitter:
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=True)
+    transmitter = Transmitter(datagram, output_print=True, output_plot=True)
     t, s = transmitter.run()
     result = TransmissionResult(t, s)
     result.save("../out/transmitter")
