@@ -1,3 +1,10 @@
+"""
+Implementação de um receptor PTT-A3 com seus componentes.
+
+Autor: Arthur Cadore
+Data: 16-08-2025
+"""
+
 from datagram import Datagram
 from modulator import Modulator
 from scrambler import Scrambler
@@ -13,6 +20,15 @@ from convolutional import DecoderViterbi
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
+        r"""
+        Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit.
+
+        Args:
+            fs (int): Frequência de amostragem em Hz. Default é 128000 Hz.
+            Rb (int): Taxa de bits em bps. Default é 400 bps.
+            output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.
+            output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários. Default é True.
+        """
         self.fs = fs
         self.Rb = Rb
         self.output_print = output_print
@@ -20,11 +36,22 @@ class Receiver:
         self.plotter = Plotter()
 
     def demodulate(self, s):
+        r"""
+        Demodula o sinal recebido, recuperando os sinais I e Q.
+
+        Args:
+            s (np.ndarray): Sinal recebido a ser demodulado.
+
+        Returns:
+            i_signal (np.ndarray): Sinal I demodulado.
+            q_signal (np.ndarray): Sinal Q demodulado.
+        """
         demodulator = Modulator(fc=self.fc, fs=self.fs)
         i_signal, q_signal = demodulator.demodulate(s)
         if self.output_print:
-            print("i_signal:", ''.join(map(str, i_signal[:20])))
-            print("q_signal:", ''.join(map(str, q_signal[:20])))
+            print("\n ==== DEMODULADOR ==== \n")
+            print("x'I(t):", ''.join(map(str, i_signal[:5])),"...")
+            print("y'Q(t):", ''.join(map(str, q_signal[:5])),"...")
         if self.output_plot:
             self.plotter.plot_freq_receiver(
                 i_signal,
@@ -40,6 +67,12 @@ class Receiver:
         impulse_response, t_impulse = lpf.calc_impulse_response()
         i_signal_filtered = lpf.apply_filter(i_signal)
         q_signal_filtered = lpf.apply_filter(q_signal)
+
+        if self.output_print:
+            print("\n ==== FILTRAGEM PASSA-BAIXA ==== \n")
+            print("d'I(t):", ''.join(map(str, i_signal_filtered[:5])),"...")
+            print("d'Q(t):", ''.join(map(str, q_signal_filtered[:5])),"...")
+        
         if self.output_plot:
             self.plotter.plot_lowpass_filter(
                 t_impulse,
@@ -68,7 +101,12 @@ class Receiver:
 
         i_signal_filtered = matched_filter.apply_filter(i_signal)
         q_signal_filtered = matched_filter.apply_filter(q_signal)
-        
+
+        if self.output_print:
+            print("\n ==== FILTRAGEM CASADA ==== \n")
+            print("I(t):", ''.join(map(str, i_signal_filtered[:5])),"...")
+            print("Q(t):", ''.join(map(str, q_signal_filtered[:5])),"...")
+
         if self.output_plot:
             self.plotter.plot_matched_filter(
                 matched_filter.t_impulse,
@@ -116,7 +154,12 @@ class Receiver:
 
         i_signal_quantized = sampler.quantize(i_signal_sampled)
         q_signal_quantized = sampler.quantize(q_signal_sampled)
-        
+
+        if self.output_print:
+            print("\n ==== DECISOR ==== \n")
+            print("X'nrz:", ''.join(map(str, i_signal_quantized[:80])),"...")
+            print("Y'man:", ''.join(map(str, q_signal_quantized[:80])),"...")
+
         if self.output_plot:
             self.plotter.plot_sampled_signals(t,
                                  i_signal,
@@ -143,22 +186,45 @@ class Receiver:
         
         i_signal_decoded = decoderNRZ.decode(i_quantized)
         q_signal_decoded = decoderManchester.decode(q_quantized)
+
+        if self.output_print:
+            print("\n ==== DECODIFICADOR DE LINHA ==== \n")
+            print("X'n:", ''.join(map(str, i_signal_decoded)))
+            print("Y'n:", ''.join(map(str, q_signal_decoded)))
+
         return i_signal_decoded, q_signal_decoded
 
     def remove_preamble(self, i_signal_decoded, q_signal_decoded):
         # remove the first 15 bits from each signal
         i = i_signal_decoded[15:]
         q = q_signal_decoded[15:]
+
+        if self.output_print:
+            print("\n ==== REMOÇÃO DO PREÂMBULO ==== \n")
+            print("X'n:", ''.join(map(str, i)))
+            print("Y'n:", ''.join(map(str, q)))
+
         return i, q
 
     def descrambler(self, X, Y):
         descrambler = Scrambler()
         vt0, vt1 = descrambler.descramble(X, Y)
+
+        if self.output_print:
+            print("\n ==== DESEMBARALHADOR ==== \n")
+            print("vt0':", ''.join(map(str, vt0)))
+            print("vt1':", ''.join(map(str, vt1)))
+
         return vt0, vt1
 
     def conv_decoder(self, vt0, vt1):
         conv_decoder = DecoderViterbi()
         u = conv_decoder.decode(vt0, vt1)
+
+        if self.output_print:
+            print("\n ==== DECODIFICADOR VITERBI ==== \n")
+            print("u't:", ''.join(map(str, u)))
+
         return u
     
     def run(self, s, t, fc=4000):
@@ -179,7 +245,7 @@ class Receiver:
 
 
 if __name__ == "__main__":
-    datagramTX = Datagram(pcdnum=1234, numblocks=8)
+    datagramTX = Datagram(pcdnum=1234, numblocks=1)
     bitsTX = datagramTX.streambits  
     transmitter = Transmitter(datagramTX, output_print=True)
     t, s = transmitter.run()
@@ -187,13 +253,17 @@ if __name__ == "__main__":
     snr_db = 0
     add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
-    
+
+    print("\n ==== CANAL ==== \n")
+    print("s(t):", ''.join(map(str, s_noisy[:5])), "...")
+    print("t:   ", ''.join(map(str, t[:5])), "...")
+
     receiver = Receiver(output_print=True)
     bitsRX = receiver.run(s_noisy, t)
 
     try:
         datagramRX = Datagram(streambits=bitsRX)
-        print(datagramRX.parse_datagram())
+        print("\n",datagramRX.parse_datagram())
     except Exception as e:
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))

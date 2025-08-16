@@ -5,6 +5,7 @@ Autor: Arthur Cadore
 Data: 16-08-2025
 """
 
+import os
 from formatter import Formatter
 from convolutional import EncoderConvolutional
 from datagram import Datagram
@@ -28,10 +29,19 @@ class TransmissionResult:
         self.time = t
         self.signal = s
 
-    def save(self, path_prefix):
-        with open(f"{path_prefix}_signal.txt", "w") as f:
+    def save(self, path_prefix="../out/transmission"):
+        r"""
+        Salva os resultados em arquivos TXT.
+        """
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        basepath = os.path.normpath(os.path.join(script_dir, path_prefix))
+
+        os.makedirs(os.path.dirname(basepath), exist_ok=True)
+
+        with open(f"{basepath}_signal.txt", "w") as f:
             f.write(" ".join(map(str, self.signal)))
-        with open(f"{path_prefix}_time.txt", "w") as f:
+
+        with open(f"{basepath}_time.txt", "w") as f:
             f.write(" ".join(map(str, self.time)))
 
 
