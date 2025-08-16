@@ -1,6 +1,6 @@
 # BER vs SNR
 
-::: bersnr.simulate_ber
+::: bersnr
     options:
         show_source: true
         extra:
