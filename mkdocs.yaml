@@ -8,6 +8,7 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   logo: assets/icon.svg
+  favicon: assets/icon.svg
   palette:
     - scheme: white
       primary: darkblue
