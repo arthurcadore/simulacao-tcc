@@ -11,7 +11,7 @@ output_dir = "./docs/api/assets"
 os.makedirs(output_dir, exist_ok=True)
 
 MAX_SVG_SIZE = 1 * 1024 * 1024  # 1 MB
-N_CORES = 4
+N_CORES = 12
 
 
 def remove_white_background(svg_path):
@@ -54,7 +54,7 @@ def process_file(filename):
 
         if svg_size > MAX_SVG_SIZE:
             # Se já ultrapassar 1MB em memória, gera direto PNG
-            zoom = 4  # aumenta/diminui resolução conforme necessário
+            zoom = 8
             mat = fitz.Matrix(zoom, zoom)
             pix = page.get_pixmap(matrix=mat, alpha=False)
             png_path = os.path.join(output_dir, base_name + ".png")

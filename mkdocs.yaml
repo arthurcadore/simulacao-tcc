@@ -63,7 +63,7 @@ plugins:
         python:
           paths: [src]
           options:
-            show_source: true
+            show_source: false
             show_submodules: true
             members_order: source
 
