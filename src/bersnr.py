@@ -115,15 +115,24 @@ def plot_from_file(filename="../out/snr_vs_ber.txt", out_pdf="../out/snr_vs_ber.
     filepath = os.path.normpath(os.path.join(script_dir, filename))
     outpath = os.path.normpath(os.path.join(script_dir, out_pdf))
 
-    data = np.loadtxt(filepath, skiprows=1)  # ignora cabeçalho
+    data = np.loadtxt(filepath, skiprows=1)
     snr_list, ber_list = data[:, 0], data[:, 1]
 
     plt.figure()
-    plt.semilogy(snr_list, ber_list, marker='o')
+    plt.semilogy(snr_list, ber_list, marker='o', label='BER vs SNR')
     plt.grid(True, which="both", ls="--")
     plt.xlabel("SNR (dB)")
     plt.ylabel("BER")
-    plt.title("SNR vs BER")
+    plt.xlim(-30, 0)
+    plt.ylim(1e-4, 1)
+
+    leg1 = plt.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+            )
+    leg1.get_frame().set_facecolor('white')
+    leg1.get_frame().set_edgecolor('black')
+    leg1.get_frame().set_alpha(1.0)
 
     os.makedirs(os.path.dirname(outpath), exist_ok=True)
     plt.savefig(outpath, dpi=300)
