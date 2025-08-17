@@ -6,8 +6,7 @@ Data: 15-08-2025
 """
 
 import numpy as np
-from plots import Plotter
-
+from plotter import create_figure, save_figure, ImpulseResponsePlot
 
 class MatchedFilter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted"):
@@ -121,5 +120,16 @@ class MatchedFilter:
 
 if __name__ == "__main__":
     filtro = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted")
-    plotter = Plotter()
-    plotter.plot_impulse_response(filtro.t_impulse, filtro.impulse_response, "Resposta ao Impulso - Filtro Casado", xlim=10, save_path="../out/example_matched_filter_impulse.pdf")
+
+    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
+
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (0, 0),
+        filtro.t_impulse, filtro.impulse_response,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+    fig_impulse.tight_layout()
+    save_figure(fig_impulse, "example_mf_impulse.pdf")
+    

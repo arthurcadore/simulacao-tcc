@@ -2,8 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import scienceplots 
-from typing import Optional, List, Union, Tuple, Dict, Any
 import os
+from typing import Optional, List, Union, Tuple, Dict, Any
+from collections import defaultdict
+from matplotlib.lines import Line2D
 
 plt.style.use("science")
 plt.rcParams["figure.figsize"] = (16, 9)
@@ -536,4 +538,96 @@ class ImpulseResponsePlot(BasePlot):
         if xlim is not None:
             self.ax.set_xlim(xlim)
 
+        self.apply_ax_style()
+
+
+class TrellisPlot(BasePlot):
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 trellis: dict,
+                 num_steps: int = 5,
+                 initial_state: int = 0,
+                 **kwargs) -> None:
+        r"""
+        Classe para plotar o diagrama de treliça de um codificador convolucional.
+
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int): Posição do plot no GridSpec
+            trellis (dict): Dicionário do treliça. 
+                            Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}
+            num_steps (int): Número de passos no tempo
+            initial_state (int): Estado inicial
+        """
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.trellis = trellis
+        self.num_steps = num_steps
+        self.initial_state = initial_state
+
+    def plot(self,
+             xlabel: Optional[str] = None,
+             ylabel: Optional[str] = None,
+             show_legend: bool = True) -> None:
+        states_per_time = defaultdict(set)
+        states_per_time[0].add(self.initial_state)
+        branches = []
+
+        for t in range(self.num_steps):
+            for state in states_per_time[t]:
+                for bit in [0, 1]:
+                    next_state, out = self.trellis[state][bit]
+                    module = sum(np.abs(out))
+                    branches.append((t, state, bit, next_state, module, out))
+                    states_per_time[t+1].add(next_state)
+
+        all_states = sorted(set(s for states in states_per_time.values() for s in states))
+        state_to_x = {s: i for i, s in enumerate(all_states)}
+        num_states = len(all_states)
+
+        # Ajusta tamanho da figura dinamicamente
+        self.ax.set_xlim(-0.5, num_states - 0.5)
+        self.ax.set_ylim(-0.5, self.num_steps + 0.5)
+        self.ax.set_xticks(range(num_states))
+        self.ax.set_xticklabels([f"{hex(s)[2:].upper():0>2}" for s in all_states])
+        self.ax.set_yticks(range(self.num_steps + 1))
+
+        if xlabel:
+            self.ax.set_xlabel(xlabel)
+        else:
+            self.ax.set_xlabel("Estado")
+
+        if ylabel:
+            self.ax.set_ylabel(ylabel)
+        else:
+            self.ax.set_ylabel("Intervalo de tempo")
+
+        self.ax.grid(True, axis='x', linestyle='--', alpha=0.3)
+        self.ax.grid(True, axis='y', linestyle=':', alpha=0.2)
+        self.ax.invert_yaxis()
+
+        # Desenha os ramos (transições)
+        for t, state, bit, next_state, module, out in branches:
+            x = [state_to_x[state], state_to_x[next_state]]
+            y = [t, t+1]
+            color = 'C0' if bit == 0 else 'C1'
+            self.ax.plot(x, y, color=color, lw=2, alpha=0.8)
+
+        # Desenha os nós (estados)
+        for t in range(self.num_steps+1):
+            for state in states_per_time[t]:
+                self.ax.plot(state_to_x[state], t, 'o', color='k', markersize=8)
+
+        # Legenda
+        if show_legend:
+            legend_elements = [
+                Line2D([0], [0], color='C0', lw=2, label='Bit de entrada 0'),
+                Line2D([0], [0], color='C1', lw=2, label='Bit de entrada 1')
+            ]
+            self.ax.legend(handles=legend_elements,
+                           loc='upper right', frameon=True, fontsize=12)
+        
         self.apply_ax_style()

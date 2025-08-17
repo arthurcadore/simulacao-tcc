@@ -147,7 +147,7 @@ if __name__ == "__main__":
         formatter.t_rc, formatter.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-10, 10))
+    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
     
     TimePlot(
         fig_format, grid_format, (1,0),

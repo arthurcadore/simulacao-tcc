@@ -10,7 +10,7 @@ Data: 28-07-2025
 
 import numpy as np
 import komm 
-from plots import Plotter
+from plotter import create_figure, save_figure, BitsPlot, TrellisPlot
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
@@ -187,27 +187,48 @@ if __name__ == "__main__":
     print("ut:  ", ''.join(str(b) for b in ut))
     print("vt0: ", ''.join(str(b) for b in vt0))
     print("vt1: ", ''.join(str(b) for b in vt1))
-
-    plotter = Plotter()
-    plotter.plot_conv(ut, 
-                      vt0, 
-                      vt1, 
-                      "Entrada $u_t$", 
-                      "Canal I $v_t^{(0)}$", 
-                      "Canal Q $v_t^{(1)}$", 
-                      "$u_t$", 
-                      "$v_t^{(0)}$", 
-                      "$v_t^{(1)}$", 
-                      save_path="../out/example_convolutional.pdf"
-    )
     
+    fig_conv, grid_conv = create_figure(3, 1, figsize=(16, 9))
+    
+    BitsPlot(
+        fig_conv, grid_conv, (0, 0),
+        bits_list=[ut],
+        sections=[("$u_t$", len(ut))],
+        colors=["darkred"]
+    ).plot(ylabel="$u_t$")
+
+    BitsPlot(
+        fig_conv, grid_conv, (1, 0),
+        bits_list=[vt0],
+        sections=[("$v_t^{(0)}$", len(vt0))],
+        colors=["darkgreen"]
+    ).plot(ylabel="$v_t^{(0)}$")
+
+    BitsPlot(
+        fig_conv, grid_conv, (2, 0),
+        bits_list=[vt1],
+        sections=[("$v_t^{(1)}$", len(vt1))],
+        colors=["navy"]
+    ).plot(ylabel="$v_t^{(1)}$")
+
+    fig_conv.tight_layout()
+    save_figure(fig_conv, "example_conv_time.pdf")
+
     decoder = DecoderViterbi()
     ut_prime = decoder.decode(vt0, vt1)
-    plotter.plot_trellis(decoder.trellis, 
-                         num_steps=10, 
-                         initial_state=0, 
-                         save_path="../out/example_trelica.pdf"
-    )
+
+    fig_trellis, grid_trellis = create_figure(1, 1, figsize=(16, 9))
+
+    TrellisPlot(
+        fig_trellis, grid_trellis, (0, 0),
+        decoder.trellis,
+        num_steps=10,
+        initial_state=0,
+        colors=["darkred", "darkgreen", "navy"]
+    ).plot()
+
+    fig_trellis.tight_layout()
+    save_figure(fig_trellis, "example_conv_trellis.pdf")
 
     print("ut': ", ''.join(str(b) for b in ut_prime))
     print("ut = ut': ", np.array_equal(ut, ut_prime))
