@@ -1,14 +1,9 @@
-# Plots
+# Plotter
 
-::: plots.mag2db
+::: plotter
     options:
         extra:
             show_docstring: true
             show_signature: true
 
-::: plots.Plotter
-    options:
-        extra:
-            show_docstring: true
-            show_signature: true
     

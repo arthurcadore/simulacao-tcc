@@ -54,7 +54,7 @@ nav:
       - Decisor: api/sampler.md
   - Transmissor: api/transmitter.md
   - Receptor: api/receiver.md
-  - Plots: api/plots.md
+  - Plotter: api/plots.md
   - Extras: 
       - BER vs SNR: api/bersnr.md
 

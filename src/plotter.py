@@ -96,7 +96,10 @@ class BasePlot:
         self.colors = colors
         self.style = style or {}
 
-    def _apply_axes_style(self) -> None:
+    def apply_ax_style(self) -> None:
+        r"""
+        Aplica o estilo do eixo.
+        """
         grid_kwargs = self.style.get("grid", {"alpha": 0.6, "linestyle": "--", "linewidth": 0.5})
         self.ax.grid(True, **grid_kwargs)
         if self.xlim is not None:
@@ -105,9 +108,12 @@ class BasePlot:
             self.ax.set_ylim(self.ylim)
         if self.title:
             self.ax.set_title(self.title)
-        self._apply_legend()
+        self.apply_legend()
 
-    def _apply_legend(self) -> None:
+    def apply_legend(self) -> None:
+        r"""
+        Aplica a legenda do plot.
+        """
         handles, labels = self.ax.get_legend_handles_labels()
         if not handles:
             return
@@ -123,7 +129,16 @@ class BasePlot:
         leg.get_frame().set_edgecolor("black")
         leg.get_frame().set_alpha(1.0)
 
-    def _color_for(self, idx: int) -> Optional[str]:
+    def apply_color(self, idx: int) -> Optional[str]:
+        r"""
+        Aplica a cor do vetor de dados.
+        
+        Args:
+            idx (int): Índice do vetor de dados
+        
+        Returns:
+            Optional[str]: Cor do vetor de dados
+        """
         if self.colors is None:
             return None
         if isinstance(self.colors, str):
@@ -133,18 +148,7 @@ class BasePlot:
         return None
 
 
-# ====== Plots específicos ======
 class TimePlot(BasePlot):
-    r"""
-    Classe para plotar sinais no domínio do tempo.
-    
-    Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        t (np.ndarray): Vetor de tempo
-        signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
-    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -152,6 +156,16 @@ class TimePlot(BasePlot):
                  t: np.ndarray,
                  signals: Union[np.ndarray, List[np.ndarray]],
                  **kwargs) -> None:
+        r"""
+        Classe para plotar sinais no domínio do tempo.
+
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int): Posição do plot
+            t (np.ndarray): Vetor de tempo
+            signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
+        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t = t
@@ -164,7 +178,7 @@ class TimePlot(BasePlot):
         line_kwargs.update(self.style.get("line", {}))
 
         for i, sig in enumerate(self.signals):
-            color = self._color_for(i)
+            color = self.apply_color(i)
             if color is not None:
                 self.ax.plot(self.t, sig, label=self.labels[i], color=color, **line_kwargs)
             else:
@@ -172,7 +186,7 @@ class TimePlot(BasePlot):
 
         self.ax.set_xlabel("Tempo (s)")
         self.ax.set_ylabel("Amplitude")
-        self._apply_axes_style()
+        self.apply_ax_style()
 
 
 class FrequencyPlot(BasePlot):
@@ -184,6 +198,17 @@ class FrequencyPlot(BasePlot):
                  signal: np.ndarray,
                  fc: float = 0.0,
                  **kwargs) -> None:
+        r"""
+        Classe para plotar sinais no domínio da frequência.
+        
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int): Posição do plot
+            fs (float): Frequência de amostragem
+            signal (np.ndarray): Sinal a ser plotado
+            fc (float): Frequência central
+        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.fs = fs
@@ -204,7 +229,7 @@ class FrequencyPlot(BasePlot):
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
 
-        color = self._color_for(0)
+        color = self.apply_color(0)
         label = self.labels[0] if self.labels else None
         if color is not None:
             self.ax.plot(freqs, y, label=label, color=color, **line_kwargs)
@@ -215,7 +240,7 @@ class FrequencyPlot(BasePlot):
         if self.ylim is None:
             self.ax.set_ylim(-80, 5)
 
-        self._apply_axes_style()
+        self.apply_ax_style()
 
 
 class ConstellationPlot(BasePlot):
@@ -227,6 +252,17 @@ class ConstellationPlot(BasePlot):
                  dQ: np.ndarray,
                  amplitude: Optional[float] = None,
                  **kwargs) -> None:
+        r"""
+        Classe para plotar sinais no domínio da constelação.
+        
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int): Posição do plot
+            dI (np.ndarray): Sinal I
+            dQ (np.ndarray): Sinal Q
+            amplitude (Optional[float]): Amplitude alvo para pontos ideais
+        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.dI = dI
@@ -246,7 +282,7 @@ class ConstellationPlot(BasePlot):
 
         scatter_kwargs = {"s": 10, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
-        color = self._color_for(0) or "darkgreen"
+        color = self.apply_color(0) or "darkgreen"
 
         # Amostras IQ
         self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
@@ -267,4 +303,4 @@ class ConstellationPlot(BasePlot):
 
         self.ax.set_xlabel("Componente em Fase $I$")
         self.ax.set_ylabel("Componente em Quadratura $Q$")
-        self._apply_axes_style()
+        self.apply_ax_style()
