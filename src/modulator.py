@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 import numpy as np
 from formatter import Formatter
-from plots import Plotter
+from plots2 import TimePlot, FrequencyPlot, ConstellationPlot
 
 class Modulator:
     def __init__(self, fc, fs):
@@ -132,81 +132,103 @@ if __name__ == "__main__":
     modulator = Modulator(fc=fc, fs=fs)
     t, s = modulator.modulate(dI, dQ)
     print("s:", ''.join(str(b) for b in s[:5]))
-    
-    plot = Plotter()
-    plot.plot_modulation_time(dI, 
-                              dQ, 
-                              s, 
-                              "dI(t)", 
-                              "dQ(t)",
-                              "s(t)",
-                              "Sinal $IQ$ - Formatados RRC",
-                              "Sinal Modulado $IQ$",
-                              fs=fs, 
-                              t_xlim=0.10, 
-                              save_path="../out/example_modulator.pdf"
-    )
 
-    plot.plot_modulation_freq(dI, 
-                              dQ, 
-                              s,
-                              "$D_I'(f)$",
-                              "$D_Q'(f)$",
-                              "$S(f)$",
-                              "Sinal Banda Base - Componente $I$",
-                              "Sinal Banda Base - Componente $Q$",
-                              "Sinal Modulado $IQ$",
-                              fs=fs, 
-                              fc=fc, 
-                              save_path="../out/example_frequency.pdf"
-    )
-    
-    plot.plot_modulation_eye(dI, 
-                             dQ, 
-                             "dI(t)", 
-                             "dQ(t)", 
-                             "Sinal Modulado $IQ$", 
-                             "Sinal Modulado $IQ$", 
-                             fs=fs, 
-                             Rb=Rb, 
-                             save_path="../out/example_eye.pdf"
-    )
 
-    plot.plot_modulation_iq(dI,
-                            dQ,
-                            fr'Amostras $IQ$',
-                            fr'Simbolos $QPSK$',
-                            fr'Plano $IQ$ (Scatter)',
-                            fr'Plano $IQ$ (Constelação)',
-                            save_path="../out/example_constellation.pdf"
+    time_plot = TimePlot(
+        signals=[[dI, dQ], s],
+        t=t,  
+        labels=[["$dI(t)$", "$dQ(t)$"], "$s(t)$"],
+        titles=["Sinal $IQ$ - Formatados RRC", "Sinal Modulado $IQ$"],
+        layout=(2, 1),
+        position=[(0, 0), (1, 0)],  
+        figsize=(16, 9),
+        xlim=[(0, 0.1), (0, 0.1)],
+        ylim=[(-0.02, 0.08), (-0.1, 0.1)], 
+        colors=[["darkgreen", "navy"], "darkred"],
+        style={
+            'line': {'linewidth': 2, 'alpha': 1},
+            'grid': {'color': 'gray', 'linestyle': '--', 'linewidth': 0.5}
+        }
     )
-    
+    time_plot.plot(save_path="../out/example_modulator_time.pdf")
 
+    freq_plot = FrequencyPlot(
+        signals=[dI, dQ, s],
+        fs=fs,
+        fc=fc,
+        labels=["$D_I'(f)$", "$D_Q'(f)$", "$S(f)$"],
+        titles=["Sinal Banda Base - Componente $I$", "Sinal Banda Base - Componente $Q$", "Sinal Modulado $IQ$"],
+        layout=(2, 2),  
+        position=[(0, 0),(0, 1),(1, slice(0, 2))  
+        ],
+        xlim=[(-1.5,1.5 ), (-1.5,1.5), (-4,4)],
+        figsize=(16, 9),
+        colors=["navy", "darkgreen", "darkred"],
+        style={
+            'line': {'linewidth': 1, 'alpha': 1},
+            'grid': {'color': 'gray', 'linestyle': '--', 'linewidth': 0.5}
+        }
+    )
+    freq_plot.plot(save_path="../out/example_modulator_freq.pdf")
+
+    iq_plot = ConstellationPlot(
+        signals=[dI[:40000], dQ[:40000]],
+        fs=fs,
+        Rb=Rb,
+        labels=["$dI(t)$", "$dQ(t)$"],
+        titles=["Sinal $IQ$ - Formatados RRC", "Sinal Modulado $IQ$"],
+        layout=(1, 2),
+        position=[(0, 0), (0, 1)],
+        figsize=(16, 8),
+        xlim=[(0, 0.025), (-0.2, 0.2)],
+        ylim=[(-0.05, 0.05), (-0.2, 0.2)],
+        colors=[["darkred", "navy"], "darkgreen"],
+        style={
+            'line': {'linewidth': 2, 'alpha': 1},
+            'grid': {'color': 'gray', 'linestyle': '--', 'linewidth': 0.5},
+            'legend': {'loc': 'upper right'}
+        }
+    )
+    iq_plot.plot(save_path="../out/example_modulator_constellation.pdf")
+    
     # Demodulação
     i_signal, q_signal = modulator.demodulate(s)
     print("i_signal:", ''.join(str(b) for b in i_signal[:5]))
     print("q_signal:", ''.join(str(b) for b in q_signal[:5]))
 
-    plot.plot_modulation_time(i_signal,
-                              q_signal, 
-                              s, 
-                              "Sinal I Demodulado", 
-                              "Sinal Q Demodulado",
-                              "Sinal Modulado $IQ$",
-                              "Sinais Demodulados $I$ e $Q$",
-                              "Sinal Modulado $IQ$",
-                              fs=fs, 
-                              t_xlim=0.10, 
-                              save_path="../out/example_demodulation_time.pdf"
+    time_plot = TimePlot(
+        signals=[[i_signal, q_signal], s],
+        t=t,  
+        labels=[["$dI'(t)$", "$dQ'(t)$"], "$s(t)$"],
+        titles=["Sinal $IQ$ - Demodulados", "Sinal Modulado $s(t)$"],
+        layout=(2, 1),
+        position=[(0, 0), (1, 0)],  
+        figsize=(16, 9),
+        xlim=[(0, 0.1), (0, 0.1)],
+        ylim=[(-0.1, 0.2), (-0.1, 0.1)], 
+        colors=[["darkgreen", "navy"], "darkred"],
+        style={
+            'line': {'linewidth': 2, 'alpha': 1},
+            'grid': {'color': 'gray', 'linestyle': '--', 'linewidth': 0.5}
+        }
     )
-    
-    plot.plot_demodulation_freq(i_signal,
-                                q_signal,
-                                "$I(f)$",
-                                "$Q(f)$",
-                                "Sinal Demodulado - Componente $I$",
-                                "Sinal Demodulado - Componente $Q$",
-                                fs,
-                                fc,
-                                save_path="../out/example_demodulation_frequency.pdf"
+    time_plot.plot(save_path="../out/example_demodulation_time.pdf")
+
+    freq_plot = FrequencyPlot(
+        signals=[s, i_signal, q_signal],
+        fs=fs,
+        fc=fc,
+        labels=["$S(f)$", "$D_I'(f)$", "$D_Q'(f)$"],
+        titles=["Sinal Modulado $s(t)$", "Sinal Demodulado - Componente $I$", "Sinal Demodulado - Componente $Q$"],
+        layout=(3, 1),  
+        position=[(0, 0),(1, 0),(2, 0)],
+        xlim=[(-5.5,5.5 ), (-5.5,5.5), (-5.5,5.5)],
+        ylim=[(-60,0), (-60,0), (-60,0)],
+        figsize=(16, 9),
+        colors=["darkred", "darkgreen", "navy"],
+        style={
+            'line': {'linewidth': 1, 'alpha': 1},
+            'grid': {'color': 'gray', 'linestyle': '--', 'linewidth': 0.5}
+        }
     )
+    freq_plot.plot(save_path="../out/example_demodulation_frequency.pdf")
