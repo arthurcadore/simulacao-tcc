@@ -1,6 +1,6 @@
 # Simulador ARGOS-3
 
-O **Simulador ARGOS-3** é uma ferramenta computacional desenvolvida em Python com o objetivo de **estudar, analisar e validar a comunicação via satélite** no padrão **ARGOS-III**.  
+O **Simulador ARGOS-3** é uma ferramenta computacional desenvolvida em Python com o objetivo de **estudar, analisar e validar a comunicação via satélite** no padrão **ARGOS-3**.  
 
 --- 
 
