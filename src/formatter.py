@@ -126,25 +126,27 @@ if __name__ == "__main__":
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
 
     # Plotando a resposta ao impulso
-    fig_impulse, grid_impulse = create_figure(1, 1)
+    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
 
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0, 0),
         formatter.t_rc, formatter.g,
         t_unit="ms",
-    ).plot(label="g(t)", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+        colors="darkorange",
+    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse.pdf")
 
     # Plotando os sinais formatados
     
-    fig_format, grid_format = create_figure(2, 2)
+    fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
 
     ImpulseResponsePlot(
         fig_format, grid_format, (0, slice(0, 2)),
         formatter.t_rc, formatter.g,
         t_unit="ms",
+        colors="darkorange",
     ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-10, 10))
     
     TimePlot(

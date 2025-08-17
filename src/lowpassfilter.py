@@ -6,8 +6,8 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
 from scipy.signal import butter, filtfilt, lfilter
+from plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
 
 class LPF:
     def __init__(self, cut_off, order, fs=128_000, type="butter"):
@@ -46,12 +46,12 @@ class LPF:
         b, a = butter(self.order, self.cut_off / (fNyquist * self.fs), btype='low')
         return b, a
 
-    def calc_impulse_response(self, impulse_len=512):
+    def calc_impulse_response(self, impulse_len=1024):
         r"""
         Calcula a resposta ao impulso do filtro.
 
         Args: 
-            impulse_len (int): Comprimento do vetor de impulso. Padrão é 512.
+            impulse_len (int): Comprimento do vetor de impulso. Padrão é 1024.
 
         Returns:
             tuple: Resposta ao impulso e vetor de tempo.
@@ -99,22 +99,48 @@ if __name__ == "__main__":
     filtro = LPF(cut_off=1500, order=6, fs=fs, type="butter")
     signal_filtered = filtro.apply_filter(signal)
 
-    plotter = Plotter()
-    plotter.plot_impulse_response(filtro.t_impulse,
-                                  filtro.impulse_response,
-                                  "Resposta ao Impulso - FPB",
-                                  save_path="../out/example_lpf_impulse.pdf")
+    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
 
-    plotter.plot_filtered_signals(filtro.t_impulse, 
-                                  filtro.impulse_response, 
-                                  t, 
-                                  signal,
-                                  signal_filtered,
-                                  "Resposta ao Impulso - FPB",
-                                  "Sinal original",
-                                  "Sinal filtrado",
-                                  "Resposta ao Impulso - FPB", 
-                                  "Sinal original", 
-                                  "Sinal filtrado", 
-                                  0.01, 
-                                  save_path="../out/example_lpf_signals.pdf")
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (0, 0),
+        filtro.t_impulse, filtro.impulse_response,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+
+    fig_impulse.tight_layout()
+    save_figure(fig_impulse, "example_lpf_impulse.pdf")
+
+    fig_signal, grid_signal = create_figure(2, 2, figsize=(16, 9))
+
+    ImpulseResponsePlot(
+        fig_signal, grid_signal, (0, slice(0, 2)),
+        filtro.t_impulse, filtro.impulse_response,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+    
+    TimePlot(
+        fig_signal, grid_signal, (1, 0),
+        t, 
+        signal,
+        labels=["$x(t)$"],
+        title="Sinal original",
+        xlim=(0, 0.008),
+        ylim=(-4, 4),
+        colors="navy"
+    ).plot()
+
+    TimePlot(
+        fig_signal, grid_signal, (1, 1),
+        t, 
+        signal_filtered,
+        labels=["$x'(t)$"],
+        title="Sinal filtrado",
+        xlim=(0, 0.008),
+        ylim=(-4, 4),
+        colors="darkred"
+    ).plot()
+    
+    fig_signal.tight_layout()
+    save_figure(fig_signal, "example_lpf_signals.pdf")
