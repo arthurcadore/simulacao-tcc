@@ -320,22 +320,22 @@ class BitsPlot(BasePlot):
         self.sections = sections
         self.colors = colors
 
-    def plot(self, show_bit_values: bool = True, bit_value_offset: float = 0.15, 
-             bit_value_size: int = 12, bit_value_weight: str = 'bold') -> None:
+    def plot(self,
+             show_bit_values: bool = True,
+             bit_value_offset: float = 0.15,
+             bit_value_size: int = 12,
+             bit_value_weight: str = 'bold',
+             xlabel: Optional[str] = None,
+             ylabel: Optional[str] = None,
+             label: Optional[str] = None) -> None:
         """
-        Plota os bits com opção para exibir os valores dos bits acima do plot.
-        
-        Args:
-            show_bit_values (bool): Se True, exibe os valores dos bits acima do plot
-            bit_value_offset (float): Deslocamento vertical dos valores dos bits
-            bit_value_size (int): Tamanho da fonte dos valores dos bits
-            bit_value_weight (str): Peso da fonte dos valores dos bits (ex: 'normal', 'bold')
+        Plota os bits com opção para exibir os valores acima do plot.
         """
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
         x = np.arange(len(bits_up))
 
-        # Ajusta os limites para acomodar os valores dos bits
+        # Ajustes de eixo
         y_upper = 1.4 if show_bit_values else 1.2
         self.ax.set_xlim(0, len(bits_up))
         self.ax.set_ylim(-0.2, y_upper)
@@ -352,42 +352,36 @@ class BitsPlot(BasePlot):
                 bit_start = start_bit * 2
                 bit_end = (start_bit + sec_len) * 2
                 color = self.colors[i] if self.colors and i < len(self.colors) else 'black'
-
                 if i > 0:
                     bit_start -= 1
 
-                # Plota a linha dos bits
                 self.ax.step(
                     x[bit_start:bit_end],
                     bits_up[bit_start:bit_end],
                     where='post',
                     color=color,
                     linewidth=2.0,
-                    label=sec_name if i == 0 or sec_name not in [s[0] for s in self.sections[:i]] else None
+                    label=sec_name if label is None else label
                 )
                 
-                # Adiciona os valores dos bits
                 if show_bit_values:
                     section_bits = all_bits[start_bit:start_bit + sec_len]
                     for j, bit in enumerate(section_bits):
-                        bit_pos = start_bit + j
                         self.ax.text(
-                            bit_pos * 2 + 1,  # Posição central do bit
-                            1.0 + bit_value_offset,  # Posição vertical acima da linha
-                            str(int(bit)),  # Converte para 0 ou 1
+                            (start_bit + j) * 2 + 1,
+                            1.0 + bit_value_offset,
+                            str(int(bit)),
                             ha='center',
                             va='bottom',
                             fontsize=bit_value_size,
                             fontweight=bit_value_weight,
                             color='black'
                         )
-                
                 start_bit += sec_len
         else:
-            # Para o caso sem seções
-            self.ax.step(x, bits_up, where='post', color='black', linewidth=2.0, label='Bits')
-            
-            # Adiciona os valores dos bits
+            self.ax.step(x, bits_up, where='post',
+                         color='black', linewidth=2.0,
+                         label=label if label else None)
             if show_bit_values:
                 for i, bit in enumerate(all_bits):
                     self.ax.text(
@@ -400,9 +394,75 @@ class BitsPlot(BasePlot):
                         fontweight=bit_value_weight
                     )
 
-        self.ax.set_xlabel('Índice do Bit')
-        self.ax.set_ylabel('Valor')
-        
-        # Ajusta o layout para garantir que os valores dos bits não sejam cortados
+        if xlabel:
+            self.ax.set_xlabel(xlabel)
+        if ylabel:
+            self.ax.set_ylabel(ylabel)
+
+        plt.tight_layout()
+        self.apply_ax_style()
+
+class EncodedBitsPlot(BasePlot):
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 bits: np.ndarray,
+                 color: str = "black",
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.bits = np.array(bits).astype(int)
+        self.color = color
+
+    def plot(self,
+             show_pairs: bool = True,
+             pair_value_offset: float = 0.15,
+             pair_value_size: int = 12,
+             pair_value_weight: str = "bold",
+             xlabel: Optional[str] = None,
+             ylabel: Optional[str] = None,
+             label: Optional[str] = None) -> None:
+        """
+        Plota um vetor de bits agrupados de dois em dois.
+        """
+        if len(self.bits) % 2 != 0:
+            raise ValueError("O número de bits deve ser par para codificação em pares.")
+
+        bits_up = np.repeat(self.bits, 2)
+        x = np.arange(len(bits_up))
+
+        self.ax.set_xlim(0, len(bits_up))
+        self.ax.set_ylim(-0.2, 1.4 if show_pairs else 1.2)
+        self.ax.grid(False)
+        self.ax.set_yticks([0, 1])
+
+        pair_edges = np.arange(0, len(bits_up) + 1, 4)
+        for pos in pair_edges:
+            self.ax.axvline(x=pos, color="gray", linestyle="--", linewidth=0.5)
+
+        self.ax.step(x, bits_up, where="post",
+                     color=self.color, linewidth=2.0,
+                     label=label if label else None)
+
+        if show_pairs:
+            for i in range(0, len(self.bits), 2):
+                pair = f"{self.bits[i]}{self.bits[i+1]}"
+                self.ax.text(
+                    i * 2 + 2,
+                    1.0 + pair_value_offset,
+                    pair,
+                    ha="center",
+                    va="bottom",
+                    fontsize=pair_value_size,
+                    fontweight=pair_value_weight,
+                    color="black"
+                )
+
+        if xlabel:
+            self.ax.set_xlabel(xlabel)
+        if ylabel:
+            self.ax.set_ylabel(ylabel)
+
         plt.tight_layout()
         self.apply_ax_style()

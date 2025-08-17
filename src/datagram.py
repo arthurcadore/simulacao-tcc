@@ -218,7 +218,7 @@ if __name__ == "__main__":
                   ("Dados de App.", len(datagram_tx.blocks)),
                   ("Tail", len(datagram_tx.tail))],
         colors=["green", "orange", "red", "blue"]
-    ).plot()
+    ).plot(xlabel="Index de Bit")
 
     fig_datagram.tight_layout()
     save_figure(fig_datagram, "example_datagram.pdf")

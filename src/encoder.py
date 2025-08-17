@@ -9,7 +9,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
 
 class Encoder:
     def __init__(self, method):
@@ -127,20 +127,36 @@ if __name__ == "__main__":
     Yman = encoder_man.encode(Yn)
     print("Channel Y(MAN)[n]:", ''.join(str(int(b)) for b in Yman))
 
-    plot = Plotter()
-    plot.plot_encode(s1=Xn, 
-                     s2=Yn, 
-                     s3=Xnrz, 
-                     s4=Yman, 
-                     label1="Canal I $(X_n)$", 
-                     label2="Canal Q $(Y_n)$", 
-                     label3="Canal I $(X_{NRZ}[n])$", 
-                     label4="Canal Q $(Y_{MAN}[n])$", 
-                     title1="$X_n$", 
-                     title2="$Y_n$", 
-                     title3="$X_{NRZ}[n]$", 
-                     title4="$Y_{MAN}[n]$", 
-                     save_path="../out/example_encoder.pdf")
+    fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
+
+    BitsPlot(
+        fig_encoder, grid, (0, 0),
+        bits_list=[Xn],
+        sections=[("$X_n$", len(Xn))],
+        colors=["darkgreen"]
+    ).plot(ylabel="$X_n$")
+
+    EncodedBitsPlot(
+        fig_encoder, grid, (1, 0),
+        bits=Xnrz,
+        color='darkgreen',
+    ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+
+    BitsPlot(
+        fig_encoder, grid, (2, 0),
+        bits_list=[Yn],
+        sections=[("$Y_n$", len(Yn))],
+        colors=["navy"]
+    ).plot(ylabel="$Y_n$")
+
+    EncodedBitsPlot(
+        fig_encoder, grid, (3, 0),
+        bits=Yman,
+        color="navy",
+    ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+
+    fig_encoder.tight_layout()
+    save_figure(fig_encoder, "example_encoder.pdf")
 
     Xn_prime = encoder_nrz.decode(Xnrz)
     print("Channel X'n:", ''.join(str(int(b)) for b in Xn_prime))
