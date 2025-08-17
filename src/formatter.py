@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):
@@ -124,22 +124,58 @@ if __name__ == "__main__":
     print("Yman:", ''.join(str(b) for b in Yman))
     print("dI:", ''.join(str(b) for b in dI[:5]))
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
+
+    # Plotando a resposta ao impulso
+    fig_impulse, grid_impulse = create_figure(1, 1)
+
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (0, 0),
+        formatter.t_rc, formatter.g,
+        t_unit="ms",
+    ).plot(label="g(t)", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+    fig_impulse.tight_layout()
+    save_figure(fig_impulse, "example_formatter_impulse.pdf")
+
+    # Plotando os sinais formatados
     
-    plot = Plotter()
-    plot.plot_filter(formatter.g, 
-                     formatter.t_rc, 
-                     formatter.Tb, 
-                     formatter.span, 
-                     formatter.fs, 
-                     dI, 
-                     dQ,
-                     fr'Pulso RRC ($\alpha={formatter.alpha}$)', 
-                     fr'$d_I(t)$', 
-                     fr'$d_Q(t)$', 
-                     'Pulso Root Raised Cosine (RRC)', 
-                     fr'Sinal $d_I(t)$', 
-                     fr'Sinal $d_Q(t)$', 
-                     0.05,
-                     save_path="../out/example_formatter.pdf"
-    )
+    fig_format, grid_format = create_figure(2, 2)
+
+    ImpulseResponsePlot(
+        fig_format, grid_format, (0, slice(0, 2)),
+        formatter.t_rc, formatter.g,
+        t_unit="ms",
+    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-10, 10))
     
+    TimePlot(
+        fig_format, grid_format, (1,0),
+        t= np.arange(len(dI)) / formatter.fs,
+        signals=[dI],
+        labels=["$d_I(t)$"],
+        title="Canal $I$",
+        xlim=(0, 0.1),
+        ylim=(-0.02, 0.08),
+        colors="darkgreen",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+    
+    TimePlot(
+        fig_format, grid_format, (1,1),
+        t= np.arange(len(dQ)) / formatter.fs,
+        signals=[dQ],
+        labels=["$d_Q(t)$"],
+        title="Canal $Q$",
+        xlim=(0, 0.1),
+        ylim=(-0.02, 0.08),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+    
+    fig_format.tight_layout()
+    save_figure(fig_format, "example_formatter_time.pdf")

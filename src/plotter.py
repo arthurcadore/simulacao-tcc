@@ -466,3 +466,74 @@ class EncodedBitsPlot(BasePlot):
 
         plt.tight_layout()
         self.apply_ax_style()
+
+class ImpulseResponsePlot(BasePlot):
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 t_imp: np.ndarray,
+                 impulse_response: np.ndarray,
+                 t_unit: str = "ms",
+                 **kwargs) -> None:
+        r"""
+        Classe para plotar a resposta ao impulso de um filtro.
+
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int): Posição do plot no GridSpec
+            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
+            impulse_response (np.ndarray): Amostras da resposta ao impulso
+            t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
+        """
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.t_imp = t_imp
+        self.impulse_response = impulse_response
+        self.t_unit = t_unit
+
+    def plot(self,
+             label: Optional[str] = None,
+             xlabel: Optional[str] = None,
+             ylabel: Optional[str] = None,
+             xlim: Optional[Tuple[float, float]] = None) -> None:
+        """
+        Plota a resposta ao impulso.
+
+        Args:
+            label (str, optional): Rótulo da curva
+            xlabel (str, optional): Rótulo do eixo X
+            ylabel (str, optional): Rótulo do eixo Y
+            xlim (float, optional): Limite de tempo para exibição (simétrico em torno de 0)
+        """
+        if self.t_unit == "ms":
+            t_plot = self.t_imp * 1000
+            default_xlabel = "Tempo (ms)"
+        else:
+            t_plot = self.t_imp
+            default_xlabel = "Tempo (s)"
+
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+
+        color = self.apply_color(0) or "red"
+        lbl = label if label else (self.labels[0] if self.labels else None)
+
+        self.ax.plot(t_plot, self.impulse_response,
+                     color=color, label=lbl, **line_kwargs)
+
+        if xlabel is not None:
+            self.ax.set_xlabel(xlabel)
+        else:
+            self.ax.set_xlabel(default_xlabel)
+
+        if ylabel is not None:
+            self.ax.set_ylabel(ylabel)
+        else:
+            self.ax.set_ylabel("Amplitude")
+
+        if xlim is not None:
+            self.ax.set_xlim(xlim)
+
+        self.apply_ax_style()
