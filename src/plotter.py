@@ -304,3 +304,105 @@ class ConstellationPlot(BasePlot):
         self.ax.set_xlabel("Componente em Fase $I$")
         self.ax.set_ylabel("Componente em Quadratura $Q$")
         self.apply_ax_style()
+
+class BitsPlot(BasePlot):
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 bits_list: List[np.ndarray],
+                 sections: Optional[List[Tuple[str, int]]] = None,
+                 colors: Optional[List[str]] = None,
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.bits_list = bits_list
+        self.sections = sections
+        self.colors = colors
+
+    def plot(self, show_bit_values: bool = True, bit_value_offset: float = 0.15, 
+             bit_value_size: int = 12, bit_value_weight: str = 'bold') -> None:
+        """
+        Plota os bits com opção para exibir os valores dos bits acima do plot.
+        
+        Args:
+            show_bit_values (bool): Se True, exibe os valores dos bits acima do plot
+            bit_value_offset (float): Deslocamento vertical dos valores dos bits
+            bit_value_size (int): Tamanho da fonte dos valores dos bits
+            bit_value_weight (str): Peso da fonte dos valores dos bits (ex: 'normal', 'bold')
+        """
+        all_bits = np.concatenate(self.bits_list)
+        bits_up = np.repeat(all_bits, 2)
+        x = np.arange(len(bits_up))
+
+        # Ajusta os limites para acomodar os valores dos bits
+        y_upper = 1.4 if show_bit_values else 1.2
+        self.ax.set_xlim(0, len(bits_up))
+        self.ax.set_ylim(-0.2, y_upper)
+        self.ax.grid(False)
+        self.ax.set_yticks([0, 1])
+
+        bit_edges = np.arange(0, len(bits_up) + 1, 2)
+        for pos in bit_edges:
+            self.ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
+
+        if self.sections:
+            start_bit = 0
+            for i, (sec_name, sec_len) in enumerate(self.sections):
+                bit_start = start_bit * 2
+                bit_end = (start_bit + sec_len) * 2
+                color = self.colors[i] if self.colors and i < len(self.colors) else 'black'
+
+                if i > 0:
+                    bit_start -= 1
+
+                # Plota a linha dos bits
+                self.ax.step(
+                    x[bit_start:bit_end],
+                    bits_up[bit_start:bit_end],
+                    where='post',
+                    color=color,
+                    linewidth=2.0,
+                    label=sec_name if i == 0 or sec_name not in [s[0] for s in self.sections[:i]] else None
+                )
+                
+                # Adiciona os valores dos bits
+                if show_bit_values:
+                    section_bits = all_bits[start_bit:start_bit + sec_len]
+                    for j, bit in enumerate(section_bits):
+                        bit_pos = start_bit + j
+                        self.ax.text(
+                            bit_pos * 2 + 1,  # Posição central do bit
+                            1.0 + bit_value_offset,  # Posição vertical acima da linha
+                            str(int(bit)),  # Converte para 0 ou 1
+                            ha='center',
+                            va='bottom',
+                            fontsize=bit_value_size,
+                            fontweight=bit_value_weight,
+                            color='black'
+                        )
+                
+                start_bit += sec_len
+        else:
+            # Para o caso sem seções
+            self.ax.step(x, bits_up, where='post', color='black', linewidth=2.0, label='Bits')
+            
+            # Adiciona os valores dos bits
+            if show_bit_values:
+                for i, bit in enumerate(all_bits):
+                    self.ax.text(
+                        i * 2 + 1,
+                        1.0 + bit_value_offset,
+                        str(int(bit)),
+                        ha='center',
+                        va='bottom',
+                        fontsize=bit_value_size,
+                        fontweight=bit_value_weight
+                    )
+
+        self.ax.set_xlabel('Índice do Bit')
+        self.ax.set_ylabel('Valor')
+        
+        # Ajusta o layout para garantir que os valores dos bits não sejam cortados
+        plt.tight_layout()
+        self.apply_ax_style()

@@ -10,7 +10,7 @@ Data: 28-07-2025
 
 import numpy as np
 import json
-from plots import Plotter
+from plotter import BitsPlot, create_figure, save_figure
 
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
@@ -205,18 +205,23 @@ if __name__ == "__main__":
     print(datagram_tx.parse_datagram())
     print("Stream bits: ", ''.join(str(b) for b in datagram_tx.streambits))
 
-    plotter = Plotter()
-    plotter.plot_bits([datagram_tx.msglength, 
-                       datagram_tx.pcdid, 
-                       datagram_tx.blocks, 
-                       datagram_tx.tail],
-                       sections=[("Message Length", len(datagram_tx.msglength)),
-                                 ("PCD ID", len(datagram_tx.pcdid)),
-                                 ("Dados de App.", len(datagram_tx.blocks)),
-                                 ("Tail", len(datagram_tx.tail))],
-                       colors=["green", "orange", "red", "blue"],
-                       save_path="../out/example_datagram.pdf")
+    fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
+    
+    BitsPlot(
+        fig_datagram, grid, (0, 0),
+        bits_list=[datagram_tx.msglength, 
+                   datagram_tx.pcdid, 
+                   datagram_tx.blocks, 
+                   datagram_tx.tail],
+        sections=[("Message Length", len(datagram_tx.msglength)),
+                  ("PCD ID", len(datagram_tx.pcdid)),
+                  ("Dados de App.", len(datagram_tx.blocks)),
+                  ("Tail", len(datagram_tx.tail))],
+        colors=["green", "orange", "red", "blue"]
+    ).plot()
 
+    fig_datagram.tight_layout()
+    save_figure(fig_datagram, "example_datagram.pdf")
 
     # Receptor
     bits = datagram_tx.streambits
