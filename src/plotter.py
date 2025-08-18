@@ -631,3 +631,80 @@ class TrellisPlot(BasePlot):
                            loc='upper right', frameon=True, fontsize=12)
         
         self.apply_ax_style()
+
+class SampledSignalPlot(BasePlot):
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 t_signal: np.ndarray,
+                 signal: np.ndarray,
+                 t_samples: np.ndarray,
+                 samples: np.ndarray,
+                 **kwargs) -> None:
+        r"""
+        Classe para plotar um sinal filtrado com seus pontos de amostragem.
+
+        Args:
+            fig (plt.Figure): Figura do plot
+            grid (gridspec.GridSpec): GridSpec do plot
+            pos (int ou tuple): Posição no GridSpec
+            t_signal (np.ndarray): Vetor de tempo do sinal filtrado
+            signal (np.ndarray): Sinal filtrado
+            t_samples (np.ndarray): Instantes de amostragem
+            samples (np.ndarray): Amostras correspondentes
+        """
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.t_signal = t_signal
+        self.signal = signal
+        self.t_samples = t_samples
+        self.samples = samples
+
+    def plot(self,
+             label_signal: Optional[str] = None,
+             label_samples: Optional[str] = None,
+             xlabel: Optional[str] = "Tempo (s)",
+             ylabel: Optional[str] = "Amplitude",
+             title: Optional[str] = None,
+             x_lim: Optional[float] = None) -> None:
+        """
+        Plota o sinal filtrado e suas amostras.
+
+        Args:
+            label_signal (str, optional): Rótulo do sinal contínuo
+            label_samples (str, optional): Rótulo das amostras
+            xlabel (str, optional): Texto do eixo X
+            ylabel (str, optional): Texto do eixo Y
+            title (str, optional): Título do gráfico
+            x_lim (float, optional): Limite superior do eixo X
+        """
+        # Sinal filtrado - usa a cor fornecida ou azul como padrão
+        signal_color = self.colors if isinstance(self.colors, str) else "blue"
+        self.ax.plot(self.t_signal, self.signal,
+                     color=signal_color, label=label_signal, linewidth=2)
+
+        # Amostras - usa preto como padrão para manter contraste
+        self.ax.stem(self.t_samples, self.samples,
+                     linefmt="k-", markerfmt="ko", basefmt=" ",
+                     label=label_samples)
+
+        if title:
+            self.title = title
+            self.ax.set_title(title)
+        if xlabel:
+            self.ax.set_xlabel(xlabel)
+        if ylabel:
+            self.ax.set_ylabel(ylabel)
+        if x_lim:
+            self.ax.set_xlim(0, x_lim)
+
+        # Aplica os estilos da classe base, incluindo a legenda
+        self.apply_ax_style()
+        
+        # Garante que a legenda seja exibida
+        if label_signal or label_samples:
+            leg = self.ax.legend(loc='upper right', frameon=True, fontsize=12)
+            leg.get_frame().set_facecolor("white")
+            leg.get_frame().set_edgecolor("black")
+            leg.get_frame().set_alpha(1.0)

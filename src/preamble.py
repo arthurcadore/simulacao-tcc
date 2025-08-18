@@ -9,7 +9,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import save_figure, create_figure, BitsPlot
 
 class Preamble:
 
@@ -83,12 +83,23 @@ if __name__ == "__main__":
     print("Si: ", ''.join(str(int(b)) for b in Si))
     print("Sq: ", ''.join(str(int(b)) for b in Sq))
 
-    plot = Plotter()
-    plot.plot_preamble(Si, 
-                       Sq, 
-                       r"$S_i$", 
-                       r"$S_q$", 
-                       r"Canal $I$", 
-                       r"Canal $Q$", 
-                       save_path="../out/example_preamble.pdf"
-    )
+    fig_preamble, grid_preamble = create_figure(2, 1, figsize=(16, 9))
+
+    BitsPlot(
+        fig_preamble, grid_preamble, (0,0),
+        bits_list=[Si],
+        sections=[("Preambulo $S_I$", len(Si))],
+        colors=["darkgreen"]
+    ).plot(ylabel="Canal $I$")
+    
+    BitsPlot(
+        fig_preamble, grid_preamble, (1,0),
+        bits_list=[Sq],
+        sections=[("Preambulo $S_Q$", len(Sq))],
+        colors=["navy"]
+    ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+    
+    fig_preamble.tight_layout()
+    save_figure(fig_preamble, "example_preamble.pdf")
+        
+    

@@ -9,7 +9,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import save_figure, create_figure, BitsPlot
 
 class Scrambler:
     def __init__(self):
@@ -149,20 +149,50 @@ if __name__ == "__main__":
     print("vt1 = vt1': ", np.array_equal(vt1, vt1_prime))
     print("idx_vt0 = idx_vt0': ", np.array_equal(idx_vt0, idx_vt0_prime))
     print("idx_vt1 = idx_vt1': ", np.array_equal(idx_vt1, idx_vt1_prime))
-    
-    plotter = Plotter()
-    plotter.plot_scrambler(vt0, 
-                           vt1, 
-                           Xn, 
-                           Yn, 
-                           vt0_prime, 
-                           vt1_prime,
-                           "Canal I $v_t^{(0)}$", 
-                           "Canal Q $v_t^{(1)}$", 
-                           "Canal I $(X_n)$", 
-                           "Canal Q $(Y_n)$", 
-                           "Canal I $v_t^{(0)'} $", 
-                           "Canal Q $v_t^{(1)'} $",
-                           save_path="../out/example_scrambling.pdf"
-    )
 
+    fig_scrambler, grid_scrambler = create_figure(3, 2, figsize=(16, 9))
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (0, 0),
+        bits_list=[vt0],
+        sections=[("$v_t^{0}$", len(vt0))],
+        colors=["darkgreen"]
+    ).plot(ylabel="Original")
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (0, 1),
+        bits_list=[vt1],
+        sections=[("$v_t^{1}$", len(vt1))],
+        colors=["navy"]
+    ).plot()
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (1, 0),
+        bits_list=[Xn],
+        sections=[("$X_n$", len(Xn))],
+        colors=["darkgreen"]
+    ).plot(ylabel="Embaralhado")
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (1, 1),
+        bits_list=[Yn],
+        sections=[("$Y_n$", len(Yn))],
+        colors=["navy"]
+    ).plot()
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (2, 0),
+        bits_list=[vt0_prime],
+        sections=[("$v_t^{0}$", len(vt0_prime))],
+        colors=["darkgreen"]
+    ).plot(ylabel="Restaurado", xlabel="Index de Bit")
+
+    BitsPlot(
+        fig_scrambler, grid_scrambler, (2, 1),
+        bits_list=[vt1_prime],
+        sections=[("$v_t^{1}$", len(vt1_prime))],
+        colors=["navy"]
+    ).plot(xlabel="Index de Bit")
+
+    fig_scrambler.tight_layout()
+    save_figure(fig_scrambler, "example_scrambler_time.pdf")

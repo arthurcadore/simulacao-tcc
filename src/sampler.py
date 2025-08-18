@@ -6,7 +6,7 @@ Data: 15-08-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import save_figure, create_figure, SampledSignalPlot
 
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, output_print=True, output_plot=True):
@@ -25,7 +25,6 @@ class Sampler:
         self.sps = int(self.fs / self.Rb)
         self.output_print = output_print
         self.output_plot = output_plot
-        self.plotter = Plotter()
         self.delay = 0
         self.indexes = self.calc_indexes(t)
     
@@ -80,27 +79,40 @@ if __name__ == "__main__":
     Rb = 2000
     t = np.arange(10000) / fs
     signal = np.cos(2 * np.pi * 1000 * t) + np.cos(2 * np.pi * 4000 * t)
+    signal2 = np.sin(2 * np.pi * 1000 * t) + np.sin(2 * np.pi * 4000 * t)
 
     sampler = Sampler(fs=fs, Rb=Rb, t=t)
     sampled_signal = sampler.sample(signal)
     sampled_time = sampler.sample(t)
 
-    bits = sampler.quantize(sampled_signal)
-    print(bits)
+    sampler2 = Sampler(fs=fs, Rb=Rb, t=t)
+    sampled_signal2 = sampler2.sample(signal2)
+    sampled_time2 = sampler2.sample(t)
 
-    plotter = Plotter()
-    plotter.plot_sampled_signals(t,
-                                 signal,
-                                 signal,
-                                 sampled_time,
-                                 sampled_signal,
-                                 sampled_signal,                                 
-                                 "Amostragem",
-                                 "Sinal original",
-                                 "Sinal amostrado",
-                                 "Amostragem",
-                                 "Sinal original",
-                                 "Sinal amostrado",
-                                 0.01,
-                                 save_path="../out/example_sampler.pdf"
-    )
+    bits = sampler.quantize(sampled_signal)
+    bits2 = sampler2.quantize(sampled_signal2)
+    print(bits)
+    print(bits2)
+
+    fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
+
+    SampledSignalPlot(
+        fig_sampler, grid_sampler, (0, 0),
+        t,
+        signal,
+        sampled_time,
+        sampled_signal,
+        colors='red'
+    ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.01, title="Sinal $Cos(t)$ amostrado")
+
+    SampledSignalPlot(
+        fig_sampler, grid_sampler, (1, 0),
+        t,
+        signal2,
+        sampled_time2,
+        sampled_signal2,
+        colors='navy'
+    ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.01, title="Sinal $Sin(t)$ amostrado")
+
+    fig_sampler.tight_layout()
+    save_figure(fig_sampler, "example_sampler_time.pdf")
