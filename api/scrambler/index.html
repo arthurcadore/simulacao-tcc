@@ -983,25 +983,6 @@
 
 
 <h1 id="scrambler">Scrambler</h1>
-<p align="center" class="image-container">
-  <img src="../assets/embaralhador.png" alt="Diagrama de blocos do embaralhador" class="responsive-image">
-</p>
-
-<p>O processo de embaralhamento pode ser expresso como:</p>
-<div class="arithmatex">\[
-X_n =
-\begin{cases}
-A, &amp; \text{se } n \equiv 0 \pmod{3} \\\\
-B, &amp; \text{se } n \equiv 1 \pmod{3} \\\\
-C, &amp; \text{se } n \equiv 2 \pmod{3}
-\end{cases}, \quad
-Y_n =
-\begin{cases}
-A, &amp; \text{se } n \equiv 0 \pmod{3} \\\\
-B, &amp; \text{se } n \equiv 1 \pmod{3} \\\\
-C, &amp; \text{se } n \equiv 2 \pmod{3}
-\end{cases}
-\]</div>
 
 
 <div class="doc doc-object doc-class">
@@ -1060,7 +1041,9 @@ C, &amp; \text{se } n \equiv 2 \pmod{3}
 
     <div class="doc doc-contents ">
 
-        <p>Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados.</p>
+        <p>Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados. O processo de embaralhamento 
+é ilustrado pelo diagrama de blocos abaixo. </p>
+<p><img alt="pageplot" src="../../assets/embaralhador.svg" /></p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1181,7 +1164,9 @@ C, &amp; \text{se } n \equiv 2 \pmod{3}
 
     <div class="doc doc-contents ">
 
-        <p>Restaura os vetores X e Y embaralhados ao seu estado original.</p>
+        <p>Restaura os vetores X e Y embaralhados ao seu estado original. O processo de desembaralhamento 
+é ilustrado pelo diagrama de blocos abaixo.</p>
+<p><img alt="pageplot" src="../../assets/desembaralhador.svg" /></p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
