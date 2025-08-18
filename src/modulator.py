@@ -252,7 +252,7 @@ if __name__ == "__main__":
         fig_time, grid, (0, 0),
         t=t,
         signals=[i_signal, q_signal],
-        labels=["$dI'(t)$", "$dQ'(t)$"],
+        labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
         xlim=(0, 0.1),
         ylim=(-0.1, 0.2),
@@ -279,7 +279,7 @@ if __name__ == "__main__":
     ).plot()
     
     fig_time.tight_layout()
-    save_figure(fig_time, "example_demodulation_time.pdf")
+    save_figure(fig_time, "example_demodulator_time.pdf")
     
 
     # PLOT 2 - Frequência
@@ -301,7 +301,7 @@ if __name__ == "__main__":
         fs=fs,
         signal=i_signal,
         fc=fc,
-        labels=["$D_I'(f)$"],
+        labels=["$X_I'(f)$"],
         title="Componente $I$ - Demodulado",
         xlim=(-5.5, 5.5),
         colors="darkgreen",
@@ -313,7 +313,7 @@ if __name__ == "__main__":
         fs=fs,
         signal=q_signal,
         fc=fc,
-        labels=["$D_Q'(f)$"],
+        labels=["$Y_Q'(f)$"],
         title="Componente $Q$ - Demodulado",
         xlim=(-5.5, 5.5),
         colors="navy",
@@ -322,4 +322,4 @@ if __name__ == "__main__":
     
 
     fig_freq.tight_layout()
-    save_figure(fig_freq, "example_demodulation_freq.pdf")
+    save_figure(fig_freq, "example_demodulator_freq.pdf")

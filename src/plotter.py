@@ -145,6 +145,11 @@ class TimePlot(BasePlot):
         pos (int): Posição do plot
         t (np.ndarray): Vetor de tempo
         signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
+
+    Exemplos:
+        - Modulador: ![pageplot](assets/example_modulator_time.svg)
+        - Demodulador: ![pageplot](assets/example_demodulator_time.svg)
+        - Adição de AWGN ![pageplot](assets/example_noise_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -187,6 +192,11 @@ class FrequencyPlot(BasePlot):
         fs (float): Frequência de amostragem
         signal (np.ndarray): Sinal a ser plotado
         fc (float): Frequência central
+
+    Exemplos:
+        - Modulador: ![pageplot](assets/example_modulator_freq.svg)
+        - Demodulador: ![pageplot](assets/example_demodulator_freq.svg)
+        - Adição de AWGN ![pageplot](assets/example_noise_freq.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -241,6 +251,9 @@ class ConstellationPlot(BasePlot):
         dI (np.ndarray): Sinal I
         dQ (np.ndarray): Sinal Q
         amplitude (Optional[float]): Amplitude alvo para pontos ideais
+
+    Exemplos:
+        - Modulador: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -303,6 +316,13 @@ class BitsPlot(BasePlot):
         bits_list (List[np.ndarray]): Lista de bits
         sections (Optional[List[Tuple[str, int]]]): Seções do plot
         colors (Optional[List[str]]): Cores do plot
+
+    Exemplos:
+        - Datagrama: ![pageplot](assets/example_datagram_time.svg)
+        - Codificador Convolucional: ![pageplot](assets/example_conv_time.svg)
+        - Embaralhador: ![pageplot](assets/example_scrambler_time.svg)
+        - Preâmbulo: ![pageplot](assets/example_preamble.svg)
+        - Multiplexador: ![pageplot](assets/example_mux.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -408,6 +428,9 @@ class EncodedBitsPlot(BasePlot):
         pos (int): Posição do plot
         bits (np.ndarray): Vetor de bits
         color (str): Cor do plot
+
+    Exemplos:
+        - Codificação de Linha: ![pageplot](assets/example_encoder_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -482,6 +505,11 @@ class ImpulseResponsePlot(BasePlot):
         t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
         impulse_response (np.ndarray): Amostras da resposta ao impulso
         t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
+
+    Exemplos:
+        - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
+        - Resposta ao Impulso Filtro Passa baixa: ![pageplot](assets/example_lpf_impulse.svg)
+        - Resposta ao Impulso RRC Invertido: ![pageplot](assets/example_mf_impulse.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -548,6 +576,9 @@ class TrellisPlot(BasePlot):
                         Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}
         num_steps (int): Número de passos no tempo
         initial_state (int): Estado inicial
+
+    Exemplos:
+        - Treliça Decodificador Viterbi: ![pageplot](assets/example_conv_trellis.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -640,6 +671,9 @@ class SampledSignalPlot(BasePlot):
         signal (np.ndarray): Sinal filtrado
         t_samples (np.ndarray): Instantes de amostragem
         samples (np.ndarray): Amostras correspondentes
+
+    Exemplos:
+        - Sinal Amostrado: ![pageplot](assets/example_sampler_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,

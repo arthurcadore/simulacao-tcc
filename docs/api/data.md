@@ -1,6 +1,6 @@
-# Transmissor
+# Data
 
-::: transmitter.Transmitter
+::: data
     options:
         extra:
             show_docstring: true
