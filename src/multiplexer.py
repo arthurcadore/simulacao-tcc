@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plots import Plotter
+from plotter import create_figure, save_figure, BitsPlot
 
 class Multiplexer:
     def __init__(self):
@@ -53,21 +53,28 @@ if __name__ == "__main__":
     print("X: ", ''.join(str(int(b)) for b in X))
     print("Y: ", ''.join(str(int(b)) for b in Y))
 
+    fig_mux, grid_mux = create_figure(2, 1, figsize=(16, 9))
+
+    BitsPlot(
+        fig_mux, grid_mux, (0,0),
+        bits_list=[SI, X],
+        sections=[("Preambulo $S_I$", len(SI)),
+                  ("Canal I $(X_n)$", len(X))],
+        colors=["blue", "purple"]
+    ).plot(ylabel="Canal $I$")
+    
     Xn, Yn = mux.concatenate(SI, SQ, X, Y)
 
-    plotter = Plotter()
-    plotter.plot_mux(SI, 
-                     SQ, 
-                     X, 
-                     Y, 
-                     "Preambulo $S_I$",
-                     "Canal I $(X_n)$",
-                     "Preambulo $S_Q$",
-                     "Canal Q $(Y_n)$",
-                     "$X_n$",
-                     "$Y_n$",
-                     save_path="../out/example_multiplexing.pdf"
-                     )
+    BitsPlot(
+        fig_mux, grid_mux, (1,0),
+        bits_list=[SQ, Y],
+        sections=[("Preambulo $S_Q$", len(SQ)),
+                  ("Canal Q $(Y_n)$", len(Y))],
+        colors=["blue", "purple"]
+    ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+
+    fig_mux.tight_layout()
+    save_figure(fig_mux, "example_mux.pdf")
 
     print("Xn:", ''.join(str(int(b)) for b in Xn))
     print("Yn:", ''.join(str(int(b)) for b in Yn))
