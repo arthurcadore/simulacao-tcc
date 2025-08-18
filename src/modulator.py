@@ -229,8 +229,8 @@ if __name__ == "__main__":
 
     ConstellationPlot(
         fig_const, grid, (0, 1),
-        dI=dI[:40000],
-        dQ=dQ[:40000],
+        dI=dI[:20000],
+        dQ=dQ[:20000],
         title="Constelação $IQ$",
         xlim=(-0.05, 0.05),
         ylim=(-0.05, 0.05),
