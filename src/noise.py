@@ -6,9 +6,9 @@ Data: 16-08-2025
 """
 
 import numpy as np
-from plots import Plotter
 from datagram import Datagram
 from transmitter import Transmitter
+from plotter import save_figure, create_figure, TimePlot, FrequencyPlot
 
 class Noise:
     def __init__(self, snr=10):
@@ -45,24 +45,60 @@ if __name__ == "__main__":
     add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
 
-    plotter = Plotter()
-    plotter.plot_time_domain(s, 
-                        s_noisy, 
-                        t, 
-                        r'$s(t)$', 
-                        r'$s(t) + AWGN$', 
-                        "Domínio do Tempo - Sem Ruído", 
-                        f"Domínio do Tempo - Com Ruído (SNR = {snr_db} dB)", 
-                        save_path="../out/example_addnoise_time.pdf"
-    )
-    plotter.plot_frequency_domain(s,
-                             s_noisy,
-                             transmitter.fs,
-                             transmitter.fc,
-                             r'$S(f)$',
-                             r'$S(f) + AWGN$',
-                             "Domínio da Frequência - Sem Ruído",
-                             "Domínio da Frequência - Com Ruído",
-                             save_path="../out/example_addnoise_frequency.pdf"
-    )
+    fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
+
+    TimePlot(
+        fig_time, grid_time, (0,0),
+        t=t,
+        signals=[s],
+        labels=["$s(t)$"],
+        title="Domínio do Tempo - Sem Ruído",
+        xlim=(0, 0.1),
+        ylim=(-0.1, 0.1),
+        colors="darkblue",
+        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
     
+    TimePlot(
+        fig_time, grid_time, (1,0),
+        t=t,
+        signals=[s_noisy],
+        labels=["$s(t) + AWGN$"],
+        title="Domínio do Tempo - Com Ruído",
+        xlim=(0, 0.1),
+        ylim=(-0.1, 0.1),
+        colors="darkred",
+        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
+    
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_noise_time.pdf")
+
+    fig_freq, grid_freq = create_figure(2, 1, figsize=(16, 9))
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,0),
+        fs=transmitter.fs,
+        signal=s,
+        fc=transmitter.fc,
+        labels=["$S(f)$"],
+        title="Domínio da Frequência - Sem Ruído",
+        xlim=(-8, 8),
+        colors="darkblue",
+        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
+    
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,0),
+        fs=transmitter.fs,
+        signal=s_noisy,
+        fc=transmitter.fc,
+        labels=["$S(f) + AWGN$"],
+        title="Domínio da Frequência - Com Ruído",
+        xlim=(-8, 8),
+        colors="darkred",
+        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
+    
+    fig_freq.tight_layout()
+    save_figure(fig_freq, "example_noise_freq.pdf")
