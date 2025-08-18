@@ -1,10 +1,3 @@
-"""
-Implementação de plots para visualização de sinais e gráficos.
-
-Autor: Arthur Cadore
-Data: 17-08-2025
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -106,9 +99,6 @@ class BasePlot:
         self.style = style or {}
 
     def apply_ax_style(self) -> None:
-        r"""
-        Aplica o estilo do eixo.
-        """
         grid_kwargs = self.style.get("grid", {"alpha": 0.6, "linestyle": "--", "linewidth": 0.5})
         self.ax.grid(True, **grid_kwargs)
         if self.xlim is not None:
@@ -120,9 +110,6 @@ class BasePlot:
         self.apply_legend()
 
     def apply_legend(self) -> None:
-        r"""
-        Aplica a legenda do plot.
-        """
         handles, labels = self.ax.get_legend_handles_labels()
         if not handles:
             return
@@ -139,15 +126,6 @@ class BasePlot:
         leg.get_frame().set_alpha(1.0)
 
     def apply_color(self, idx: int) -> Optional[str]:
-        r"""
-        Aplica a cor do vetor de dados.
-        
-        Args:
-            idx (int): Índice do vetor de dados
-        
-        Returns:
-            Optional[str]: Cor do vetor de dados
-        """
         if self.colors is None:
             return None
         if isinstance(self.colors, str):
