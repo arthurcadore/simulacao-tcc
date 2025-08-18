@@ -156,7 +156,7 @@ if __name__ == "__main__":
     ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
 
     fig_encoder.tight_layout()
-    save_figure(fig_encoder, "example_encoder.pdf")
+    save_figure(fig_encoder, "example_encoder_time.pdf")
 
     Xn_prime = encoder_nrz.decode(Xnrz)
     print("Channel X'n:", ''.join(str(int(b)) for b in Xn_prime))

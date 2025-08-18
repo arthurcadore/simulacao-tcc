@@ -1,3 +1,10 @@
+"""
+Implementação de plots para visualização de sinais e gráficos.
+
+Autor: Arthur Cadore
+Data: 17-08-2025
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -70,6 +77,18 @@ def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../out") -> None
     plt.close(fig)
 
 class BasePlot:
+    r"""
+    Inicializa o plot.
+    
+    Args:
+        ax (plt.Axes): Eixo do plot
+        title (str): Título do plot
+        labels (Optional[List[str]]): Lista de rótulos
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x
+        ylim (Optional[Tuple[float, float]]): Limites do eixo y
+        colors (Optional[Union[str, List[str]]]): Cores do plot
+        style (Optional[Dict[str, Any]]): Estilo do plot
+    """
     def __init__(self,
                  ax: plt.Axes,
                  title: str = "",
@@ -78,18 +97,6 @@ class BasePlot:
                  ylim: Optional[Tuple[float, float]] = None,
                  colors: Optional[Union[str, List[str]]] = None,
                  style: Optional[Dict[str, Any]] = None) -> None:
-        r"""
-        Inicializa o plot.
-        
-        Args:
-            ax (plt.Axes): Eixo do plot
-            title (str): Título do plot
-            labels (Optional[List[str]]): Lista de rótulos
-            xlim (Optional[Tuple[float, float]]): Limites do eixo x
-            ylim (Optional[Tuple[float, float]]): Limites do eixo y
-            colors (Optional[Union[str, List[str]]]): Cores do plot
-            style (Optional[Dict[str, Any]]): Estilo do plot
-        """
         self.ax = ax
         self.title = title
         self.labels = labels
@@ -151,6 +158,16 @@ class BasePlot:
 
 
 class TimePlot(BasePlot):
+    r"""
+    Classe para plotar sinais no domínio do tempo.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        t (np.ndarray): Vetor de tempo
+        signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -158,16 +175,6 @@ class TimePlot(BasePlot):
                  t: np.ndarray,
                  signals: Union[np.ndarray, List[np.ndarray]],
                  **kwargs) -> None:
-        r"""
-        Classe para plotar sinais no domínio do tempo.
-
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int): Posição do plot
-            t (np.ndarray): Vetor de tempo
-            signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t = t
@@ -192,6 +199,17 @@ class TimePlot(BasePlot):
 
 
 class FrequencyPlot(BasePlot):
+    r"""
+    Classe para plotar sinais no domínio da frequência.
+    
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        fs (float): Frequência de amostragem
+        signal (np.ndarray): Sinal a ser plotado
+        fc (float): Frequência central
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -200,17 +218,6 @@ class FrequencyPlot(BasePlot):
                  signal: np.ndarray,
                  fc: float = 0.0,
                  **kwargs) -> None:
-        r"""
-        Classe para plotar sinais no domínio da frequência.
-        
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int): Posição do plot
-            fs (float): Frequência de amostragem
-            signal (np.ndarray): Sinal a ser plotado
-            fc (float): Frequência central
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.fs = fs
@@ -246,6 +253,17 @@ class FrequencyPlot(BasePlot):
 
 
 class ConstellationPlot(BasePlot):
+    r"""
+    Classe para plotar sinais no domínio da constelação.
+    
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        dI (np.ndarray): Sinal I
+        dQ (np.ndarray): Sinal Q
+        amplitude (Optional[float]): Amplitude alvo para pontos ideais
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -254,17 +272,6 @@ class ConstellationPlot(BasePlot):
                  dQ: np.ndarray,
                  amplitude: Optional[float] = None,
                  **kwargs) -> None:
-        r"""
-        Classe para plotar sinais no domínio da constelação.
-        
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int): Posição do plot
-            dI (np.ndarray): Sinal I
-            dQ (np.ndarray): Sinal Q
-            amplitude (Optional[float]): Amplitude alvo para pontos ideais
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.dI = dI
@@ -308,6 +315,17 @@ class ConstellationPlot(BasePlot):
         self.apply_ax_style()
 
 class BitsPlot(BasePlot):
+    r"""
+    Classe para plotar bits.
+    
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        bits_list (List[np.ndarray]): Lista de bits
+        sections (Optional[List[Tuple[str, int]]]): Seções do plot
+        colors (Optional[List[str]]): Cores do plot
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -330,9 +348,7 @@ class BitsPlot(BasePlot):
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
              label: Optional[str] = None) -> None:
-        """
-        Plota os bits com opção para exibir os valores acima do plot.
-        """
+
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
         x = np.arange(len(bits_up))
@@ -405,6 +421,16 @@ class BitsPlot(BasePlot):
         self.apply_ax_style()
 
 class EncodedBitsPlot(BasePlot):
+    r"""
+    Classe para plotar bits com codificação de linha.
+    
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        bits (np.ndarray): Vetor de bits
+        color (str): Cor do plot
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -425,9 +451,7 @@ class EncodedBitsPlot(BasePlot):
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
              label: Optional[str] = None) -> None:
-        """
-        Plota um vetor de bits agrupados de dois em dois.
-        """
+
         if len(self.bits) % 2 != 0:
             raise ValueError("O número de bits deve ser par para codificação em pares.")
 
@@ -470,6 +494,17 @@ class EncodedBitsPlot(BasePlot):
         self.apply_ax_style()
 
 class ImpulseResponsePlot(BasePlot):
+    r"""
+    Classe para plotar a resposta ao impulso de um filtro.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot no GridSpec
+        t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
+        impulse_response (np.ndarray): Amostras da resposta ao impulso
+        t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -478,17 +513,7 @@ class ImpulseResponsePlot(BasePlot):
                  impulse_response: np.ndarray,
                  t_unit: str = "ms",
                  **kwargs) -> None:
-        r"""
-        Classe para plotar a resposta ao impulso de um filtro.
 
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int): Posição do plot no GridSpec
-            t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
-            impulse_response (np.ndarray): Amostras da resposta ao impulso
-            t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t_imp = t_imp
@@ -500,15 +525,7 @@ class ImpulseResponsePlot(BasePlot):
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
              xlim: Optional[Tuple[float, float]] = None) -> None:
-        """
-        Plota a resposta ao impulso.
 
-        Args:
-            label (str, optional): Rótulo da curva
-            xlabel (str, optional): Rótulo do eixo X
-            ylabel (str, optional): Rótulo do eixo Y
-            xlim (float, optional): Limite de tempo para exibição (simétrico em torno de 0)
-        """
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
             default_xlabel = "Tempo (ms)"
@@ -542,6 +559,18 @@ class ImpulseResponsePlot(BasePlot):
 
 
 class TrellisPlot(BasePlot):
+    r"""
+    Classe para plotar o diagrama de treliça de um decodificador viterbi.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot no GridSpec
+        trellis (dict): Dicionário do treliça. 
+                        Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}
+        num_steps (int): Número de passos no tempo
+        initial_state (int): Estado inicial
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -550,18 +579,7 @@ class TrellisPlot(BasePlot):
                  num_steps: int = 5,
                  initial_state: int = 0,
                  **kwargs) -> None:
-        r"""
-        Classe para plotar o diagrama de treliça de um codificador convolucional.
 
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int): Posição do plot no GridSpec
-            trellis (dict): Dicionário do treliça. 
-                            Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}
-            num_steps (int): Número de passos no tempo
-            initial_state (int): Estado inicial
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.trellis = trellis
@@ -633,6 +651,18 @@ class TrellisPlot(BasePlot):
         self.apply_ax_style()
 
 class SampledSignalPlot(BasePlot):
+    r"""
+    Classe para plotar um sinal no domínio do tempo com seus pontos de amostragem.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int ou tuple): Posição no GridSpec
+        t_signal (np.ndarray): Vetor de tempo do sinal filtrado
+        signal (np.ndarray): Sinal filtrado
+        t_samples (np.ndarray): Instantes de amostragem
+        samples (np.ndarray): Amostras correspondentes
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -642,18 +672,7 @@ class SampledSignalPlot(BasePlot):
                  t_samples: np.ndarray,
                  samples: np.ndarray,
                  **kwargs) -> None:
-        r"""
-        Classe para plotar um sinal filtrado com seus pontos de amostragem.
 
-        Args:
-            fig (plt.Figure): Figura do plot
-            grid (gridspec.GridSpec): GridSpec do plot
-            pos (int ou tuple): Posição no GridSpec
-            t_signal (np.ndarray): Vetor de tempo do sinal filtrado
-            signal (np.ndarray): Sinal filtrado
-            t_samples (np.ndarray): Instantes de amostragem
-            samples (np.ndarray): Amostras correspondentes
-        """
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t_signal = t_signal
@@ -668,17 +687,7 @@ class SampledSignalPlot(BasePlot):
              ylabel: Optional[str] = "Amplitude",
              title: Optional[str] = None,
              x_lim: Optional[float] = None) -> None:
-        """
-        Plota o sinal filtrado e suas amostras.
 
-        Args:
-            label_signal (str, optional): Rótulo do sinal contínuo
-            label_samples (str, optional): Rótulo das amostras
-            xlabel (str, optional): Texto do eixo X
-            ylabel (str, optional): Texto do eixo Y
-            title (str, optional): Título do gráfico
-            x_lim (float, optional): Limite superior do eixo X
-        """
         # Sinal filtrado - usa a cor fornecida ou azul como padrão
         signal_color = self.colors if isinstance(self.colors, str) else "blue"
         self.ax.plot(self.t_signal, self.signal,

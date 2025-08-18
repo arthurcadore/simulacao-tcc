@@ -221,7 +221,7 @@ if __name__ == "__main__":
     ).plot(xlabel="Index de Bit")
 
     fig_datagram.tight_layout()
-    save_figure(fig_datagram, "example_datagram.pdf")
+    save_figure(fig_datagram, "example_datagram_time.pdf")
 
     # Receptor
     bits = datagram_tx.streambits
