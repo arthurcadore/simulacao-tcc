@@ -29,6 +29,10 @@ class EncoderConvolutional:
             - $G_0$ é definido como $1111001_{2}$ ou $121_{10}$
             - $G_1$ é definido como $1011011_{2}$ ou $91_{10}$
 
+        Com base nos polinômios geradores, o codificador convolucional pode ser representado pelo diagrama de blocos abaixo.
+
+        ![pageplot](../assets/cod_convolucional.svg)
+
         """
         self.G = G
         self.G0 = int(G[0][0])

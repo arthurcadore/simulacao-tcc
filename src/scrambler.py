@@ -20,8 +20,11 @@ class Scrambler:
 
     def scramble(self, X, Y):
         r"""
-        Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados.
+        Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados. O processo de embaralhamento 
+        é ilustrado pelo diagrama de blocos abaixo. 
 
+        ![pageplot](../assets/embaralhador.svg)
+        
         Args:
             X (np.ndarray): Vetor de entrada $v_t^{(0)}$.
             Y (np.ndarray): Vetor de entrada $v_t^{(1)}$.
@@ -32,6 +35,7 @@ class Scrambler:
 
         Raises:
             AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
+
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
@@ -65,7 +69,10 @@ class Scrambler:
 
     def descramble(self, X, Y):
         r"""
-        Restaura os vetores X e Y embaralhados ao seu estado original.
+        Restaura os vetores X e Y embaralhados ao seu estado original. O processo de desembaralhamento 
+        é ilustrado pelo diagrama de blocos abaixo.
+
+        ![pageplot](../assets/desembaralhador.svg)
 
         Args:
             X (np.ndarray): Vetor $X'_{n}$ embaralhado.

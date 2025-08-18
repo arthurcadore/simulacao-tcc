@@ -21,7 +21,9 @@ class Transmitter:
                  output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de transmissão, desde a preparação do datagrama até a
-        modulação do sinal.
+        modulação do sinal. O processo de transmissão pode ser representado pelo diagrama de blocos abaixo.
+
+        ![pageplot](../assets/blocos_modulador.svg)
     
         Args:
             datagram (Datagram): Instância do datagrama a ser transmitido.

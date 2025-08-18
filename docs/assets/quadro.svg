@@ -1,0 +1,43 @@
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" width="1484.1599" height="564" version="1.1" viewBox="0 0 1484.1599 564">
+ <ns0:defs>
+  <ns0:clipPath id="b">
+   <ns0:path transform="scale(.48)" d="M0 0H3089.9903V1175.9766H0Z" clip-rule="evenodd" />
+  </ns0:clipPath>
+  <ns0:clipPath id="a">
+   <ns0:path transform="scale(.48)" d="M78.125 28.125H3012.5V1150H78.125Z" clip-rule="evenodd" />
+  </ns0:clipPath>
+ </ns0:defs>
+ <ns0:g clip-path="url(#b)">
+  <ns0:path transform="scale(1.5)" d="M0 0H989V376H0Z" fill="#fff" />
+ </ns0:g>
+ <ns0:g clip-path="url(#a)">
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-290 940H720V1268.46H-290Z" fill="#fff" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-290 940H720V1268.46H-290Z" fill="none" stroke="#000" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="22" xml:space="preserve"><ns0:tspan x="114.1875 130.0715 141.0715 150.83951 161.83951 169.16551 180.16551 185.66551 196.66551 206.43352 211.93352 218.04952 225.37552 235.14353 246.14353 254.70153 271.81755 277.93354 286.49156 295.04957 304.81758" y="967">Quadro de transmiss&#227;o</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="324.98439 333.98439 342.98439 351.98439 356.48439 365.48439 379.48838 386.4904 390.9904 398.9824 403.4824 412.4824 421.4824 430.4824 434.9824 443.9824 457.9864" y="1239">157.5ms a 722.5ms</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-280 990h180v198.46h-180z" fill="#fff" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-280 990h180v198.46h-180z" fill="none" stroke="#000" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-243.75 -233.742 -224.742 -218.748 -213.744 -205.752 -196.752 -187.752 -181.758 -173.76599 -169.26599 -159.258 -150.258 -144.26399" y="1095">Portadora Pura</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-280 1210h180" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-280 1205.5v9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-100 1214.5v-9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-211.76563 -202.76563 -193.76563 -189.26563 -175.26163" y="1239">82 ms</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-90 990H70V1188.46H-90Z" fill="#fff" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-90 990H70V1188.46H-90Z" fill="none" stroke="#000" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-49 -38.991998 -32.997999 -25.005997 -17.013997 -3.0099955 5.9900047 14.990005 19.994006" y="1095">Pre&#226;mbulo</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M80 990H710V1188.46H80Z" fill="#fff" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M80 990H710V1188.46H80Z" fill="none" stroke="#000" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="355.51564 368.51164 376.50364 381.50764 389.49964 398.49964 404.49363 412.48564 426.48963" y="1095">Datagrama</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m80.5 1210h630" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m80.5 1205.5v9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m710.5 1214.5v-9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-90 1210H70" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-90 1205.5v9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m70 1214.5v-9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-33.765626 -24.765625 -15.765625 -11.265625 2.7383757" y="1239">75 ms</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="M-290 1290H720" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m-290 1285.5v9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:path transform="matrix(1.3638535,0,0,1.3638535,446.80494,-1265.6583)" d="m720 1294.5v-9" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2" />
+  <ns0:text transform="matrix(1.3638535 0 0 1.3638535 446.80494 -1265.6583)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="144.98438 153.98438 162.98438 171.98438 176.48438 185.48438 199.48838 206.49037 210.99037 218.98238 223.48238 232.48238 241.48238 250.48238 254.98238 263.98237 277.98637" y="1321">314.5ms a 879.5ms</ns0:tspan></ns0:text>
+ </ns0:g>
+</ns0:svg>

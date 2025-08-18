@@ -15,7 +15,9 @@ from plotter import BitsPlot, create_figure, save_figure
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
         r"""
-        Inicializa uma instância do datagrama.
+        Inicializa uma instância do datagrama. 
+
+        ![pageplot](../assets/datagrama.svg)
         
         Referência:
             AS3-SP-516-274-CNES (seção 3.1.4).

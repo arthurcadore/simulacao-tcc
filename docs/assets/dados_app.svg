@@ -1,0 +1,108 @@
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" width="2034.24" height="630.24" version="1.1" viewBox="0 0 2034.24 630.24">
+ <ns0:defs>
+  <ns0:clipPath id="b">
+   <ns0:path transform="scale(.48)" d="M0 0H4239V1314H0Z" clip-rule="evenodd" />
+  </ns0:clipPath>
+  <ns0:clipPath id="a">
+   <ns0:path transform="scale(.48)" d="M78.125 21.875H4162.5V1290.625H78.125Z" clip-rule="evenodd" />
+  </ns0:clipPath>
+ </ns0:defs>
+ <ns0:g clip-path="url(#b)">
+  <ns0:path transform="scale(1.5)" d="M0 0H1356V420H0Z" fill="#fff" />
+ </ns0:g>
+ <ns0:g clip-path="url(#a)">
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2190 1740h1410v435h-1410z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2190 1740h1410v435h-1410z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="24" font-weight="bold" xml:space="preserve"><ns0:tspan x="2796.9844 2814.3123 2826.3123 2839.6563 2851.6563 2860.9923 2866.9923 2880.3363 2890.9923 2896.9923 2908.9923 2922.3363 2929.0084 2935.6805 2946.3365 2958.3365 2968.9925 2980.9925" y="1769">Dados de aplica&#231;&#227;o</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2550 1800h240v320h-240z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2550 1800h240v320h-240z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="2598.5938 2611.9339 2617.494 2627.494 2636.3739 2646.3739 2651.3739 2662.494 2671.3739 2676.3739 2687.494 2697.494 2708.614 2718.614 2726.394 2731.394" y="1850">Bloco de dados 1</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2215 1800h240v260h-240z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2215 1800h240v260h-240z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="2263.5938 2276.9339 2282.494 2292.494 2301.3739 2311.3739 2316.3739 2327.494 2336.3739 2341.3739 2352.494 2362.494 2373.614 2383.614 2391.394 2396.394" y="1850">Bloco de dados 0</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 1880h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 1880h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2270.1719 2283.168 2288.1719 2295.836 2303.828 2311.8199 2320.8199 2329.8199 2334.3199 2344.328 2353.328 2357.828 2366.828 2374.8199 2384.828 2390.8218" y="1906">Dire&#231;&#227;o do vento</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 1940h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 1940h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2287.1719 2298.17 2305.831 2313.823 2321.815 2326.8189 2336.827 2341.8309 2347.8248 2356.8248 2364.8167 2373.8167" y="1966">Precipita&#231;&#227;o</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 2e3h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2225 2e3h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2258.4376 2269.4356 2277.0968 2285.0887 2292.0906 2299.0926 2308.0926 2317.0926 2321.5926 2330.5926 2336.5865 2351.5804 2360.5804 2367.5823 2373.5762 2381.568 2389.56 2394.564 2402.556" y="2026">Press&#227;o atmosf&#233;rica</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 1880h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 1880h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2595.3282 2605.6817 2613.6737 2628.6676 2638.6756 2646.6676 2654.6595 2663.6595 2669.6534 2679.6614 2687.6534 2696.6534 2701.1534 2711.1614 2720.1614 2723.666 2736.662" y="1906">Temperatura do Ar</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 1940h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 1940h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2600.75 2613.746 2628.74 2633.744 2643.752 2652.752 2662.76 2670.752 2675.252 2688.248 2696.24 2701.244 2710.244 2716.2379 2721.2418 2730.2418" y="1966">Umidade Relativa</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 2e3h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 2e3h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2592.3126 2603.6593 2611.6512 2616.655 2625.655 2633.647 2638.651 2648.659 2657.659 2667.667 2675.659 2680.159 2690.167 2699.167 2703.336 2714.6827 2722.6746 2732.6827 2738.6766" y="2026">Velocidade do Vento</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 2060h220v50h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2560 2060h220v50h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2565.1407 2578.1368 2587.1368 2597.1448 2602.1488 2611.1488 2619.1407 2628.1407 2637.1407 2641.6407 2651.6488 2660.6488 2665.6527 2674.6527 2682.3165 2685.8233 2698.8194 2706.8114 2716.8194 2731.8133 2741.8214 2746.8253 2755.8253 2765.8333" y="2091">R&#225;dia&#231;&#227;o Solar Acumulada</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(0 1.3854643 -1.3854643 0 3129.286 -3173.875)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="2461.9376 2471.9376 2481.9376 2486.9376 2498.0577 2503.6177 2510.2777" y="1938">24 bits</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2470 2060v-260" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2466 2060h8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2474 1800h-8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:text transform="matrix(0 1.3854643 -1.3854643 0 3641.908 -3603.3692)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="2801.9376 2811.9376 2821.9376 2826.9376 2838.0577 2843.6177 2850.2777" y="1968">32 bits</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2810 2120v-320" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2806 2120h8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2814 1800h-8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2870 1800h240v320h-240z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2870 1800h240v320h-240z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="2918.5938 2931.9339 2937.494 2947.494 2956.3739 2966.3739 2971.3739 2982.494 2991.3739 2996.3739 3007.494 3017.494 3028.614 3038.614 3046.394 3051.394" y="1850">Bloco de dados 2</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 1880h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 1880h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2940.6407 2950.9007 2960.9088 2968.9007 2978.9088 2985.9107 2994.9107 3002.5772 3007.0772" y="1906">&lt;Sensor X</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3020.0782" y="1906">2</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3029.0782" y="1906">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 1940h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 1940h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2940.9688 2951.2288 2961.2369 2969.2288 2979.2369 2986.2388 2995.2388 3002.9053 3006.7374" y="1966">&lt;Sensor Y</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3019.75" y="1966">2</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3028.75" y="1966">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 2e3h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 2e3h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2941.1407 2951.4007 2961.4088 2969.4007 2979.4088 2986.4107 2995.4107 3003.0772 3007.5772" y="2026">&lt;Sensor Z</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3019.5938" y="2026">2</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3028.5938" y="2026">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 2060h220v50h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m2880 2060h220v50h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="2938.2969 2948.557 2958.565 2966.557 2976.565 2983.567 2992.567 3000.2335 3004.4083" y="2091">&lt;Sensor W</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3022.4219" y="2091">2</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3031.4219" y="2091">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3205.0067 1958.91 1 0.0131-0.0132 1-1-0.0131m4.0129-0.9475 0.9996 0.0131-0.013 1-0.9998-0.0131m4.0127-0.9476 1 0.0132-0.0132 1-1-0.0132m4.013-0.9475 0.9997 0.0131-0.0131 1-0.9998-0.0131m4.0127-0.9476 1 0.0131-0.0132 1-1-0.0131m4.013-0.9475 1 0.013-0.0132 1-1-0.013m4.0129-0.9477 0.9998 0.0132-0.0132 1-0.9998-0.0132m4.0127-0.9475 1 0.0131-0.0132 1-1-0.0131m4.013-0.9475 0.9997 0.0131-0.0131 1-0.9998-0.0131m4.0127-0.9476 1 0.013-0.0132 1-1-0.013m4.0129-0.9475 1 0.013-0.0132 1-1-0.013m4.013-0.9477 0.9998 0.0132-0.0132 1-0.9998-0.0132" />
+  <ns0:text transform="matrix(0 1.3854643 -1.3854643 0 4085.2567 -4046.7178)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="3121.9376 3131.9376 3141.9376 3146.9376 3158.0577 3163.6177 3170.2777" y="1968">32 bits</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3130 2120v-320" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3126 2120h8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3134 1800h-8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3288 1800h240v320h-240z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3288 1800h240v320h-240z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="3336.0313 3349.3714 3354.9315 3364.9315 3373.8114 3383.8114 3388.8114 3399.9315 3408.8114 3413.8114 3424.9315 3434.9315 3446.0516 3456.0516 3463.8316 3468.8316" y="1850">Bloco de dados n</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 1880h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 1880h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3358.9688 3369.2288 3379.2369 3387.2288 3397.2369 3404.2388 3413.2388 3420.9053 3425.4053" y="1904">&lt;Sensor X</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="15" font-weight="bold" xml:space="preserve"><ns0:tspan x="3438.4063" y="1908.5938">n</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3446.75" y="1904">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 1940h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 1940h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3359.2969 3369.557 3379.565 3387.557 3397.565 3404.567 3413.567 3421.2335 3425.0655" y="1964">&lt;Sensor Y</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="15" font-weight="bold" xml:space="preserve"><ns0:tspan x="3438.0782" y="1968.5938">n</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3446.4219" y="1964">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 2e3h220v40h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 2e3h220v40h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3359.4688 3369.7288 3379.7369 3387.7288 3397.7369 3404.7388 3413.7388 3421.4053 3425.9053" y="2024">&lt;Sensor Z</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="15" font-weight="bold" xml:space="preserve"><ns0:tspan x="3437.9219" y="2028.5938">n</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3446.2657" y="2024">&gt;</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 2060h220v50h-220z" fill="#fff" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3298 2060h220v50h-220z" fill="none" stroke="#000" />
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3356.625 3366.885 3376.893 3384.885 3394.893 3401.895 3410.895 3418.5616 3422.7364" y="2089">&lt;Sensor W</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="15" font-weight="bold" xml:space="preserve"><ns0:tspan x="3440.75" y="2093.5938">n</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(1.3854643 0 0 1.3854643 -2994.4659 -2398.0152)" font-family="Tinos" font-size="18" font-weight="bold" xml:space="preserve"><ns0:tspan x="3449.0938" y="2089">&gt;</ns0:tspan></ns0:text>
+  <ns0:text transform="matrix(0 1.3854643 -1.3854643 0 4664.3806 -4625.8415)" font-family="Tinos" font-size="20" font-weight="bold" xml:space="preserve"><ns0:tspan x="3539.9376 3549.9376 3559.9376 3564.9376 3576.0577 3581.6177 3588.2777" y="1968">32 bits</ns0:tspan></ns0:text>
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3548 2120v-320" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3544 2120h8" fill="none" stroke="#000" stroke-miterlimit="10" />
+  <ns0:path transform="matrix(1.3854643,0,0,1.3854643,-2993.7733,-2397.3226)" d="m3552 1800h-8" fill="none" stroke="#000" stroke-miterlimit="10" />
+ </ns0:g>
+</ns0:svg>

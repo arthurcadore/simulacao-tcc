@@ -21,7 +21,10 @@ from convolutional import DecoderViterbi
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
         r"""
-        Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit.
+        Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit. 
+        O processo de demodulação é representado pelo diagrama de blocos abaixo.
+
+        ![pageplot](../assets/blocos_demodulador.svg)
 
         Args:
             fs (int): Frequência de amostragem em Hz. Default é 128000 Hz.
