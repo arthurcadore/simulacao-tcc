@@ -4,8 +4,7 @@ Implementação de um transmissor PTT-A3 com seus componentes.
 Autor: Arthur Cadore
 Data: 16-08-2025
 """
-
-import os
+import numpy as np
 from formatter import Formatter
 from convolutional import EncoderConvolutional
 from datagram import Datagram
@@ -15,35 +14,7 @@ from scrambler import Scrambler
 from multiplexer import Multiplexer
 from encoder import Encoder
 from plots import Plotter
-
-# TODO: Implementar salvamento dos dados em formato binário para diminuir o tamanho do arquivo e facilitar a leitura posterior.
-class TransmissionResult:
-    r"""
-    Classe para armazenar o resultado da transmissão, incluindo o sinal modulado e o vetor de tempo.
-
-    Args:
-        t (np.ndarray): Vetor de tempo.
-        s (np.ndarray): Sinal modulado.
-    """
-    def __init__(self, t, s):
-        self.time = t
-        self.signal = s
-
-    def save(self, path_prefix="../out/transmission"):
-        r"""
-        Salva os resultados em arquivos TXT.
-        """
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        basepath = os.path.normpath(os.path.join(script_dir, path_prefix))
-
-        os.makedirs(os.path.dirname(basepath), exist_ok=True)
-
-        with open(f"{basepath}_signal.txt", "w") as f:
-            f.write(" ".join(map(str, self.signal)))
-
-        with open(f"{basepath}_time.txt", "w") as f:
-            f.write(" ".join(map(str, self.time)))
-
+from data import ExportData, ImportData
 
 class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
@@ -320,5 +291,23 @@ if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(datagram, output_print=True, output_plot=True)
     t, s = transmitter.run()
-    result = TransmissionResult(t, s)
-    result.save("../out/transmitter")
+
+    ExportData(s, "transmitter_s").save()
+    ExportData(t, "transmitter_t").save()
+
+    ### TESTE DE IMPORT:
+
+    # # Importa os dados    
+    # import_data = ImportData("transmitter_s")
+    # s1 = import_data.load()
+    # import_data = ImportData("transmitter_t")
+    # t1 = import_data.load()
+    
+    # print("s(t):", ''.join(map(str, s[:5])),"...")
+    # print("t:   ", ''.join(map(str, t[:5])),"...")
+
+
+    # # Verifica se os dados importados são iguais aos dados exportados
+    # if np.array_equal(s, s1) and np.array_equal(t, t1):
+    #     print("\nOs dados importados são iguais aos dados exportados.")
+    
