@@ -396,7 +396,6 @@ class Transmitter:
             dQ (np.ndarray): Vetor formatado do canal Q.
         
         Returns:
-
             t (np.ndarray): Vetor de tempo.
             s (np.ndarray): Sinal modulado.
 
@@ -418,7 +417,7 @@ class Transmitter:
                 labels=["$d_I(t)$", "$d_Q(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.1, 0.2),
+                ylim=(-0.05, 0.1),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
