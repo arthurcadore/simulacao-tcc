@@ -13,8 +13,8 @@ from preamble import Preamble
 from scrambler import Scrambler
 from multiplexer import Multiplexer
 from encoder import Encoder
-from plots import Plotter
 from data import ExportData, ImportData
+from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot
 
 class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
@@ -39,7 +39,6 @@ class Transmitter:
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
-        self.plotter = Plotter()
 
     def prepare_datagram(self):
         r"""
@@ -47,6 +46,9 @@ class Transmitter:
 
         Returns:
             ut (np.ndarray): Vetor de bits do datagrama.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_datagram_time.svg)
         """
         ut = self.datagram.streambits
         if self.output_print:
@@ -54,17 +56,24 @@ class Transmitter:
             print(self.datagram.parse_datagram())
             print("\nut:", ''.join(map(str, ut)))
         if self.output_plot:
-            self.plotter.plot_bits(
-                [self.datagram.msglength, self.datagram.pcdid, self.datagram.blocks, self.datagram.tail],
-                sections=[
-                    ("Message Length", len(self.datagram.msglength)),
-                    ("PCD ID", len(self.datagram.pcdid)),
-                    ("Dados de App.", len(self.datagram.blocks)),
-                    ("Tail", len(self.datagram.tail))
-                ],
-                colors=["green", "orange", "red", "blue"],
-                save_path="../out/transmitter_datagram.pdf"
-            )
+            fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
+
+            BitsPlot(
+                fig_datagram, grid, (0, 0),
+                bits_list=[self.datagram.msglength, 
+                           self.datagram.pcdid, 
+                           self.datagram.blocks, 
+                           self.datagram.tail],
+                sections=[("Message Length", len(self.datagram.msglength)),
+                          ("PCD ID", len(self.datagram.pcdid)),
+                          ("Dados de App.", len(self.datagram.blocks)),
+                          ("Tail", len(self.datagram.tail))],
+                colors=["green", "orange", "red", "blue"]
+            ).plot(xlabel="Index de Bit")
+
+            fig_datagram.tight_layout()
+            save_figure(fig_datagram, "transmitter_datagram_time.pdf")
+
         return ut
 
     def encode_convolutional(self, ut):
@@ -77,6 +86,9 @@ class Transmitter:
         Returns:
             vt0 (np.ndarray): Saída do canal I.
             vt1 (np.ndarray): Saída do canal Q.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_conv_time.svg)
         """
         encoder = EncoderConvolutional()
         vt0, vt1 = encoder.encode(ut)
@@ -85,12 +97,31 @@ class Transmitter:
             print("vt0:", ''.join(map(str, vt0)))
             print("vt1:", ''.join(map(str, vt1)))
         if self.output_plot:
-            self.plotter.plot_conv(
-                ut, vt0, vt1, "Entrada $u_t$",
-                "Canal I $v_t^{(0)}$", "Canal Q $v_t^{(1)}$",
-                "$u_t$", "$v_t^{(0)}$", "$v_t^{(1)}$",
-                save_path="../out/transmitter_convolutional.pdf"
-            )
+            fig_conv, grid_conv = create_figure(3, 1, figsize=(16, 9))
+
+            BitsPlot(
+                fig_conv, grid_conv, (0, 0),
+                bits_list=[ut],
+                sections=[("$u_t$", len(ut))],
+                colors=["darkred"]
+            ).plot(ylabel="$u_t$")
+
+            BitsPlot(
+                fig_conv, grid_conv, (1, 0),
+                bits_list=[vt0],
+                sections=[("$v_t^{(0)}$", len(vt0))],
+                colors=["darkgreen"]
+            ).plot(ylabel="$v_t^{(0)}$")
+
+            BitsPlot(
+                fig_conv, grid_conv, (2, 0),
+                bits_list=[vt1],
+                sections=[("$v_t^{(1)}$", len(vt1))],
+                colors=["navy"]
+            ).plot(ylabel="$v_t^{(1)}$")
+
+            fig_conv.tight_layout()
+            save_figure(fig_conv, "transmitter_conv_time.pdf")       
         return vt0, vt1
 
     def scramble(self, vt0, vt1):
@@ -104,6 +135,9 @@ class Transmitter:
         Returns:
             Xn (np.ndarray): Vetor embaralhado do canal I.
             Yn (np.ndarray): Vetor embaralhado do canal Q.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_scrambler_time.svg)
         """
         scrambler = Scrambler()
         X, Y = scrambler.scramble(vt0, vt1)
@@ -111,6 +145,40 @@ class Transmitter:
             print("\n ==== EMBARALHADOR ==== \n")
             print("Xn:", ''.join(map(str, X)))
             print("Yn:", ''.join(map(str, Y)))
+        if self.output_plot:
+            fig_scrambler, grid_scrambler = create_figure(2, 2, figsize=(16, 9))
+
+            BitsPlot(
+                fig_scrambler, grid_scrambler, (0, 0),
+                bits_list=[vt0],
+                sections=[("$v_t^{0}$", len(vt0))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Original")
+
+            BitsPlot(
+                fig_scrambler, grid_scrambler, (0, 1),
+                bits_list=[vt1],
+                sections=[("$v_t^{1}$", len(vt1))],
+                colors=["navy"]
+            ).plot()
+
+            BitsPlot(
+                fig_scrambler, grid_scrambler, (1, 0),
+                bits_list=[X],
+                sections=[("$X_n$", len(X))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Embaralhado")
+
+            BitsPlot(
+                fig_scrambler, grid_scrambler, (1, 1),
+                bits_list=[Y],
+                sections=[("$Y_n$", len(Y))],
+                colors=["navy"]
+            ).plot()
+
+            fig_scrambler.tight_layout()
+            save_figure(fig_scrambler, "transmitter_scrambler_time.pdf")
+
         return X, Y
 
     def generate_preamble(self):
@@ -120,6 +188,9 @@ class Transmitter:
         Returns:
             sI (np.ndarray): Vetor do preâmbulo do canal I.
             sQ (np.ndarray): Vetor do preâmbulo do canal Q.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_preamble_time.svg)
         """
         sI, sQ = Preamble().generate_preamble()
         if self.output_print:
@@ -127,11 +198,24 @@ class Transmitter:
             print("sI:", ''.join(map(str, sI)))
             print("sQ:", ''.join(map(str, sQ)))
         if self.output_plot:
-            self.plotter.plot_preamble(
-                sI, sQ, r"$S_i$", r"$S_q$",
-                r"Canal $I$", r"Canal $Q$",
-                save_path="../out/transmitter_preamble.pdf"
-            )
+            fig_preamble, grid_preamble = create_figure(2, 1, figsize=(16, 9))
+
+            BitsPlot(
+                fig_preamble, grid_preamble, (0,0),
+                bits_list=[sI],
+                sections=[("Preambulo $S_I$", len(sI))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Canal $I$")
+            
+            BitsPlot(
+                fig_preamble, grid_preamble, (1,0),
+                bits_list=[sQ],
+                sections=[("Preambulo $S_Q$", len(sQ))],
+                colors=["navy"]
+            ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+
+            fig_preamble.tight_layout()
+            save_figure(fig_preamble, "transmitter_preamble_time.pdf")
         return sI, sQ
 
     def multiplex(self, sI, sQ, X, Y):
@@ -147,6 +231,9 @@ class Transmitter:
         Returns:
             Xn (np.ndarray): Vetor multiplexado do canal I.
             Yn (np.ndarray): Vetor multiplexado do canal Q.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_mux_time.svg)
         """
 
         multiplexer = Multiplexer()
@@ -156,13 +243,25 @@ class Transmitter:
             print("Xn:", ''.join(map(str, Xn)))
             print("Yn:", ''.join(map(str, Yn)))
         if self.output_plot:
-            self.plotter.plot_mux(
-                sI, sQ, X, Y,
-                "Preambulo $S_I$", "Canal I $(X_n)$",
-                "Preambulo $S_Q$", "Canal Q $(Y_n)$",
-                "$X_n$", "$Y_n$",
-                save_path="../out/transmitter_multiplexing.pdf"
-            )
+            fig_mux, grid_mux = create_figure(2, 1, figsize=(16, 9))
+            BitsPlot(
+                fig_mux, grid_mux, (0,0),
+                bits_list=[sI, X],
+                sections=[("Preambulo $S_I$", len(sI)),
+                          ("Canal I $(X_n)$", len(X))],
+                colors=["blue", "purple"]
+            ).plot(ylabel="Canal $I$")
+
+            BitsPlot(
+                fig_mux, grid_mux, (1,0),
+                bits_list=[sQ, Y],
+                sections=[("Preambulo $S_Q$", len(sQ)),
+                          ("Canal Q $(Y_n)$", len(Y))],
+                colors=["blue", "purple"]
+            ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+
+            fig_mux.tight_layout()
+            save_figure(fig_mux, "transmitter_mux_time.pdf")   
         return Xn, Yn
 
     def encode_channels(self, Xn, Yn):
@@ -176,6 +275,9 @@ class Transmitter:
         Returns:
             Xnrz (np.ndarray): Vetor codificado do canal I (NRZ).
             Yman (np.ndarray): Vetor codificado do canal Q (Manchester).
+
+        Exemplo:
+            ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
         encoderNRZ = Encoder("nrz")
@@ -187,13 +289,36 @@ class Transmitter:
             print("Xnrz:", ''.join(map(str, Xnrz[:80])),"...")
             print("Yman:", ''.join(map(str, Yman[:80])),"...")
         if self.output_plot:
-            self.plotter.plot_encode(
-                Xn, Yn, Xnrz, Yman,
-                "Canal I $(X_n)$", "Canal Q $(Y_n)$",
-                "Canal I $(X_{NRZ}[n])$", "Canal Q $(Y_{MAN}[n])$",
-                "$X_n$", "$Y_n$", "$X_{NRZ}[n]$", "$Y_{MAN}[n]$",
-                save_path="../out/transmitter_encode.pdf"
-            )
+            fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
+
+            BitsPlot(
+                fig_encoder, grid, (0, 0),
+                bits_list=[Xn],
+                sections=[("$X_n$", len(Xn))],
+                colors=["darkgreen"]
+            ).plot(ylabel="$X_n$")
+
+            EncodedBitsPlot(
+                fig_encoder, grid, (1, 0),
+                bits=Xnrz,
+                color='darkgreen',
+            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+
+            BitsPlot(
+                fig_encoder, grid, (2, 0),
+                bits_list=[Yn],
+                sections=[("$Y_n$", len(Yn))],
+                colors=["navy"]
+            ).plot(ylabel="$Y_n$")
+
+            EncodedBitsPlot(
+                fig_encoder, grid, (3, 0),
+                bits=Yman,
+                color="navy",
+            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+
+            fig_encoder.tight_layout()
+            save_figure(fig_encoder, "transmitter_encoder_time.pdf")
         return Xnrz, Yman
 
     def format_signals(self, Xnrz, Yman):
@@ -207,6 +332,9 @@ class Transmitter:
         Returns:
             dI (np.ndarray): Vetor formatado do canal I.
             dQ (np.ndarray): Vetor formatado do canal Q.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_formatter_time.svg)
         """
         formatter = Formatter()
         dI = formatter.apply_format(Xnrz)
@@ -216,15 +344,47 @@ class Transmitter:
             print("dI:", ''.join(map(str, dI[:5])),"...")
             print("dQ:", ''.join(map(str, dQ[:5])),"...")
         if self.output_plot:
-            self.plotter.plot_filter(
-                formatter.g, formatter.t_rc, formatter.Tb,
-                formatter.span, formatter.fs, dI, dQ,
-                fr'Pulso RRC ($\alpha={formatter.alpha}$)',
-                fr'$d_I(t)$', fr'$d_Q(t)$',
-                'Pulso Root Raised Cosine (RRC)',
-                fr'Sinal $d_I(t)$', fr'Sinal $d_Q(t)$',
-                0.05, save_path="../out/transmitter_filter.pdf"
-            )
+            fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_format, grid_format, (0, slice(0, 2)),
+                formatter.t_rc, formatter.g,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+            TimePlot(
+                fig_format, grid_format, (1,0),
+                t= np.arange(len(dI)) / formatter.fs,
+                signals=[dI],
+                labels=["$d_I(t)$"],
+                title="Canal $I$",
+                xlim=(0, 0.1),
+                ylim=(-0.02, 0.08),
+                colors="darkgreen",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            TimePlot(
+                fig_format, grid_format, (1,1),
+                t= np.arange(len(dQ)) / formatter.fs,
+                signals=[dQ],
+                labels=["$d_Q(t)$"],
+                title="Canal $Q$",
+                xlim=(0, 0.1),
+                ylim=(-0.02, 0.08),
+                colors="darkblue",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            fig_format.tight_layout()
+            save_figure(fig_format, "transmitter_formatter_time.pdf")
         return dI, dQ
 
     def modulate(self, dI, dQ):
@@ -239,6 +399,9 @@ class Transmitter:
 
             t (np.ndarray): Vetor de tempo.
             s (np.ndarray): Sinal modulado.
+
+        Exemplo:
+            ![pageplot](assets/transmitter_modulator_time.svg)
         """
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
@@ -247,27 +410,39 @@ class Transmitter:
             print("s(t):", ''.join(map(str, s[:5])),"...")
             print("t:   ", ''.join(map(str, t[:5])),"...")
         if self.output_plot:
-            self.plotter.plot_modulation_time(
-                dI, dQ, s, "dI(t)", "dQ(t)", "s(t)",
-                "Sinal $IQ$ - Formatados RRC", "Sinal Modulado $IQ$",
-                fs=self.fs, t_xlim=0.10,
-                save_path="../out/transmitter_modulator_time.pdf"
-            )
-            self.plotter.plot_modulation_freq(
-                dI, dQ, s,
-                "$D_I'(f)$", "$D_Q'(f)$", "$S(f)$",
-                "Sinal Banda Base - Componente $I$",
-                "Sinal Banda Base - Componente $Q$",
-                "Sinal Modulado $IQ$",
-                fs=self.fs, fc=self.fc,
-                save_path="../out/transmitter_modulator_freq.pdf"
-            )
-            self.plotter.plot_modulation_iq(
-                dI, dQ,
-                fr'Amostras $IQ$', fr'Simbolos $QPSK$',
-                fr'Plano $IQ$ (Scatter)', fr'Plano $IQ$ (Constelação)',
-                save_path="../out/transmitter_modulator_iq.pdf"
-            )
+            fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+            TimePlot(
+                fig_time, grid, (0, 0),
+                t=t,
+                signals=[dI, dQ],
+                labels=["$d_I(t)$", "$d_Q(t)$"],
+                title="Componentes $IQ$ - Demoduladas",
+                xlim=(0, 0.1),
+                ylim=(-0.1, 0.2),
+                colors=["darkgreen", "navy"],
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            TimePlot(
+                fig_time, grid, (1, 0),
+                t=t,
+                signals=[s],
+                labels=["$s(t)$"],
+                title="Sinal Modulado $IQ$",
+                xlim=(0, 0.1),
+                ylim=(-0.1, 0.1),
+                colors="darkred",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            fig_time.tight_layout()
+            save_figure(fig_time, "transmitter_modulator_time.pdf")           
         return t, s
 
     def run(self):
