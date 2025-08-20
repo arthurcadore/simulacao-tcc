@@ -550,7 +550,7 @@ class Receiver:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
 
         Exemplo:
-            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
+            - Tempo: ![pageplot](assets/transmitter_datagram_time.svg)
         """
         
         # TODO: Adicionar detecção de portadora;
