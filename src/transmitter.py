@@ -14,7 +14,7 @@ from scrambler import Scrambler
 from multiplexer import Multiplexer
 from encoder import Encoder
 from data import ExportData, ImportData
-from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot
+from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
 
 class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
@@ -487,15 +487,15 @@ class Transmitter:
 
             # PLOT 3 - Constelação
             fig_const, grid = create_figure(1, 2, figsize=(16, 8))
-            TimePlot(
+            PhasePlot(
                 fig_const, grid, (0, 0),
                 t=t,
                 signals=[dI, dQ],
-                labels=["$dI(t)$", "$dQ(t)$"],
-                title="Sinal $IQ$ - Formatados RRC",
-                xlim=(0, 0.025),
-                ylim=(-0.02, 0.08),
-                colors=["darkgreen", "navy"],
+                labels=["Fase $I + jQ$"],
+                title="Fase $I + jQ$",
+                xlim=(0, 0.2),
+                ylim=(-np.pi, np.pi),
+                colors=["darkblue"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
                     "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}

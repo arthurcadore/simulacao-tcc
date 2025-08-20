@@ -729,3 +729,70 @@ class SampledSignalPlot(BasePlot):
             leg.get_frame().set_facecolor("white")
             leg.get_frame().set_edgecolor("black")
             leg.get_frame().set_alpha(1.0)
+
+class PhasePlot(BasePlot):
+    r"""
+    Classe para plotar a fase dos sinais IQ no domínio do tempo.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        t (np.ndarray): Vetor de tempo
+        signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
+        labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
+
+    Exemplos:
+        - Fase dos sinais IQ
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos: int,
+                 t: np.ndarray,
+                 signals: Union[np.ndarray, List[np.ndarray]],
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.t = t
+        
+        # Garantir que os sinais estão em uma lista
+        if isinstance(signals, (list, tuple)):
+            assert len(signals) == 2, "Os sinais devem conter exatamente dois componentes: I e Q."
+            self.I = signals[0]
+            self.Q = signals[1]
+        else:
+            raise ValueError("Os sinais devem ser passados como uma lista ou tupla com dois componentes (I, Q).")
+        
+        if self.labels is None:
+            self.labels = ["Fase IQ"]
+
+    def plot(self) -> None:
+        # Calcula a fase usando a função atan2
+        fase = np.angle(self.I + 1j * self.Q)
+
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+
+        # Plot da fase ao longo do tempo
+        color = self.apply_color(0)
+        if color is not None:
+            self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
+        else:
+            self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
+
+        # Ajuste dos eixos
+        self.ax.set_xlabel("Tempo (s)")
+        
+        # Usar \pi no rótulo do eixo Y para o LaTeX
+        self.ax.set_ylabel(r"Fase ($\pi$ rad)")
+        
+        # Definir limites de fase entre -π e π
+        self.ax.set_ylim([-np.pi, np.pi])
+        
+        # Formatando os ticks do eixo Y para múltiplos de π
+        self.ax.set_yticks(np.linspace(-np.pi, np.pi, 5))
+        self.ax.set_yticklabels([f'{-i} $\pi$' if i < 0 else f'{i} $\pi$' for i in np.linspace(-1, 1, 5)])
+
+        self.ax.legend()
+        self.apply_ax_style()
