@@ -14,7 +14,7 @@ from scrambler import Scrambler
 from multiplexer import Multiplexer
 from encoder import Encoder
 from data import ExportData, ImportData
-from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot
+from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot
 
 class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
@@ -400,7 +400,9 @@ class Transmitter:
             s (np.ndarray): Sinal modulado.
 
         Exemplo:
-            ![pageplot](assets/transmitter_modulator_time.svg)
+            - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
+            - Frequência: ![pageplot](assets/transmitter_modulator_freq.svg)
+            - Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
@@ -441,7 +443,78 @@ class Transmitter:
             ).plot()
 
             fig_time.tight_layout()
-            save_figure(fig_time, "transmitter_modulator_time.pdf")           
+            save_figure(fig_time, "transmitter_modulator_time.pdf")
+
+            fig_freq, grid = create_figure(2, 2, figsize=(16, 9))
+            FrequencyPlot(
+                fig_freq, grid, (0, 0),
+                fs=self.fs,
+                signal=dI,
+                fc=self.fc,
+                labels=["$D_I(f)$"],
+                title="Componente I",
+                xlim=(-1.5, 1.5),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+        
+            FrequencyPlot(
+                fig_freq, grid, (0, 1),
+                fs=self.fs,
+                signal=dQ,
+                fc=self.fc,
+                labels=["$D_Q(f)$"],
+                title="Componente Q",
+                xlim=(-1.5, 1.5),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+        
+            FrequencyPlot(
+                fig_freq, grid, (1, slice(0, 2)),
+                fs=self.fs,
+                signal=s,
+                fc=self.fc,
+                labels=["$S(f)$"],
+                title="Sinal Modulado $IQ$",
+                xlim=(-10, 10),
+                colors="darkred",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+        
+            fig_freq.tight_layout()
+            save_figure(fig_freq, "transmitter_modulator_freq.pdf")
+
+            # PLOT 3 - Constelação
+            fig_const, grid = create_figure(1, 2, figsize=(16, 8))
+            TimePlot(
+                fig_const, grid, (0, 0),
+                t=t,
+                signals=[dI, dQ],
+                labels=["$dI(t)$", "$dQ(t)$"],
+                title="Sinal $IQ$ - Formatados RRC",
+                xlim=(0, 0.025),
+                ylim=(-0.02, 0.08),
+                colors=["darkgreen", "navy"],
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            ConstellationPlot(
+                fig_const, grid, (0, 1),
+                dI=dI[:40000],
+                dQ=dQ[:40000],
+                title="Constelação $IQ$",
+                xlim=(-0.05, 0.05),
+                ylim=(-0.05, 0.05),
+                colors=["darkgreen", "navy"],
+                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_const.tight_layout()
+            save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
         return t, s
 
     def run(self):
