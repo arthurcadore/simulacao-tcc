@@ -35,14 +35,90 @@ class Noise:
         noise_power = signal_power / snr_linear
         noise = np.random.normal(0, np.sqrt(noise_power), len(signal))
         return signal + noise
+    
+class NoiseEBN0:
+    def __init__(self, ebn0_db, bits_per_symbol=2, Es=1.0, rng=None, fs=128_000, Rb=400):
+        r"""
+        Canal AWGN (Additive White Gaussian Noise) controlado por Eb/N0.
+
+        Esta classe permite adicionar ruído branco gaussiano aditivo a um sinal
+        amostrado, de modo que a relação energia por bit sobre densidade espectral
+        de ruído ($E_b/N_0$) seja atendida conforme especificado.
+
+        Args:
+            ebn0_db (float): Valor alvo de Eb/N0 em decibéis.
+            bits_per_symbol (int): Número de bits por símbolo (k). Para QPSK, k=2.
+            Es (float): Energia por símbolo nominal (não usada diretamente na versão atual,
+                        mas mantida por compatibilidade).
+            rng (np.random.Generator, opcional): Gerador de números aleatórios (NumPy).
+                                                 Se None, cria um novo gerador.
+            fs (int): Taxa de amostragem do sinal em Hz.
+            Rb (int): Taxa de bits em bits/s.
+        """
+        self.ebn0_db = ebn0_db
+        self.ebn0_lin = 10 ** (ebn0_db / 10)
+        self.k = bits_per_symbol
+        self.Es = Es
+        self.rng = rng if rng is not None else np.random.default_rng()
+        self.fs = fs
+        self.Rb = Rb
+        self.Rs = Rb / bits_per_symbol  # taxa de símbolos
+
+    def add_noise(self, s):
+        r"""
+        Adiciona ruído AWGN ao sinal de entrada, garantindo que a relação Eb/N0
+        seja respeitada.
+
+        A potência do ruído é ajustada de acordo com a potência média do sinal e os
+        parâmetros do sistema (Rb, fs, Eb/N0). O modelo assume que o sinal é real
+        (uma dimensão do canal equivalente em banda-base).
+
+        Etapas do cálculo:
+            1. Calcula a potência média do sinal amostrado:
+               $P = \mathbb{E}[|s|^2]$.
+            2. Calcula a energia por bit: $E_b = P / R_b$.
+            3. Calcula a densidade espectral de ruído:
+               $N_0 = E_b / (E_b/N_0)$.
+            4. Converte $N_0$ em variância de amostras discretas:
+               $\sigma^2 = \dfrac{N_0 \cdot f_s}{2}$.
+            5. Gera vetor gaussiano $n(t) \sim \mathcal{N}(0, \sigma^2)$
+               do mesmo tamanho de `s`.
+
+        Args:
+            s (np.ndarray): Sinal transmitido $s(t)$.
+
+        Returns:
+            np.ndarray: Sinal recebido $r(t) = s(t) + n(t)$, com ruído AWGN.
+        """
+        # Potência média do sinal (por amostra)
+        P = np.mean(np.abs(s)**2)
+
+        # Energia por bit
+        Eb = P / self.Rb
+
+        # Densidade espectral de potência do ruído
+        N0 = Eb / self.ebn0_lin
+
+        # Variância do ruído discreto por amostra (real)
+        sigma2 = (N0 * self.fs) / 2.0
+        sigma = np.sqrt(sigma2)
+
+        # Ruído gaussiano branco
+        n = self.rng.normal(0.0, sigma, size=s.shape)
+        return s + n
+
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(datagram, output_print=False)
     t, s = transmitter.run()
 
-    snr_db = 15
-    add_noise = Noise(snr=snr_db)
+    # snr_db = 15
+    # add_noise = Noise(snr=snr_db)
+    # s_noisy = add_noise.add_noise(s)
+
+    eb_n0 = 20
+    add_noise = NoiseEBN0(eb_n0)
     s_noisy = add_noise.add_noise(s)
 
     fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
