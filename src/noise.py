@@ -120,6 +120,14 @@ if __name__ == "__main__":
     eb_n0 = 20
     add_noise = NoiseEBN0(eb_n0)
     s_noisy = add_noise.add_noise(s)
+    n_est = s_noisy - s
+    P = np.mean(s**2)
+    Eb = P / add_noise.Rb
+    # de sigma^2 -> N0 estimado:
+    sigma2_meas = np.var(n_est)
+    N0_meas = 2 * sigma2_meas / add_noise.fs
+    ebn0_meas_db = 10*np.log10(Eb / N0_meas)
+    print("Eb/N0 alvo:", add_noise.ebn0_db, "dB | medido:", ebn0_meas_db, "dB")
 
     fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
 

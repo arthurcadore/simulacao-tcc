@@ -1,5 +1,5 @@
 """
-Implementação de simulação para curva BER vs SNR. 
+Implementação de simulação para curva BER vs Eb/N0. 
 
 Autor: Arthur Cadore
 Data: 28-07-2025
@@ -12,15 +12,15 @@ from tqdm import tqdm
 from datagram import Datagram
 from transmitter import Transmitter
 from receiver import Receiver
-from noise import Noise
+from noise import NoiseEBN0
 import os
 
-def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
+def simulate_ber(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     r"""
-    Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado SNR.
+    Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado Eb/N0.
 
     Args: 
-        snr_db (float): Relação sinal-ruído em decibéis.
+        ebn0_db (float): Relação Eb/N0 em decibéis.
         numblocks (int): Número de blocos a serem transmitidos.
         fs (int): Frequência de amostragem.
         Rb (int): Taxa de bits. 
@@ -34,7 +34,8 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
     transmitter = Transmitter(datagramTX, output_print=False, output_plot=False)
     t, s = transmitter.run()
 
-    add_noise = Noise(snr=snr_db)
+    # Canal AWGN baseado em Eb/N0
+    add_noise = NoiseEBN0(ebn0_db, bits_per_symbol=2, fs=fs, Rb=Rb)
     s_noisy = add_noise.add_noise(s)
 
     receiver = Receiver(fs=fs, Rb=Rb, output_print=False, output_plot=False)
@@ -45,51 +46,50 @@ def simulate_ber(snr_db, numblocks=8, fs=128_000, Rb=400):
     ber = num_errors / len(bitsTX)
     return ber
 
-def run_simulation(SNR_values=np.arange(-30, 31, 1), repetitions=10, numblocks=1, num_workers=16):
+def run_simulation(EbN0_values=np.arange(0, 21, 1), repetitions=50, numblocks=2, num_workers=16):
     r"""
-    Executa a simulação completa de BER vs SNR. Retorna a tupla BER vs SNR.
+    Executa a simulação completa de BER vs Eb/N0. Retorna a tupla BER vs Eb/N0.
 
     Args: 
-        SNR_values (np.ndarray): Valores de SNR a serem simulados.
-        repetitions (int): Número de repetições para cada valor de SNR.
+        EbN0_values (np.ndarray): Valores de Eb/N0 a serem simulados.
+        repetitions (int): Número de repetições para cada valor.
         numblocks (int): Número de blocos a serem transmitidos.
-        num_workers (int): Número de trabalhadores para a execução paralela.
+        num_workers (int): Número de processos para execução paralela.
 
     Returns:
-        list: Lista de tuplas (SNR, BER_médio).
+        list: Lista de tuplas (Eb/N0, BER_médio).
     """
     results = []
-    total_tasks = len(SNR_values) * repetitions
-    ber_accumulator = {snr: [] for snr in SNR_values}
+    total_tasks = len(EbN0_values) * repetitions
+    ber_accumulator = {ebn0: [] for ebn0 in EbN0_values}
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
-            executor.submit(simulate_ber, snr, numblocks): snr
-            for snr in SNR_values
+            executor.submit(simulate_ber, ebn0, numblocks): ebn0
+            for ebn0 in EbN0_values
             for _ in range(repetitions)
         }
         for future in tqdm(concurrent.futures.as_completed(futures), total=total_tasks, desc="Simulando"):
-            snr = futures[future]
+            ebn0 = futures[future]
             try:
                 ber = future.result()
-                ber_accumulator[snr].append(ber)
+                ber_accumulator[ebn0].append(ber)
             except Exception as e:
-                print(f"Erro na simulação SNR={snr}: {e}")
+                print(f"Erro na simulação Eb/N0={ebn0}: {e}")
 
-    # Calcula média por SNR
-    for snr in SNR_values:
-        mean_ber = np.mean(ber_accumulator[snr])
-        results.append((snr, mean_ber))
+    # Calcula média por Eb/N0
+    for ebn0 in EbN0_values:
+        mean_ber = np.mean(ber_accumulator[ebn0])
+        results.append((ebn0, mean_ber))
 
     return results
 
-# TODO: Implementar salvamento dos dados em formato binário para diminuir o tamanho do arquivo e facilitar a leitura posterior.
-def save_results(results, filename="../out/snr_vs_ber.txt"):
+def save_results(results, filename="../out/ebn0_vs_ber.txt"):
     r"""
     Salva os resultados de simulação em um arquivo .txt 
 
     Args:
-        results (list): Lista de tuplas (SNR, BER) a serem salvas.
+        results (list): Lista de tuplas (Eb/N0, BER) a serem salvas.
         filename (str): Caminho do arquivo de saída.
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -97,34 +97,32 @@ def save_results(results, filename="../out/snr_vs_ber.txt"):
 
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, "w") as f:
-        f.write("SNR_dB\tBER\n")
-        for snr, ber in results:
-            f.write(f"{snr}\t{ber:.8e}\n")
+        f.write("EbN0_dB\tBER\n")
+        for ebn0, ber in results:
+            f.write(f"{ebn0}\t{ber:.8e}\n")
 
-def plot_from_file(filename="../out/snr_vs_ber.txt", out_pdf="../out/snr_vs_ber.pdf"):
+def plot_from_file(filename="../out/ebn0_vs_ber.txt", out_pdf="../out/ebn0_vs_ber.pdf"):
     r"""
-    Lê os resultados do arquivo TXT (relativo ao diretório do script) e gera o gráfico BER vs SNR em PDF.
+    Lê os resultados do arquivo TXT e gera o gráfico BER vs Eb/N0 em PDF.
 
     Args:
         filename (str): Caminho do arquivo de entrada.
         out_pdf (str): Caminho do arquivo PDF de saída. 
-
-    ![bersnr](assets/snr_vs_ber.svg)
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
     filepath = os.path.normpath(os.path.join(script_dir, filename))
     outpath = os.path.normpath(os.path.join(script_dir, out_pdf))
 
     data = np.loadtxt(filepath, skiprows=1)
-    snr_list, ber_list = data[:, 0], data[:, 1]
+    ebn0_list, ber_list = data[:, 0], data[:, 1]
 
     plt.figure()
-    plt.semilogy(snr_list, ber_list, marker='o', label='BER vs SNR')
+    plt.semilogy(ebn0_list, ber_list, marker='o', label='BER vs Eb/N0')
     plt.grid(True, which="both", ls="--")
-    plt.xlabel("SNR (dB)")
+    plt.xlabel("Eb/N0 (dB)")
     plt.ylabel("BER")
-    plt.xlim(-30, 0)
-    plt.ylim(1e-4, 1)
+    plt.xlim(0, 20)
+    plt.ylim(1e-5, 1)
 
     leg1 = plt.legend(
             loc='upper right', frameon=True, edgecolor='black',
