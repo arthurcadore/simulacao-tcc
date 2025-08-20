@@ -9,7 +9,6 @@ from datagram import Datagram
 from modulator import Modulator
 from scrambler import Scrambler
 from encoder import Encoder
-from plots import Plotter
 from transmitter import Transmitter
 from noise import Noise
 from lowpassfilter import LPF
@@ -17,6 +16,7 @@ from matchedfilter import MatchedFilter
 from sampler import Sampler
 import numpy as np
 from convolutional import DecoderViterbi
+from plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -36,7 +36,6 @@ class Receiver:
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
-        self.plotter = Plotter()
 
     def demodulate(self, s):
         r"""
@@ -48,6 +47,10 @@ class Receiver:
         Returns:
             xI_prime (np.ndarray): Sinal $x'_{I}(t)$ demodulado.
             yQ_prime (np.ndarray): Sinal $y'_{Q}(t)$ demodulado.
+        
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_demodulator_time.svg)
+            - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
         demodulator = Modulator(fc=self.fc, fs=self.fs)
         xI_prime, yQ_prime = demodulator.demodulate(s)
@@ -57,13 +60,81 @@ class Receiver:
             print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
             print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
         if self.output_plot:
-            self.plotter.plot_freq_receiver(
-                xI_prime,
-                yQ_prime,
-                self.fs,
-                self.fc,
-                save_path="../out/receiver_freq.pdf"
-            )
+            fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+            TimePlot(
+                fig_time, grid, (0, 0),
+                t=t,
+                signals=[s],
+                labels=["$s(t) + AWGN$"],
+                title="Sinal Modulado + Ruído AWGN 15$dB$",
+                xlim=(0, 0.1),
+                ylim=(-0.15, 0.15),
+                colors="darkred",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            
+            TimePlot(
+                fig_time, grid, (1, 0),
+                t=t,
+                signals=[xI_prime, yQ_prime],
+                labels=["$xI'(t)$", "$yQ'(t)$"],
+                title="Componentes $IQ$ - Demoduladas",
+                xlim=(0, 0.1),
+                ylim=(-0.15, 0.2),
+                colors=["darkgreen", "navy"],
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            fig_time.tight_layout()
+            save_figure(fig_time, "receiver_demodulator_time.pdf")
+
+            fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
+            FrequencyPlot(
+                fig_freq, grid, (0, 0),
+                fs=self.fs,
+                signal=s,
+                fc=self.fc,
+                labels=["$S(f)$"],
+                title="Sinal Modulado $IQ$",
+                xlim=(-10, 10),
+                colors="darkred",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_freq, grid, (1, 0),
+                fs=self.fs,
+                signal=xI_prime,
+                fc=self.fc,
+                labels=["$X_I'(f)$"],
+                title="Componente $I$ - Demodulada",
+                xlim=(-10, 10),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_freq, grid, (2, 0),
+                fs=self.fs,
+                signal=yQ_prime,
+                fc=self.fc,
+                labels=["$Y_Q'(f)$"],
+                title="Componente $Q$ - Demodulada",
+                xlim=(-10, 10),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_freq.tight_layout()
+            save_figure(fig_freq, "receiver_demodulator_freq.pdf")
+
         return xI_prime, yQ_prime
     
     def lowpassfilter(self, cut_off, xI_prime, yQ_prime, t):
@@ -79,6 +150,9 @@ class Receiver:
         Returns:
             dI_prime (np.ndarray): Sinal $d'_{I}(t)$ filtrado.
             dQ_prime (np.ndarray): Sinal $d'_{Q}(t)$ filtrado.
+
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_lpf_time.svg)
         """
 
         lpf = LPF(cut_off=cut_off, order=6, fs=self.fs, type="butter")
@@ -92,25 +166,39 @@ class Receiver:
             print("d'Q(t):", ''.join(map(str, dQ_prime[:5])),"...")
         
         if self.output_plot:
-            self.plotter.plot_lowpass_filter(
-                t_impulse,
-                impulse_response,
-                t,
+            fig_signal, grid_signal = create_figure(2, 2, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_signal, grid_signal, (0, slice(0, 2)),
+                t_impulse, impulse_response,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+
+            TimePlot(
+                fig_signal, grid_signal, (1, 0),
+                t, 
                 dI_prime,
+                labels=["$d_I'(t)$"],  
+                title="Sinal filtrado - Componente $I$",
+                xlim=(0, 0.1),
+                # ylim=(-4, 4),
+                colors="navy"
+            ).plot()
+
+            TimePlot(
+                fig_signal, grid_signal, (1, 1),
+                t, 
                 dQ_prime,
-                save_path="../out/receiver_lowpass_filter.pdf"
-            )
-            self.plotter.plot_lowpass_freq(
-                t_impulse,
-                impulse_response,
-                xI_prime,
-                yQ_prime,
-                dI_prime,
-                dQ_prime,
-                self.fs,
-                self.fc,
-                save_path="../out/receiver_lowpass_freq.pdf"
-            )
+                labels=["$d_Q'(t)$"],
+                title="Sinal filtrado - Componente $Q$",
+                xlim=(0, 0.1),
+                # ylim=(-4, 4),
+                colors="darkred"
+            ).plot()
+
+            fig_signal.tight_layout()
+            save_figure(fig_signal, "receiver_lpf_time.pdf")
 
         return dI_prime, dQ_prime
 
@@ -126,6 +214,9 @@ class Receiver:
         Returns:
             It_prime (np.ndarray): Sinal $I'(t)$ filtrado.
             Qt_prime (np.ndarray): Sinal $Q'(t)$ filtrado.
+
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_mf_time.svg)
         """
 
         matched_filter = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted")
@@ -138,42 +229,41 @@ class Receiver:
             print("Q'(t):", ''.join(map(str, Qt_prime[:5])),"...")
 
         if self.output_plot:
-            self.plotter.plot_matched_filter(
-                matched_filter.t_impulse,
-                matched_filter.impulse_response,
+            fig_matched, grid_matched = create_figure(3, 1, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_matched, grid_matched, (0, 0),
+                matched_filter.t_impulse, matched_filter.impulse_response,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$-g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+            TimePlot(
+                fig_matched, grid_matched, (1, 0),
                 t,
                 It_prime,
+                labels=["$I'(t)$"],
+                title="Sinal filtrado - Componente $I$",
+                xlim=(0, 0.1),
+                # ylim=(-4, 4),
+                colors="navy"
+            ).plot()
+
+            TimePlot(
+                fig_matched, grid_matched, (2, 0),
+                t,
                 Qt_prime,
-                "Resposta ao Impulso - Filtro Casado",
-                "Canal I - Filtro Casado",
-                "Canal Q - Filtro Casado",
-                "Resposta ao Impulso - Filtro Casado",
-                "Canal I - Filtro Casado",
-                "Canal Q - Filtro Casado",
-                0.1,
-                save_path="../out/receiver_matched_filter.pdf"
-            )
-            self.plotter.plot_matched_filter_freq(
-                matched_filter.t_impulse,
-                matched_filter.impulse_response,
-                dI_prime,
-                dQ_prime,
-                It_prime,
-                Qt_prime,
-                self.fs,
-                self.fc,
-                "Resposta ao Impulso - Filtro Casado",
-                "Canal I - Antes do Filtro Casado",
-                "Canal Q - Antes do Filtro Casado",
-                "Canal I - Depois do Filtro Casado",
-                "Canal Q - Depois do Filtro Casado",
-                "Resposta ao Impulso - Filtro Casado",
-                "Canal I - Antes do Filtro Casado",
-                "Canal Q - Antes do Filtro Casado",
-                "Canal I - Depois do Filtro Casado",
-                "Canal Q - Depois do Filtro Casado",
-                save_path="../out/receiver_matched_filter_freq.pdf"
-            )
+                labels=["$Q'(t)$"],
+                title="Sinal filtrado - Componente $Q$",
+                xlim=(0, 0.1),
+                # ylim=(-4, 4),
+                colors="darkred"
+            ).plot()
+
+            fig_matched.tight_layout()
+            save_figure(fig_matched, "receiver_mf_time.pdf")
+            
+
         return It_prime, Qt_prime
 
     def sampler(self, It_prime, Qt_prime, t):
@@ -188,6 +278,9 @@ class Receiver:
         Returns:
             Xnrz_prime (np.ndarray): Sinal $X'_{NRZ}[n]$ amostrado e quantizado.
             Yman_prime (np.ndarray): Sinal $Y'_{MAN}[n]$ amostrado e quantizado.
+        
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_sampler_time.svg)
         """ 
         sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t)
         i_signal_sampled = sampler.sample(It_prime)
@@ -203,21 +296,28 @@ class Receiver:
             print("Y'man:", ''.join(map(str, Yman_prime[:80])),"...")
 
         if self.output_plot:
-            self.plotter.plot_sampled_signals(t,
-                                 It_prime,
-                                 Qt_prime,
-                                 t_sampled,
-                                 i_signal_sampled,
-                                 q_signal_sampled,                                 
-                                 "Amostragem",
-                                 "Canal I",
-                                 "Canal Q",
-                                 "Amostragem",
-                                 "Canal I - Amostragem",
-                                 "Canal Q - Amostragem",
-                                 0.1,
-                                 save_path="../out/receiver_sampler.pdf"
-            )
+            fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
+
+            SampledSignalPlot(
+                fig_sampler, grid_sampler, (0, 0),
+                t,
+                It_prime,
+                t_sampled,
+                i_signal_sampled,
+                colors='red'
+            ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.1, title="Componente $I$ amostrado")
+
+            SampledSignalPlot(
+                fig_sampler, grid_sampler, (1, 0),
+                t,
+                Qt_prime,
+                t_sampled,
+                q_signal_sampled,
+                colors='navy'
+            ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.1, title="Componente $Q$ amostrado")
+
+            fig_sampler.tight_layout()
+            save_figure(fig_sampler, "receiver_sampler_time.pdf")            
         return Xnrz_prime, Yman_prime
 
     def decode(self, Xnrz_prime, Yman_prime):
@@ -231,6 +331,9 @@ class Receiver:
         Returns:
             Xn_prime (np.ndarray): Sinal $X'n$ decodificado.
             Yn_prime (np.ndarray): Sinal $Y'n$ decodificado.
+        
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
         """
         decoderNRZ = Encoder("nrz")
         decoderManchester = Encoder("manchester")
@@ -244,7 +347,39 @@ class Receiver:
             print("\n ==== DECODIFICADOR DE LINHA ==== \n")
             print("X'n:", ''.join(map(str, Xn_prime)))
             print("Y'n:", ''.join(map(str, Yn_prime)))
+        
+        if self.output_plot:
+            fig_decoder, grid_decoder = create_figure(4, 1, figsize=(16, 9))
 
+            EncodedBitsPlot(
+                fig_decoder, grid_decoder, (0, 0),
+                bits=Xnrz_prime,
+                color='darkgreen',
+            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+
+            BitsPlot(
+                fig_decoder, grid_decoder, (1, 0),
+                bits_list=[Xn_prime],
+                sections=[("$X_n$", len(Xn_prime))],
+                colors=["darkgreen"]
+            ).plot(ylabel="$X_n$")
+
+            EncodedBitsPlot(
+                fig_decoder, grid_decoder, (2, 0),
+                bits=Yman_prime,
+                color="navy",
+            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+
+            BitsPlot(
+                fig_decoder, grid_decoder, (3, 0),
+                bits_list=[Yn_prime],
+                sections=[("$Y_n$", len(Yn_prime))],
+                colors=["navy"]
+            ).plot(ylabel="$Y_n$")
+
+            fig_decoder.tight_layout()
+            save_figure(fig_decoder, "receiver_decoder_time.pdf")
+                 
         return Xn_prime, Yn_prime
 
     def remove_preamble(self, Xn_prime, Yn_prime):
@@ -258,6 +393,9 @@ class Receiver:
         Returns:
             Xn_prime (np.ndarray): Sinal $X'n$ sem preâmbulo.
             Yn_prime (np.ndarray): Sinal $Y'n$ sem preâmbulo.
+
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_remove_preamble_time.svg)
         """
         # remove the first 15 bits from each signal
         Xn_prime = Xn_prime[15:]
@@ -267,6 +405,26 @@ class Receiver:
             print("\n ==== REMOÇÃO DO PREÂMBULO ==== \n")
             print("X'n:", ''.join(map(str, Xn_prime)))
             print("Y'n:", ''.join(map(str, Yn_prime)))
+        
+        if self.output_plot:
+            fig_remove_preamble, grid_remove_preamble = create_figure(2, 1, figsize=(16, 9))
+
+            BitsPlot(
+                fig_remove_preamble, grid_remove_preamble, (0, 0),
+                bits_list=[Xn_prime],
+                sections=[("$X_n'$", len(Xn_prime))],
+                colors=["darkgreen"]
+            ).plot(ylabel="$X_n$")
+
+            BitsPlot(
+                fig_remove_preamble, grid_remove_preamble, (1, 0),
+                bits_list=[Yn_prime],
+                sections=[("$Y_n'$", len(Yn_prime))],
+                colors=["navy"]
+            ).plot(ylabel="$Y_n$")
+
+            fig_remove_preamble.tight_layout()
+            save_figure(fig_remove_preamble, "receiver_remove_preamble_time.pdf")
 
         return Xn_prime, Yn_prime
 
@@ -281,6 +439,9 @@ class Receiver:
         Returns:
             vt0 (np.ndarray): Vetor de bits $v_{t}^{0}'$ desembaralhado.
             vt1 (np.ndarray): Vetor de bits $v_{t}^{1}'$ desembaralhado.
+
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_descrambler_time.svg)
         """
         descrambler = Scrambler()
         vt0, vt1 = descrambler.descramble(Xn_prime, Yn_prime)
@@ -289,6 +450,40 @@ class Receiver:
             print("\n ==== DESEMBARALHADOR ==== \n")
             print("vt0':", ''.join(map(str, vt0)))
             print("vt1':", ''.join(map(str, vt1)))
+        
+        if self.output_plot:
+            fig_descrambler, grid_descrambler = create_figure(2, 2, figsize=(16, 9))
+
+            BitsPlot(
+                fig_descrambler, grid_descrambler, (0, 0),
+                bits_list=[Xn_prime],
+                sections=[("$X_n$", len(Xn_prime))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Embaralhado")
+
+            BitsPlot(
+                fig_descrambler, grid_descrambler, (0, 1),
+                bits_list=[Yn_prime],
+                sections=[("$Y_n$", len(Yn_prime))],
+                colors=["navy"]
+            ).plot()
+
+            BitsPlot(
+                fig_descrambler, grid_descrambler, (1, 0),
+                bits_list=[vt0],
+                sections=[("$v_t^{0}$", len(vt0))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Restaurado", xlabel="Index de Bit")
+
+            BitsPlot(
+                fig_descrambler, grid_descrambler, (1, 1),
+                bits_list=[vt1],
+                sections=[("$v_t^{1}$", len(vt1))],
+                colors=["navy"]
+            ).plot(xlabel="Index de Bit")
+
+            fig_descrambler.tight_layout()
+            save_figure(fig_descrambler, "receiver_descrambler_time.pdf")     
 
         return vt0, vt1
 
@@ -302,6 +497,9 @@ class Receiver:
 
         Returns:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+        
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_conv_time.svg)
         """
         conv_decoder = DecoderViterbi()
         ut = conv_decoder.decode(vt0, vt1)
@@ -309,6 +507,33 @@ class Receiver:
         if self.output_print:
             print("\n ==== DECODIFICADOR VITERBI ==== \n")
             print("u't:", ''.join(map(str, ut)))
+        
+        if self.output_plot:
+            fig_conv_decoder, grid_conv_decoder = create_figure(3, 1, figsize=(16, 9))
+
+            BitsPlot(
+                fig_conv_decoder, grid_conv_decoder, (0, 0),
+                bits_list=[vt0],
+                sections=[("$v_t^{0}$", len(vt0))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Canal $I$")
+
+            BitsPlot(
+                fig_conv_decoder, grid_conv_decoder, (1, 0),
+                bits_list=[vt1],
+                sections=[("$v_t^{1}$", len(vt1))],
+                colors=["navy"]
+            ).plot(ylabel="Canal $Q$")
+
+            BitsPlot(
+                fig_conv_decoder, grid_conv_decoder, (2, 0),
+                bits_list=[ut],
+                sections=[("$u_t'$", len(ut))],
+                colors=["darkgreen"]
+            ).plot(ylabel="Decodificado", xlabel="Index de Bit")
+
+            fig_conv_decoder.tight_layout()
+            save_figure(fig_conv_decoder, "receiver_conv_time.pdf")     
 
         return ut
     
@@ -323,6 +548,9 @@ class Receiver:
 
         Returns:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+
+        Exemplo:
+            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
         """
         
         # TODO: Adicionar detecção de portadora;
@@ -346,7 +574,7 @@ if __name__ == "__main__":
     transmitter = Transmitter(datagramTX, output_print=True)
     t, s = transmitter.run()
 
-    snr_db = 0
+    snr_db = 15
     add_noise = Noise(snr=snr_db)
     s_noisy = add_noise.add_noise(s)
 
@@ -360,6 +588,24 @@ if __name__ == "__main__":
     try:
         datagramRX = Datagram(streambits=bitsRX)
         print("\n",datagramRX.parse_datagram())
+
+        # fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
+        # BitsPlot(
+        #     fig_datagram, grid, (0, 0),
+        #     bits_list=[datagramRX.msglength, 
+        #                datagramRX.pcdid, 
+        #                datagramRX.blocks, 
+        #                datagramRX.tail],
+        #     sections=[("Message Length", len(datagramRX.msglength)),
+        #               ("PCD ID", len(datagramRX.pcdid)),
+        #               ("Dados de App.", len(datagramRX.blocks)),
+        #               ("Tail", len(datagramRX.tail))],
+        #     colors=["green", "orange", "red", "blue"]
+        # ).plot(xlabel="Index de Bit")
+
+        # fig_datagram.tight_layout()
+        # save_figure(fig_datagram, "receiver_datagram_time.pdf")
+
     except Exception as e:
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))
@@ -373,3 +619,4 @@ if __name__ == "__main__":
         
         print(f"Número de erros: {num_errors}")
         print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
+
