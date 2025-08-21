@@ -57,7 +57,7 @@ class Modulator:
         carrier_cos = np.cos(2 * np.pi * self.fc * t)
         carrier_sin = np.sin(2 * np.pi * self.fc * t)
         
-        modulated_signal = np.sqrt(2.0) * (i_signal * carrier_cos - q_signal * carrier_sin)
+        modulated_signal = (i_signal * carrier_cos - q_signal * carrier_sin)
         return t, modulated_signal
     
     def demodulate(self, modulated_signal):
