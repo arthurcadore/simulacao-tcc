@@ -29,7 +29,7 @@ doc-images:
 doc: 
 	@echo "Gerando documentação..."
 	mkdocs build
-	mkdocs serve -a 0.0.0.0:8001
+	mkdocs serve -a 0.0.0.0:8002
 		
 freeze: 
 	@echo "Congelando dependências..."

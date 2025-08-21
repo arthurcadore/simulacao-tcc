@@ -437,8 +437,8 @@ class Receiver:
             Yn_prime (np.ndarray): Vetor de bits $Y'n$ embaralhados.
 
         Returns:
-            vt0 (np.ndarray): Vetor de bits $v_{t}^{0}'$ desembaralhado.
-            vt1 (np.ndarray): Vetor de bits $v_{t}^{1}'$ desembaralhado.
+            vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
+            vt1 (np.ndarray): Vetor de bits $v_{t}^{1'}$ desembaralhado.
 
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_descrambler_time.svg)
@@ -492,8 +492,8 @@ class Receiver:
         Decodifica os vetores de bits dos canais I e Q.
 
         Args:
-            vt0 (np.ndarray): Vetor de bits $v_{t}^{0}'$ desembaralhado.
-            vt1 (np.ndarray): Vetor de bits $v_{t}^{1}'$ desembaralhado.
+            vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
+            vt1 (np.ndarray): Vetor de bits $v_{t}^{1'}$ desembaralhado.
 
         Returns:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
