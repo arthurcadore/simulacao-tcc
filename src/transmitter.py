@@ -249,7 +249,7 @@ class Transmitter:
                 bits_list=[sI, X],
                 sections=[("Preambulo $S_I$", len(sI)),
                           ("Canal I $(X_n)$", len(X))],
-                colors=["darkorange", "darkgreen"]
+                colors=["darkred", "darkgreen"]
             ).plot(ylabel="Canal $I$")
 
             BitsPlot(
@@ -257,7 +257,7 @@ class Transmitter:
                 bits_list=[sQ, Y],
                 sections=[("Preambulo $S_Q$", len(sQ)),
                           ("Canal Q $(Y_n)$", len(Y))],
-                colors=["darkorange", "navy"]
+                colors=["darkred", "navy"]
             ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
 
             fig_mux.tight_layout()
@@ -350,7 +350,7 @@ class Transmitter:
                 fig_format, grid_format, (0, slice(0, 2)),
                 formatter.t_rc, formatter.g,
                 t_unit="ms",
-                colors="darkred",
+                colors="darkorange",
             ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
@@ -435,7 +435,7 @@ class Transmitter:
                 title="Sinal Modulado $IQ$",
                 xlim=(0, 0.1),
                 ylim=(-0.15, 0.15),
-                colors="darkorange",
+                colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
                     "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
@@ -454,7 +454,7 @@ class Transmitter:
                 labels=["$D_I(f)$"],
                 title="Componente I",
                 xlim=(-1.5, 1.5),
-                colors="navy",
+                colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
         
@@ -466,7 +466,7 @@ class Transmitter:
                 labels=["$D_Q(f)$"],
                 title="Componente Q",
                 xlim=(-1.5, 1.5),
-                colors="darkgreen",
+                colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
         
@@ -478,7 +478,7 @@ class Transmitter:
                 labels=["$S(f)$"],
                 title="Sinal Modulado $IQ$",
                 xlim=(-10, 10),
-                colors="darkorange",
+                colors="darkred",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
         
@@ -495,7 +495,7 @@ class Transmitter:
                 title="Fase $I + jQ$",
                 xlim=(0, 0.15),
                 ylim=(-np.pi, np.pi),
-                colors=["darkorange"],
+                colors=["darkred"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
                     "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
@@ -509,7 +509,7 @@ class Transmitter:
                 title="Constelação $IQ$",
                 xlim=(-0.1, 0.1),
                 ylim=(-0.1, 0.1),
-                colors=["darkorange"],
+                colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
 

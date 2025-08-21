@@ -183,7 +183,7 @@ class Receiver:
                 title="Sinal filtrado - Componente $I$",
                 xlim=(0, 0.1),
                 # ylim=(-4, 4),
-                colors="navy"
+                colors="darkgreen"
             ).plot()
 
             TimePlot(
@@ -194,7 +194,7 @@ class Receiver:
                 title="Sinal filtrado - Componente $Q$",
                 xlim=(0, 0.1),
                 # ylim=(-4, 4),
-                colors="darkred"
+                colors="navy"
             ).plot()
 
             fig_signal.tight_layout()
@@ -246,7 +246,7 @@ class Receiver:
                 title="Sinal filtrado - Componente $I$",
                 xlim=(0, 0.1),
                 # ylim=(-4, 4),
-                colors="navy"
+                colors="darkgreen"
             ).plot()
 
             TimePlot(
@@ -257,7 +257,7 @@ class Receiver:
                 title="Sinal filtrado - Componente $Q$",
                 xlim=(0, 0.1),
                 # ylim=(-4, 4),
-                colors="darkred"
+                colors="navy"
             ).plot()
 
             fig_matched.tight_layout()
@@ -304,7 +304,7 @@ class Receiver:
                 It_prime,
                 t_sampled,
                 i_signal_sampled,
-                colors='red'
+                colors='darkgreen'
             ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.1, title="Componente $I$ amostrado")
 
             SampledSignalPlot(
@@ -529,7 +529,7 @@ class Receiver:
                 fig_conv_decoder, grid_conv_decoder, (2, 0),
                 bits_list=[ut],
                 sections=[("$u_t'$", len(ut))],
-                colors=["darkgreen"]
+                colors=["darkred"]
             ).plot(ylabel="Decodificado", xlabel="Index de Bit")
 
             fig_conv_decoder.tight_layout()

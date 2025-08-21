@@ -290,7 +290,7 @@ class ConstellationPlot(BasePlot):
         # Pontos ideais QPSK
         qpsk_points = np.array([[amp, amp], [amp, -amp], [-amp, amp], [-amp, -amp]])
         self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
-                        color="red", s=160, marker="x", label="Pontos Ideais", linewidth=2)
+                        color="blue", s=160, marker="o", label="Pontos Ideais", linewidth=2)
 
         # Linhas auxiliares
         self.ax.axhline(0, color="gray", linestyle="--", alpha=0.5)
