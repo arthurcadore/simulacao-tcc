@@ -105,6 +105,13 @@ class Formatter:
         Returns:
             out_symbols (np.ndarray): Vetor formatado com o pulso aplicado.
         """
+
+        # TODO: Alterar para o encoder.
+        symbols = np.asarray(symbols, dtype=float)
+        if symbols.min() >= 0.0 and symbols.max() <= 1.0:
+            # mapa 0/1 -> -1/+1
+            symbols = 2.0*symbols - 1.0
+            
         pulse = self.g
         sps = self.sps
         upsampled = np.zeros(len(symbols) * sps)

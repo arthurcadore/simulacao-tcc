@@ -360,7 +360,7 @@ class Transmitter:
                 labels=["$d_I(t)$"],
                 title="Canal $I$",
                 xlim=(0, 0.1),
-                ylim=(-0.02, 0.08),
+                ylim=(-0.1, 0.1),
                 colors="darkgreen",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -375,7 +375,7 @@ class Transmitter:
                 labels=["$d_Q(t)$"],
                 title="Canal $Q$",
                 xlim=(0, 0.1),
-                ylim=(-0.02, 0.08),
+                ylim=(-0.1, 0.1),
                 colors="darkblue",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -419,7 +419,7 @@ class Transmitter:
                 labels=["$d_I(t)$", "$d_Q(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.05, 0.1),
+                ylim=(-0.1, 0.1),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -434,7 +434,7 @@ class Transmitter:
                 labels=["$s(t)$"],
                 title="Sinal Modulado $IQ$",
                 xlim=(0, 0.1),
-                ylim=(-0.1, 0.1),
+                ylim=(-0.15, 0.15),
                 colors="darkorange",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -493,7 +493,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(0, 0.2),
+                xlim=(0, 0.15),
                 ylim=(-np.pi, np.pi),
                 colors=["darkorange"],
                 style={
@@ -507,8 +507,8 @@ class Transmitter:
                 dI=dI[:40000],
                 dQ=dQ[:40000],
                 title="Constelação $IQ$",
-                xlim=(-0.05, 0.05),
-                ylim=(-0.05, 0.05),
+                xlim=(-0.1, 0.1),
+                ylim=(-0.1, 0.1),
                 colors=["darkorange"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()

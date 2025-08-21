@@ -107,6 +107,16 @@ class NoiseEBN0:
         n = self.rng.normal(0.0, sigma, size=s.shape)
         return s + n
 
+def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
+    n_est = s_noisy - s
+    P = np.mean(s**2)
+    Eb = P / add_noise.Rb
+    # de sigma^2 -> N0 estimado:
+    sigma2_meas = np.var(n_est)
+    N0_meas = 2 * sigma2_meas / add_noise.fs
+    ebn0_meas_db = 10*np.log10(Eb / N0_meas)
+    print("Eb/N0 alvo:", add_noise.ebn0_db, "dB | medido:", ebn0_meas_db, "dB")
+    
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
@@ -117,17 +127,11 @@ if __name__ == "__main__":
     # add_noise = Noise(snr=snr_db)
     # s_noisy = add_noise.add_noise(s)
 
-    eb_n0 = 20
+    eb_n0 = 12
     add_noise = NoiseEBN0(eb_n0)
     s_noisy = add_noise.add_noise(s)
-    n_est = s_noisy - s
-    P = np.mean(s**2)
-    Eb = P / add_noise.Rb
-    # de sigma^2 -> N0 estimado:
-    sigma2_meas = np.var(n_est)
-    N0_meas = 2 * sigma2_meas / add_noise.fs
-    ebn0_meas_db = 10*np.log10(Eb / N0_meas)
-    print("Eb/N0 alvo:", add_noise.ebn0_db, "dB | medido:", ebn0_meas_db, "dB")
+    check_ebn0(s, s_noisy, add_noise)
+
 
     fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
 

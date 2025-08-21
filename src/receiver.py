@@ -68,7 +68,7 @@ class Receiver:
                 labels=["$s(t) + AWGN$"],
                 title="Sinal Modulado + Ruído AWGN 15$dB$",
                 xlim=(0, 0.1),
-                ylim=(-0.15, 0.15),
+                ylim=(-0.2, 0.2),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -84,7 +84,7 @@ class Receiver:
                 labels=["$xI'(t)$", "$yQ'(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.15, 0.2),
+                ylim=(-0.3, 0.3),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
