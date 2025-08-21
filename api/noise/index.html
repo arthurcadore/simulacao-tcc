@@ -705,6 +705,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0" class="md-nav__link">
+    <span class="md-ellipsis">
+      NoiseEBN0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0.add_noise" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_noise
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1112,6 +1139,241 @@
             <td>
               <div class="doc-md-description">
                 <p>np.ndarray: Sinal com ruído adicionado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="noise.NoiseEBN0"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="noise.NoiseEBN0.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">ebn0_db</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Implementação de canal AWGN, controlado por <span class="arithmatex">\(Eb\)</span>/<span class="arithmatex">\(N_{0}\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ebn0_db</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Valor alvo de<span class="arithmatex">\(Eb\)</span>/<span class="arithmatex">\(N_{0}\)</span> em decibéis (<span class="arithmatex">\(dB\)</span>).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>bits_per_symbol</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Número de bits por símbolo (<span class="arithmatex">\(k\)</span>). Para QPSK, <span class="arithmatex">\(k=2\)</span>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>2</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>rng</code>
+            </td>
+            <td>
+                  <code>(<span title="numpy.random.Generator">Generator</span>, <span title="opcional">opcional</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Gerador de números aleatórios (NumPy).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Taxa de amostragem do sinal em <span class="arithmatex">\(Hz\)</span>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>128000</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Rb</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Taxa de bits em bits/s.</p>
+              </div>
+            </td>
+            <td>
+                  <code>400</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="noise.NoiseEBN0.add_noise" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_noise</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adiciona ruído AWGN ao sinal de entrada </p>
+
+
+<details class="etapas-do-cálculo" open>
+  <summary>Etapas do cálculo</summary>
+  <ol>
+<li>Calcula a potência média do sinal amostrado:
+   <span class="arithmatex">\(P = \mathbb{E}[|s|^2]\)</span>.</li>
+<li>Calcula a energia por bit: <span class="arithmatex">\(E_b = P / R_b\)</span>.</li>
+<li>Calcula a densidade espectral de ruído:
+   <span class="arithmatex">\(N_0 = E_b / (E_b/N_0)\)</span>.</li>
+<li>Converte <span class="arithmatex">\(N_0\)</span> em variância de amostras discretas:
+   <span class="arithmatex">\(\sigma^2 = \dfrac{N_0 \cdot f_s}{2}\)</span>.</li>
+<li>Gera vetor gaussiano <span class="arithmatex">\(n(t)\)</span> com variância <span class="arithmatex">\(\sigma^2\)</span>.</li>
+<li>Adiciona ruído ao sinal: <span class="arithmatex">\(r(t) = s(t) + n(t)\)</span>.</li>
+</ol>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>s</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal transmitido <span class="arithmatex">\(s(t)\)</span>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>s_noisy</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal recebido <span class="arithmatex">\(r(t) = s(t) + n(t)\)</span>, com ruído AWGN.</p>
               </div>
             </td>
           </tr>

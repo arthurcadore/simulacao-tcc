@@ -992,7 +992,7 @@
 <a id="bersnr.simulate_ber"></a>
     <div class="doc doc-contents first">
 
-        <p>Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado SNR.</p>
+        <p>Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado Eb/N0.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1008,14 +1008,14 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>snr_db</code>
+                <code>ebn0_db</code>
             </td>
             <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Relação sinal-ruído em decibéis.</p>
+                <p>Relação Eb/N0 em decibéis.</p>
               </div>
             </td>
             <td>
@@ -1108,7 +1108,7 @@
 <a id="bersnr.run_simulation"></a>
     <div class="doc doc-contents first">
 
-        <p>Executa a simulação completa de BER vs SNR. Retorna a tupla BER vs SNR.</p>
+        <p>Executa a simulação completa de BER vs Eb/N0. Retorna a tupla BER vs Eb/N0.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1124,18 +1124,18 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>SNR_values</code>
+                <code>EbN0_values</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores de SNR a serem simulados.</p>
+                <p>Valores de Eb/N0 a serem simulados.</p>
               </div>
             </td>
             <td>
-                  <code><span title="numpy.arange">arange</span>(-30, 31, 1)</code>
+                  <code><span title="numpy.arange">arange</span>(0, 12, 0.5)</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1147,11 +1147,11 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de repetições para cada valor de SNR.</p>
+                <p>Número de repetições para cada valor.</p>
               </div>
             </td>
             <td>
-                  <code>10</code>
+                  <code>2000</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1167,7 +1167,7 @@
               </div>
             </td>
             <td>
-                  <code>1</code>
+                  <code>8</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1179,11 +1179,11 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de trabalhadores para a execução paralela.</p>
+                <p>Número de processos para execução paralela.</p>
               </div>
             </td>
             <td>
-                  <code>16</code>
+                  <code>24</code>
             </td>
           </tr>
       </tbody>
@@ -1204,7 +1204,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de tuplas (SNR, BER_médio).</p>
+                <p>Lista de tuplas (Eb/N0, BER_médio).</p>
               </div>
             </td>
           </tr>
@@ -1246,7 +1246,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de tuplas (SNR, BER) a serem salvas.</p>
+                <p>Lista de tuplas (Eb/N0, BER) a serem salvas.</p>
               </div>
             </td>
             <td>
@@ -1266,7 +1266,7 @@
               </div>
             </td>
             <td>
-                  <code>&#39;../out/snr_vs_ber.txt&#39;</code>
+                  <code>&#39;../out/ebn0_vs_ber.txt&#39;</code>
             </td>
           </tr>
       </tbody>
@@ -1284,7 +1284,7 @@
 <a id="bersnr.plot_from_file"></a>
     <div class="doc doc-contents first">
 
-        <p>Lê os resultados do arquivo TXT (relativo ao diretório do script) e gera o gráfico BER vs SNR em PDF.</p>
+        <p>Lê os resultados do arquivo TXT e gera o gráfico BER vs Eb/N0 em PDF.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1311,7 +1311,7 @@
               </div>
             </td>
             <td>
-                  <code>&#39;../out/snr_vs_ber.txt&#39;</code>
+                  <code>&#39;../out/ebn0_vs_ber.txt&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1327,13 +1327,17 @@
               </div>
             </td>
             <td>
-                  <code>&#39;../out/snr_vs_ber.pdf&#39;</code>
+                  <code>&#39;../out/ebn0_vs_ber.pdf&#39;</code>
             </td>
           </tr>
       </tbody>
     </table>
-        <p><img alt="bersnr" src="../assets/snr_vs_ber.svg" /></p>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/ebn0_vs_ber.svg" /></p>
+</details>
 
     </div>
 
