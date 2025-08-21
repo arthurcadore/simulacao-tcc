@@ -6,6 +6,7 @@ Data: 28-07-2025
 """
 import numpy as np
 from formatter import Formatter
+from encoder import Encoder
 from plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
@@ -120,6 +121,7 @@ if __name__ == "__main__":
 
     Xnrz = np.random.randint(0, 2, 900)
     Yman = np.random.randint(0, 2, 900)
+
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
@@ -142,7 +144,7 @@ if __name__ == "__main__":
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
         xlim=(0, 0.1),
-        ylim=(-0.02, 0.08),
+        ylim=(-0.1, 0.1),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -157,7 +159,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        ylim=(-0.15, 0.15),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -219,7 +221,7 @@ if __name__ == "__main__":
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
         xlim=(0, 0.025),
-        ylim=(-0.02, 0.08),
+        ylim=(-0.1, 0.1),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -232,8 +234,8 @@ if __name__ == "__main__":
         dI=dI[:20000],
         dQ=dQ[:20000],
         title="Constelação $IQ$",
-        xlim=(-0.05, 0.05),
-        ylim=(-0.05, 0.05),
+        xlim=(-0.1, 0.1),
+        ylim=(-0.1, 0.1),
         colors=["darkgreen", "navy"],
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -255,7 +257,7 @@ if __name__ == "__main__":
         labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.2),
+        ylim=(-0.2, 0.2),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -270,7 +272,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        ylim=(-0.15, 0.15),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},

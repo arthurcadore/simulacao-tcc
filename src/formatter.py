@@ -163,7 +163,7 @@ if __name__ == "__main__":
         labels=["$d_I(t)$"],
         title="Canal $I$",
         xlim=(0, 0.1),
-        ylim=(-0.02, 0.08),
+        ylim=(-0.1, 0.1),
         colors="darkgreen",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         labels=["$d_Q(t)$"],
         title="Canal $Q$",
         xlim=(0, 0.1),
-        ylim=(-0.02, 0.08),
+        ylim=(-0.1, 0.1),
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},

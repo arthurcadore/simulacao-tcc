@@ -114,7 +114,7 @@ if __name__ == "__main__":
     # add_noise = Noise(snr=snr_db)
     # s_noisy = add_noise.add_noise(s)
 
-    eb_n0 = 12
+    eb_n0 = 20
     add_noise = NoiseEBN0(eb_n0)
     s_noisy = add_noise.add_noise(s)
     check_ebn0(s, s_noisy, add_noise)
@@ -129,7 +129,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Domínio do Tempo - Sem Ruído",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        ylim=(-0.15, 0.15),
         colors="darkblue",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         labels=["$s(t) + AWGN$"],
         title="Domínio do Tempo - Com Ruído",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        ylim=(-0.4, 0.4),
         colors="darkred",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
