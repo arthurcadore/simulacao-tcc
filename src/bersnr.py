@@ -46,7 +46,7 @@ def simulate_ber(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     ber = num_errors / len(bitsTX)
     return ber
 
-def run_simulation(EbN0_values=np.arange(0, 12, 0.5), repetitions=2000, numblocks=8, num_workers=24):
+def run_simulation(EbN0_values=np.arange(0, 12, 0.5), repetitions=20000, numblocks=8, num_workers=24):
     r"""
     Executa a simulação completa de BER vs Eb/N0. Retorna a tupla BER vs Eb/N0.
 
