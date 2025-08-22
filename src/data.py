@@ -4,33 +4,43 @@ import numpy as np
 class ExportData:
     r"""
     Classe para armazenar o resultado da transmissão, incluindo o sinal modulado e o vetor de tempo.
+    Pode salvar um único vetor ou múltiplos vetores em um único arquivo.
 
     Args:
-        vector (np.ndarray): Vetor de dados.
+        vector (Union[np.ndarray, List[np.ndarray]]): Um único vetor ou lista de vetores para salvar.
         filename (str): Nome do arquivo de saída.
         path (str): Caminho do diretório de saída.
     """
     def __init__(self, vector, filename, path="../out"):
-        self.vector = vector
+        # Converte um único vetor para uma lista com um elemento
+        self.vectors = [vector] if isinstance(vector, np.ndarray) else list(vector)
         self.filename = filename
         self.path = path
 
     def save(self, binary=True):
         r"""
         Salva os resultados em arquivo binário (.npy) ou em TXT.
+        
+        Args:
+            binary (bool): Se True, salva em formato binário (.npy).
+                          Se False, salva em formato de texto (.txt).
         """
         script_dir = os.path.dirname(os.path.abspath(__file__))
         basepath = os.path.normpath(os.path.join(script_dir, self.path, self.filename))
-
         os.makedirs(os.path.dirname(basepath), exist_ok=True)
 
         if binary:
             # Salva em formato binário do NumPy
-            np.save(f"{basepath}.npy", self.vector)
+            # Se houver apenas um vetor, salva como array 1D, senão como array 2D
+            data = self.vectors[0] if len(self.vectors) == 1 else np.array(self.vectors)
+            np.save(f"{basepath}.npy", data)
         else:
             # Salva em texto (menos eficiente, mas legível)
             with open(f"{basepath}.txt", "w") as f:
-                f.write(" ".join(map(str, self.vector)))
+                for i, vec in enumerate(self.vectors):
+                    if i > 0:
+                        f.write("\n--- Vector {} ---\n".format(i+1))
+                    f.write(" ".join(map(str, vec)))
 
 class ImportData:
     r"""

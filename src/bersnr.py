@@ -5,6 +5,7 @@ Autor: Arthur Cadore
 Data: 28-07-2025
 """
 
+import os
 import numpy as np
 import concurrent.futures
 import matplotlib.pyplot as plt
@@ -13,11 +14,12 @@ from datagram import Datagram
 from transmitter import Transmitter
 from receiver import Receiver
 from noise import NoiseEBN0
-import os
+from data import ExportData, ImportData
+from plotter import BersnrPlot, create_figure, save_figure
 
-def simulate_ber(ebn0_db, numblocks=8, fs=128_000, Rb=400):
+def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     r"""
-    Simula a transmissão e recepção de um datagrama ARGOS-III, para um dado Eb/N0.
+    Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado Eb/N0.
 
     Args: 
         ebn0_db (float): Relação Eb/N0 em decibéis.
@@ -46,14 +48,13 @@ def simulate_ber(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     ber = num_errors / len(bitsTX)
     return ber
 
-def run_simulation(EbN0_values=np.arange(0, 12, 0.5), repetitions=20000, numblocks=8, num_workers=24):
+def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
     r"""
     Executa a simulação completa de BER vs Eb/N0. Retorna a tupla BER vs Eb/N0.
 
     Args: 
         EbN0_values (np.ndarray): Valores de Eb/N0 a serem simulados.
         repetitions (int): Número de repetições para cada valor.
-        numblocks (int): Número de blocos a serem transmitidos.
         num_workers (int): Número de processos para execução paralela.
 
     Returns:
@@ -65,7 +66,7 @@ def run_simulation(EbN0_values=np.arange(0, 12, 0.5), repetitions=20000, numbloc
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
-            executor.submit(simulate_ber, ebn0, numblocks): ebn0
+            executor.submit(simulate_argos, ebn0): ebn0
             for ebn0 in EbN0_values
             for _ in range(repetitions)
         }
@@ -84,62 +85,24 @@ def run_simulation(EbN0_values=np.arange(0, 12, 0.5), repetitions=20000, numbloc
 
     return results
 
-def save_results(results, filename="../out/ebn0_vs_ber.txt"):
-    r"""
-    Salva os resultados de simulação em um arquivo .txt 
-
-    Args:
-        results (list): Lista de tuplas (Eb/N0, BER) a serem salvas.
-        filename (str): Caminho do arquivo de saída.
-    """
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.normpath(os.path.join(script_dir, filename))
-
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    with open(filepath, "w") as f:
-        f.write("EbN0_dB\tBER\n")
-        for ebn0, ber in results:
-            f.write(f"{ebn0}\t{ber:.8e}\n")
-
-def plot_from_file(filename="../out/ebn0_vs_ber.txt", out_pdf="../out/ebn0_vs_ber.pdf"):
-    r"""
-    Lê os resultados do arquivo TXT e gera o gráfico BER vs Eb/N0 em PDF.
-
-    Args:
-        filename (str): Caminho do arquivo de entrada.
-        out_pdf (str): Caminho do arquivo PDF de saída. 
-
-    Exemplo: 
-        ![pageplot](assets/ebn0_vs_ber.svg)
-    """
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.normpath(os.path.join(script_dir, filename))
-    outpath = os.path.normpath(os.path.join(script_dir, out_pdf))
-
-    data = np.loadtxt(filepath, skiprows=1)
-    ebn0_list, ber_list = data[:, 0], data[:, 1]
-
-    plt.figure()
-    plt.semilogy(ebn0_list, ber_list, marker='o', label='BER vs Eb/N0')
-    plt.grid(True, which="both", ls="--")
-    plt.xlabel("Eb/N0 (dB)")
-    plt.ylabel("BER")
-    plt.xlim(0, 20)
-    plt.ylim(1e-5, 1)
-
-    leg1 = plt.legend(
-            loc='upper right', frameon=True, edgecolor='black',
-            facecolor='white', fontsize=12, fancybox=True
-            )
-    leg1.get_frame().set_facecolor('white')
-    leg1.get_frame().set_edgecolor('black')
-    leg1.get_frame().set_alpha(1.0)
-
-    os.makedirs(os.path.dirname(outpath), exist_ok=True)
-    plt.savefig(outpath, dpi=300)
-    plt.close()
-
 if __name__ == "__main__":
-    results = run_simulation()
-    save_results(results)
-    plot_from_file()
+    results = run()
+    results = np.array(results)
+    ExportData(results, "bersnr").save()
+
+    import_data = ImportData("bersnr").load()
+    ebn0_values = import_data[:, 0]  
+    ber_values = import_data[:, 1]   
+
+    fig, grid = create_figure(rows=1, cols=1)
+    ber_plot = BersnrPlot(
+        fig=fig,
+        grid=grid,
+        pos=0,
+        ebn0=ebn0_values,
+        ber_values=[ber_values],
+        labels=["ARGOS-3 (default)"]
+    )
+    ber_plot.plot()
+    save_figure(fig, "ber_vs_ebn0.pdf")
+

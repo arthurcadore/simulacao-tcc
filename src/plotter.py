@@ -796,3 +796,67 @@ class PhasePlot(BasePlot):
 
         self.ax.legend()
         self.apply_ax_style()
+
+class BersnrPlot(BasePlot):
+    r"""
+    Classe para plotar a curva \( E_b/N_0 \) versus \( BER \) (Taxa de Erro de Bit).
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot no GridSpec
+        ebn0 (np.ndarray): Vetor de valores de \( E_b/N_0 \) (em dB)
+        ber_values (List[np.ndarray]): Lista de vetores de valores de \( BER \) para diferentes condições
+        labels (Optional[List[str]]): Rótulos para as curvas (por exemplo, diferentes condições ou algoritmos)
+
+    Exemplos:
+        - Curva de desempenho de modulação
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 ebn0: np.ndarray,
+                 ber_values: List[np.ndarray],
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.ebn0 = ebn0
+        self.ber_values = ber_values
+        self.labels = kwargs.get("labels", [f"Curva {i+1}" for i in range(len(ber_values))])
+
+    def plot(self) -> None:
+        """
+        Método para gerar o gráfico \( E_b/N_0 \) vs \( BER \).
+        """
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+
+        for i, ber in enumerate(self.ber_values):
+            color = self.apply_color(i)
+            # Plotando a curva com marcadores 'o' (círculos) para os pontos
+            if color is not None:
+                self.ax.semilogy(self.ebn0, ber, label=self.labels[i], color=color, marker='o', **line_kwargs)
+            else:
+                self.ax.semilogy(self.ebn0, ber, label=self.labels[i], marker='o', **line_kwargs)
+
+        self.ax.set_xlabel(r"$E_b/N_0$ (dB)")
+        self.ax.set_ylabel("BER")
+        self.ax.set_title("Curva \( E_b/N_0 \) vs \( BER \)")
+
+        # Definir limites para o eixo y (escala de 10^-n)
+        self.ax.set_ylim(1e-5, 1)
+
+        # Estilo da legenda
+        leg = self.ax.legend(
+            loc='upper right', frameon=True, edgecolor='black',
+            facecolor='white', fontsize=12, fancybox=True
+        )
+        leg.get_frame().set_facecolor('white')
+        leg.get_frame().set_edgecolor('black')
+
+        # Estilo da grade
+        self.ax.grid(True, which="both", ls="--", alpha=0.7)
+
+        # Aplica os estilos de eixos e legendas da classe base
+        self.apply_ax_style()

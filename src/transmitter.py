@@ -541,22 +541,19 @@ if __name__ == "__main__":
     transmitter = Transmitter(datagram, output_print=True, output_plot=True)
     t, s = transmitter.run()
 
-    ExportData(s, "transmitter_s").save()
-    ExportData(t, "transmitter_t").save()
+    ExportData([s, t], "transmitter_st").save()
 
-    ### TESTE DE IMPORT:
+    # ## TESTE DE IMPORT:
 
     # # Importa os dados    
-    # import_data = ImportData("transmitter_s")
-    # s1 = import_data.load()
-    # import_data = ImportData("transmitter_t")
-    # t1 = import_data.load()
+    # import_data = ImportData("transmitter_st")
+    # st = import_data.load()
     
     # print("s(t):", ''.join(map(str, s[:5])),"...")
     # print("t:   ", ''.join(map(str, t[:5])),"...")
 
 
     # # Verifica se os dados importados são iguais aos dados exportados
-    # if np.array_equal(s, s1) and np.array_equal(t, t1):
+    # if np.array_equal(s, st[0]) and np.array_equal(t, st[1]):
     #     print("\nOs dados importados são iguais aos dados exportados.")
     
