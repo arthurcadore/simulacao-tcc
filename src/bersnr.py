@@ -49,7 +49,7 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     return ber
 
 
-def simulate_qpsk(ebn0_db, num_bits=10000, bits_por_simbolo=2, rng=None):
+def simulate_qpsk(ebn0_db, num_bits=100000, bits_por_simbolo=2, rng=None):
     r"""
     Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.
 
@@ -192,7 +192,7 @@ if __name__ == "__main__":
         pos=0,
         ebn0=ebn0_values,
         ber_values=[ber_values_argos, ber_values_qpsk],
-        labels=["ARGOS-3", "QPSK"]
+        labels=["ARGOS-3 (Default)", "QPSK"]
     )
     ber_plot.plot(ylim=(1e-6, 1))
     save_figure(fig, "ber_vs_ebn0.pdf")
