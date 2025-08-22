@@ -48,7 +48,7 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     ber = num_errors / len(bitsTX)
     return ber
 
-
+# TODO: Alterar função para operar usando add_noise
 def simulate_qpsk(ebn0_db, num_bits=100000, bits_por_simbolo=2, rng=None):
     r"""
     Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.
@@ -167,8 +167,6 @@ def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
         results[i][2] = mean_ber_qpsk
 
     return results
-
-
 
 if __name__ == "__main__":
     results = run()  
