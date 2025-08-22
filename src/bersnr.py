@@ -17,6 +17,22 @@ from noise import NoiseEBN0
 from data import ExportData, ImportData
 from plotter import BersnrPlot, create_figure, save_figure
 
+def repetitions_for_ebn0(ebn0: float) -> int:
+    r"""
+    Define o número de repetições em função do Eb/N0 (progressão).
+    Usa interpolação linear entre pontos de referência.
+    """
+    ebn0_ref = [0, 1, 8]
+    reps_ref = [500, 1000, 40000]
+
+    bean = np.interp(ebn0, ebn0_ref, reps_ref)
+
+    repetitions = int(round(bean))
+
+    print(f"Repetições para {ebn0} dB: {repetitions}")
+    return repetitions
+
+
 def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     r"""
     Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado Eb/N0.
@@ -106,13 +122,12 @@ def simulate_qpsk(ebn0_db, num_bits=100000, bits_por_simbolo=2, rng=None):
     return ber
 
 
-def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
+def run(EbN0_values=np.arange(0, 12, 0.5), num_workers=28):
     r"""
     Executa a simulação completa de BER vs Eb/N0 para ARGOS e QPSK.
 
     Args: 
         EbN0_values (np.ndarray): Valores de Eb/N0 a serem simulados.
-        repetitions (int): Número de repetições para cada valor.
         num_workers (int): Número de processos para execução paralela.
 
     Returns:
@@ -122,12 +137,12 @@ def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
     ber_accumulator_argos = {ebn0: [] for ebn0 in EbN0_values}
     ber_accumulator_qpsk = {ebn0: [] for ebn0 in EbN0_values}
 
-    # Simulação ARGOS-3
+    # --- Simulação ARGOS-3 ---
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures_argos = {
             executor.submit(simulate_argos, ebn0): ebn0
             for ebn0 in EbN0_values
-            for _ in range(repetitions)
+            for _ in range(repetitions_for_ebn0(ebn0))
         }
         for future in tqdm(concurrent.futures.as_completed(futures_argos),
                            total=len(futures_argos),
@@ -144,12 +159,12 @@ def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
         mean_ber_argos = np.mean(ber_accumulator_argos[ebn0])
         results.append([ebn0, mean_ber_argos, None])
 
-    # Simulação QPSK
+    # --- Simulação QPSK ---
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures_qpsk = {
             executor.submit(simulate_qpsk, ebn0): ebn0
             for ebn0 in EbN0_values
-            for _ in range(repetitions)
+            for _ in range(repetitions_for_ebn0(ebn0))
         }
         for future in tqdm(concurrent.futures.as_completed(futures_qpsk),
                            total=len(futures_qpsk),
@@ -161,7 +176,7 @@ def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
             except Exception as e:
                 print(f"Erro na simulação QPSK Eb/N0={ebn0}: {e}")
 
-    # Calcula média para QPSK e preenche os resultados
+    # Calcula média para QPSK
     for i, ebn0 in enumerate(EbN0_values):
         mean_ber_qpsk = np.mean(ber_accumulator_qpsk[ebn0])
         results[i][2] = mean_ber_qpsk
@@ -178,6 +193,7 @@ if __name__ == "__main__":
     print(results)
 
     import_data = ImportData("bersnr").load()
+
     ebn0_values = import_data[:, 0]  
     ber_values_argos = import_data[:, 1]   
     ber_values_qpsk = import_data[:, 2]   
