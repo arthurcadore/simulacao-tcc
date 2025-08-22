@@ -48,9 +48,67 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     ber = num_errors / len(bitsTX)
     return ber
 
+
+def simulate_qpsk(ebn0_db, num_bits=10000, bits_por_simbolo=2, rng=None):
+    r"""
+    Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.
+
+    Args:
+        ebn0_db (float): Relação Eb/N0 em dB.
+        num_bits (int): Número de bits simulados.
+        bits_por_simbolo (int): Número de bits por símbolo (QPSK = 2).
+        rng (np.random.Generator, opcional): gerador de números aleatórios.
+
+    Returns:
+        float: BER simulada.
+    """
+    rng = rng if rng is not None else np.random.default_rng()
+
+    # Geração dos bits (I e Q independentes)
+    bI = rng.integers(0, 2, size=(num_bits,))
+    bQ = rng.integers(0, 2, size=(num_bits,))
+
+    # Mapeamento QPSK normalizado (Es=1, Gray coding)
+    I = (2*bI - 1) / np.sqrt(2)
+    Q = (2*bQ - 1) / np.sqrt(2)
+    s = I + 1j*Q
+
+    # Cálculo do Eb/N0
+    ebn0_lin = 10 ** (ebn0_db / 10)
+
+    # Energia média por símbolo
+    Es = np.mean(np.abs(s)**2)
+
+    # Energia por bit
+    Eb = Es / bits_por_simbolo
+
+    # Densidade espectral de potência do ruído
+    N0 = Eb / ebn0_lin
+
+    # Variância por dimensão (I e Q)
+    sigma2 = N0 / 2
+    sigma = np.sqrt(sigma2)
+
+    # Ruído complexo AWGN
+    n = rng.normal(0.0, sigma, size=s.shape) + 1j * rng.normal(0.0, sigma, size=s.shape)
+
+    # Sinal recebido
+    r = s + n
+
+    # Decisão por quadrante
+    bI_dec = (r.real >= 0).astype(int)
+    bQ_dec = (r.imag >= 0).astype(int)
+
+    # Contagem de erros
+    erros = np.count_nonzero(bI_dec != bI) + np.count_nonzero(bQ_dec != bQ)
+    ber = erros / (2 * num_bits)
+
+    return ber
+
+
 def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
     r"""
-    Executa a simulação completa de BER vs Eb/N0. Retorna a tupla BER vs Eb/N0.
+    Executa a simulação completa de BER vs Eb/N0 para ARGOS e QPSK.
 
     Args: 
         EbN0_values (np.ndarray): Valores de Eb/N0 a serem simulados.
@@ -58,51 +116,85 @@ def run(EbN0_values=np.arange(0, 15, 0.5), repetitions=10, num_workers=24):
         num_workers (int): Número de processos para execução paralela.
 
     Returns:
-        list: Lista de tuplas (Eb/N0, BER_médio).
+        list: Lista de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].
     """
     results = []
-    total_tasks = len(EbN0_values) * repetitions
-    ber_accumulator = {ebn0: [] for ebn0 in EbN0_values}
+    ber_accumulator_argos = {ebn0: [] for ebn0 in EbN0_values}
+    ber_accumulator_qpsk = {ebn0: [] for ebn0 in EbN0_values}
 
+    # Simulação ARGOS-3
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        futures = {
+        futures_argos = {
             executor.submit(simulate_argos, ebn0): ebn0
             for ebn0 in EbN0_values
             for _ in range(repetitions)
         }
-        for future in tqdm(concurrent.futures.as_completed(futures), total=total_tasks, desc="Simulando"):
-            ebn0 = futures[future]
+        for future in tqdm(concurrent.futures.as_completed(futures_argos),
+                           total=len(futures_argos),
+                           desc="Simulando ARGOS"):
+            ebn0 = futures_argos[future]
             try:
                 ber = future.result()
-                ber_accumulator[ebn0].append(ber)
+                ber_accumulator_argos[ebn0].append(ber)
             except Exception as e:
-                print(f"Erro na simulação Eb/N0={ebn0}: {e}")
+                print(f"Erro na simulação ARGOS Eb/N0={ebn0}: {e}")
 
-    # Calcula média por Eb/N0
+    # Calcula média para ARGOS
     for ebn0 in EbN0_values:
-        mean_ber = np.mean(ber_accumulator[ebn0])
-        results.append((ebn0, mean_ber))
+        mean_ber_argos = np.mean(ber_accumulator_argos[ebn0])
+        results.append([ebn0, mean_ber_argos, None])
+
+    # Simulação QPSK
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures_qpsk = {
+            executor.submit(simulate_qpsk, ebn0): ebn0
+            for ebn0 in EbN0_values
+            for _ in range(repetitions)
+        }
+        for future in tqdm(concurrent.futures.as_completed(futures_qpsk),
+                           total=len(futures_qpsk),
+                           desc="Simulando QPSK"):
+            ebn0 = futures_qpsk[future]
+            try:
+                ber = future.result()
+                ber_accumulator_qpsk[ebn0].append(ber)
+            except Exception as e:
+                print(f"Erro na simulação QPSK Eb/N0={ebn0}: {e}")
+
+    # Calcula média para QPSK e preenche os resultados
+    for i, ebn0 in enumerate(EbN0_values):
+        mean_ber_qpsk = np.mean(ber_accumulator_qpsk[ebn0])
+        results[i][2] = mean_ber_qpsk
 
     return results
 
+
+
 if __name__ == "__main__":
-    results = run()
+    results = run()  
     results = np.array(results)
+
+    # Salvar os resultados no formato adequado
     ExportData(results, "bersnr").save()
+
+    print(results)
 
     import_data = ImportData("bersnr").load()
     ebn0_values = import_data[:, 0]  
-    ber_values = import_data[:, 1]   
+    ber_values_argos = import_data[:, 1]   
+    ber_values_qpsk = import_data[:, 2]   
 
+    # Criando o gráfico
     fig, grid = create_figure(rows=1, cols=1)
     ber_plot = BersnrPlot(
         fig=fig,
         grid=grid,
         pos=0,
         ebn0=ebn0_values,
-        ber_values=[ber_values],
-        labels=["ARGOS-3 (default)"]
+        ber_values=[ber_values_argos, ber_values_qpsk],
+        labels=["ARGOS-3", "QPSK"]
     )
-    ber_plot.plot()
+    ber_plot.plot(ylim=(1e-6, 1))
     save_figure(fig, "ber_vs_ebn0.pdf")
+
 

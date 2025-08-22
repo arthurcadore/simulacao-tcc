@@ -825,7 +825,7 @@ class BersnrPlot(BasePlot):
         self.ber_values = ber_values
         self.labels = kwargs.get("labels", [f"Curva {i+1}" for i in range(len(ber_values))])
 
-    def plot(self) -> None:
+    def plot(self, ylim: Optional[Tuple[float, float]] = None) -> None:
         """
         Método para gerar o gráfico \( E_b/N_0 \) vs \( BER \).
         """
@@ -845,7 +845,10 @@ class BersnrPlot(BasePlot):
         self.ax.set_title("Curva \( E_b/N_0 \) vs \( BER \)")
 
         # Definir limites para o eixo y (escala de 10^-n)
-        self.ax.set_ylim(1e-5, 1)
+        if ylim is not None:
+            self.ax.set_ylim(ylim)
+        else:
+            self.ax.set_ylim(1e-5, 1)
 
         # Estilo da legenda
         leg = self.ax.legend(
