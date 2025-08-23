@@ -12,13 +12,16 @@ from plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
 class LPF:
     def __init__(self, cut_off, order, fs=128_000, type="butter"):
         r"""
-        Inicializa o LPF (Low-Pass Filter).
+        Inicializa uma instância de filtro passa-baixa com base em uma frequência de corte $f_{cut}$ e uma ordem $N$.
 
         Args:
-            cut_off (float): Frequência de corte do filtro.
-            order (int): Ordem do filtro.
-            fs (int, opcional): Frequência de amostragem. Padrão é 128000.
+            cut_off (float): Frequência de corte $f_{cut}$ do filtro.
+            order (int): Ordem $N$ do filtro.
+            fs (int, opcional): Frequência de amostragem $f_s$. 
             type (str, opcional): Tipo de filtro. Padrão é "butter".
+        
+        Raises:
+            ValueError: Se o tipo de filtro for inválido.
         """
 
         self.cut_off = cut_off
@@ -35,26 +38,42 @@ class LPF:
 
     def butterworth_filter(self, fNyquist=0.5):
         r"""
-        Calcula os coeficientes do filtro Butterworth.
+        Calcula os coeficientes do filtro Butterworth utilizando a biblioteca `scipy.signal`. A função de transferência contínua $H(s)$ de um filtro Butterworth é dada pela expressão abaixo.
+
+        $$
+        H(s) = \frac{1}{1 + \left(\frac{s}{2 \pi f_{cut}}\right)^{2n}}
+        $$
+
+        Sendo:
+            - $s$: Variável complexa no domínio de Laplace.
+            - $2 \pi f_{cut}$: Frequência angular de corte do filtro.
+            - $n$: Ordem do filtro.
 
         Args: 
             fNyquist (float): Fator de Nyquist. Padrão é 0.5 * fs.
 
         Returns:
-            tuple: Coeficientes b e a do filtro Butterworth.
+            tuple: Coeficientes $b$ e $a$ correspondentes à função de transferência do filtro Butterworth.
         """
         b, a = butter(self.order, self.cut_off / (fNyquist * self.fs), btype='low')
         return b, a
 
     def calc_impulse_response(self, impulse_len=1024):
         r"""
-        Calcula a resposta ao impulso do filtro.
+        Para obter a resposta ao impulso no dominio do tempo, um impulso unitário é aplicado como entrada. Para um filtro Butterworth, o calculo é dado pela expressão abaixo. 
+
+        $$
+        h(t) = \mathcal{L}^{-1}\left\{H(f)\right\}
+        $$
 
         Args: 
-            impulse_len (int): Comprimento do vetor de impulso. Padrão é 1024.
+            impulse_len (int): Comprimento do vetor de impulso.
 
         Returns:
-            tuple: Resposta ao impulso e vetor de tempo.
+            impulse_response (tuple[np.ndarray, np.ndarray]): Resposta ao impulso e vetor de tempo.
+        
+        Exemplo: 
+            ![pageplot](assets/example_lpf_impulse.svg)
         """
         # Impulso unitário
         impulse_input = np.zeros(impulse_len)
@@ -67,13 +86,22 @@ class LPF:
 
     def apply_filter(self, signal):
         r"""
-        Aplica o filtro passa-baixa ao sinal de entrada.
+        Aplica o filtro passa-baixa com resposta ao impulso $h(t)$ ao sinal de entrada $s(t)$, utilizando a função `scipy.signal.filtfilt`. O processo de filtragem é dado pela expressão abaixo. 
+
+        $$
+            x(t) = s(t) \ast h(t)
+        $$
+
+        Sendo: 
+            - $x(t)$: Sinal filtrado.
+            - $s(t)$: Sinal de entrada.
+            - $h(t)$: Resposta ao impulso do filtro.
 
         Args:
-            signal (np.ndarray): Sinal de entrada a ser filtrado.
+            signal (np.ndarray): Sinal de entrada $s(t)$.
 
         Returns:
-            np.ndarray: Sinal filtrado.
+            signal_filtered (np.ndarray): Sinal filtrado $x(t)$.
         """
         signal_filtered = filtfilt(self.b, self.a, signal)
 
