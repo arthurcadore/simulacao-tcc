@@ -45,10 +45,10 @@ class Noise:
             - $\mathrm{SNR}_{dB}$: Relação sinal-ruído em decibéis (dB).
 
         Args:
-            signal (np.ndarray): Sinal ao qual o ruído será adicionado.
+            signal (np.ndarray): Sinal transmitido $s(t)$.
 
         Returns:
-            np.ndarray: Sinal com ruído adicionado.
+            signal (np.ndarray): Sinal $r(t)$, com ruído AWGN adicionado.
 
         Exemplo:
             ![pageplot](assets/example_noise_gaussian_snr.svg)
@@ -56,67 +56,79 @@ class Noise:
 
         self.signal_power = np.mean(np.abs(signal) ** 2)
         self.snr_linear = 10 ** (self.snr / 10)
-        self.noise_power = self.signal_power / self.snr_linear
-        self.noise = np.random.normal(0, np.sqrt(self.noise_power), len(signal))
-        return signal + self.noise
+        self.variance = self.signal_power / self.snr_linear
+        noise = np.random.normal(0, np.sqrt(self.variance), len(signal))
+        return signal + noise
 
 class NoiseEBN0:
-    def __init__(self, ebn0_db=10, bits_per_symbol=2, rng=None, fs=128_000, Rb=400):
+    def __init__(self, ebn0_db=10, fs=128_000, Rb=400):
         r"""
         Implementação de canal para aplicação de ruido $AWGN$, com base em $Eb/N_{0}$.
 
         Args:
             ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
-            bits_per_symbol (int): Número de bits por símbolo ($k$). Para QPSK, $k=2$.
-            rng (np.random.Generator, opcional): Gerador de números aleatórios (NumPy).
             fs (int): Taxa de amostragem do sinal em $Hz$.
             Rb (int): Taxa de bits em bits/s.
         """
         self.ebn0_db = ebn0_db
         self.ebn0_lin = 10 ** (ebn0_db / 10)
-        self.k = bits_per_symbol
-        self.rng = rng if rng is not None else np.random.default_rng()
         self.fs = fs
         self.Rb = Rb
-        self.Rs = Rb / bits_per_symbol
 
-    def add_noise(self, s):
+    def add_noise(self, signal):
         r"""
-        Adiciona ruído AWGN ao sinal de entrada 
+        Adiciona ruído AWGN $n(t) ao sinal de entrada $s(t), com base na $Eb/N0_{dB}$ definida na inicialização. 
 
-        Etapas do cálculo:
-            1. Calcula a potência média do sinal amostrado:
-               $P = \mathbb{E}[|s|^2]$.
-            2. Calcula a energia por bit: $E_b = P / R_b$.
-            3. Calcula a densidade espectral de ruído:
-               $N_0 = E_b / (E_b/N_0)$.
-            4. Converte $N_0$ em variância de amostras discretas:
-               $\sigma^2 = \dfrac{N_0 \cdot f_s}{2}$.
-            5. Gera vetor gaussiano $n(t)$ com variância $\sigma^2$.
-            6. Adiciona ruído ao sinal: $r(t) = s(t) + n(t)$.
+        $$
+        r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
+        $$
+
+        Sendo: 
+            - $r(t)$: Sinal retornado com ruído AWGN adicionado.
+            - $s(t)$: Sinal de entrada sem ruído. 
+            - $n(t)$: Ruído adicionado, com distribuição normal $\mathcal{N}(0, \sigma^2)$.
+
+        
+        A variância do ruído $\sigma^2$ é dada por:
+
+        $$
+        \sigma^2 = \frac{N_0 \cdot f_s}{2}
+        $$
+
+        Sendo: 
+            - $\sigma^2$: A variância do ruído.
+            - $N_0$: Densidade espectral de ruído.
+            - $f_s$: Taxa de amostragem do sinal em $Hz$.
+
+        
+        A densidade espectral de ruído $N_0$ é dada por:
+
+        $$
+        N_0 = \frac{\left[ \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b} \right]}{10^{\frac{Eb/N_0}{10}}}
+        $$
+
+        Sendo: 
+            - $N_0$: Densidade espectral de ruído.
+            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Potência média do sinal amostrado.
+            - $R_b$: Taxa de bits em bits/s.
+            - $Eb/N_0$: Relação $dB$ da energia por bit $E_b$ por densidade espectral de ruído $N_0$ dada na inicialização.
 
         Args:
-            s (np.ndarray): Sinal transmitido $s(t)$.
+            signal (np.ndarray): Sinal transmitido $s(t)$.
 
         Returns:
-            s_noisy (np.ndarray): Sinal recebido $r(t) = s(t) + n(t)$, com ruído AWGN.
+            signal (np.ndarray): Sinal recebido $r(t)$, com ruído AWGN adicionado.
+
+        Exemplo:
+            ![pageplot](assets/example_noise_gaussian_ebn0.svg)
         """
-        # Potência média do sinal (por amostra)
-        P = np.mean(np.abs(s)**2)
 
-        # Energia por bit
-        Eb = P / self.Rb
-
-        # Densidade espectral de potência do ruído
-        N0 = Eb / self.ebn0_lin
-
-        # Variância do ruído discreto por amostra (real)
-        sigma2 = (N0 * self.fs) / 2.0
-        sigma = np.sqrt(sigma2)
-
-        # Ruído gaussiano branco
-        n = self.rng.normal(0.0, sigma, size=s.shape)
-        return s + n
+        self.signal_power = np.mean(np.abs(signal)**2)
+        self.bit_energy = self.signal_power / self.Rb
+        self.noise_density = self.bit_energy / self.ebn0_lin
+        self.variance = (self.noise_density * self.fs) / 2.0
+        noise = np.random.normal(0, np.sqrt(self.variance), len(signal))
+        return signal + noise
 
 def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
     n_est = s_noisy - s
@@ -142,17 +154,26 @@ if __name__ == "__main__":
     fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
     GaussianNoisePlot(
         fig_gauss, grid_gauss, (0,0),
-        variance=add_noise.noise_power,
+        variance=add_noise.variance,
         colors="darkorange",
-        legend=f"Ruído AWGN - {snr_db} dB",
-    ).plot(xlim=(-0.2, 0.2))
+        legend=f"Ruído AWGN SNR - {snr_db} dB",
+    ).plot(xlim=(-0.5, 0.5))
     save_figure(fig_gauss, "example_noise_gaussian_snr.pdf")
 
     # ADIÇÃO DE RUIDO USANDO EBN0
-    eb_n0 = 20
+    eb_n0 = 10
     add_noise = NoiseEBN0(ebn0_db=eb_n0)
     s_noisy = add_noise.add_noise(s)
     check_ebn0(s, s_noisy, add_noise)
+
+    fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
+    GaussianNoisePlot(
+        fig_gauss, grid_gauss, (0,0),
+        variance=add_noise.variance,
+        colors="darkorange",
+        legend=f"Ruído AWGN Eb/N0 - {eb_n0} dB",
+    ).plot(xlim=(-1, 1))
+    save_figure(fig_gauss, "example_noise_gaussian_ebn0.pdf")
 
 
     fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
@@ -176,7 +197,7 @@ if __name__ == "__main__":
         labels=["$s(t) + AWGN$"],
         title="Domínio do Tempo - Com Ruído",
         xlim=(0, 0.1),
-        ylim=(-0.4, 0.4),
+        ylim=(-1, 1),
         colors="darkred",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
