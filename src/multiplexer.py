@@ -11,23 +11,29 @@ from plotter import create_figure, save_figure, BitsPlot
 class Multiplexer:
     def __init__(self):
         r"""
-        Inicializa uma instância do multiplexador.
+        Inicializa o multiplexador no padrão ARGOS-3.
         """
         pass
 
     def concatenate(self, I1, Q1, I2, Q2):
         r"""
-        Concatena os vetores I e Q de dois canais, retornando os vetores concatenados.
+        Concatena os vetores $X_n$ e $Y_n$ de entrada, com $S_I$ e $S_Q$, retornando os vetores concatenados $X_n$ e $Y_n$. O processo de multiplexação é dado pela expressão abaixo.
+
+        $$
+        \begin{align}
+        X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
+        \end{align}
+        $$
 
         Args:
-            I1 (np.ndarray): Vetor I do primeiro canal.
-            Q1 (np.ndarray): Vetor Q do primeiro canal.
-            I2 (np.ndarray): Vetor I do segundo canal.
-            Q2 (np.ndarray): Vetor Q do segundo canal.
-            
+            I1 (np.ndarray): Vetor de entrada $S_I$.
+            Q1 (np.ndarray): Vetor de entrada $S_Q$.
+            I2 (np.ndarray): Vetor de entrada $X_n$.
+            Q2 (np.ndarray): Vetor de entrada $Y_n$.
+
         Returns:
-            I (np.ndarray): Vetor I concatenado.
-            Q (np.ndarray): Vetor Q concatenado.
+            I (np.ndarray): Vetor $X_n$ concatenado.
+            Q (np.ndarray): Vetor $Y_n$ concatenado.
         
         Raises:
             AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.
