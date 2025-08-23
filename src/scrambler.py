@@ -14,14 +14,38 @@ from plotter import save_figure, create_figure, BitsPlot
 class Scrambler:
     def __init__(self):
         r"""
-        Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
+        Inicializa o embaralhador no padrão ARGOS-3.
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.5)
+        </div>
         """
         pass
 
     def scramble(self, X, Y):
         r"""
-        Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados. O processo de embaralhamento 
-        é ilustrado pelo diagrama de blocos abaixo. 
+        Embaralha os vetores $v_t^{(0)}$ e $v_t^{(1)}$, retornando os vetores $X_n$ e $Y_n$ embaralhados. O processo de embaralhamento é dado pela expressão abaixo.
+
+        \begin{equation}
+            X_n = \begin{cases}
+            A, & \text{se } n = 0 \pmod{3} \\
+            B, & \text{se } n = 1 \pmod{3} \\
+            C, & \text{se } n = 2 \pmod{3}
+            \end{cases} \quad
+            Y_n = \begin{cases}
+            A, & \text{se } n = 0 \pmod{3} \\
+            B, & \text{se } n = 1 \pmod{3} \\
+            C, & \text{se } n = 2 \pmod{3}
+            \end{cases}
+        \end{equation}
+
+        Sendo: 
+            - $X_n$ e $Y_n$: Vetores de saída embaralhados.
+            - $A$, $B$ e $C$: Combinação de bits dos vetores de entrada $v_t^{(0)}$ e $v_t^{(1)}$.
+            - $n$: Indice do bit a ser embaralhado.
+
+        O processo de embaralhamento é ilustrado pelo diagrama de blocos abaixo. 
 
         ![pageplot](../assets/embaralhador.svg)
         
@@ -35,7 +59,6 @@ class Scrambler:
 
         Raises:
             AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
-
         """
         assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
@@ -69,17 +92,35 @@ class Scrambler:
 
     def descramble(self, X, Y):
         r"""
-        Restaura os vetores X e Y embaralhados ao seu estado original. O processo de desembaralhamento 
-        é ilustrado pelo diagrama de blocos abaixo.
+        Desembaralha os vetores $X'_n$ e $Y'_n$ embaralhados, retornando os vetores $v_t^{(0)'}$ e $v_t^{(1)'}$ restaurados. O processo de desembaralhamento
+        é dado pela expressão abaixo.
+
+        \begin{equation}
+            v_t^{(0)'} = \begin{cases}
+            A, & \text{se } n = 0 \pmod{3} \\
+            B, & \text{se } n = 1 \pmod{3} \\
+            C, & \text{se } n = 2 \pmod{3}
+            \end{cases}, \quad
+            v_t^{(1)'} = \begin{cases}
+            A, & \text{se } n = 0 \pmod{3} \\
+            B, & \text{se } n = 1 \pmod{3} \\
+            C, & \text{se } n = 2 \pmod{3}
+            \end{cases} \text{ .}
+            \label{eq:desembaralhador_Y}
+        \end{equation}
+
+        Sendo: 
+            - $v_t^{(0)'}$ e $v_t^{(1)'}$: Vetores de saida desembaralhados.
+            - $A$, $B$ e $C$: Combinação de bits dos vetores de entrada $X'_n$ e $Y'_n$ embaralhados.
+            - $n$: Indice do bit a ser embaralhado.
+
+        O processo de desembaralhamento é ilustrado pelo diagrama de blocos abaixo.
 
         ![pageplot](../assets/desembaralhador.svg)
 
         Args:
             X (np.ndarray): Vetor $X'_{n}$ embaralhado.
             Y (np.ndarray): Vetor $Y'_{n}$ embaralhado.
-
-        Returns:
-           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
 
         Returns:
             X_original (np.ndarray): Vetor $v_t^{(0)}$ restaurado.
