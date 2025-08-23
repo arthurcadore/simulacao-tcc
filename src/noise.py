@@ -8,41 +8,65 @@ Data: 16-08-2025
 import numpy as np
 from datagram import Datagram
 from transmitter import Transmitter
-from plotter import save_figure, create_figure, TimePlot, FrequencyPlot
+from plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
 
 class Noise:
-    def __init__(self, snr=10):
+    def __init__(self, snr=15):
         r"""
-        Implementação de canal para aplicação de ruido AWGN no sinal transmitido.
+        Implementação de canal para aplicação de ruido $AWGN$, com base em $SNR$.
 
         Args:
-            snr (float): Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.
+            snr (float): Relação sinal-ruído em decibéis (dB). 
         """
         self.snr = snr
     
     def add_noise(self, signal):
         r"""
-        Adiciona ruído AWGN ao sinal fornecido.
+        Adiciona ruído AWGN $n(t)$ ao sinal de entrada $s(t)$, com base na $\mathrm{SNR}_{dB}$ definida na inicialização. 
+
+        $$
+        r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
+        $$
+
+        Sendo: 
+            - $r(t)$: Sinal retornado com ruído AWGN adicionado.
+            - $s(t)$: Sinal de entrada sem ruído. 
+            - $n(t)$: Ruído adicionado, com distribuição normal $\mathcal{N}(0, \sigma^2)$.
+
+        A variância do ruído $\sigma^2$ é dada por:
+
+        $$
+        \sigma^2 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{10^{\frac{\mathrm{SNR}_{dB}}{10}}}
+        $$
+
+        Sendo: 
+            - $\sigma^2$: A variância do ruído.
+            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Potência média do sinal de entrada.
+            - $\mathrm{SNR}_{dB}$: Relação sinal-ruído em decibéis (dB).
 
         Args:
             signal (np.ndarray): Sinal ao qual o ruído será adicionado.
-        
+
         Returns:
             np.ndarray: Sinal com ruído adicionado.
+
+        Exemplo:
+            ![pageplot](assets/example_noise_gaussian_snr.svg)
         """
-        signal_power = np.mean(np.abs(signal) ** 2)
-        snr_linear = 10 ** (self.snr / 10)
-        noise_power = signal_power / snr_linear
-        noise = np.random.normal(0, np.sqrt(noise_power), len(signal))
-        return signal + noise
-    
+
+        self.signal_power = np.mean(np.abs(signal) ** 2)
+        self.snr_linear = 10 ** (self.snr / 10)
+        self.noise_power = self.signal_power / self.snr_linear
+        self.noise = np.random.normal(0, np.sqrt(self.noise_power), len(signal))
+        return signal + self.noise
+
 class NoiseEBN0:
-    def __init__(self, ebn0_db, bits_per_symbol=2, rng=None, fs=128_000, Rb=400):
+    def __init__(self, ebn0_db=10, bits_per_symbol=2, rng=None, fs=128_000, Rb=400):
         r"""
-        Implementação de canal AWGN, controlado por $Eb$/$N_{0}$.
+        Implementação de canal para aplicação de ruido $AWGN$, com base em $Eb/N_{0}$.
 
         Args:
-            ebn0_db (float): Valor alvo de$Eb$/$N_{0}$ em decibéis ($dB$).
+            ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
             bits_per_symbol (int): Número de bits por símbolo ($k$). Para QPSK, $k=2$.
             rng (np.random.Generator, opcional): Gerador de números aleatórios (NumPy).
             fs (int): Taxa de amostragem do sinal em $Hz$.
@@ -54,7 +78,7 @@ class NoiseEBN0:
         self.rng = rng if rng is not None else np.random.default_rng()
         self.fs = fs
         self.Rb = Rb
-        self.Rs = Rb / bits_per_symbol  # taxa de símbolos
+        self.Rs = Rb / bits_per_symbol
 
     def add_noise(self, s):
         r"""
@@ -107,15 +131,26 @@ def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=False)
+    transmitter = Transmitter(datagram, output_print=False, output_plot=False)
     t, s = transmitter.run()
 
-    # snr_db = 15
-    # add_noise = Noise(snr=snr_db)
-    # s_noisy = add_noise.add_noise(s)
+    # ADIÇÃO DE RUIDO USANDO SNR
+    snr_db = 15
+    add_noise = Noise(snr=snr_db)
+    s_noisy = add_noise.add_noise(s)
 
+    fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
+    GaussianNoisePlot(
+        fig_gauss, grid_gauss, (0,0),
+        variance=add_noise.noise_power,
+        colors="darkorange",
+        legend=f"Ruído AWGN - {snr_db} dB",
+    ).plot(xlim=(-0.2, 0.2))
+    save_figure(fig_gauss, "example_noise_gaussian_snr.pdf")
+
+    # ADIÇÃO DE RUIDO USANDO EBN0
     eb_n0 = 20
-    add_noise = NoiseEBN0(eb_n0)
+    add_noise = NoiseEBN0(ebn0_db=eb_n0)
     s_noisy = add_noise.add_noise(s)
     check_ebn0(s, s_noisy, add_noise)
 

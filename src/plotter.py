@@ -858,3 +858,51 @@ class BersnrPlot(BasePlot):
 
         # Aplica os estilos de eixos e legendas da classe base
         self.apply_ax_style()
+
+class GaussianNoisePlot(BasePlot):
+    r"""
+    Classe para plotar a distribuição Gaussiana do ruído AWGN com base na variância.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot no GridSpec
+        variance (float): Variância do ruído
+        num_points (int): Número de pontos para a curva da gaussiana
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 variance: float,
+                 num_points: int = 1000,
+                 legend: str = "Ruído AWGN",
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.variance = variance
+        self.num_points = num_points
+        self.legend = legend
+
+    def plot(self,
+             xlabel: str = "Amplitude",
+             ylabel: str = "Densidade de Probabilidade",
+             xlim: Optional[Tuple[float, float]] = None) -> None:
+        sigma = np.sqrt(self.variance)
+
+        x = np.linspace(-50*sigma, 50*sigma, self.num_points)
+        pdf = (1 / (np.sqrt(2*np.pi) * sigma)) * np.exp(-x**2 / (2*self.variance))
+
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+        color = self.apply_color(0) or "darkgreen"
+
+        self.ax.plot(x, pdf, label=self.legend, color=color, **line_kwargs)
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+
+        # Aplica xlim customizado, se passado
+        if xlim is not None:
+            self.ax.set_xlim(xlim)
+
+        self.apply_ax_style()
