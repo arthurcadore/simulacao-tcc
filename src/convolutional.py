@@ -15,24 +15,29 @@ from plotter import create_figure, save_figure, BitsPlot, TrellisPlot
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
         r"""
-        Inicializa o codificador convolucional com matriz de geradores.
+        Inicializa o codificador convolucional, com base em uma tupla de polinômios geradores $G$ que determinam a estrutura do codificador.
 
-        Referência:
-            - AS3-SP-516-274-CNES (seção 3.1.4.4)
-            - CCSDS 131.1-G-2
+        $$
+        \begin{equation}
+            \begin{split}
+                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
+                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+            \end{split}
+        \end{equation}
+        $$
 
-        Args:
-            G (np.ndarray): Matriz de polinômios geradores em formato binário.
-        
-        Nota: 
-            - O polinômio gerador $G_0$ é representado por `G[0][0]` e $G_1$ por `G[0][1]`.
-            - $G_0$ é definido como $1111001_{2}$ ou $121_{10}$
-            - $G_1$ é definido como $1011011_{2}$ ou $91_{10}$
-
-        Com base nos polinômios geradores, o codificador convolucional pode ser representado pelo diagrama de blocos abaixo.
+        O codificador convolucional, considerando $G_0$ e $G_1$ pode ser representado pelo diagrama de blocos abaixo.
 
         ![pageplot](../assets/cod_convolucional.svg)
+        
+        Args:
+            G (np.ndarray): Tupla de polinômios geradores $G$.
 
+        <div class="referencia">
+          <b>Referência:</b>
+          <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
+          <p>CCSDS 131.1-G-2</p>
+        </div>
         """
         self.G = G
         self.G0 = int(G[0][0])
@@ -45,10 +50,10 @@ class EncoderConvolutional:
 
     def calc_taps(self, poly):
         r"""
-        Calcula os índices ("taps") dos bits ativos (ou seja, bits $'1'$) no polinômio gerador.
+        Calcula os índices dos bits ativos ($'1'$), ou taps, do polinômio gerador $G_n$.
 
         Args:
-            poly (int): Polinômio em formato binário. 
+            poly (int): Polinômio gerador $G_n$ em formato binário. 
 
         Returns:
             taps (int): Lista com os índices dos taps ativos.
@@ -59,23 +64,39 @@ class EncoderConvolutional:
 
     def calc_free_distance(self):
         r"""
-        Calcula a distância livre do código convolucional, definida como a menor
-        distância de Hamming entre quaisquer duas sequências de saída distintas.
+        Calcula a distância livre $d_{free}$ do código convolucional, definida como a menor distância de Hamming entre quaisquer duas sequências de saída distintas.
 
         Returns:
-            dist (int): Distância livre do código.
+            dist (int): Distância livre $d_{free}$ do codificador convolucional organizado com $G$.
         """
         return self.komm.free_distance()
 
     def encode(self, input_bits):
         r"""
-        Codifica uma sequência binária de entrada $u_t$ utilizando os registradores deslizantes e os taps.
+        Codifica uma sequência binária de entrada $u_t$, retornando as sequências de saida $v_t^{(0)}$ e $v_t^{(1)}$. O processo de codificação pode ser representado pela expressão abaixo.
+
+        $$
+        \begin{equation}
+        \begin{bmatrix} v_t^{(0)} & v_t^{(1)} \end{bmatrix}
+        =
+        \begin{bmatrix}
+        u_{(t)} & u_{(t-1)} & u_{(t-2)} & u_{(t-3)} & u_{(t-4)} & u_{(t-5)} & u_{(t-6)}
+        \end{bmatrix}
+        \cdot
+        \begin{bmatrix} G_{0} & G_{1} \end{bmatrix}^{T}
+        \end{equation}
+        $$
+
+        Sendo: 
+            - $v_t^{(0)}$ e $v_t^{(1)}$: Canais de saída do codificador.
+            - $u_t$: Vetor de bits de entrada.
+            - $G_{0}$ e $G_{1}$: Polinômios geradores do codificador.
 
         Args:
             input_bits (np.ndarray): Vetor de bits $u_t$ de entrada a serem codificados.
 
         Returns:
-            tuple (np.ndarray, np.ndarray): Tupla com os dois canais de saída $v_t^{(0)}$ e $v_t^{(1)}$.
+                tuple (np.ndarray, np.ndarray): Tupla com os dois canais de saída $v_t^{(0)}$ e $v_t^{(1)}$.
         """
         input_bits = np.array(input_bits, dtype=int)
         vt0 = []

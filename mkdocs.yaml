@@ -52,6 +52,7 @@ nav:
       - Filtro Passa-Baixa: api/lpf.md
       - Filtro Casado: api/matchedfilter.md
       - Decisor: api/sampler.md
+      - Viterbi: api/viterbi.md
   - Transmissor: api/transmitter.md
   - Receptor: api/receiver.md
   - Plotter: api/plots.md

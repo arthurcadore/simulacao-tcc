@@ -18,11 +18,6 @@ class Datagram:
         Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
         ![pageplot](../assets/datagrama.svg)
-        
-        <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.2)
-        </div>
 
         Args:
             pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
@@ -34,6 +29,10 @@ class Datagram:
             ValueError: Se o número PCD não estiver entre 0 e 1048575 $(2^{20} - 1)$.
             ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
 
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        </div>
         """
 
         # construtor TX
@@ -73,13 +72,13 @@ class Datagram:
             - $L_{app}$: Comprimento do datagrama em bits 
             - $n$: Número de blocos do datagrama, podendo variar de 1 á 8. 
 
+        Returns:
+            blocks (np.ndarray): Vetor de bits representando os blocos de dados.
+
         <div class="referencia">
         <b>Referência:</b><br>
         AS3-SP-516-274-CNES (seção 3.1.4.2)
         </div>
-
-        Returns:
-            blocks (np.ndarray): Vetor de bits representando os blocos de dados.
         """
 
         length = [24] + [32] * (self.numblocks - 1)
@@ -112,15 +111,14 @@ class Datagram:
             - $b$: Valor do bit do campo $PCD_{num}$.
 
         O campo $PCD_{ID}$ é gerado concatenando os parâmetros gerados, sendo $PCD_{ID} = PCD_{num} \oplus R_{PCD}$.
-        
+
+        Returns:
+            pcd_id (np.ndarray): Vetor de bits contendo o PCD ID e o checksum.       
 
         <div class="referencia">
         <b>Referência:</b><br>
         AS3-SP-516-274-CNES (seção 3.1.4.2)
         </div>
-
-        Returns:
-            pcd_id (np.ndarray): Vetor de bits contendo o PCD ID e o checksum.
         """
 
         bin_str = format(self.pcdnum, '020b')
@@ -160,13 +158,13 @@ class Datagram:
 
         O campo $T_{m}$ é gerado concatenando os parâmetros gerados, sendo $T_{m} = B_{m} \oplus P_{m}$.
 
+        Returns:
+           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
+
         <div class="referencia">
         <b>Referência:</b><br>
         AS3-SP-516-274-CNES (seção 3.1.4.2)
         </div>
-
-        Returns:
-           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
         """
 
         n = self.numblocks - 1
@@ -187,13 +185,13 @@ class Datagram:
             - $E_m$: Comprimento de cauda do datagrama (zeros) adicionada ao final do datagrama. 
             - $n$: Número de blocos do datagrama.
 
+        Returns:
+            tail (np.ndarray): Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).
+            
         <div class="referencia">
         <b>Referência:</b><br>
         AS3-SP-516-274-CNES (seção 3.1.4.3)
         </div>
-
-        Returns:
-            tail (np.ndarray): Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).
         """
 
         tail_pad = [7, 8, 9]
