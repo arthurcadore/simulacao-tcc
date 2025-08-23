@@ -52,7 +52,7 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     t, s = transmitter.run()
 
     # Canal AWGN baseado em Eb/N0
-    add_noise = NoiseEBN0(ebn0_db, bits_per_symbol=2, fs=fs, Rb=Rb)
+    add_noise = NoiseEBN0(ebn0_db, fs=fs, Rb=Rb)
     s_noisy = add_noise.add_noise(s)
 
     receiver = Receiver(fs=fs, Rb=Rb, output_print=False, output_plot=False)
@@ -86,38 +86,24 @@ def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
     # Mapeamento QPSK normalizado (Es=1, Gray coding)
     I = (2*bI - 1) / np.sqrt(2)
     Q = (2*bQ - 1) / np.sqrt(2)
-    s = I + 1j*Q
+    signal = I + 1j*Q
 
     # Cálculo do Eb/N0
     ebn0_lin = 10 ** (ebn0_db / 10)
+    signal_power = np.mean(np.abs(signal)**2)
+    bit_energy = signal_power / bits_por_simbolo
+    noise_density = bit_energy / ebn0_lin
+    variance = noise_density / 2
+    sigma = np.sqrt(variance)
 
-    # Energia média por símbolo
-    Es = np.mean(np.abs(s)**2)
+    noise = rng.normal(0.0, sigma, size=signal.shape) + 1j * rng.normal(0.0, sigma, size=signal.shape)
+    r = signal + noise
 
-    # Energia por bit
-    Eb = Es / bits_por_simbolo
-
-    # Densidade espectral de potência do ruído
-    N0 = Eb / ebn0_lin
-
-    # Variância por dimensão (I e Q)
-    sigma2 = N0 / 2
-    sigma = np.sqrt(sigma2)
-
-    # Ruído complexo AWGN
-    n = rng.normal(0.0, sigma, size=s.shape) + 1j * rng.normal(0.0, sigma, size=s.shape)
-
-    # Sinal recebido
-    r = s + n
-
-    # Decisão por quadrante
     bI_dec = (r.real >= 0).astype(int)
     bQ_dec = (r.imag >= 0).astype(int)
 
-    # Contagem de erros
     erros = np.count_nonzero(bI_dec != bI) + np.count_nonzero(bQ_dec != bQ)
     ber = erros / (2 * num_bits)
-
     return ber
 
 

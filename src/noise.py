@@ -104,7 +104,7 @@ class NoiseEBN0:
         A densidade espectral de ruído $N_0$ é dada por:
 
         $$
-        N_0 = \frac{\left[ \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b} \right]}{10^{\frac{Eb/N_0}{10}}}
+        N_0 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b \cdot 10^{\frac{Eb/N_0}{10}}}
         $$
 
         Sendo: 
@@ -121,6 +121,12 @@ class NoiseEBN0:
 
         Exemplo:
             ![pageplot](assets/example_noise_gaussian_ebn0.svg)
+
+        <div class="referencia">
+          <b>Referência:</b>
+          <p>Digital communications / John G. Proakis, Masoud Salehi.—5th ed. (pg. 283)</p>
+          <p>https://rwnobrega.page/posts/snr/</p>
+        </div>
         """
 
         self.signal_power = np.mean(np.abs(signal)**2)
