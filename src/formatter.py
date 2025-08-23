@@ -62,7 +62,7 @@ class Formatter:
            rc (np.ndarray): Pulso RRC.
 
         Exemplo: 
-            - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
+            - ![pageplot](assets/example_formatter_impulse.svg)
         """
         self.t_rc = np.array(self.t_rc, dtype=float) 
         rc = np.zeros_like(self.t_rc)

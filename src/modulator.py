@@ -10,10 +10,16 @@ from encoder import Encoder
 from plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
-    def __init__(self, fc, fs):
+    def __init__(self, fc, fs=128_000):
         r"""
-        Inicializa uma instância do modulador IQ.
-        O modulador IQ é responsável por modular os sinais I e Q em uma portadora de frequência específica.
+        Inicializa uma instância do modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
+
+        ![pageplot](../assets/modulador.svg)
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.2.5.3)
+        </div>
 
         Args:
             fc (float): Frequência da portadora.
@@ -33,19 +39,19 @@ class Modulator:
 
     def modulate(self, i_signal, q_signal):
         r"""
-        Modula os sinais I e Q em uma portadora de frequência específica. O processo de modulação é dado pela expressão:
+        Modula em QPSK os sinais $d_I$ e $d_Q$ com uma portadora $f_c$, resultando no sinal modulado $s(t)$. O processo de modulação é dado pela expressão abaixo.
 
         $$
-            s(t) = I(t) \cdot \cos(2\pi f_c t) - Q(t) \cdot \sin(2\pi f_c t)
+            s(t) = d_I(t) \cdot \cos(2\pi f_c t) - d_Q(t) \cdot \sin(2\pi f_c t)
         $$
 
         Args:
-            i_signal (np.ndarray): Sinal I a ser modulado.
-            q_signal (np.ndarray): Sinal Q a ser modulado.
+            i_signal (np.ndarray): Sinal $d_I$ correspondente ao canal $I$ a ser modulado.
+            q_signal (np.ndarray): Sinal $d_Q$ correspondente ao canal $Q$ a ser modulado.
 
         Returns:
-            t (np.ndarray): Vetor de tempo $t$ correspondente ao sinal modulado.
             modulated_signal (np.ndarray): Sinal modulado $s(t)$ resultante.
+            t (np.ndarray): Vetor de tempo $t$ correspondente ao sinal modulado.
 
         Raises:
             ValueError: Se os sinais I e Q não tiverem o mesmo tamanho.
@@ -63,37 +69,44 @@ class Modulator:
     
     def demodulate(self, modulated_signal):
         r"""
-        Demodula o sinal modulado para recuperar os sinais I e Q originais. 
-
-        Para o processo de demodulação, utilizamos os sinais de portadora $x_I(t)$ e $y_Q(t)$ definidos como:
+        Demodula o sinal modulado em QPSK. Para o processo de demodulação, utiliza-se duas componentes auxiliares $x_I(t)$ e $y_Q(t)$ definidas pelas expressões abaixo.
 
         $$
-            x_I(t) = 2 \cos(2\pi f_c t)
+        \begin{aligned}
+        x_I(t) &= 2 \cos(2\pi f_c t), &\quad
+        y_Q(t) &= 2 \sin(2\pi f_c t)
+        \end{aligned}
+        $$
+
+        Sendo: 
+            - $x_I(t)$ e $y_Q(t)$: Componentes auxiliares utilizadas para a demodulação.
+            - $f_c$: Frequência da portadora.
+            - $t$: Vetor de tempo.
+
+        A partir das componentes criadas é realizado o processo de demodulação (translação em frequência), que resulta em duas componentes, uma em banda base e outra em $2f_c$, conforme as expressões abaixo.
+
+        $$
+        x_I'(t) = s(t) \cdot x_I(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
         $$
 
         $$
-            y_Q(t) = 2 \sin(2\pi f_c t)
+        y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
         $$
 
-        Nota: 
-            - A constante 2 é utilizada para manter a amplitude do sinal original, devido a translação do sinal modulado.
-        
-        O processo resulta em dois sinais, contendo uma componente em banda base e outra em banda $2f_c$: 
-
-        $$
-        x_I'(t) = s(t) \cdot x_I(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
-        $$
-
-        $$
-        y_Q'(t) = -s(t) \cdot y_Q(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
-        $$
+        Sendo: 
+            - $x_I'(t)$ e $y_Q'(t)$: Componentes resultantes da demodulação.
+            - $x_I(t)$ e $y_Q(t)$: Componentes auxiliares utilizadas para a demodulação.
+            - $s(t)$: Sinal modulado.
+            - $d_I(t)$ e $d_Q(t)$: Sinais formatados correspondentes aos canais $I$ e $Q$.
+            - $f_c$: Frequência da portadora.
+            - $t$: Vetor de tempo.
 
         Args:
             modulated_signal (np.ndarray): Sinal modulado $s(t)$ a ser demodulado.
 
         Returns:
-            i_signal (np.ndarray): Sinal I recuperado.
-            q_signal (np.ndarray): Sinal Q recuperado.
+            i_signal (np.ndarray): Sinal $x_I'(t)$ recuperado.
+            q_signal (np.ndarray): Sinal $y_Q'(t)$ recuperado.
         
         Raises:
             ValueError: Se o sinal modulado estiver vazio.
