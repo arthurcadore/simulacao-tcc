@@ -15,7 +15,7 @@ from plotter import BitsPlot, create_figure, save_figure
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
         r"""
-        Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama ARGOS-3 é ilustrado na figura abaixo.
+        Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
         ![pageplot](../assets/datagrama.svg)
         
@@ -26,7 +26,7 @@ class Datagram:
 
         Args:
             pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
-            numblocks (int): Quantidade de blocos de dados (1 a 8). Necessário para o modo TX.
+            numblocks (int): Quantidade de blocos de dados. Necessário para o modo TX.
             streambits (np.ndarray): Sequência de bits do datagrama. Necessário para o modo RX.
         
         Raises:
@@ -61,17 +61,17 @@ class Datagram:
 
     def generate_blocks(self):
         r"""
-        Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. Para o padrão ARGOS-3, a quantidade de blocos pode variar de 1 á 8 blocos. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. 
-
-        Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão: 
+        Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. 
+        
+        A quantidade de blocos pode variar de 1 á 8. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão abaixo.
 
         $$
         L_{app} = 24 + 32 \cdot (n-1)
         $$
 
         Sendo: 
-            - L: comprimento do datagrama em bits 
-            - n: número de blocos
+            - $L_{app}$: Comprimento do datagrama em bits 
+            - $n$: Número de blocos do datagrama, podendo variar de 1 á 8. 
 
         <div class="referencia">
         <b>Referência:</b><br>
@@ -88,7 +88,31 @@ class Datagram:
 
     def generate_pcdid(self):
         r"""
-        Gera o campo PCD ID a partir do número PCD, incluindo um checksum de 8 bits.
+        Gera o campo $PCD_{ID}$ a partir do número PCD ($PCD_{num}$), Primeiro gera-se a sequência de 20 bits correspondente ao número PCD.
+
+        $$
+          PCDnum_{10} \mapsto PCDnum_{2}  
+        $$
+
+        Sendo: 
+            - $PCDnum_{10}$: Valor decimal do campo $PCD_{num}$, podendo variar de 0 á 1048575 $(2^{20} - 1)$.
+            - $PCDnum_{2}$: Sequência de 20 bits correspondente ao valor de $PCD_{num}$.
+
+        Em seguida, é calculado o checksum, $R_{PCD}$, do campo $PCD_{num}$, obtido através da soma dos bits e aplicação da operação módulo 256 ($2^8$).
+
+        $$
+        \begin{equation}
+        R_{PCD} = \left( \sum_{i=0}^{19} b_i \cdot 2^i \right) \bmod 256
+        \end{equation}
+        $$
+
+        Sendo: 
+            - $R_{PCD}$: Sequência de 8 bits correspondente ao checksum do campo $PCD_{num}$.
+            - $i$: Indice do bit do campo $PCD_{num}$.
+            - $b$: Valor do bit do campo $PCD_{num}$.
+
+        O campo $PCD_{ID}$ é gerado concatenando os parâmetros gerados, sendo $PCD_{ID} = PCD_{num} \oplus R_{PCD}$.
+        
 
         <div class="referencia">
         <b>Referência:</b><br>
@@ -108,7 +132,33 @@ class Datagram:
 
     def generate_msglength(self):
         r"""
-        Gera o campo Message Length com base na quantidade de blocos e calcula o bit de paridade.
+        Gera o valor do comprimento de mensagem $T_{m}$ com base na quantidade de blocos $n$. Primeiro, deve-se calcular a sequência de bits $B_m$. 
+        
+         $$
+           Bm_{10} = (n - 1) \mapsto Bm_{2} 
+         $$
+
+        Sendo: 
+            - $B_m$: Sequência de três bits correspondendo ao tamanho de mensagem. 
+            - $n$: Número de blocos do datagrama, podendo variar de 1 á 8. 
+
+        Em seguida, é calculado o quarto bit $P_m$ (bit de paridade).
+
+        $$
+        \begin{equation}
+            P_m = 
+            \begin{cases}
+            1, & \text{se } \left[ \sum_{i=0}^{B_m} b_i = 0 \right]\mod 2  \\
+            0, & \text{se } \left[ \sum_{i=0}^{B_m} b_i = 1 \right]\mod 2 
+            \end{cases} \text{.}
+        \end{equation}
+        $$
+        
+        Sendo: 
+            - $P_m$: Bit de paridade.
+            - $i$: Indice de bit do campo $B_m$.
+
+        O campo $T_{m}$ é gerado concatenando os parâmetros gerados, sendo $T_{m} = B_{m} \oplus P_{m}$.
 
         <div class="referencia">
         <b>Referência:</b><br>
@@ -127,7 +177,15 @@ class Datagram:
     
     def generate_tail(self):
         r"""
-        Gera o campo Tail (cauda), utilizado para esvaziar o registrador do codificador convolucional.
+        Gera a cauda do datagrama $E_m$, utilizado para limpar o registrador do codificador convolucional.
+
+        $$
+        E_m = 7 + [(n - 1) \bmod 3]
+        $$
+
+        Sendo: 
+            - $E_m$: Comprimento de cauda do datagrama (zeros) adicionada ao final do datagrama. 
+            - $n$: Número de blocos do datagrama.
 
         <div class="referencia">
         <b>Referência:</b><br>
@@ -144,38 +202,39 @@ class Datagram:
 
     def parse_datagram(self):
         r"""
-        Faz o parsing da sequência de bits do datagrama, extraindo campos e validando integridade.
+        Interpreta a sequência de bits do datagrama, extraindo campos e validando integridade.
         
         Returns:
             str (json): Objeto JSON contendo a representação estruturada do datagrama.
         
         Raises:
-            ValueError: Caso haja falha nas validações de paridade de Message Length.
-            ValueError: Caso haja falha no checksum do campo PCD ID.
-            ValueError: Se a sequência de bits não for válida ou não puder ser convertida para json.
+            ValueError: Caso haja falha na validação de paridade do comprimento de mensagem $T_m$.
+            ValueError: Caso haja falha no checksum do campo $PCD_{ID}$. 
+            ValueError: Se a sequência de bits de aplicação não corresponder ao comprimento de $T_m$.
 
-        Examples:
-
-                >>> datagram = Datagram(streambits=bits)
-                >>> print(datagram.parse_datagram())
-                    {
-                      "msglength": 2,
-                      "pcdid": 1234,
-                      "data": {
-                        "bloco_1": {
-                          "sensor_1": 42,
-                          "sensor_2": 147,
-                          "sensor_3": 75
-                        },
-                        "bloco_2": {
-                          "sensor_1": 138,
-                          "sensor_2": 7,
-                          "sensor_3": 134,
-                          "sensor_4": 182
-                        }
-                      },
-                      "tail": 8
-                    }
+        Exemplo:
+            ```python
+            >>> datagram = Datagram(streambits=bits)
+            >>> print(datagram.parse_datagram())
+            {
+              "msglength": 2,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 42,
+                  "sensor_2": 147,
+                  "sensor_3": 75
+                },
+                "bloco_2": {
+                  "sensor_1": 138,
+                  "sensor_2": 7,
+                  "sensor_3": 134,
+                  "sensor_4": 182
+                }
+              },
+              "tail": 8
+            }
+            ```
         """
 
         msglength_bits = self.streambits[:4]

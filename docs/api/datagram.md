@@ -1,5 +1,3 @@
-# Datagram
-
 ::: datagram.Datagram
     options:
         extra:
