@@ -45,6 +45,12 @@ class Modulator:
             s(t) = d_I(t) \cdot \cos(2\pi f_c t) - d_Q(t) \cdot \sin(2\pi f_c t)
         $$
 
+        Sendo: 
+            - $s(t)$: Sinal modulado.
+            - $d_I(t)$ e $d_Q(t)$: Sinais formatados correspondentes aos canais $I$ e $Q$.
+            - $f_c$: Frequência da portadora.
+            - $t$: Vetor de tempo.
+
         Args:
             i_signal (np.ndarray): Sinal $d_I$ correspondente ao canal $I$ a ser modulado.
             q_signal (np.ndarray): Sinal $d_Q$ correspondente ao canal $Q$ a ser modulado.

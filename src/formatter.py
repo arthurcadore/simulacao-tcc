@@ -91,7 +91,7 @@ class Formatter:
            d(t) = \sum_{n} x[n] \cdot g(t - nT_b)
         $$
 
-        Nota: 
+        Sendo: 
             - $d(t)$: Sinal formatado de saída.
             - $x$: Vetor de símbolos de entrada.
             - $g(t)$: Pulso formatador.

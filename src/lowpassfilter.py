@@ -66,6 +66,11 @@ class LPF:
         h(t) = \mathcal{L}^{-1}\left\{H(f)\right\}
         $$
 
+        Sendo:
+            - $h(t)$: Resposta ao impulso do filtro.
+            - $H(f)$: Função de transferência do filtro.
+            - $\mathcal{L}^{-1}$: Transformada de Laplace inversa.
+
         Args: 
             impulse_len (int): Comprimento do vetor de impulso.
 
