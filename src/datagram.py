@@ -15,12 +15,14 @@ from plotter import BitsPlot, create_figure, save_figure
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
         r"""
-        Inicializa uma instância do datagrama. 
+        Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama ARGOS-3 é ilustrado na figura abaixo.
 
         ![pageplot](../assets/datagrama.svg)
         
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.1.4).
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        </div>
 
         Args:
             pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
@@ -59,10 +61,22 @@ class Datagram:
 
     def generate_blocks(self):
         r"""
-        Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos.
+        Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. Para o padrão ARGOS-3, a quantidade de blocos pode variar de 1 á 8 blocos. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. 
 
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.1.4.2)
+        Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão: 
+
+        $$
+        L_{app} = 24 + 32 \cdot (n-1)
+        $$
+
+        Sendo: 
+            - L: comprimento do datagrama em bits 
+            - n: número de blocos
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        </div>
 
         Returns:
             blocks (np.ndarray): Vetor de bits representando os blocos de dados.
@@ -76,8 +90,10 @@ class Datagram:
         r"""
         Gera o campo PCD ID a partir do número PCD, incluindo um checksum de 8 bits.
 
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        </div>
 
         Returns:
             pcd_id (np.ndarray): Vetor de bits contendo o PCD ID e o checksum.
@@ -94,8 +110,10 @@ class Datagram:
         r"""
         Gera o campo Message Length com base na quantidade de blocos e calcula o bit de paridade.
 
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        </div>
 
         Returns:
            msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
@@ -111,8 +129,10 @@ class Datagram:
         r"""
         Gera o campo Tail (cauda), utilizado para esvaziar o registrador do codificador convolucional.
 
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.1.4.3)
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1.4.3)
+        </div>
 
         Returns:
             tail (np.ndarray): Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).

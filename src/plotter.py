@@ -742,8 +742,6 @@ class PhasePlot(BasePlot):
         signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
         labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
 
-    Exemplos:
-        - Fase dos sinais IQ
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -810,7 +808,7 @@ class BersnrPlot(BasePlot):
         labels (Optional[List[str]]): Rótulos para as curvas (por exemplo, diferentes condições ou algoritmos)
 
     Exemplos:
-        - Curva de desempenho de modulação
+        - Argos e QPSK: ![pageplot](assets/ber_vs_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -826,9 +824,6 @@ class BersnrPlot(BasePlot):
         self.labels = kwargs.get("labels", [f"Curva {i+1}" for i in range(len(ber_values))])
 
     def plot(self, ylim: Optional[Tuple[float, float]] = None) -> None:
-        """
-        Método para gerar o gráfico \( E_b/N_0 \) vs \( BER \).
-        """
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
 

@@ -19,11 +19,10 @@ from plotter import BersnrPlot, create_figure, save_figure
 
 def repetitions_for_ebn0(ebn0: float) -> int:
     r"""
-    Define o número de repetições em função do Eb/N0 (progressão).
-    Usa interpolação linear entre pontos de referência.
+    Define o número de repetições em função do $Eb/N0$, usa interpolação linear entre pontos de referência.
     """
-    ebn0_ref = [0, 1, 8]
-    reps_ref = [500, 1000, 40000]
+    ebn0_ref = [0, 1, 4, 6, 8]
+    reps_ref = [2000, 4000, 20000, 40000, 60000]
 
     bean = np.interp(ebn0, ebn0_ref, reps_ref)
 
@@ -35,10 +34,10 @@ def repetitions_for_ebn0(ebn0: float) -> int:
 
 def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     r"""
-    Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado Eb/N0.
+    Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado $Eb/N0$.
 
     Args: 
-        ebn0_db (float): Relação Eb/N0 em decibéis.
+        ebn0_db (float): Relação $Eb/N0$ em decibéis.
         numblocks (int): Número de blocos a serem transmitidos.
         fs (int): Frequência de amostragem.
         Rb (int): Taxa de bits. 
@@ -65,7 +64,7 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     return ber
 
 # TODO: Alterar função para operar usando add_noise
-def simulate_qpsk(ebn0_db, num_bits=100000, bits_por_simbolo=2, rng=None):
+def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
     r"""
     Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.
 
@@ -132,6 +131,9 @@ def run(EbN0_values=np.arange(0, 12, 0.5), num_workers=28):
 
     Returns:
         list: Lista de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].
+
+    Exemplos:
+        - Argos e QPSK: ![pageplot](assets/ber_vs_ebn0.svg)
     """
     results = []
     ber_accumulator_argos = {ebn0: [] for ebn0 in EbN0_values}
