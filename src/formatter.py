@@ -52,7 +52,7 @@ class Formatter:
             g(t) = \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
         $$
 
-        Onde: 
+        Sendo: 
             - $g(t)$: Pulso formatador $RRC$ no dominio do tempo.
             - $\alpha$: Fator de roll-off do pulso.
             - $T_b$: Período de bit.

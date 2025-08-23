@@ -49,24 +49,25 @@ class MatchedFilter:
 
     def rrc_inverted_pulse(self):
         r"""
-        Gera o pulso Root Raised Cosine (RRC) invertido para a transmissão de sinais digitais. O pulso RRC é definido como:
+        Gera o pulso Root Raised Cosine ($RRC$) invertido $-g(t)$ para filtragem casada do sinal de entrada.
+        
         $$
         \begin{equation}
-            g(t) = \frac{\sin(\pi \frac{t}{T_b})}{\pi \frac{t}{T_b}} \cdot \frac{\cos(\pi \alpha \frac{t}{T_b})}{1 - (2\alpha \frac{t}{T_b})^2}
+            -g(t) = - \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
         \end{equation}
         $$
 
-        Nota:
-            - $g(t)$ é o pulso RRC invertido,
-            - $\alpha$ é o fator de roll-off, 
-            - $T_b$ é o período de bit, 
-            - $t$ é o tempo.
-
-        Args:
-            None
+        Sendo: 
+            - $-g(t)$: Pulso formatador $RRC$ invertido no dominio do tempo.
+            - $\alpha$: Fator de roll-off do pulso.
+            - $T_b$: Período de bit.
+            - $t$: Vetor de tempo.
 
         Returns:
-           rc (np.ndarray): Pulso RRC invertido.
+           rc (np.ndarray): Pulso RRC invertido $-g(t)$.
+
+        Exemplo: 
+            ![pageplot](assets/example_mf_impulse.svg)
         """
         self.t_rc = np.array(self.t_rc, dtype=float) 
         rc = np.zeros_like(self.t_rc)
@@ -91,13 +92,14 @@ class MatchedFilter:
         return rc
 
     def calc_impulse_response(self, impulse_len=512):
-        """
+        r"""
         Calcula a resposta ao impulso do filtro casado.
-                                      
+
+        Args:
+            impulse_len (int): Comprimento do vetor de impulso.
+
         Returns:
-            tuple: (impulse_response, t_impulse) onde:
-                - impulse_response: Resposta ao impulso do filtro
-                - t_impulse: Vetor de tempo correspondente
+            impulse_response (tuple[np.ndarray, np.ndarray]): Resposta ao impulso e vetor de tempo.
         """
         # Usa o comprimento do pulso RRC como base para garantir que capturamos toda a resposta
         pulse_len = len(self.g)
@@ -115,6 +117,24 @@ class MatchedFilter:
         return impulse_response, t_impulse
         
     def apply_filter(self, signal):
+        r"""
+        Aplica o filtro casado com resposta ao impulso $-g(t)$ ao sinal de entrada $s(t)$. O processo de filtragem é dado pela expressão abaixo. 
+
+        $$
+            x(t) = s(t) \ast h(t)
+        $$
+
+        Sendo: 
+            - $x(t)$: Sinal filtrado.
+            - $s(t)$: Sinal de entrada.
+            - $-g(t)$: Pulso formatador $RRC$ invertido.
+
+        Args:
+            signal (np.ndarray): Sinal de entrada $s(t)$.
+
+        Returns:
+            signal_filtered (np.ndarray): Sinal filtrado $x(t)$.
+        """
         return np.convolve(signal, self.impulse_response, mode='same')
 
 
