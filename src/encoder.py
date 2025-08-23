@@ -14,13 +14,15 @@ from plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
 class Encoder:
     def __init__(self, method):
         r"""
-        Inicializa uma instância do codificador com o método especificado.
+        Inicializa o codificador de linha com o método de codificação especificado. 
 
-        Referência:
-            AS3-SP-516-274-CNES (seção 3.2.4)
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.2.4)
+        </div>
 
         Args:
-            method (str): Método de codificação ('NRZ' ou 'Manchester').
+            method (str): Método de codificação desejado, $NRZ$ ou $Manchester$.
 
         Raises:
             ValueError: Se o método de codificação não for suportado.
@@ -38,13 +40,35 @@ class Encoder:
 
     def encode(self, bitstream):
         r"""
-        Codifica o vetor de bits usando o método especificado na inicialização.
+        Codifica o vetor de bits usando o método especificado na inicialização. O processo de codificação de linha é dado pelas expressões abaixo correspondente a cada método. 
+
+        $$
+        \begin{equation}
+        \begin{aligned}
+        X_{\text{NRZ}}[n] &= 
+        \begin{cases}
+        11, & \text{se } X_n = 1 \\
+        00, & \text{se } X_n = 0 ,
+        \end{cases}
+        &\quad\quad
+        Y_{\text{MAN}}[n] &=
+        \begin{cases}
+        10, & \text{se } Y_n = 1 \\
+        01, & \text{se } Y_n = 0 .
+        \end{cases}
+        \end{aligned}
+        \end{equation}
+        $$
+
+        Sendo:
+            - $X_n$ e $Y_n$: Vetor de bits de entrada.
+            - $X_{\text{NRZ}}[n]$ e $Y_{\text{MAN}}[n]$: Vetor de simbolos de saída.
 
         Args:
             bitstream (np.ndarray): Vetor de bits a ser codificado.
 
         Returns:
-            out (np.ndarray): Vetor de bits codificado.
+            out (np.ndarray): Vetor de simbolos codificados.
         """
         out = np.empty(bitstream.size * 2, dtype=int)
 
@@ -74,10 +98,32 @@ class Encoder:
 
     def decode(self, encoded_stream):
         r"""
-        Decodifica o vetor codificado de volta para o vetor original.
+        Decodifica o vetor de simbolos usando o método especificado na inicialização. O processo de decodificação de linha é dado pelas expressões abaixo correspondente a cada método.
+
+        $$
+        \begin{equation}
+        \begin{aligned}
+        X_n &= 
+        \begin{cases}
+        1, & \text{se } X_{\text{NRZ}}[n] = 11 \\
+        0, & \text{se } X_{\text{NRZ}}[n] = 00
+        \end{cases}
+        &\quad\quad
+        Y_n &=
+        \begin{cases}
+        1, & \text{se } Y_{\text{MAN}}[n] = 10 \\
+        0, & \text{se } Y_{\text{MAN}}[n] = 01
+        \end{cases}
+        \end{aligned}
+        \end{equation}
+        $$
+        
+        Sendo: 
+            - $X_{\text{NRZ}}[n]$ e $Y_{\text{MAN}}[n]$: Vetor de simbolos de entrada
+            - $X_n$ e $Y_n$: Vetor de bits de saída.
 
         Args:
-            encoded_stream (np.ndarray): Vetor codificado a ser decodificado.
+            encoded_stream (np.ndarray): Vetor codificado.
 
         Returns:
             out (np.ndarray): Vetor de bits decodificado.

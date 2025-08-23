@@ -46,7 +46,7 @@ nav:
       - Preâmbulo: api/preamble.md
       - Multiplexador: api/multiplexer.md
       - Codificador NRZ e MAN: api/encoder.md
-      - Formatador RRC: api/formatter.md
+      - Formatador: api/formatter.md
       - Modulador: api/modulator.md
       - Noise: api/noise.md
       - Filtro Passa-Baixa: api/lpf.md

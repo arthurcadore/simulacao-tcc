@@ -1,5 +1,3 @@
-# Convolutional Encoder
-
 ::: convolutional.EncoderConvolutional
     options:
         extra:

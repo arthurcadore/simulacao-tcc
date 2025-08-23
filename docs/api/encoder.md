@@ -1,5 +1,3 @@
-# Encoder
-
 ::: encoder.Encoder
     options:
         extra:

@@ -1,5 +1,3 @@
-# Preamble
-
 ::: preamble.Preamble
     options:
         extra:

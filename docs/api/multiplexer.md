@@ -1,5 +1,3 @@
-# Multiplexador
-
 ::: multiplexer.Multiplexer
     options:
         extra:

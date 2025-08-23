@@ -11,14 +11,14 @@ from plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):
         r"""
-        Inicializa uma instância de formatador de pulso. O pulso formatador é usado para preparar os símbolos nos canais I e Q para transmissão.
+        Inicializa uma instância de formatador, utilizado preparar os símbolos para modulação.
 
         Args:
             alpha (float): Fator de roll-off do pulso RRC.
             fs (int): Frequência de amostragem.
             Rb (int): Taxa de bits.
             span (int): Duração do pulso em termos de períodos de bit.
-            type (str): Tipo de pulso, atualmente apenas "RRC" é suportado.
+            type (str): Tipo de pulso, atualmente apenas $RRC$ é suportado.
 
         Raises:
             ValueError: Se o tipo de pulso não for suportado.
@@ -46,24 +46,23 @@ class Formatter:
 
     def rrc_pulse(self):
         r"""
-        Gera o pulso Root Raised Cosine (RRC) para a transmissão de sinais digitais. O pulso RRC é definido como:
+        Gera o pulso Root Raised Cosine ($RRC$). O pulso $RRC$ no dominio do tempo é definido pela expressão abaixo.
+
         $$
-        \begin{equation}
-            g(t) = \frac{\sin(\pi \frac{t}{T_b})}{\pi \frac{t}{T_b}} \cdot \frac{\cos(\pi \alpha \frac{t}{T_b})}{1 - (2\alpha \frac{t}{T_b})^2}
-        \end{equation}
+            g(t) = \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
         $$
 
-        Nota:
-            - $g(t)$ é o pulso formatador,
-            - $\alpha$ é o fator de roll-off, 
-            - $T_b$ é o período de bit, 
-            - $t$ é o tempo.
-
-        Args:
-            None
+        Onde: 
+            - $g(t)$: Pulso formatador $RRC$ no dominio do tempo.
+            - $\alpha$: Fator de roll-off do pulso.
+            - $T_b$: Período de bit.
+            - $t$: Vetor de tempo.
 
         Returns:
            rc (np.ndarray): Pulso RRC.
+
+        Exemplo: 
+            - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
         """
         self.t_rc = np.array(self.t_rc, dtype=float) 
         rc = np.zeros_like(self.t_rc)
@@ -93,11 +92,11 @@ class Formatter:
         $$
 
         Nota: 
-            - $d(t)$ é o sinal formatado de saída,
-            - $x$ é o vetor de símbolos de entrada,
-            - $g(t)$ é o pulso formatador,
-            - $n$ é o índice de tempo,
-            - $T_b$ é o período de bit.
+            - $d(t)$: Sinal formatado de saída.
+            - $x$: Vetor de símbolos de entrada.
+            - $g(t)$: Pulso formatador.
+            - $n$: Indice de bit.
+            - $T_b$: Período de bit.
 
         Args:
             symbols (np.ndarray): Vetor de símbolos a serem formatados.

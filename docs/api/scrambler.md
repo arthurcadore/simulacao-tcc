@@ -1,5 +1,3 @@
-# Scrambler
-
 ::: scrambler.Scrambler
     options:
         extra:

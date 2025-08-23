@@ -1,5 +1,3 @@
-# Formatter
-
 ::: formatter.Formatter
     options:
         extra:
