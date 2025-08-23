@@ -588,7 +588,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -791,6 +791,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -1032,7 +1055,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa o LPF (Low-Pass Filter).</p>
+        <p>Inicializa uma instância de filtro passa-baixa com base em uma frequência de corte <span class="arithmatex">\(f_{cut}\)</span> e uma ordem <span class="arithmatex">\(N\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1055,7 +1078,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de corte do filtro.</p>
+                <p>Frequência de corte <span class="arithmatex">\(f_{cut}\)</span> do filtro.</p>
               </div>
             </td>
             <td>
@@ -1071,7 +1094,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Ordem do filtro.</p>
+                <p>Ordem <span class="arithmatex">\(N\)</span> do filtro.</p>
               </div>
             </td>
             <td>
@@ -1087,7 +1110,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem. Padrão é 128000.</p>
+                <p>Frequência de amostragem <span class="arithmatex">\(f_s\)</span>. </p>
               </div>
             </td>
             <td>
@@ -1114,6 +1137,29 @@
     </table>
 
 
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se o tipo de filtro for inválido.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
     </div>
 
 </div>
@@ -1129,8 +1175,20 @@
 
     <div class="doc doc-contents ">
 
-        <p>Calcula os coeficientes do filtro Butterworth.</p>
+        <p>Calcula os coeficientes do filtro Butterworth utilizando a biblioteca <code>scipy.signal</code>. A função de transferência contínua <span class="arithmatex">\(H(s)\)</span> de um filtro Butterworth é dada pela expressão abaixo.</p>
+<div class="arithmatex">\[
+H(s) = \frac{1}{1 + \left(\frac{s}{2 \pi f_{cut}}\right)^{2n}}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s\)</span>: Variável complexa no domínio de Laplace.</li>
+<li><span class="arithmatex">\(2 \pi f_{cut}\)</span>: Frequência angular de corte do filtro.</li>
+<li><span class="arithmatex">\(n\)</span>: Ordem do filtro.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1177,7 +1235,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Coeficientes b e a do filtro Butterworth.</p>
+                <p>Coeficientes <span class="arithmatex">\(b\)</span> e <span class="arithmatex">\(a\)</span> correspondentes à função de transferência do filtro Butterworth.</p>
               </div>
             </td>
           </tr>
@@ -1200,7 +1258,10 @@
 
     <div class="doc doc-contents ">
 
-        <p>Calcula a resposta ao impulso do filtro.</p>
+        <p>Para obter a resposta ao impulso no dominio do tempo, um impulso unitário é aplicado como entrada. Para um filtro Butterworth, o calculo é dado pela expressão abaixo. </p>
+<div class="arithmatex">\[
+h(t) = \mathcal{L}^{-1}\left\{H(f)\right\}
+\]</div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1223,7 +1284,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Comprimento do vetor de impulso. Padrão é 1024.</p>
+                <p>Comprimento do vetor de impulso.</p>
               </div>
             </td>
             <td>
@@ -1244,7 +1305,8 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>tuple</code></td>            <td>
+<td><code>impulse_response</code></td>            <td>
+                  <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="numpy.ndarray">ndarray</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1255,6 +1317,11 @@
       </tbody>
     </table>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_lpf_impulse.svg" /></p>
+</details>
 
     </div>
 
@@ -1271,8 +1338,20 @@
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro passa-baixa ao sinal de entrada.</p>
+        <p>Aplica o filtro passa-baixa com resposta ao impulso <span class="arithmatex">\(h(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>, utilizando a função <code>scipy.signal.filtfilt</code>. O processo de filtragem é dado pela expressão abaixo. </p>
+<div class="arithmatex">\[
+    x(t) = s(t) \ast h(t)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(x(t)\)</span>: Sinal filtrado.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada.</li>
+<li><span class="arithmatex">\(h(t)\)</span>: Resposta ao impulso do filtro.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1294,7 +1373,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal de entrada a ser filtrado.</p>
+                <p>Sinal de entrada <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1309,17 +1388,18 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>signal_filtered</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>np.ndarray: Sinal filtrado.</p>
+                <p>Sinal filtrado <span class="arithmatex">\(x(t)\)</span>.</p>
               </div>
             </td>
           </tr>

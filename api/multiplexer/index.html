@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#multiplexador" class="md-skip">
+        <a href="#multiplexer.Multiplexer" class="md-skip">
           Skip to content
         </a>
       
@@ -543,8 +543,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -576,8 +574,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -657,7 +653,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -773,6 +769,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -973,8 +992,7 @@
   
 
 
-<h1 id="multiplexador">Multiplexador</h1>
-
+  <h1>Multiplexador</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1014,7 +1032,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância do multiplexador.</p>
+        <p>Inicializa o multiplexador no padrão ARGOS-3.</p>
 
 
     </div>
@@ -1025,14 +1043,19 @@
 
 
 <h2 id="multiplexer.Multiplexer.concatenate" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">concatenate</span><span class="p">(</span><span class="n">I1</span><span class="p">,</span> <span class="n">Q1</span><span class="p">,</span> <span class="n">I2</span><span class="p">,</span> <span class="n">Q2</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">concatenate</span><span class="p">(</span><span class="n">SI</span><span class="p">,</span> <span class="n">SQ</span><span class="p">,</span> <span class="n">Xn</span><span class="p">,</span> <span class="n">Yn</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Concatena os vetores I e Q de dois canais, retornando os vetores concatenados.</p>
+        <p>Concatena os vetores <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span> de entrada, com <span class="arithmatex">\(S_I\)</span> e <span class="arithmatex">\(S_Q\)</span>, retornando os vetores concatenados <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span>. O processo de multiplexação é dado pela expressão abaixo.</p>
+<div class="arithmatex">\[
+\begin{align}
+X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
+\end{align}
+\]</div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1048,14 +1071,14 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>I1</code>
+                <code>SI</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor I do primeiro canal.</p>
+                <p>Vetor de entrada <span class="arithmatex">\(S_I\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1064,14 +1087,14 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>Q1</code>
+                <code>SQ</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor Q do primeiro canal.</p>
+                <p>Vetor de entrada <span class="arithmatex">\(S_Q\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1080,14 +1103,14 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>I2</code>
+                <code>Xn</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor I do segundo canal.</p>
+                <p>Vetor de entrada <span class="arithmatex">\(X_n\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1096,14 +1119,14 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>Q2</code>
+                <code>Yn</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor Q do segundo canal.</p>
+                <p>Vetor de entrada <span class="arithmatex">\(Y_n\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1124,22 +1147,22 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>I</code></td>            <td>
+<td><code>Xn</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor I concatenado.</p>
+                <p>Vetor <span class="arithmatex">\(X_n\)</span> concatenado.</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
-<td><code>Q</code></td>            <td>
+<td><code>Yn</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor Q concatenado.</p>
+                <p>Vetor <span class="arithmatex">\(Y_n\)</span> concatenado.</p>
               </div>
             </td>
           </tr>

@@ -585,7 +585,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -701,6 +701,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -921,6 +944,15 @@
   <a href="#plotter.BersnrPlot" class="md-nav__link">
     <span class="md-ellipsis">
       BersnrPlot
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotter.GaussianNoisePlot" class="md-nav__link">
+    <span class="md-ellipsis">
+      GaussianNoisePlot
     </span>
   </a>
   
@@ -2866,6 +2898,146 @@
 <li>Argos e QPSK: <img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
 </ul>
 </details>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="plotter.GaussianNoisePlot" class="doc doc-heading">
+            <code>GaussianNoisePlot</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
+
+
+        <p>Classe para plotar a distribuição Gaussiana do ruído AWGN com base na variância.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figura do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Posição do plot no GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>variance</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Variância do ruído</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>num_points</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Número de pontos para a curva da gaussiana</p>
+              </div>
+            </td>
+            <td>
+                  <code>1000</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
 
 
 

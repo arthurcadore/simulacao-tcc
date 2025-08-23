@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#preamble" class="md-skip">
+        <a href="#preamble.Preamble" class="md-skip">
           Skip to content
         </a>
       
@@ -520,8 +520,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -554,8 +552,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -576,15 +572,6 @@
   <a href="#preamble.Preamble.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       __init__
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#preamble.Preamble.hex_to_bits" class="md-nav__link">
-    <span class="md-ellipsis">
-      hex_to_bits
     </span>
   </a>
   
@@ -666,7 +653,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -782,6 +769,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -982,8 +992,7 @@
   
 
 
-<h1 id="preamble">Preamble</h1>
-
+  <h1>Preâmbulo</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1023,12 +1032,21 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância de palavra de sincronismo. A palavra de sincronismo <span class="arithmatex">\(S\)</span> é composta por 30 bits, <span class="arithmatex">\(S = 2BEEEEBF_{16}\)</span>, conforme o padrão PPT-A3.</p>
+        <p>Inicializa uma instância de palavra de sincronismo, <span class="arithmatex">\(S = 2BEEEEBF_{16}\)</span> no padrão ARGOS-3. A palavra de sincronismo composta por 30 bits, <span class="arithmatex">\(S = [S_0, S_1, S_2, \dots, S_{29}]\)</span> que são intercalados para formar os vetores <span class="arithmatex">\(S_I\)</span> e <span class="arithmatex">\(S_Q\)</span> de cada canal, conforme apresentado abaixo.</p>
+<div class="arithmatex">\[
+\begin{align}
+S_I &amp;= [S_0,\, S_2,\, S_4,\, \dots,\, S_{28}] &amp;&amp; \mapsto \quad S_I = [1111,\, 1111,\, 1111,\, 111] \\
+S_Q &amp;= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] &amp;&amp; \mapsto \quad S_Q = [0011,\, 0101,\, 0100,\, 111]
+\end{align}
+\]</div>
 
 
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.6)</p>
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(S\)</span>: Palavra de sincronismo original.</li>
+<li><span class="arithmatex">\(S_I\)</span> e <span class="arithmatex">\(S_Q\)</span>: Vetores de saida correspondentes aos canais I e Q, respectivamente.</li>
+</ul>
 </details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1077,7 +1095,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se a palavra de sincronismo não contiver 30 bits.</p>
+                <p>Se a palavra de sincronismo <span class="arithmatex">\(S\)</span> tiver comprimento diferente de 8 caracteres. </p>
               </div>
             </td>
           </tr>
@@ -1087,84 +1105,16 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se o hexadecimal não for válido ou não puder ser convertido para 30 bits</p>
+                <p>Se o hexadecimal não for válido ou não puder ser convertido.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
-
-
-    </div>
-
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.6)
 </div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="preamble.Preamble.hex_to_bits" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">hex_to_bits</span><span class="p">(</span><span class="n">hex_string</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Converte uma string hexadecimal em uma string de bits de 30 bits.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>hex_string</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>String hexadecimal a ser convertida.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>bin_str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>String de bits de 30 bits.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
 
 
     </div>
@@ -1182,18 +1132,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Gera os vetores I e Q da palavra de sincronismo, com base no vetor <span class="arithmatex">\(S\)</span> passado no construtor.</p>
-<p>Definição dos vetores:
-$$
-\begin{align}
-    S_I &amp;= [S_0, S_2, S_4, \dots, S_{28}]
-\end{align}
-$$
-$$
-\begin{align}
-    S_Q &amp;= [S_1, S_3, S_5, \dots, S_{29}]
-\end{align}
-$$</p>
+        <p>Gera os vetores <span class="arithmatex">\(S_I\)</span> e <span class="arithmatex">\(S_Q\)</span> da palavra de sincronismo, com base no vetor <span class="arithmatex">\(S\)</span> passado no construtor.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>

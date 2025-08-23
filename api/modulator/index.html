@@ -588,7 +588,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -782,6 +782,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -1016,15 +1039,19 @@
 
 
 <h2 id="modulator.Modulator.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância do modulador IQ.
-O modulador IQ é responsável por modular os sinais I e Q em uma portadora de frequência específica.</p>
+        <p>Inicializa uma instância do modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.</p>
+<p><img alt="pageplot" src="../../assets/modulador.svg" /></p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.2.5.3)
+</div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1067,7 +1094,7 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>128000</code>
             </td>
           </tr>
       </tbody>
@@ -1112,9 +1139,9 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
 
     <div class="doc doc-contents ">
 
-        <p>Modula os sinais I e Q em uma portadora de frequência específica. O processo de modulação é dado pela expressão:</p>
+        <p>Modula em QPSK os sinais <span class="arithmatex">\(d_I\)</span> e <span class="arithmatex">\(d_Q\)</span> com uma portadora <span class="arithmatex">\(f_c\)</span>, resultando no sinal modulado <span class="arithmatex">\(s(t)\)</span>. O processo de modulação é dado pela expressão abaixo.</p>
 <div class="arithmatex">\[
-    s(t) = I(t) \cdot \cos(2\pi f_c t) - Q(t) \cdot \sin(2\pi f_c t)
+    s(t) = d_I(t) \cdot \cos(2\pi f_c t) - d_Q(t) \cdot \sin(2\pi f_c t)
 \]</div>
 
 
@@ -1138,7 +1165,7 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal I a ser modulado.</p>
+                <p>Sinal <span class="arithmatex">\(d_I\)</span> correspondente ao canal <span class="arithmatex">\(I\)</span> a ser modulado.</p>
               </div>
             </td>
             <td>
@@ -1154,7 +1181,7 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal Q a ser modulado.</p>
+                <p>Sinal <span class="arithmatex">\(d_Q\)</span> correspondente ao canal <span class="arithmatex">\(Q\)</span> a ser modulado.</p>
               </div>
             </td>
             <td>
@@ -1175,22 +1202,22 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>t</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Vetor de tempo <span class="arithmatex">\(t\)</span> correspondente ao sinal modulado.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
 <td><code>modulated_signal</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
                 <p>Sinal modulado <span class="arithmatex">\(s(t)\)</span> resultante.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>t</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo <span class="arithmatex">\(t\)</span> correspondente ao sinal modulado.</p>
               </div>
             </td>
           </tr>
@@ -1236,29 +1263,42 @@ O modulador IQ é responsável por modular os sinais I e Q em uma portadora de f
 
     <div class="doc doc-contents ">
 
-        <p>Demodula o sinal modulado para recuperar os sinais I e Q originais. </p>
-<p>Para o processo de demodulação, utilizamos os sinais de portadora <span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span> definidos como:</p>
+        <p>Demodula o sinal modulado em QPSK. Para o processo de demodulação, utiliza-se duas componentes auxiliares <span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span> definidas pelas expressões abaixo.</p>
 <div class="arithmatex">\[
-    x_I(t) = 2 \cos(2\pi f_c t)
-\]</div>
-<div class="arithmatex">\[
-    y_Q(t) = 2 \sin(2\pi f_c t)
+\begin{aligned}
+x_I(t) &amp;= 2 \cos(2\pi f_c t), &amp;\quad
+y_Q(t) &amp;= 2 \sin(2\pi f_c t)
+\end{aligned}
 \]</div>
 
 
-<details class="nota" open>
-  <summary>Nota</summary>
+<details class="sendo" open>
+  <summary>Sendo</summary>
   <ul>
-<li>A constante 2 é utilizada para manter a amplitude do sinal original, devido a translação do sinal modulado.</li>
+<li><span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span>: Componentes auxiliares utilizadas para a demodulação.</li>
+<li><span class="arithmatex">\(f_c\)</span>: Frequência da portadora.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
 </ul>
-</details>        <p>O processo resulta em dois sinais, contendo uma componente em banda base e outra em banda <span class="arithmatex">\(2f_c\)</span>: </p>
+</details>        <p>A partir das componentes criadas é realizado o processo de demodulação (translação em frequência), que resulta em duas componentes, uma em banda base e outra em <span class="arithmatex">\(2f_c\)</span>, conforme as expressões abaixo.</p>
 <div class="arithmatex">\[
-x_I'(t) = s(t) \cdot x_I(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
+x_I'(t) = s(t) \cdot x_I(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
 \]</div>
 <div class="arithmatex">\[
-y_Q'(t) = -s(t) \cdot y_Q(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
+y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
 \]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(x_I'(t)\)</span> e <span class="arithmatex">\(y_Q'(t)\)</span>: Componentes resultantes da demodulação.</li>
+<li><span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span>: Componentes auxiliares utilizadas para a demodulação.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal modulado.</li>
+<li><span class="arithmatex">\(d_I(t)\)</span> e <span class="arithmatex">\(d_Q(t)\)</span>: Sinais formatados correspondentes aos canais <span class="arithmatex">\(I\)</span> e <span class="arithmatex">\(Q\)</span>.</li>
+<li><span class="arithmatex">\(f_c\)</span>: Frequência da portadora.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1306,7 +1346,7 @@ y_Q'(t) = -s(t) \cdot y_Q(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal I recuperado.</p>
+                <p>Sinal <span class="arithmatex">\(x_I'(t)\)</span> recuperado.</p>
               </div>
             </td>
           </tr>
@@ -1316,7 +1356,7 @@ y_Q'(t) = -s(t) \cdot y_Q(t) = \left[Ad_I(t) \cos(2\pi f_c t ) - Ad_Q(t) \sin(2\
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal Q recuperado.</p>
+                <p>Sinal <span class="arithmatex">\(y_Q'(t)\)</span> recuperado.</p>
               </div>
             </td>
           </tr>

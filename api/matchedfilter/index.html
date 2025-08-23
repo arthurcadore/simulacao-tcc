@@ -588,7 +588,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -760,6 +760,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#matchedfilter.MatchedFilter.apply_filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      apply_filter
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -782,6 +791,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -1159,21 +1191,21 @@
 
     <div class="doc doc-contents ">
 
-        <p>Gera o pulso Root Raised Cosine (RRC) invertido para a transmissão de sinais digitais. O pulso RRC é definido como:
-$$
+        <p>Gera o pulso Root Raised Cosine (<span class="arithmatex">\(RRC\)</span>) invertido <span class="arithmatex">\(-g(t)\)</span> para filtragem casada do sinal de entrada.</p>
+<div class="arithmatex">\[
 \begin{equation}
-    g(t) = \frac{\sin(\pi \frac{t}{T_b})}{\pi \frac{t}{T_b}} \cdot \frac{\cos(\pi \alpha \frac{t}{T_b})}{1 - (2\alpha \frac{t}{T_b})^2}
+    -g(t) = - \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
 \end{equation}
-$$</p>
+\]</div>
 
 
-<details class="nota" open>
-  <summary>Nota</summary>
+<details class="sendo" open>
+  <summary>Sendo</summary>
   <ul>
-<li><span class="arithmatex">\(g(t)\)</span> é o pulso RRC invertido,</li>
-<li><span class="arithmatex">\(\alpha\)</span> é o fator de roll-off, </li>
-<li><span class="arithmatex">\(T_b\)</span> é o período de bit, </li>
-<li><span class="arithmatex">\(t\)</span> é o tempo.</li>
+<li><span class="arithmatex">\(-g(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido no dominio do tempo.</li>
+<li><span class="arithmatex">\(\alpha\)</span>: Fator de roll-off do pulso.</li>
+<li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
 </ul>
 </details>
 
@@ -1192,13 +1224,18 @@ $$</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Pulso RRC invertido.</p>
+                <p>Pulso RRC invertido <span class="arithmatex">\(-g(t)\)</span>.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_mf_impulse.svg" /></p>
+</details>
 
     </div>
 
@@ -1218,6 +1255,37 @@ $$</p>
         <p>Calcula a resposta ao impulso do filtro casado.</p>
 
 
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>impulse_len</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Comprimento do vetor de impulso.</p>
+              </div>
+            </td>
+            <td>
+                  <code>512</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
       <thead>
@@ -1228,13 +1296,96 @@ $$</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>tuple</code></td>            <td>
+<td><code>impulse_response</code></td>            <td>
+                  <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="numpy.ndarray">ndarray</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>(impulse_response, t_impulse) onde:
-- impulse_response: Resposta ao impulso do filtro
-- t_impulse: Vetor de tempo correspondente</p>
+                <p>Resposta ao impulso e vetor de tempo.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="matchedfilter.MatchedFilter.apply_filter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">apply_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Aplica o filtro casado com resposta ao impulso <span class="arithmatex">\(-g(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>. O processo de filtragem é dado pela expressão abaixo. </p>
+<div class="arithmatex">\[
+    x(t) = s(t) \ast h(t)
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(x(t)\)</span>: Sinal filtrado.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada.</li>
+<li><span class="arithmatex">\(-g(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>signal</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal de entrada <span class="arithmatex">\(s(t)\)</span>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>signal_filtered</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal filtrado <span class="arithmatex">\(x(t)\)</span>.</p>
               </div>
             </td>
           </tr>

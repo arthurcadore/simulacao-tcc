@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#convolutional-encoder" class="md-skip">
+        <a href="#convolutional.EncoderConvolutional" class="md-skip">
           Skip to content
         </a>
       
@@ -474,8 +474,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -507,8 +505,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -675,7 +671,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -791,6 +787,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -991,8 +1010,7 @@
   
 
 
-<h1 id="convolutional-encoder">Convolutional Encoder</h1>
-
+  <h1>Codificador Convolutional</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1032,16 +1050,18 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa o codificador convolucional com matriz de geradores.</p>
+        <p>Inicializa o codificador convolucional, com base em uma tupla de polinômios geradores <span class="arithmatex">\(G\)</span> que determinam a estrutura do codificador.</p>
+<div class="arithmatex">\[
+\begin{equation}
+    \begin{split}
+        G_0 &amp;= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
+        G_1 &amp;= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+    \end{split}
+\end{equation}
+\]</div>
+<p>O codificador convolucional, considerando <span class="arithmatex">\(G_0\)</span> e <span class="arithmatex">\(G_1\)</span> pode ser representado pelo diagrama de blocos abaixo.</p>
+<p><img alt="pageplot" src="../../assets/cod_convolucional.svg" /></p>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <ul>
-<li>AS3-SP-516-274-CNES (seção 3.1.4.4)</li>
-<li>CCSDS 131.1-G-2</li>
-</ul>
-</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1063,7 +1083,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Matriz de polinômios geradores em formato binário.</p>
+                <p>Tupla de polinômios geradores <span class="arithmatex">\(G\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1072,17 +1092,11 @@
           </tr>
       </tbody>
     </table>
-
-
-<details class="nota" open>
-  <summary>Nota</summary>
-  <ul>
-<li>O polinômio gerador <span class="arithmatex">\(G_0\)</span> é representado por <code>G[0][0]</code> e <span class="arithmatex">\(G_1\)</span> por <code>G[0][1]</code>.</li>
-<li><span class="arithmatex">\(G_0\)</span> é definido como <span class="arithmatex">\(1111001_{2}\)</span> ou <span class="arithmatex">\(121_{10}\)</span></li>
-<li><span class="arithmatex">\(G_1\)</span> é definido como <span class="arithmatex">\(1011011_{2}\)</span> ou <span class="arithmatex">\(91_{10}\)</span></li>
-</ul>
-</details>        <p>Com base nos polinômios geradores, o codificador convolucional pode ser representado pelo diagrama de blocos abaixo.</p>
-<p><img alt="pageplot" src="../../assets/cod_convolucional.svg" /></p>
+        <div class="referencia">
+  <b>Referência:</b>
+  <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
+  <p>CCSDS 131.1-G-2</p>
+</div>
 
 
     </div>
@@ -1100,7 +1114,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Calcula os índices ("taps") dos bits ativos (ou seja, bits <span class="arithmatex">\('1'\)</span>) no polinômio gerador.</p>
+        <p>Calcula os índices dos bits ativos (<span class="arithmatex">\('1'\)</span>), ou taps, do polinômio gerador <span class="arithmatex">\(G_n\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1123,7 +1137,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Polinômio em formato binário. </p>
+                <p>Polinômio gerador <span class="arithmatex">\(G_n\)</span> em formato binário. </p>
               </div>
             </td>
             <td>
@@ -1172,8 +1186,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Calcula a distância livre do código convolucional, definida como a menor
-distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
+        <p>Calcula a distância livre <span class="arithmatex">\(d_{free}\)</span> do código convolucional, definida como a menor distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1191,7 +1204,7 @@ distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Distância livre do código.</p>
+                <p>Distância livre <span class="arithmatex">\(d_{free}\)</span> do codificador convolucional organizado com <span class="arithmatex">\(G\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1207,15 +1220,35 @@ distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
 
 
 <h2 id="convolutional.EncoderConvolutional.encode" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">input_bits</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Codifica uma sequência binária de entrada <span class="arithmatex">\(u_t\)</span> utilizando os registradores deslizantes e os taps.</p>
+        <p>Codifica uma sequência binária de entrada <span class="arithmatex">\(u_t\)</span>, retornando as sequências de saida <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>. O processo de codificação pode ser representado pela expressão abaixo.</p>
+<div class="arithmatex">\[
+\begin{equation}
+\begin{bmatrix} v_t^{(0)} &amp; v_t^{(1)} \end{bmatrix}
+=
+\begin{bmatrix}
+u_{(t)} &amp; u_{(t-1)} &amp; u_{(t-2)} &amp; u_{(t-3)} &amp; u_{(t-4)} &amp; u_{(t-5)} &amp; u_{(t-6)}
+\end{bmatrix}
+\cdot
+\begin{bmatrix} G_{0} &amp; G_{1} \end{bmatrix}^{T}
+\end{equation}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>: Canais de saída do codificador.</li>
+<li><span class="arithmatex">\(u_t\)</span>: Vetor de bits de entrada.</li>
+<li><span class="arithmatex">\(G_{0}\)</span> e <span class="arithmatex">\(G_{1}\)</span>: Polinômios geradores do codificador.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1230,7 +1263,7 @@ distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>input_bits</code>
+                <code>ut</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1264,225 +1297,6 @@ distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
             <td>
               <div class="doc-md-description">
                 <p>Tupla com os dois canais de saída <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div><h1 id="convolutional-decoder-viterbi">Convolutional Decoder (Viterbi)</h1>
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<a id="convolutional.DecoderViterbi"></a>
-    <div class="doc doc-contents first">
-
-
-        <p>Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.</p>
-
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (3.1.4.4)</p>
-</details>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]))</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Inicializa o decodificador Convolucional.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>G</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Matriz de polinômios geradores.</p>
-              </div>
-            </td>
-            <td>
-                  <code><span title="numpy.array">array</span>([[121, 91]])</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.build_trellis" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">build_trellis</span><span class="p">()</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Constroi a trelica do decodificador Viterbi.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>dict</code></td>            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Trelica do decodificador Viterbi.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.decode" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Decodifica os bits de entrada.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>vt0</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Bits de entrada do canal I.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>vt1</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Bits de entrada do canal Q.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>np.ndarray: Bits decodificados.</p>
               </div>
             </td>
           </tr>

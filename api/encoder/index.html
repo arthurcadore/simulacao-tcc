@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#encoder" class="md-skip">
+        <a href="#encoder.Encoder" class="md-skip">
           Skip to content
         </a>
       
@@ -566,8 +566,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -599,8 +597,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -666,7 +662,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -782,6 +778,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -982,8 +1001,7 @@
   
 
 
-<h1 id="encoder">Encoder</h1>
-
+  <h1>Codificador NRZ e MAN</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1023,13 +1041,12 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância do codificador com o método especificado.</p>
+        <p>Inicializa o codificador de linha com o método de codificação especificado. </p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.2.4)
+</div>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.2.4)</p>
-</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1051,7 +1068,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Método de codificação ('NRZ' ou 'Manchester').</p>
+                <p>Método de codificação desejado, <span class="arithmatex">\(NRZ\)</span> ou <span class="arithmatex">\(Manchester\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1100,8 +1117,33 @@
 
     <div class="doc doc-contents ">
 
-        <p>Codifica o vetor de bits usando o método especificado na inicialização.</p>
+        <p>Codifica o vetor de bits usando o método especificado na inicialização. O processo de codificação de linha é dado pelas expressões abaixo correspondente a cada método. </p>
+<div class="arithmatex">\[
+\begin{equation}
+\begin{aligned}
+X_{\text{NRZ}}[n] &amp;= 
+\begin{cases}
+11, &amp; \text{se } X_n = 1 \\
+00, &amp; \text{se } X_n = 0 ,
+\end{cases}
+&amp;\quad\quad
+Y_{\text{MAN}}[n] &amp;=
+\begin{cases}
+10, &amp; \text{se } Y_n = 1 \\
+01, &amp; \text{se } Y_n = 0 .
+\end{cases}
+\end{aligned}
+\end{equation}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span>: Vetor de bits de entrada.</li>
+<li><span class="arithmatex">\(X_{\text{NRZ}}[n]\)</span> e <span class="arithmatex">\(Y_{\text{MAN}}[n]\)</span>: Vetor de simbolos de saída.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1149,7 +1191,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits codificado.</p>
+                <p>Vetor de simbolos codificados.</p>
               </div>
             </td>
           </tr>
@@ -1172,8 +1214,33 @@
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica o vetor codificado de volta para o vetor original.</p>
+        <p>Decodifica o vetor de simbolos usando o método especificado na inicialização. O processo de decodificação de linha é dado pelas expressões abaixo correspondente a cada método.</p>
+<div class="arithmatex">\[
+\begin{equation}
+\begin{aligned}
+X_n &amp;= 
+\begin{cases}
+1, &amp; \text{se } X_{\text{NRZ}}[n] = 11 \\
+0, &amp; \text{se } X_{\text{NRZ}}[n] = 00
+\end{cases}
+&amp;\quad\quad
+Y_n &amp;=
+\begin{cases}
+1, &amp; \text{se } Y_{\text{MAN}}[n] = 10 \\
+0, &amp; \text{se } Y_{\text{MAN}}[n] = 01
+\end{cases}
+\end{aligned}
+\end{equation}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(X_{\text{NRZ}}[n]\)</span> e <span class="arithmatex">\(Y_{\text{MAN}}[n]\)</span>: Vetor de simbolos de entrada</li>
+<li><span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span>: Vetor de bits de saída.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1195,7 +1262,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor codificado a ser decodificado.</p>
+                <p>Vetor codificado.</p>
               </div>
             </td>
             <td>

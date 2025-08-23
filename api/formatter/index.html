@@ -22,7 +22,7 @@
     
     
       
-        <title>Formatador RRC - Simulador ARGOS-3</title>
+        <title>Formatador - Simulador ARGOS-3</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#formatter" class="md-skip">
+        <a href="#formatter.Formatter" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Formatador RRC
+              Formatador
             
           </span>
         </div>
@@ -589,15 +589,13 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -610,7 +608,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -622,8 +620,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -782,6 +778,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -982,8 +1001,7 @@
   
 
 
-<h1 id="formatter">Formatter</h1>
-
+  <h1>Formatador</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1023,7 +1041,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância de formatador de pulso. O pulso formatador é usado para preparar os símbolos nos canais I e Q para transmissão.</p>
+        <p>Inicializa uma instância de formatador, utilizado preparar os símbolos para modulação.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1110,7 +1128,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tipo de pulso, atualmente apenas "RRC" é suportado.</p>
+                <p>Tipo de pulso, atualmente apenas <span class="arithmatex">\(RRC\)</span> é suportado.</p>
               </div>
             </td>
             <td>
@@ -1159,21 +1177,19 @@
 
     <div class="doc doc-contents ">
 
-        <p>Gera o pulso Root Raised Cosine (RRC) para a transmissão de sinais digitais. O pulso RRC é definido como:
-$$
-\begin{equation}
-    g(t) = \frac{\sin(\pi \frac{t}{T_b})}{\pi \frac{t}{T_b}} \cdot \frac{\cos(\pi \alpha \frac{t}{T_b})}{1 - (2\alpha \frac{t}{T_b})^2}
-\end{equation}
-$$</p>
+        <p>Gera o pulso Root Raised Cosine (<span class="arithmatex">\(RRC\)</span>). O pulso <span class="arithmatex">\(RRC\)</span> no dominio do tempo é definido pela expressão abaixo.</p>
+<div class="arithmatex">\[
+    g(t) = \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
+\]</div>
 
 
-<details class="nota" open>
-  <summary>Nota</summary>
+<details class="sendo" open>
+  <summary>Sendo</summary>
   <ul>
-<li><span class="arithmatex">\(g(t)\)</span> é o pulso formatador,</li>
-<li><span class="arithmatex">\(\alpha\)</span> é o fator de roll-off, </li>
-<li><span class="arithmatex">\(T_b\)</span> é o período de bit, </li>
-<li><span class="arithmatex">\(t\)</span> é o tempo.</li>
+<li><span class="arithmatex">\(g(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> no dominio do tempo.</li>
+<li><span class="arithmatex">\(\alpha\)</span>: Fator de roll-off do pulso.</li>
+<li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
 </ul>
 </details>
 
@@ -1200,6 +1216,13 @@ $$</p>
     </table>
 
 
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <ul>
+<li><img alt="pageplot" src="../assets/example_formatter_impulse.svg" /></li>
+</ul>
+</details>
+
     </div>
 
 </div>
@@ -1224,11 +1247,11 @@ $$</p>
 <details class="nota" open>
   <summary>Nota</summary>
   <ul>
-<li><span class="arithmatex">\(d(t)\)</span> é o sinal formatado de saída,</li>
-<li><span class="arithmatex">\(x\)</span> é o vetor de símbolos de entrada,</li>
-<li><span class="arithmatex">\(g(t)\)</span> é o pulso formatador,</li>
-<li><span class="arithmatex">\(n\)</span> é o índice de tempo,</li>
-<li><span class="arithmatex">\(T_b\)</span> é o período de bit.</li>
+<li><span class="arithmatex">\(d(t)\)</span>: Sinal formatado de saída.</li>
+<li><span class="arithmatex">\(x\)</span>: Vetor de símbolos de entrada.</li>
+<li><span class="arithmatex">\(g(t)\)</span>: Pulso formatador.</li>
+<li><span class="arithmatex">\(n\)</span>: Indice de bit.</li>
+<li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
 </ul>
 </details>
 

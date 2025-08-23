@@ -588,7 +588,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -800,6 +800,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -1034,14 +1057,14 @@
 
 
 <h2 id="noise.Noise.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Implementação de canal para aplicação de ruido AWGN no sinal transmitido.</p>
+        <p>Implementação de canal para aplicação de ruido <span class="arithmatex">\(AWGN\)</span>, com base em <span class="arithmatex">\(SNR\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1064,11 +1087,11 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Relação sinal-ruído em decibéis (dB). Padrão é 10 dB.</p>
+                <p>Relação sinal-ruído em decibéis (dB).</p>
               </div>
             </td>
             <td>
-                  <code>10</code>
+                  <code>15</code>
             </td>
           </tr>
       </tbody>
@@ -1090,8 +1113,33 @@
 
     <div class="doc doc-contents ">
 
-        <p>Adiciona ruído AWGN ao sinal fornecido.</p>
+        <p>Adiciona ruído AWGN <span class="arithmatex">\(n(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>, com base na <span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span> definida na inicialização. </p>
+<div class="arithmatex">\[
+r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(r(t)\)</span>: Sinal retornado com ruído AWGN adicionado.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada sem ruído. </li>
+<li><span class="arithmatex">\(n(t)\)</span>: Ruído adicionado, com distribuição normal <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
+</ul>
+</details>        <p>A variância do ruído <span class="arithmatex">\(\sigma^2\)</span> é dada por:</p>
+<div class="arithmatex">\[
+\sigma^2 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{10^{\frac{\mathrm{SNR}_{dB}}{10}}}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\sigma^2\)</span>: A variância do ruído.</li>
+<li><span class="arithmatex">\(\mathbb{E}\!\left[ |s(t)|^2 \right]\)</span>: Potência média do sinal de entrada.</li>
+<li><span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span>: Relação sinal-ruído em decibéis (dB).</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1113,7 +1161,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal ao qual o ruído será adicionado.</p>
+                <p>Sinal transmitido <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1128,23 +1176,29 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>signal</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>np.ndarray: Sinal com ruído adicionado.</p>
+                <p>Sinal <span class="arithmatex">\(r(t)\)</span>, com ruído AWGN adicionado.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_noise_gaussian_snr.svg" /></p>
+</details>
 
     </div>
 
@@ -1189,14 +1243,14 @@
 
 
 <h2 id="noise.NoiseEBN0.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">ebn0_db</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">ebn0_db</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Implementação de canal AWGN, controlado por <span class="arithmatex">\(Eb\)</span>/<span class="arithmatex">\(N_{0}\)</span>.</p>
+        <p>Implementação de canal para aplicação de ruido <span class="arithmatex">\(AWGN\)</span>, com base em <span class="arithmatex">\(Eb/N_{0}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1219,43 +1273,11 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valor alvo de<span class="arithmatex">\(Eb\)</span>/<span class="arithmatex">\(N_{0}\)</span> em decibéis (<span class="arithmatex">\(dB\)</span>).</p>
+                <p>Valor alvo de <span class="arithmatex">\(Eb/N_{0}\)</span> em <span class="arithmatex">\(dB\)</span></p>
               </div>
             </td>
             <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>bits_per_symbol</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de bits por símbolo (<span class="arithmatex">\(k\)</span>). Para QPSK, <span class="arithmatex">\(k=2\)</span>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>rng</code>
-            </td>
-            <td>
-                  <code>(<span title="numpy.random.Generator">Generator</span>, <span title="opcional">opcional</span>)</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Gerador de números aleatórios (NumPy).</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
+                  <code>10</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1302,29 +1324,53 @@
 
 
 <h2 id="noise.NoiseEBN0.add_noise" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">add_noise</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">add_noise</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Adiciona ruído AWGN ao sinal de entrada </p>
+        <p>Adiciona ruído AWGN $n(t) ao sinal de entrada $s(t), com base na <span class="arithmatex">\(Eb/N0_{dB}\)</span> definida na inicialização. </p>
+<div class="arithmatex">\[
+r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
+\]</div>
 
 
-<details class="etapas-do-cálculo" open>
-  <summary>Etapas do cálculo</summary>
-  <ol>
-<li>Calcula a potência média do sinal amostrado:
-   <span class="arithmatex">\(P = \mathbb{E}[|s|^2]\)</span>.</li>
-<li>Calcula a energia por bit: <span class="arithmatex">\(E_b = P / R_b\)</span>.</li>
-<li>Calcula a densidade espectral de ruído:
-   <span class="arithmatex">\(N_0 = E_b / (E_b/N_0)\)</span>.</li>
-<li>Converte <span class="arithmatex">\(N_0\)</span> em variância de amostras discretas:
-   <span class="arithmatex">\(\sigma^2 = \dfrac{N_0 \cdot f_s}{2}\)</span>.</li>
-<li>Gera vetor gaussiano <span class="arithmatex">\(n(t)\)</span> com variância <span class="arithmatex">\(\sigma^2\)</span>.</li>
-<li>Adiciona ruído ao sinal: <span class="arithmatex">\(r(t) = s(t) + n(t)\)</span>.</li>
-</ol>
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(r(t)\)</span>: Sinal retornado com ruído AWGN adicionado.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada sem ruído. </li>
+<li><span class="arithmatex">\(n(t)\)</span>: Ruído adicionado, com distribuição normal <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
+</ul>
+</details>        <p>A variância do ruído <span class="arithmatex">\(\sigma^2\)</span> é dada por:</p>
+<div class="arithmatex">\[
+\sigma^2 = \frac{N_0 \cdot f_s}{2}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\sigma^2\)</span>: A variância do ruído.</li>
+<li><span class="arithmatex">\(N_0\)</span>: Densidade espectral de ruído.</li>
+<li><span class="arithmatex">\(f_s\)</span>: Taxa de amostragem do sinal em <span class="arithmatex">\(Hz\)</span>.</li>
+</ul>
+</details>        <p>A densidade espectral de ruído <span class="arithmatex">\(N_0\)</span> é dada por:</p>
+<div class="arithmatex">\[
+N_0 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b \cdot 10^{\frac{Eb/N_0}{10}}}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(N_0\)</span>: Densidade espectral de ruído.</li>
+<li><span class="arithmatex">\(\mathbb{E}\!\left[ |s(t)|^2 \right]\)</span>: Potência média do sinal amostrado.</li>
+<li><span class="arithmatex">\(R_b\)</span>: Taxa de bits em bits/s.</li>
+<li><span class="arithmatex">\(Eb/N_0\)</span>: Relação <span class="arithmatex">\(dB\)</span> da energia por bit <span class="arithmatex">\(E_b\)</span> por densidade espectral de ruído <span class="arithmatex">\(N_0\)</span> dada na inicialização.</li>
+</ul>
 </details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1340,7 +1386,7 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>s</code>
+                <code>signal</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1368,17 +1414,27 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>s_noisy</code></td>            <td>
+<td><code>signal</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal recebido <span class="arithmatex">\(r(t) = s(t) + n(t)\)</span>, com ruído AWGN.</p>
+                <p>Sinal recebido <span class="arithmatex">\(r(t)\)</span>, com ruído AWGN adicionado.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_noise_gaussian_ebn0.svg" /></p>
+</details>        <div class="referencia">
+  <b>Referência:</b>
+  <p>Digital communications / John G. Proakis, Masoud Salehi.—5th ed. (pg. 283)</p>
+  <p>https://rwnobrega.page/posts/snr/</p>
+</div>
 
 
     </div>

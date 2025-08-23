@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scrambler" class="md-skip">
+        <a href="#scrambler.Scrambler" class="md-skip">
           Skip to content
         </a>
       
@@ -497,8 +497,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -530,8 +528,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -666,7 +662,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -782,6 +778,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -982,8 +1001,7 @@
   
 
 
-<h1 id="scrambler">Scrambler</h1>
-
+  <h1>Embaralhador</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1023,7 +1041,11 @@
 
     <div class="doc doc-contents ">
 
-        <p>Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.</p>
+        <p>Inicializa o embaralhador no padrão ARGOS-3.</p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.5)
+</div>
 
 
     </div>
@@ -1034,15 +1056,36 @@
 
 
 <h2 id="scrambler.Scrambler.scramble" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">scramble</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">scramble</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Embaralha os vetores X e Y de mesmo comprimento, retornando os vetores embaralhados. O processo de embaralhamento 
-é ilustrado pelo diagrama de blocos abaixo. </p>
+        <p>Embaralha os vetores <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>, retornando os vetores <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span> embaralhados. O processo de embaralhamento é dado pela expressão abaixo.</p>
+<div class="arithmatex">\[\begin{equation}
+    X_n = \begin{cases}
+    A, &amp; \text{se } n = 0 \pmod{3} \\
+    B, &amp; \text{se } n = 1 \pmod{3} \\
+    C, &amp; \text{se } n = 2 \pmod{3}
+    \end{cases} \quad
+    Y_n = \begin{cases}
+    A, &amp; \text{se } n = 0 \pmod{3} \\
+    B, &amp; \text{se } n = 1 \pmod{3} \\
+    C, &amp; \text{se } n = 2 \pmod{3}
+    \end{cases}
+\end{equation}\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span>: Vetores de saída embaralhados.</li>
+<li><span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> e <span class="arithmatex">\(C\)</span>: Combinação de bits dos vetores de entrada <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>.</li>
+<li><span class="arithmatex">\(n\)</span>: Indice do bit a ser embaralhado.</li>
+</ul>
+</details>        <p>O processo de embaralhamento é ilustrado pelo diagrama de blocos abaixo. </p>
 <p><img alt="pageplot" src="../../assets/embaralhador.svg" /></p>
 
 
@@ -1059,7 +1102,7 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>X</code>
+                <code>vt0</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1075,7 +1118,7 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>Y</code>
+                <code>vt1</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1157,15 +1200,38 @@
 
 
 <h2 id="scrambler.Scrambler.descramble" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">descramble</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">descramble</span><span class="p">(</span><span class="n">X_prime</span><span class="p">,</span> <span class="n">Y_prime</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Restaura os vetores X e Y embaralhados ao seu estado original. O processo de desembaralhamento 
-é ilustrado pelo diagrama de blocos abaixo.</p>
+        <p>Desembaralha os vetores <span class="arithmatex">\(X'_n\)</span> e <span class="arithmatex">\(Y'_n\)</span> embaralhados, retornando os vetores <span class="arithmatex">\(v_t^{(0)'}\)</span> e <span class="arithmatex">\(v_t^{(1)'}\)</span> restaurados. O processo de desembaralhamento
+é dado pela expressão abaixo.</p>
+<div class="arithmatex">\[\begin{equation}
+    v_t^{(0)'} = \begin{cases}
+    A, &amp; \text{se } n = 0 \pmod{3} \\
+    B, &amp; \text{se } n = 1 \pmod{3} \\
+    C, &amp; \text{se } n = 2 \pmod{3}
+    \end{cases}, \quad
+    v_t^{(1)'} = \begin{cases}
+    A, &amp; \text{se } n = 0 \pmod{3} \\
+    B, &amp; \text{se } n = 1 \pmod{3} \\
+    C, &amp; \text{se } n = 2 \pmod{3}
+    \end{cases} \text{ .}
+    \label{eq:desembaralhador_Y}
+\end{equation}\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(v_t^{(0)'}\)</span> e <span class="arithmatex">\(v_t^{(1)'}\)</span>: Vetores de saida desembaralhados.</li>
+<li><span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> e <span class="arithmatex">\(C\)</span>: Combinação de bits dos vetores de entrada <span class="arithmatex">\(X'_n\)</span> e <span class="arithmatex">\(Y'_n\)</span> embaralhados.</li>
+<li><span class="arithmatex">\(n\)</span>: Indice do bit a ser embaralhado.</li>
+</ul>
+</details>        <p>O processo de desembaralhamento é ilustrado pelo diagrama de blocos abaixo.</p>
 <p><img alt="pageplot" src="../../assets/desembaralhador.svg" /></p>
 
 
@@ -1182,7 +1248,7 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>X</code>
+                <code>X_prime</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1198,7 +1264,7 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>Y</code>
+                <code>Y_prime</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
@@ -1226,30 +1292,7 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>msg_length</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Vetor de 4 bits representando o campo Message Length.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>X_original</code></td>            <td>
+<td><code>vt0_prime</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
@@ -1259,7 +1302,7 @@
             </td>
           </tr>
           <tr class="doc-section-item">
-<td><code>Y_original</code></td>            <td>
+<td><code>vt1_prime</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>

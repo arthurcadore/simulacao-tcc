@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://github.com/arthurcadore/eng-telecom-tcc/api/bersnr/">
+        <link rel="canonical" href="https://github.com/arthurcadore/eng-telecom-tcc/api/viterbi/">
       
       
-        <link rel="prev" href="../plots/">
+        <link rel="prev" href="../sampler/">
       
       
-        <link rel="next" href="../data/">
+        <link rel="next" href="../transmitter/">
       
       
       <link rel="icon" href="../../assets/icon.svg">
@@ -22,7 +22,7 @@
     
     
       
-        <title>BER vs SNR - Simulador ARGOS-3</title>
+        <title>Viterbi - Simulador ARGOS-3</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ber-vs-snr" class="md-skip">
+        <a href="#convolutional-decoder-viterbi" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              BER vs SNR
+              Viterbi
             
           </span>
         </div>
@@ -227,10 +227,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../datagram/" class="md-tabs__link">
           
   
@@ -304,13 +306,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../bersnr/" class="md-tabs__link">
           
   
   
@@ -394,28 +394,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -428,7 +431,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Componentes
@@ -715,10 +718,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../viterbi/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -729,6 +754,62 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#convolutional.DecoderViterbi" class="md-nav__link">
+    <span class="md-ellipsis">
+      DecoderViterbi
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolutional.DecoderViterbi.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolutional.DecoderViterbi.build_trellis" class="md-nav__link">
+    <span class="md-ellipsis">
+      build_trellis
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolutional.DecoderViterbi.decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      decode
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -811,31 +892,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -848,7 +926,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Extras
@@ -859,32 +937,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    BER vs SNR
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../bersnr/" class="md-nav__link">
         
   
   
@@ -895,62 +951,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#bersnr.repetitions_for_ebn0" class="md-nav__link">
-    <span class="md-ellipsis">
-      repetitions_for_ebn0
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bersnr.simulate_argos" class="md-nav__link">
-    <span class="md-ellipsis">
-      simulate_argos
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bersnr.simulate_qpsk" class="md-nav__link">
-    <span class="md-ellipsis">
-      simulate_qpsk
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bersnr.run" class="md-nav__link">
-    <span class="md-ellipsis">
-      run
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1005,31 +1005,55 @@
   
 
 
-<h1 id="ber-vs-snr">BER vs SNR</h1>
+<h1 id="convolutional-decoder-viterbi">Convolutional Decoder (Viterbi)</h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="convolutional.DecoderViterbi"></a>
+    <div class="doc doc-contents first">
+
+
+        <p>Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.</p>
+
+
+<details class="referência" open>
+  <summary>Referência</summary>
+  <p>AS3-SP-516-274-CNES (3.1.4.4)</p>
+</details>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
 
 
 <div class="doc doc-object doc-function">
 
 
+<h2 id="convolutional.DecoderViterbi.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]))</span></code>
 
-<a id="bersnr.repetitions_for_ebn0"></a>
-    <div class="doc doc-contents first">
-
-        <p>Define o número de repetições em função do <span class="arithmatex">\(Eb/N0\)</span>, usa interpolação linear entre pontos de referência.</p>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
+</h2>
 
 
+    <div class="doc doc-contents ">
 
-<a id="bersnr.simulate_argos"></a>
-    <div class="doc doc-contents first">
-
-        <p>Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado <span class="arithmatex">\(Eb/N0\)</span>.</p>
+        <p>Inicializa o decodificador Convolucional.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1045,269 +1069,40 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>ebn0_db</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Relação <span class="arithmatex">\(Eb/N0\)</span> em decibéis.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>numblocks</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de blocos a serem transmitidos.</p>
-              </div>
-            </td>
-            <td>
-                  <code>8</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>fs</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Frequência de amostragem.</p>
-              </div>
-            </td>
-            <td>
-                  <code>128000</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>Rb</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Taxa de bits. </p>
-              </div>
-            </td>
-            <td>
-                  <code>400</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>ber</code></td>            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>A taxa de erro de bit (BER) simulada.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<a id="bersnr.simulate_qpsk"></a>
-    <div class="doc doc-contents first">
-
-        <p>Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>ebn0_db</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Relação Eb/N0 em dB.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_bits</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de bits simulados.</p>
-              </div>
-            </td>
-            <td>
-                  <code>1000</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>bits_por_simbolo</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de bits por símbolo (QPSK = 2).</p>
-              </div>
-            </td>
-            <td>
-                  <code>2</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>rng</code>
-            </td>
-            <td>
-                  <code>(<span title="numpy.random.Generator">Generator</span>, <span title="opcional">opcional</span>)</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>gerador de números aleatórios.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>float</code></td>            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>BER simulada.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<a id="bersnr.run"></a>
-    <div class="doc doc-contents first">
-
-        <p>Executa a simulação completa de BER vs Eb/N0 para ARGOS e QPSK.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>EbN0_values</code>
+                <code>G</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores de Eb/N0 a serem simulados.</p>
+                <p>Matriz de polinômios geradores.</p>
               </div>
             </td>
             <td>
-                  <code><span title="numpy.arange">arange</span>(0, 12, 0.5)</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_workers</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de processos para execução paralela.</p>
-              </div>
-            </td>
-            <td>
-                  <code>28</code>
+                  <code><span title="numpy.array">array</span>([[121, 91]])</code>
             </td>
           </tr>
       </tbody>
     </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="convolutional.DecoderViterbi.build_trellis" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">build_trellis</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Constroi a trelica do decodificador Viterbi.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1320,11 +1115,11 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>list</code></td>            <td>
+<td><code>dict</code></td>            <td>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].</p>
+                <p>Trelica do decodificador Viterbi.</p>
               </div>
             </td>
           </tr>
@@ -1332,12 +1127,100 @@
     </table>
 
 
-<details class="exemplos" open>
-  <summary>Exemplos</summary>
-  <ul>
-<li>Argos e QPSK: <img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
-</ul>
-</details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="convolutional.DecoderViterbi.decode" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Decodifica os bits de entrada.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>vt0</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bits de entrada do canal I.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>vt1</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bits de entrada do canal Q.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>np.ndarray: Bits decodificados.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
 
     </div>
 

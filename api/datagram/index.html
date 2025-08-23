@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#datagram" class="md-skip">
+        <a href="#datagram.Datagram" class="md-skip">
           Skip to content
         </a>
       
@@ -451,8 +451,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -484,8 +482,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -693,7 +689,7 @@
   
   
   <span class="md-ellipsis">
-    Formatador RRC
+    Formatador
     
   </span>
   
@@ -809,6 +805,29 @@
   
   <span class="md-ellipsis">
     Decisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viterbi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Viterbi
     
   </span>
   
@@ -1009,8 +1028,7 @@
   
 
 
-<h1 id="datagram">Datagram</h1>
-
+  <h1>Datagrama</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1050,12 +1068,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama ARGOS-3 é ilustrado na figura abaixo.</p>
+        <p>Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.</p>
 <p><img alt="pageplot" src="../../assets/datagrama.svg" /></p>
-<div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-274-CNES (seção 3.1.4.2)
-</div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1094,7 +1108,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Quantidade de blocos de dados (1 a 8). Necessário para o modo TX.</p>
+                <p>Quantidade de blocos de dados. Necessário para o modo TX.</p>
               </div>
             </td>
             <td>
@@ -1162,6 +1176,10 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
 
     </div>
@@ -1179,8 +1197,8 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
 
     <div class="doc doc-contents ">
 
-        <p>Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. Para o padrão ARGOS-3, a quantidade de blocos pode variar de 1 á 8 blocos. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. </p>
-<p>Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão: </p>
+        <p>Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. </p>
+<p>A quantidade de blocos pode variar de 1 á 8. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão abaixo.</p>
 <div class="arithmatex">\[
 L_{app} = 24 + 32 \cdot (n-1)
 \]</div>
@@ -1189,14 +1207,10 @@ L_{app} = 24 + 32 \cdot (n-1)
 <details class="sendo" open>
   <summary>Sendo</summary>
   <ul>
-<li>L: comprimento do datagrama em bits </li>
-<li>n: número de blocos</li>
+<li><span class="arithmatex">\(L_{app}\)</span>: Comprimento do datagrama em bits </li>
+<li><span class="arithmatex">\(n\)</span>: Número de blocos do datagrama, podendo variar de 1 á 8. </li>
 </ul>
-</details>        <div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-274-CNES (seção 3.1.4.2)
-</div>
-
+</details>
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
@@ -1219,6 +1233,10 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
 
     </div>
@@ -1236,11 +1254,34 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
 
     <div class="doc doc-contents ">
 
-        <p>Gera o campo PCD ID a partir do número PCD, incluindo um checksum de 8 bits.</p>
-<div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-274-CNES (seção 3.1.4.2)
-</div>
+        <p>Gera o campo <span class="arithmatex">\(PCD_{ID}\)</span> a partir do número PCD (<span class="arithmatex">\(PCD_{num}\)</span>), Primeiro gera-se a sequência de 20 bits correspondente ao número PCD.</p>
+<div class="arithmatex">\[
+  PCDnum_{10} \mapsto PCDnum_{2}  
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(PCDnum_{10}\)</span>: Valor decimal do campo <span class="arithmatex">\(PCD_{num}\)</span>, podendo variar de 0 á 1048575 <span class="arithmatex">\((2^{20} - 1)\)</span>.</li>
+<li><span class="arithmatex">\(PCDnum_{2}\)</span>: Sequência de 20 bits correspondente ao valor de <span class="arithmatex">\(PCD_{num}\)</span>.</li>
+</ul>
+</details>        <p>Em seguida, é calculado o checksum, <span class="arithmatex">\(R_{PCD}\)</span>, do campo <span class="arithmatex">\(PCD_{num}\)</span>, obtido através da soma dos bits e aplicação da operação módulo 256 (<span class="arithmatex">\(2^8\)</span>).</p>
+<div class="arithmatex">\[
+\begin{equation}
+R_{PCD} = \left( \sum_{i=0}^{19} b_i \cdot 2^i \right) \bmod 256
+\end{equation}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(R_{PCD}\)</span>: Sequência de 8 bits correspondente ao checksum do campo <span class="arithmatex">\(PCD_{num}\)</span>.</li>
+<li><span class="arithmatex">\(i\)</span>: Indice do bit do campo <span class="arithmatex">\(PCD_{num}\)</span>.</li>
+<li><span class="arithmatex">\(b\)</span>: Valor do bit do campo <span class="arithmatex">\(PCD_{num}\)</span>.</li>
+</ul>
+</details>        <p>O campo <span class="arithmatex">\(PCD_{ID}\)</span> é gerado concatenando os parâmetros gerados, sendo <span class="arithmatex">\(PCD_{ID} = PCD_{num} \oplus R_{PCD}\)</span>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1258,12 +1299,16 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits contendo o PCD ID e o checksum.</p>
+                <p>Vetor de bits contendo o PCD ID e o checksum.       </p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
 
     </div>
@@ -1281,11 +1326,37 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
 
     <div class="doc doc-contents ">
 
-        <p>Gera o campo Message Length com base na quantidade de blocos e calcula o bit de paridade.</p>
-<div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-274-CNES (seção 3.1.4.2)
-</div>
+        <p>Gera o valor do comprimento de mensagem <span class="arithmatex">\(T_{m}\)</span> com base na quantidade de blocos <span class="arithmatex">\(n\)</span>. Primeiro, deve-se calcular a sequência de bits <span class="arithmatex">\(B_m\)</span>. </p>
+<p>$$
+   Bm_{10} = (n - 1) \mapsto Bm_{2} 
+ $$</p>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(B_m\)</span>: Sequência de três bits correspondendo ao tamanho de mensagem. </li>
+<li><span class="arithmatex">\(n\)</span>: Número de blocos do datagrama, podendo variar de 1 á 8. </li>
+</ul>
+</details>        <p>Em seguida, é calculado o quarto bit <span class="arithmatex">\(P_m\)</span> (bit de paridade).</p>
+<div class="arithmatex">\[
+\begin{equation}
+    P_m = 
+    \begin{cases}
+    1, &amp; \text{se } \left[ \sum_{i=0}^{B_m} b_i = 0 \right]\mod 2  \\
+    0, &amp; \text{se } \left[ \sum_{i=0}^{B_m} b_i = 1 \right]\mod 2 
+    \end{cases} \text{.}
+\end{equation}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(P_m\)</span>: Bit de paridade.</li>
+<li><span class="arithmatex">\(i\)</span>: Indice de bit do campo <span class="arithmatex">\(B_m\)</span>.</li>
+</ul>
+</details>        <p>O campo <span class="arithmatex">\(T_{m}\)</span> é gerado concatenando os parâmetros gerados, sendo <span class="arithmatex">\(T_{m} = B_{m} \oplus P_{m}\)</span>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1309,6 +1380,10 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
 
     </div>
@@ -1326,12 +1401,19 @@ AS3-SP-516-274-CNES (seção 3.1.4.2)
 
     <div class="doc doc-contents ">
 
-        <p>Gera o campo Tail (cauda), utilizado para esvaziar o registrador do codificador convolucional.</p>
-<div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-274-CNES (seção 3.1.4.3)
-</div>
+        <p>Gera a cauda do datagrama <span class="arithmatex">\(E_m\)</span>, utilizado para limpar o registrador do codificador convolucional.</p>
+<div class="arithmatex">\[
+E_m = 7 + [(n - 1) \bmod 3]
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(E_m\)</span>: Comprimento de cauda do datagrama (zeros) adicionada ao final do datagrama. </li>
+<li><span class="arithmatex">\(n\)</span>: Número de blocos do datagrama.</li>
+</ul>
+</details>
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
@@ -1354,6 +1436,10 @@ AS3-SP-516-274-CNES (seção 3.1.4.3)
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.3)
+</div>
 
 
     </div>
@@ -1371,7 +1457,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.3)
 
     <div class="doc doc-contents ">
 
-        <p>Faz o parsing da sequência de bits do datagrama, extraindo campos e validando integridade.</p>
+        <p>Interpreta a sequência de bits do datagrama, extraindo campos e validando integridade.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1412,7 +1498,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Caso haja falha nas validações de paridade de Message Length.</p>
+                <p>Caso haja falha na validação de paridade do comprimento de mensagem <span class="arithmatex">\(T_m\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1422,7 +1508,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Caso haja falha no checksum do campo PCD ID.</p>
+                <p>Caso haja falha no checksum do campo <span class="arithmatex">\(PCD_{ID}\)</span>. </p>
               </div>
             </td>
           </tr>
@@ -1432,35 +1518,38 @@ AS3-SP-516-274-CNES (seção 3.1.4.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se a sequência de bits não for válida ou não puder ser convertida para json.</p>
+                <p>Se a sequência de bits de aplicação não corresponder ao comprimento de <span class="arithmatex">\(T_m\)</span>.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
-        <p>Examples:</p>
-<pre><code>    &gt;&gt;&gt; datagram = Datagram(streambits=bits)
-    &gt;&gt;&gt; print(datagram.parse_datagram())
-        {
-          "msglength": 2,
-          "pcdid": 1234,
-          "data": {
-            "bloco_1": {
-              "sensor_1": 42,
-              "sensor_2": 147,
-              "sensor_3": 75
-            },
-            "bloco_2": {
-              "sensor_1": 138,
-              "sensor_2": 7,
-              "sensor_3": 134,
-              "sensor_4": 182
-            }
-          },
-          "tail": 8
-        }
-</code></pre>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <pre><code class="language-python">&gt;&gt;&gt; datagram = Datagram(streambits=bits)
+&gt;&gt;&gt; print(datagram.parse_datagram())
+{
+  &quot;msglength&quot;: 2,
+  &quot;pcdid&quot;: 1234,
+  &quot;data&quot;: {
+    &quot;bloco_1&quot;: {
+      &quot;sensor_1&quot;: 42,
+      &quot;sensor_2&quot;: 147,
+      &quot;sensor_3&quot;: 75
+    },
+    &quot;bloco_2&quot;: {
+      &quot;sensor_1&quot;: 138,
+      &quot;sensor_2&quot;: 7,
+      &quot;sensor_3&quot;: 134,
+      &quot;sensor_4&quot;: 182
+    }
+  },
+  &quot;tail&quot;: 8
+}
+</code></pre>
+</details>
 
     </div>
 
