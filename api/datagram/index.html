@@ -1050,14 +1050,13 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa uma instância do datagrama. </p>
+        <p>Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama ARGOS-3 é ilustrado na figura abaixo.</p>
 <p><img alt="pageplot" src="../../assets/datagrama.svg" /></p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4).</p>
-</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1180,13 +1179,24 @@
 
     <div class="doc doc-contents ">
 
-        <p>Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos.</p>
+        <p>Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. Para o padrão ARGOS-3, a quantidade de blocos pode variar de 1 á 8 blocos. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. </p>
+<p>Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão: </p>
+<div class="arithmatex">\[
+L_{app} = 24 + 32 \cdot (n-1)
+\]</div>
 
 
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.2)</p>
-</details>
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li>L: comprimento do datagrama em bits </li>
+<li>n: número de blocos</li>
+</ul>
+</details>        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
+
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
@@ -1227,12 +1237,11 @@
     <div class="doc doc-contents ">
 
         <p>Gera o campo PCD ID a partir do número PCD, incluindo um checksum de 8 bits.</p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.2)</p>
-</details>
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
@@ -1273,12 +1282,11 @@
     <div class="doc doc-contents ">
 
         <p>Gera o campo Message Length com base na quantidade de blocos e calcula o bit de paridade.</p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.2)
+</div>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.2)</p>
-</details>
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
@@ -1319,12 +1327,11 @@
     <div class="doc doc-contents ">
 
         <p>Gera o campo Tail (cauda), utilizado para esvaziar o registrador do codificador convolucional.</p>
+<div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1.4.3)
+</div>
 
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.3)</p>
-</details>
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>

@@ -9,3 +9,14 @@
     display: block;
     margin: 0 auto;
 }
+
+.referencia {
+  border-left: 4px solid #4287ff;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  background: #ecf3ff;
+  font-style: italic;
+}
+.referencia::before {
+  font-weight: bold;
+}
