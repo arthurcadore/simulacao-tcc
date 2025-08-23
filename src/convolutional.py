@@ -71,7 +71,7 @@ class EncoderConvolutional:
         """
         return self.komm.free_distance()
 
-    def encode(self, input_bits):
+    def encode(self, ut):
         r"""
         Codifica uma sequência binária de entrada $u_t$, retornando as sequências de saida $v_t^{(0)}$ e $v_t^{(1)}$. O processo de codificação pode ser representado pela expressão abaixo.
 
@@ -93,16 +93,16 @@ class EncoderConvolutional:
             - $G_{0}$ e $G_{1}$: Polinômios geradores do codificador.
 
         Args:
-            input_bits (np.ndarray): Vetor de bits $u_t$ de entrada a serem codificados.
+            ut (np.ndarray): Vetor de bits $u_t$ de entrada a serem codificados.
 
         Returns:
                 tuple (np.ndarray, np.ndarray): Tupla com os dois canais de saída $v_t^{(0)}$ e $v_t^{(1)}$.
         """
-        input_bits = np.array(input_bits, dtype=int)
+        ut = np.array(ut, dtype=int)
         vt0 = []
         vt1 = []
 
-        for bit in input_bits:
+        for bit in ut:
             self.shift_register = np.insert(self.shift_register, 0, bit)[:self.K]
             out0 = np.sum(self.shift_register[self.g0_taps]) % 2
             out1 = np.sum(self.shift_register[self.g1_taps]) % 2

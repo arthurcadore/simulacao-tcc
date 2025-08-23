@@ -23,7 +23,7 @@ class Scrambler:
         """
         pass
 
-    def scramble(self, X, Y):
+    def scramble(self, vt0, vt1):
         r"""
         Embaralha os vetores $v_t^{(0)}$ e $v_t^{(1)}$, retornando os vetores $X_n$ e $Y_n$ embaralhados. O processo de embaralhamento é dado pela expressão abaixo.
 
@@ -50,8 +50,8 @@ class Scrambler:
         ![pageplot](../assets/embaralhador.svg)
         
         Args:
-            X (np.ndarray): Vetor de entrada $v_t^{(0)}$.
-            Y (np.ndarray): Vetor de entrada $v_t^{(1)}$.
+            vt0 (np.ndarray): Vetor de entrada $v_t^{(0)}$.
+            vt1 (np.ndarray): Vetor de entrada $v_t^{(1)}$.
 
         Returns:
             X_scrambled (np.ndarray): Vetor $X_n$ embaralhado.
@@ -60,13 +60,13 @@ class Scrambler:
         Raises:
             AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
         """
-        assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
+        assert len(vt0) == len(vt1), "Vetores X e Y devem ter o mesmo comprimento"
         X_scrambled = []
         Y_scrambled = []
 
-        for i in range(0, len(X), 3):
-            x_blk = X[i:i+3]
-            y_blk = Y[i:i+3]
+        for i in range(0, len(vt0), 3):
+            x_blk = vt0[i:i+3]
+            y_blk = vt1[i:i+3]
             n = len(x_blk)
 
             if n == 3:
@@ -90,7 +90,7 @@ class Scrambler:
 
         return X_scrambled, Y_scrambled
 
-    def descramble(self, X, Y):
+    def descramble(self, X_prime, Y_prime):
         r"""
         Desembaralha os vetores $X'_n$ e $Y'_n$ embaralhados, retornando os vetores $v_t^{(0)'}$ e $v_t^{(1)'}$ restaurados. O processo de desembaralhamento
         é dado pela expressão abaixo.
@@ -119,45 +119,45 @@ class Scrambler:
         ![pageplot](../assets/desembaralhador.svg)
 
         Args:
-            X (np.ndarray): Vetor $X'_{n}$ embaralhado.
-            Y (np.ndarray): Vetor $Y'_{n}$ embaralhado.
+            X_prime (np.ndarray): Vetor $X'_{n}$ embaralhado.
+            Y_prime (np.ndarray): Vetor $Y'_{n}$ embaralhado.
 
         Returns:
-            X_original (np.ndarray): Vetor $v_t^{(0)}$ restaurado.
-            Y_original (np.ndarray): Vetor $v_t^{(1)}$ restaurado.
+            vt0_prime (np.ndarray): Vetor $v_t^{(0)}$ restaurado.
+            vt1_prime (np.ndarray): Vetor $v_t^{(1)}$ restaurado.
         
         Raises:
             AssertionError: Se os vetores X e Y não tiverem o mesmo comprimento.
         """
-        assert len(X) == len(Y), "Vetores X e Y devem ter o mesmo comprimento"
-        X_original = []
-        Y_original = []
+        assert len(X_prime) == len(Y_prime), "Vetores X e Y devem ter o mesmo comprimento"
+        vt0_prime = []
+        vt1_prime = []
 
-        for i in range(0, len(X), 3):
-            x_blk = X[i:i+3]
-            y_blk = Y[i:i+3]
+        for i in range(0, len(X_prime), 3):
+            x_blk = X_prime[i:i+3]
+            y_blk = Y_prime[i:i+3]
             n = len(x_blk)
 
             if n == 3:
                 # Desembaralhamento do bloco [y1, x2, y2], [x1, x3, y3]
                 x1, x2, x3 = y_blk[0], x_blk[1], y_blk[1]
                 y1, y2, y3 = x_blk[0], x_blk[2], y_blk[2]
-                X_original.extend([x1, x2, x3])
-                Y_original.extend([y1, y2, y3])
+                vt0_prime.extend([x1, x2, x3])
+                vt1_prime.extend([y1, y2, y3])
             elif n == 2:
                 # Desembaralhamento do bloco [y1, x2], [x1, y2]
                 x1, x2 = y_blk[0], x_blk[1]
                 y1, y2 = x_blk[0], y_blk[1]
-                X_original.extend([x1, x2])
-                Y_original.extend([y1, y2])
+                vt0_prime.extend([x1, x2])
+                vt1_prime.extend([y1, y2])
             elif n == 1:
                 # Desembaralhamento do bloco [y1], [x1]
                 x1 = y_blk[0]
                 y1 = x_blk[0]
-                X_original.append(x1)
-                Y_original.append(y1)
+                vt0_prime.append(x1)
+                vt1_prime.append(y1)
 
-        return X_original, Y_original
+        return vt0_prime, vt1_prime
 
 
 

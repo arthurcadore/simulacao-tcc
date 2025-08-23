@@ -15,7 +15,7 @@ class Multiplexer:
         """
         pass
 
-    def concatenate(self, I1, Q1, I2, Q2):
+    def concatenate(self, SI, SQ, Xn, Yn):
         r"""
         Concatena os vetores $X_n$ e $Y_n$ de entrada, com $S_I$ e $S_Q$, retornando os vetores concatenados $X_n$ e $Y_n$. O processo de multiplexação é dado pela expressão abaixo.
 
@@ -26,24 +26,24 @@ class Multiplexer:
         $$
 
         Args:
-            I1 (np.ndarray): Vetor de entrada $S_I$.
-            Q1 (np.ndarray): Vetor de entrada $S_Q$.
-            I2 (np.ndarray): Vetor de entrada $X_n$.
-            Q2 (np.ndarray): Vetor de entrada $Y_n$.
+            SI (np.ndarray): Vetor de entrada $S_I$.
+            SQ (np.ndarray): Vetor de entrada $S_Q$.
+            Xn (np.ndarray): Vetor de entrada $X_n$.
+            Yn (np.ndarray): Vetor de entrada $Y_n$.
 
         Returns:
-            I (np.ndarray): Vetor $X_n$ concatenado.
-            Q (np.ndarray): Vetor $Y_n$ concatenado.
+            Xn (np.ndarray): Vetor $X_n$ concatenado.
+            Yn (np.ndarray): Vetor $Y_n$ concatenado.
         
         Raises:
             AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.
         """
-        assert len(I1) == len(Q1) and len(I2) == len(Q2), "Os vetores I e Q devem ter o mesmo comprimento em ambos os canais."
+        assert len(SI) == len(SQ) and len(Xn) == len(Yn), "Os vetores I e Q devem ter o mesmo comprimento em ambos os canais."
 
-        I = np.concatenate((I1, I2))
-        Q = np.concatenate((Q1, Q2))
+        Xn = np.concatenate((SI, Xn))
+        Yn = np.concatenate((SQ, Yn))
 
-        return I, Q
+        return Xn, Yn
 
 # Exemplo de uso
 if __name__ == "__main__":
