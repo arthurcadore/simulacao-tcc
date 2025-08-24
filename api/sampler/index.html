@@ -1048,7 +1048,7 @@
 
 
 <h2 id="sampler.Sampler.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1087,6 +1087,22 @@
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>delay</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Delay de amostragem.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>Rb</code>
             </td>
             <td>
@@ -1117,41 +1133,14 @@
                   <code>None</code>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>output_print</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Se True, imprime a saída.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>output_plot</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Se True, plota a saída.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
       </tbody>
     </table>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_sampler_time.svg" /></p>
+</details>
 
     </div>
 
@@ -1168,8 +1157,24 @@
 
     <div class="doc doc-contents ">
 
-        <p>Calcula os índices de amostragem com base no vetor de tempo.</p>
+        <p>Calcula os índices de amostragem <span class="arithmatex">\(I[n]\)</span> com base no vetor de tempo <span class="arithmatex">\(t\)</span>. O vetor de índices de amostragem <span class="arithmatex">\(I[n]\)</span> é dado pela expressão abaixo. </p>
+<div class="arithmatex">\[
+\begin{align}
+I[n] = \tau + n \cdot \left( \frac{f_s}{R_b}\right) \text{ , onde: } \quad I[n] &lt; \text{len}(t)
+\end{align}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\tau\)</span>: Delay inicial de amostragem.</li>
+<li><span class="arithmatex">\(f_s\)</span>: Frequência de amostragem.</li>
+<li><span class="arithmatex">\(R_b\)</span>: Taxa de bits.</li>
+<li><span class="arithmatex">\(n\)</span>: Índice da amostra.</li>
+<li><span class="arithmatex">\(\text{len}(t)\)</span>: Comprimento do vetor de tempo.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1206,17 +1211,18 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>indexes</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>numpy.ndarray: Índices de amostragem.</p>
+                <p>Vetor de índices de amostragem <span class="arithmatex">\(I[n]\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1239,8 +1245,20 @@
 
     <div class="doc doc-contents ">
 
-        <p>Amostra o sinal com base nos índices de amostragem.</p>
+        <p>Amostra o sinal <span class="arithmatex">\(s(t)\)</span> com base nos índices de amostragem <span class="arithmatex">\(I[n]\)</span>.</p>
+<div class="arithmatex">\[
+    s(t) \rightarrow  s([I[n]) \rightarrow s[n]
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada <span class="arithmatex">\(s(t)\)</span>.</li>
+<li><span class="arithmatex">\(s[n]\)</span> Sinal amostrado <span class="arithmatex">\(s[n]\)</span>.</li>
+<li><span class="arithmatex">\(I[n]\)</span> Índices de amostragem <span class="arithmatex">\(I[n]\)</span>.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1262,7 +1280,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal a ser amostrado.</p>
+                <p>Sinal de entrada <span class="arithmatex">\(s(t)\)</span> a ser amostrado.</p>
               </div>
             </td>
             <td>
@@ -1277,17 +1295,18 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>sampled_signal</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>numpy.ndarray: Sinal amostrado.</p>
+                <p>Sinal amostrado <span class="arithmatex">\(s[n]\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1310,8 +1329,24 @@
 
     <div class="doc doc-contents ">
 
-        <p>Quantiza o sinal em uma representação binária.</p>
+        <p>Quantiza o sinal <span class="arithmatex">\(s[n]\)</span> em valores discretos. O processo de quantização é dado pela expressão abaixo.</p>
+<div class="arithmatex">\[
+\begin{align}
+s'[n] = \begin{cases}
+    +1 &amp; \text{se } s[n] \geq 0 \\
+    -1 &amp; \text{se } s[n] &lt; 0
+\end{cases}
+\end{align}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s[n]\)</span> Simbolos amostrados <span class="arithmatex">\(s[n]\)</span>.</li>
+<li><span class="arithmatex">\(s'[n]\)</span> Símbolos quantizados <span class="arithmatex">\(s'[n]\)</span>.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1333,7 +1368,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal a ser quantizado.</p>
+                <p>Sinal de entrada <span class="arithmatex">\(s[n]\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1354,11 +1389,12 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>list</code></td>            <td>
+<td><code>symbols</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Representação binária do sinal quantizado.</p>
+                <p>Símbolos quantizados <span class="arithmatex">\(s'[n]\)</span>.</p>
               </div>
             </td>
           </tr>

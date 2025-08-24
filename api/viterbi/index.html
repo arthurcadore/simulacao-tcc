@@ -1016,13 +1016,6 @@
     <div class="doc doc-contents first">
 
 
-        <p>Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.</p>
-
-
-<details class="referência" open>
-  <summary>Referência</summary>
-  <p>AS3-SP-516-274-CNES (3.1.4.4)</p>
-</details>
 
 
 
@@ -1053,7 +1046,15 @@
 
     <div class="doc doc-contents ">
 
-        <p>Inicializa o decodificador Convolucional.</p>
+        <p>Inicializa o decodificador convolucional (algoritmo Viterbi), com base em uma tupla de polinômios geradores <span class="arithmatex">\(G\)</span> que determinam a estrutura do decodificador.</p>
+<div class="arithmatex">\[
+\begin{equation}
+    \begin{split}
+        G_0 &amp;= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
+        G_1 &amp;= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+    \end{split}
+\end{equation}
+\]</div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1076,7 +1077,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Matriz de polinômios geradores.</p>
+                <p>Tupla de polinômios geradores <span class="arithmatex">\(G\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1085,6 +1086,16 @@
           </tr>
       </tbody>
     </table>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_conv_trellis.svg" /></p>
+</details>        <div class="referencia">
+  <b>Referência:</b>
+  <p>https://rwnobrega.page/apontamentos/codigos-convolucionais/</p>
+  <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
+</div>
 
 
     </div>
@@ -1115,7 +1126,8 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>dict</code></td>            <td>
+<td><code>trellis</code></td>            <td>
+                  <code><span title="dict">dict</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1142,7 +1154,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica os bits de entrada.</p>
+        <p>Decodifica os bits de entrada <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>, retornando os bits decodificados <span class="arithmatex">\(u_t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1196,17 +1208,18 @@
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>ut_hat</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>np.ndarray: Bits decodificados.</p>
+                <p>Bits decodificados.</p>
               </div>
             </td>
           </tr>
