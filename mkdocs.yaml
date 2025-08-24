@@ -39,6 +39,8 @@ extra_css:
 
 nav:
   - Início: index.md
+  - Instalação: 
+      - Guia de Instalação: api/guia.md
   - Componentes:
       - Datagrama: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
@@ -78,7 +80,7 @@ badges:
   - name: Forks 
     image: https://img.shields.io/github/forks/arthurcadore/simulacao-tcc?style=social 
     link: https://github.com/arthurcadore/simulacao-tcc/network/members 
-
+    
 markdown_extensions:
   - pymdownx.arithmatex:  
       generic: true
