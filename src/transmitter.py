@@ -20,8 +20,7 @@ class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
                  output_print=True, output_plot=True):
         r"""
-        Classe que encapsula todo o processo de transmissão, desde a preparação do datagrama até a
-        modulação do sinal. O processo de transmissão pode ser representado pelo diagrama de blocos abaixo.
+        Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.
 
         ![pageplot](../assets/blocos_modulador.svg)
     
@@ -30,8 +29,13 @@ class Transmitter:
             fc (float): Frequência da portadora em Hz. Default é 4000 Hz
             fs (float): Frequência de amostragem em Hz. Default é 128000 Hz.
             Rb (float): Taxa de bits em bps. Default é 400 b
-            output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.
-            output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários.
+            output_print (bool): Se `True`, imprime os vetores intermediários no console.
+            output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.1 e 3.2)
+        </div>
         """
         self.datagram = datagram
         self.fc = fc
@@ -42,7 +46,7 @@ class Transmitter:
 
     def prepare_datagram(self):
         r"""
-        Prepara o datagrama para transmissão, retornando o vetor de bits $u_t$.
+        Gera o datagrama para transmissão, retornando o vetor de bits $u_t$.
 
         Returns:
             ut (np.ndarray): Vetor de bits do datagrama.
@@ -78,7 +82,7 @@ class Transmitter:
 
     def encode_convolutional(self, ut):
         r"""
-        Codifica o vetor de bits $u_t$ usando codificação convolucional.
+        Codifica o vetor de bits $u_t$ usando codificação convolucional, retornando os vetores de bits $v_t^{(0)}$ e $v_t^{(1)}$.
 
         Args:
             ut (np.ndarray): Vetor de bits a ser codificado.
@@ -126,7 +130,7 @@ class Transmitter:
 
     def scramble(self, vt0, vt1):
         r"""
-        Embaralha os vetores de bits dos canais I e Q.
+        Embaralha os vetores de bits $v_t^{(0)}$ e $v_t^{(1)}$, criando os vetores $X_n$ e $Y_n$ embaralhados.
 
         Args:
             vt0 (np.ndarray): Vetor de bits do canal I.
@@ -220,7 +224,7 @@ class Transmitter:
 
     def multiplex(self, sI, sQ, X, Y):
         r"""
-        Multiplexa os vetores de preâmbulo e dados dos canais I e Q.
+        Multiplexa os vetores de preâmbulo $S_I$ e $S_Q$ com os vetores de dados $X$ e $Y$, retornando os vetores multiplexados $X_n$ e $Y_n$.
 
         Args:
             sI (np.ndarray): Vetor do preâmbulo do canal I.
@@ -266,15 +270,15 @@ class Transmitter:
 
     def encode_channels(self, Xn, Yn):
         r"""
-        Codifica os vetores dos canais I e Q usando NRZ e Manchester, respectivamente.
+        Codifica os vetores dos canais $X_n$ e $Y_n$ usando $NRZ$ e $Manchester$, respectivamente, retornando os vetores de sinal codificados $X_{NRZ}$ e $Y_{MAN}$.
 
         Args:
-            Xn (np.ndarray): Vetor do canal I a ser codificado.
-            Yn (np.ndarray): Vetor do canal Q a ser codificado.
+            Xn (np.ndarray): Vetor do canal $X_n$ a ser codificado.
+            Yn (np.ndarray): Vetor do canal $Y_n$ a ser codificado.
         
         Returns:
-            Xnrz (np.ndarray): Vetor codificado do canal I (NRZ).
-            Yman (np.ndarray): Vetor codificado do canal Q (Manchester).
+            Xnrz (np.ndarray): Vetor de sinal codificado do canal I $NRZ$. 
+            Yman (np.ndarray): Vetor de sinal codificado do canal Q $Manchester$. 
 
         Exemplo:
             ![pageplot](assets/transmitter_encoder_time.svg)
@@ -323,15 +327,15 @@ class Transmitter:
 
     def format_signals(self, Xnrz, Yman):
         r"""
-        Formata os vetores dos canais I e Q usando filtro RRC.
+        Formata os vetores de sinal codificados $X_{NRZ}$ e $Y_{MAN}$ usando filtro RRC, retornando os vetores formatados $d_I$ e $d_Q$.
 
         Args:
-            Xnrz (np.ndarray): Vetor do canal I a ser formatado.
-            Yman (np.ndarray): Vetor do canal Q a ser formatado.
+            Xnrz (np.ndarray): Vetor do canal $X_{NRZ}$ a ser formatado.
+            Yman (np.ndarray): Vetor do canal $Y_{MAN}$ a ser formatado.
         
         Returns:
-            dI (np.ndarray): Vetor formatado do canal I.
-            dQ (np.ndarray): Vetor formatado do canal Q.
+            dI (np.ndarray): Vetor formatado do canal I, $d_I$.
+            dQ (np.ndarray): Vetor formatado do canal Q, $d_Q$.
 
         Exemplo:
             ![pageplot](assets/transmitter_formatter_time.svg)
@@ -389,15 +393,15 @@ class Transmitter:
 
     def modulate(self, dI, dQ):
         r"""
-        Modula os vetores formatados dos canais I e Q usando modulação QPSK.
+        Modula os vetores de sinal $d_I(t)$ e $d_Q(t)$ usando modulação QPSK, retornando o sinal modulado $s(t)$.
 
         Args:
-            dI (np.ndarray): Vetor formatado do canal I.
-            dQ (np.ndarray): Vetor formatado do canal Q.
+            dI (np.ndarray): Vetor formatado do canal I, $d_I(t)$.
+            dQ (np.ndarray): Vetor formatado do canal Q, $d_Q(t)$.
         
         Returns:
-            t (np.ndarray): Vetor de tempo.
-            s (np.ndarray): Sinal modulado.
+            t (np.ndarray): Vetor de tempo, $t$.
+            s (np.ndarray): Sinal modulado, $s(t)$.
 
         Exemplo:
             - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
@@ -519,11 +523,11 @@ class Transmitter:
 
     def run(self):
         r"""
-        Executa o processo de transmissão, retornando o resultado da transmissão.
+        Executa o processo de transmissão, retornando o sinal modulado $s(t)$ e o vetor de tempo $t$.
 
         Returns:
-            t (np.ndarray): Vetor de tempo.
-            s (np.ndarray): Sinal modulado $s(t)$.
+            t (np.ndarray): Vetor de tempo, $t$.
+            s (np.ndarray): Sinal modulado, $s(t)$.
         """
         ut = self.prepare_datagram()
         vt0, vt1 = self.encode_convolutional(ut)
