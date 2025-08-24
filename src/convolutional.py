@@ -113,19 +113,29 @@ class EncoderConvolutional:
 
 
 class DecoderViterbi:
-    r"""
-    Implementa o decodificador Viterbi, no padrão CCSDS 131.1-G-2, utilizado no PTT-A3.
-
-    Referência:
-        AS3-SP-516-274-CNES (3.1.4.4)
-    """
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
         r"""
-        Inicializa o decodificador Convolucional.
+        Inicializa o decodificador convolucional (algoritmo Viterbi), com base em uma tupla de polinômios geradores $G$ que determinam a estrutura do decodificador.
+
+        $$
+        \begin{equation}
+            \begin{split}
+                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
+                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+            \end{split}
+        \end{equation}
+        $$
 
         Args:
-            G (np.ndarray): Matriz de polinômios geradores.
+            G (np.ndarray): Tupla de polinômios geradores $G$.
+
+        <div class="referencia">
+          <b>Referência:</b>
+          <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
+          <p>CCSDS 131.1-G-2</p>
+        </div>
         """
+        
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
@@ -138,7 +148,10 @@ class DecoderViterbi:
         Constroi a trelica do decodificador Viterbi.
 
         Returns:
-            dict: Trelica do decodificador Viterbi.
+            trellis (dict): Trelica do decodificador Viterbi.
+
+        Exemplo: 
+            ![pageplot](assets/example_conv_trellis.svg)
         """
         trellis = {}
         for state in range(self.num_states):
@@ -157,14 +170,14 @@ class DecoderViterbi:
 
     def decode(self, vt0, vt1):
         r"""
-        Decodifica os bits de entrada.
+        Decodifica os bits de entrada $v_t^{(0)}$ e $v_t^{(1)}$, retornando os bits decodificados $u_t$.
 
         Args:
             vt0 (np.ndarray): Bits de entrada do canal I.
             vt1 (np.ndarray): Bits de entrada do canal Q.
 
         Returns:
-            np.ndarray: Bits decodificados.
+            ut_hat (np.ndarray): Bits decodificados.
         """
         vt0 = np.array(vt0, dtype=int)
         vt1 = np.array(vt1, dtype=int)
