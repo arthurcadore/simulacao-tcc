@@ -1,5 +1,3 @@
-# Data
-
 ::: data
     options:
         extra:

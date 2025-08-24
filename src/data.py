@@ -3,8 +3,7 @@ import numpy as np
 
 class ExportData:
     r"""
-    Classe para armazenar o resultado da transmissão, incluindo o sinal modulado e o vetor de tempo.
-    Pode salvar um único vetor ou múltiplos vetores em um único arquivo.
+    Instância um objeto `ExportData`, utilizado para salvar vetores em arquivos binários `.npy` ou texto `.txt`.
 
     Args:
         vector (Union[np.ndarray, List[np.ndarray]]): Um único vetor ou lista de vetores para salvar.
@@ -19,11 +18,10 @@ class ExportData:
 
     def save(self, binary=True):
         r"""
-        Salva os resultados em arquivo binário (.npy) ou em TXT.
+        Salva os resultados em arquivo binário `.npy` ou em texto `.txt`.
         
         Args:
-            binary (bool): Se True, salva em formato binário (.npy).
-                          Se False, salva em formato de texto (.txt).
+            binary (bool): Se `True`, salva em formato binário `.npy`.
         """
         script_dir = os.path.dirname(os.path.abspath(__file__))
         basepath = os.path.normpath(os.path.join(script_dir, self.path, self.filename))
@@ -44,7 +42,7 @@ class ExportData:
 
 class ImportData:
     r"""
-    Classe para carregar um vetor salvo em arquivo.
+    Instância um objeto `ImportData`, utilizado para carregar vetores de arquivos binários `.npy` ou texto `.txt`.
 
     Args:
         filename (str): Nome do arquivo (sem extensão).
@@ -59,14 +57,11 @@ class ImportData:
         Carrega o vetor salvo.
 
         Args:
-            mode (str): Formato do arquivo:
-                - "npy" : arquivo binário com metadados do NumPy (.npy)
-                - "bin" : dados crus em binário (.bin)
-                - "txt" : arquivo de texto (.txt)
-            dtype (np.dtype): Tipo de dado (usado apenas para "bin").
+            mode (str): Formato do arquivo: `npy` para arquivos binários, `txt` para arquivos de texto.
+            dtype (np.dtype): Tipo de codificação utilizada, necessário para `npy`.
 
         Returns:
-            np.ndarray: Vetor carregado.
+            data (np.ndarray): Vetor carregado.
         """
         script_dir = os.path.dirname(os.path.abspath(__file__))
         basepath = os.path.normpath(os.path.join(script_dir, self.path, self.filename))
