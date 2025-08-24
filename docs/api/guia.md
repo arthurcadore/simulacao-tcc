@@ -5,6 +5,7 @@ Guia de instalação para o Simulador ARGOS-3.
 ## Pré-requisitos
 
 - `Python 3.8` (ou superior);
+- `Python-venv 3.12.7` (ou superior);
 - `Git 2.43.0` (ou superior);
 - `GNU Make 4.3` (ou superior);
 - Recomenda-se a distribuição `Ubuntu 24.04.2 LTS` para seguir os passos de instalação/atualização de pacotes.  

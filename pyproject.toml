@@ -1,0 +1,30 @@
+[project]
+name = "argos3"
+version = "1.0.0"
+description = "An open-source tool for analysis and simulation of ARGOS-3 standard"
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [
+    { name = "Arthur Cadore", email = "arthurbarcella.ifsc@gmail.com" }
+]
+license = { file = "LICENSE" }
+dependencies = [
+    "numpy>=1.21.0",
+    "matplotlib>=3.4.0",
+    "scipy>=1.7.0",
+    "komm>=0.7.0"
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://arthurcadore.github.io/simulacao-tcc/"
+Repository = "https://github.com/arthurcadore/simulacao-tcc"
+
+[build-system]
+requires = ["build", "setuptools>=61.0.0", "wheel", "twine"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
