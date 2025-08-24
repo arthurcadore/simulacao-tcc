@@ -11,7 +11,7 @@ from plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):
         r"""
-        Inicializa uma instância de formatador, utilizado preparar os símbolos para modulação.
+        Inicializa um formatador, utilizado preparar os símbolos para modulação.
 
         Args:
             alpha (float): Fator de roll-off do pulso RRC.

@@ -15,7 +15,7 @@ class Preamble:
 
     def __init__(self, preamble_hex="2BEEEEBF"):
         r"""
-        Inicializa uma instância de palavra de sincronismo, $S = 2BEEEEBF_{16}$ no padrão ARGOS-3. A palavra de sincronismo composta por 30 bits, $S = [S_0, S_1, S_2, \dots, S_{29}]$ que são intercalados para formar os vetores $S_I$ e $S_Q$ de cada canal, conforme apresentado abaixo.
+        Gera uma palavra de sincronismo, $S = 2BEEEEBF_{16}$ no padrão ARGOS-3. A palavra de sincronismo composta por 30 bits, $S = [S_0, S_1, S_2, \dots, S_{29}]$ que são intercalados para formar os vetores $S_I$ e $S_Q$ de cada canal, conforme apresentado abaixo.
 
         $$
         \begin{align}

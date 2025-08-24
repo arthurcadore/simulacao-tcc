@@ -11,7 +11,7 @@ from plotter import create_figure, save_figure, ImpulseResponsePlot
 class MatchedFilter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted"):
         r"""
-        Inicializa uma instância de filtro casado. O filtro casado é usado para maximizar a SNR do sinal recebido.
+        Inicializa um filtro casado. O filtro casado é usado para maximizar a SNR do sinal recebido.
 
         Args:
             alpha (float): Fator de roll-off do filtro casado.

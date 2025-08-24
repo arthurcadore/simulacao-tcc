@@ -11,7 +11,7 @@ from plotter import save_figure, create_figure, SampledSignalPlot
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, delay=0):
         r"""
-        Implementação de decisor (amostragem e quantização) para o receptor.
+        Inicializa o decisor, utilizado para amostragem e quantização no receptor.
 
         Args: 
             fs (int): Frequência de amostragem.

@@ -12,7 +12,7 @@ from plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
 class LPF:
     def __init__(self, cut_off, order, fs=128_000, type="butter"):
         r"""
-        Inicializa uma instância de filtro passa-baixa com base em uma frequência de corte $f_{cut}$ e uma ordem $N$.
+        Inicializa um filtro passa-baixa com base em uma frequência de corte $f_{cut}$ e uma ordem $N$.
 
         Args:
             cut_off (float): Frequência de corte $f_{cut}$ do filtro.

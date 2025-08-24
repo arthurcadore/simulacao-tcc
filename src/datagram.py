@@ -15,7 +15,7 @@ from plotter import BitsPlot, create_figure, save_figure
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):
         r"""
-        Inicializa uma instância de datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
+        Gera um datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
         ![pageplot](../assets/datagrama.svg)
 

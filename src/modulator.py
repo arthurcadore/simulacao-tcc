@@ -12,7 +12,7 @@ from plotter import create_figure, save_figure, TimePlot, FrequencyPlot, Constel
 class Modulator:
     def __init__(self, fc, fs=128_000):
         r"""
-        Inicializa uma instância do modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
+        Inicializa um modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
 
         ![pageplot](../assets/modulador.svg)
 
