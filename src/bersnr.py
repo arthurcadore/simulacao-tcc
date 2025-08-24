@@ -1,9 +1,9 @@
-"""
-Implementação de simulação para curva BER vs Eb/N0. 
+# """
+# Implementação de simulação para curva BER vs Eb/N0. 
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import os
 import numpy as np
@@ -19,7 +19,23 @@ from plotter import BersnrPlot, create_figure, save_figure
 
 def repetitions_for_ebn0(ebn0: float) -> int:
     r"""
-    Define o número de repetições em função do $Eb/N0$, usa interpolação linear entre pontos de referência.
+    Define o número de repetições em função do $Eb/N0$, usando interpolação linear entre pontos de referência, dada pela expressão abaixo.
+
+    $$
+    r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r_{i})
+    $$
+
+    Onde:
+        - $r$: Número de repetições.
+        - $EBN0$: Relação $Eb/N_0$ em decibéis.
+        - $r_i$ e $r_{i+1}$: Número de repetições nos pontos de referência próximos.
+        - $EBN0_i$ e $EBN0_{i+1}$: Relações $Eb/N_0$ nos pontos de referência próximos.
+
+    Args:
+        ebn0 (float): Relação $Eb/N_0$ em decibéis.
+
+    Returns:
+        int: Número de repetições, arredondado para o valor inteiro mais próximo.
     """
     ebn0_ref = [0, 1, 4, 6, 8]
     reps_ref = [2000, 4000, 20000, 40000, 60000]
@@ -34,7 +50,7 @@ def repetitions_for_ebn0(ebn0: float) -> int:
 
 def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
     r"""
-    Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado $Eb/N0$.
+    Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado $Eb/N0$, retornando a taxa de erro de bit (BER) simulada.
 
     Args: 
         ebn0_db (float): Relação $Eb/N0$ em decibéis.
@@ -66,16 +82,16 @@ def simulate_argos(ebn0_db, numblocks=8, fs=128_000, Rb=400):
 # TODO: Alterar função para operar usando add_noise
 def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
     r"""
-    Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.
+    Simula a transmissão e recepção QPSK em canal AWGN para um dado $Eb/N0$, retornando a taxa de erro de bit ($BER$) simulada.
 
     Args:
-        ebn0_db (float): Relação Eb/N0 em dB.
+        ebn0_db (float): Relação $Eb/N0$ em dB.
         num_bits (int): Número de bits simulados.
-        bits_por_simbolo (int): Número de bits por símbolo (QPSK = 2).
+        bits_por_simbolo (int): Número de bits por símbolo $k$, ($QPSK = 2$).
         rng (np.random.Generator, opcional): gerador de números aleatórios.
 
     Returns:
-        float: BER simulada.
+        ber (float): BER simulada.
     """
     rng = rng if rng is not None else np.random.default_rng()
 
@@ -109,14 +125,14 @@ def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
 
 def run(EbN0_values=np.arange(0, 12, 0.5), num_workers=28):
     r"""
-    Executa a simulação completa de BER vs Eb/N0 para ARGOS e QPSK.
+    Executa a simulação completa de $BER$ vs $Eb/N0$ para as funções de simulação implementadas.
 
     Args: 
-        EbN0_values (np.ndarray): Valores de Eb/N0 a serem simulados.
+        EbN0_values (np.ndarray): Valores de $Eb/N0$ a serem simulados.
         num_workers (int): Número de processos para execução paralela.
 
     Returns:
-        list: Lista de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].
+        results (np.ndarray): Array de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].
 
     Exemplos:
         - Argos e QPSK: ![pageplot](assets/ber_vs_ebn0.svg)
