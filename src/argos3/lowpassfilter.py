@@ -7,7 +7,7 @@ Data: 28-07-2025
 
 import numpy as np
 from scipy.signal import butter, filtfilt, lfilter
-from plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
+from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
 
 class LPF:
     def __init__(self, cut_off, order, fs=128_000, type="butter"):

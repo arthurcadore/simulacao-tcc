@@ -6,9 +6,9 @@ Data: 16-08-2025
 """
 
 import numpy as np
-from datagram import Datagram
-from transmitter import Transmitter
-from plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
+from .datagram import Datagram
+from .transmitter import Transmitter
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
 
 class Noise:
     def __init__(self, snr=15):

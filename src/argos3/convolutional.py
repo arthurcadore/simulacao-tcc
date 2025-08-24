@@ -10,7 +10,7 @@ Data: 28-07-2025
 
 import numpy as np
 import komm 
-from plotter import create_figure, save_figure, BitsPlot, TrellisPlot
+from .plotter import create_figure, save_figure, BitsPlot, TrellisPlot
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):

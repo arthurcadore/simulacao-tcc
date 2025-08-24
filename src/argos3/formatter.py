@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
+from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):

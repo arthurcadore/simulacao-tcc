@@ -6,7 +6,7 @@ Data: 15-08-2025
 """
 
 import numpy as np
-from plotter import save_figure, create_figure, SampledSignalPlot
+from .plotter import save_figure, create_figure, SampledSignalPlot
 
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, delay=0):

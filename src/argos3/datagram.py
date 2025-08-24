@@ -10,7 +10,7 @@ Data: 28-07-2025
 
 import numpy as np
 import json
-from plotter import BitsPlot, create_figure, save_figure
+from .plotter import BitsPlot, create_figure, save_figure
 
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None):

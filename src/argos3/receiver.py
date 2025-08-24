@@ -5,18 +5,18 @@ Autor: Arthur Cadore
 Data: 16-08-2025
 """
 
-from datagram import Datagram
-from modulator import Modulator
-from scrambler import Scrambler
-from encoder import Encoder
-from transmitter import Transmitter
-from noise import Noise
-from lowpassfilter import LPF
-from matchedfilter import MatchedFilter
-from sampler import Sampler
 import numpy as np
-from convolutional import DecoderViterbi
-from plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot
+from .datagram import Datagram
+from .modulator import Modulator
+from .scrambler import Scrambler
+from .encoder import Encoder
+from .transmitter import Transmitter
+from .noise import Noise
+from .lowpassfilter import LPF
+from .matchedfilter import MatchedFilter
+from .sampler import Sampler
+from .convolutional import DecoderViterbi
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):

@@ -5,7 +5,7 @@ from .formatter import *
 from .modulator import *
 from .multiplexer import *
 from .noise import *
-from .plots import *
+from .plotter import *
 from .preamble import *
 from .scrambler import *
 from .transmitter import *

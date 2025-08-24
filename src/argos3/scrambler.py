@@ -9,7 +9,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plotter import save_figure, create_figure, BitsPlot
+from .plotter import save_figure, create_figure, BitsPlot
 
 class Scrambler:
     def __init__(self):

@@ -4,18 +4,16 @@
 # Autor: Arthur Cadore
 # Data: 28-07-2025
 # """
-
-import os
 import numpy as np
 import concurrent.futures
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-from datagram import Datagram
-from transmitter import Transmitter
-from receiver import Receiver
-from noise import NoiseEBN0
-from data import ExportData, ImportData
-from plotter import BersnrPlot, create_figure, save_figure
+
+from .datagram import Datagram
+from .transmitter import Transmitter
+from .receiver import Receiver
+from .noise import NoiseEBN0
+from .data import ExportData, ImportData
+from .plotter import BersnrPlot, create_figure, save_figure
 
 def repetitions_for_ebn0(ebn0: float) -> int:
     r"""

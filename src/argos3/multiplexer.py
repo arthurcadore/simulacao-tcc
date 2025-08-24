@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plotter import create_figure, save_figure, BitsPlot
+from .plotter import create_figure, save_figure, BitsPlot
 
 class Multiplexer:
     def __init__(self):

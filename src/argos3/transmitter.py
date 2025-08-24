@@ -5,16 +5,16 @@ Autor: Arthur Cadore
 Data: 16-08-2025
 """
 import numpy as np
-from formatter import Formatter
-from convolutional import EncoderConvolutional
-from datagram import Datagram
-from modulator import Modulator
-from preamble import Preamble
-from scrambler import Scrambler
-from multiplexer import Multiplexer
-from encoder import Encoder
-from data import ExportData, ImportData
-from plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
+from .formatter import Formatter
+from .convolutional import EncoderConvolutional
+from .datagram import Datagram
+from .modulator import Modulator
+from .preamble import Preamble
+from .scrambler import Scrambler
+from .multiplexer import Multiplexer
+from .encoder import Encoder
+from .data import ExportData, ImportData
+from .plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
 
 class Transmitter:
     def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 

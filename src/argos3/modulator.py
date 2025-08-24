@@ -5,9 +5,8 @@ Autor: Arthur Cadore
 Data: 28-07-2025
 """
 import numpy as np
-from formatter import Formatter
-from encoder import Encoder
-from plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
+from .formatter import Formatter
+from .plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
     def __init__(self, fc, fs=128_000):

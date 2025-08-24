@@ -9,7 +9,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
+from .plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
 
 class Encoder:
     def __init__(self, method):
