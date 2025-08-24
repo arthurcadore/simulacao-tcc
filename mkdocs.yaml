@@ -67,7 +67,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [src]
+          paths: [src/argos3]
           options:
             show_source: false
             show_submodules: true

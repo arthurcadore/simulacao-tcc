@@ -58,7 +58,7 @@ def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> T
     grid = gridspec.GridSpec(rows, cols, figure=fig)
     return fig, grid
 
-def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../out") -> None:
+def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../../out") -> None:
     r"""
     Salva a figura em `<out_dir>/<filename>` a partir do diretório raiz do script. 
     
