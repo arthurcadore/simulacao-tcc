@@ -1106,8 +1106,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Classe que encapsula todo o processo de transmissão, desde a preparação do datagrama até a
-modulação do sinal. O processo de transmissão pode ser representado pelo diagrama de blocos abaixo.</p>
+        <p>Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.</p>
 <p><img alt="pageplot" src="../../assets/blocos_modulador.svg" /></p>
 
 
@@ -1147,7 +1146,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência da portadora em Hz. Default é 4000 Hz</p>
+                <p>Frequência da portadora em Hz. </p>
               </div>
             </td>
             <td>
@@ -1163,7 +1162,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem em Hz. Default é 128000 Hz.</p>
+                <p>Frequência de amostragem em Hz. </p>
               </div>
             </td>
             <td>
@@ -1179,7 +1178,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Taxa de bits em bps. Default é 400 b</p>
+                <p>Taxa de bits em bps.</p>
               </div>
             </td>
             <td>
@@ -1195,7 +1194,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se True, imprime os vetores intermediários no console. Default é True.</p>
+                <p>Se <code>True</code>, imprime os vetores intermediários no console.</p>
               </div>
             </td>
             <td>
@@ -1211,7 +1210,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se True, gera e salva os gráficos dos processos intermediários.</p>
+                <p>Se <code>True</code>, gera e salva os gráficos dos processos intermediários.</p>
               </div>
             </td>
             <td>
@@ -1220,6 +1219,10 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-274-CNES (seção 3.1 e 3.2)
+</div>
 
 
     </div>
@@ -1237,7 +1240,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Prepara o datagrama para transmissão, retornando o vetor de bits <span class="arithmatex">\(u_t\)</span>.</p>
+        <p>Gera o datagrama para transmissão, retornando o vetor de bits <span class="arithmatex">\(u_t\)</span>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1283,7 +1286,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Codifica o vetor de bits <span class="arithmatex">\(u_t\)</span> usando codificação convolucional.</p>
+        <p>Codifica o vetor de bits <span class="arithmatex">\(u_t\)</span> usando codificação convolucional, retornando os vetores de bits <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1370,7 +1373,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Embaralha os vetores de bits dos canais I e Q.</p>
+        <p>Embaralha os vetores de bits <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>, criando os vetores <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span> embaralhados.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1529,7 +1532,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Multiplexa os vetores de preâmbulo e dados dos canais I e Q.</p>
+        <p>Multiplexa os vetores de preâmbulo <span class="arithmatex">\(S_I\)</span> e <span class="arithmatex">\(S_Q\)</span> com os vetores de dados <span class="arithmatex">\(X\)</span> e <span class="arithmatex">\(Y\)</span>, retornando os vetores multiplexados <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1664,7 +1667,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Codifica os vetores dos canais I e Q usando NRZ e Manchester, respectivamente.</p>
+        <p>Codifica os vetores dos canais <span class="arithmatex">\(X_n\)</span> e <span class="arithmatex">\(Y_n\)</span> usando <span class="arithmatex">\(NRZ\)</span> e <span class="arithmatex">\(Manchester\)</span>, respectivamente, retornando os vetores de sinal codificados <span class="arithmatex">\(X_{NRZ}\)</span> e <span class="arithmatex">\(Y_{MAN}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1687,7 +1690,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor do canal I a ser codificado.</p>
+                <p>Vetor do canal <span class="arithmatex">\(X_n\)</span> a ser codificado.</p>
               </div>
             </td>
             <td>
@@ -1703,7 +1706,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor do canal Q a ser codificado.</p>
+                <p>Vetor do canal <span class="arithmatex">\(Y_n\)</span> a ser codificado.</p>
               </div>
             </td>
             <td>
@@ -1729,7 +1732,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor codificado do canal I (NRZ).</p>
+                <p>Vetor de sinal codificado do canal I <span class="arithmatex">\(NRZ\)</span>. </p>
               </div>
             </td>
           </tr>
@@ -1739,7 +1742,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor codificado do canal Q (Manchester).</p>
+                <p>Vetor de sinal codificado do canal Q <span class="arithmatex">\(Manchester\)</span>. </p>
               </div>
             </td>
           </tr>
@@ -1767,7 +1770,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Formata os vetores dos canais I e Q usando filtro RRC.</p>
+        <p>Formata os vetores de sinal codificados <span class="arithmatex">\(X_{NRZ}\)</span> e <span class="arithmatex">\(Y_{MAN}\)</span> usando filtro RRC, retornando os vetores formatados <span class="arithmatex">\(d_I\)</span> e <span class="arithmatex">\(d_Q\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1790,7 +1793,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor do canal I a ser formatado.</p>
+                <p>Vetor do canal <span class="arithmatex">\(X_{NRZ}\)</span> a ser formatado.</p>
               </div>
             </td>
             <td>
@@ -1806,7 +1809,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor do canal Q a ser formatado.</p>
+                <p>Vetor do canal <span class="arithmatex">\(Y_{MAN}\)</span> a ser formatado.</p>
               </div>
             </td>
             <td>
@@ -1832,7 +1835,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor formatado do canal I.</p>
+                <p>Vetor formatado do canal I, <span class="arithmatex">\(d_I\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1842,7 +1845,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor formatado do canal Q.</p>
+                <p>Vetor formatado do canal Q, <span class="arithmatex">\(d_Q\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1870,7 +1873,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Modula os vetores formatados dos canais I e Q usando modulação QPSK.</p>
+        <p>Modula os vetores de sinal <span class="arithmatex">\(d_I(t)\)</span> e <span class="arithmatex">\(d_Q(t)\)</span> usando modulação QPSK, retornando o sinal modulado <span class="arithmatex">\(s(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1893,7 +1896,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor formatado do canal I.</p>
+                <p>Vetor formatado do canal I, <span class="arithmatex">\(d_I(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1909,7 +1912,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor formatado do canal Q.</p>
+                <p>Vetor formatado do canal Q, <span class="arithmatex">\(d_Q(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1935,7 +1938,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Vetor de tempo, <span class="arithmatex">\(t\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1945,7 +1948,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal modulado.</p>
+                <p>Sinal modulado, <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1977,7 +1980,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
 
     <div class="doc doc-contents ">
 
-        <p>Executa o processo de transmissão, retornando o resultado da transmissão.</p>
+        <p>Executa o processo de transmissão, retornando o sinal modulado <span class="arithmatex">\(s(t)\)</span> e o vetor de tempo <span class="arithmatex">\(t\)</span>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1995,7 +1998,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Vetor de tempo, <span class="arithmatex">\(t\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -2005,7 +2008,7 @@ modulação do sinal. O processo de transmissão pode ser representado pelo diag
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal modulado <span class="arithmatex">\(s(t)\)</span>.</p>
+                <p>Sinal modulado, <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
           </tr>

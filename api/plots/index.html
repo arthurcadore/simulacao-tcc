@@ -1151,7 +1151,7 @@
     <div class="doc doc-contents ">
 
 
-        <p>Inicializa o plot.</p>
+        <p>Classe base para plotagem de gráficos, implementando funcionalidades comuns a todos os plots.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1174,7 +1174,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Eixo do plot</p>
+                <p>Objeto <code>Axes</code> do matplotlib. </p>
               </div>
             </td>
             <td>
@@ -1190,7 +1190,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Título do plot</p>
+                <p>Título do plot. </p>
               </div>
             </td>
             <td>
@@ -1206,7 +1206,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de rótulos</p>
+                <p>Lista de rótulos para os eixos. </p>
               </div>
             </td>
             <td>
@@ -1222,7 +1222,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x</p>
+                <p>Limites do eixo x <code>x = [xlim[0], xlim[1]]</code>. </p>
               </div>
             </td>
             <td>
@@ -1238,7 +1238,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo y</p>
+                <p>Limites do eixo y <code>y = [ylim[0], ylim[1]]</code>. </p>
               </div>
             </td>
             <td>
@@ -1254,7 +1254,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Cores do plot</p>
+                <p>Cores do plot. </p>
               </div>
             </td>
             <td>
@@ -1270,7 +1270,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Estilo do plot</p>
+                <p>Estilo do plot.</p>
               </div>
             </td>
             <td>
@@ -1323,7 +1323,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio do tempo.</p>
+        <p>Classe para plotar sinais no domínio do tempo, recebendo um vetor de tempo <span class="arithmatex">\(t\)</span>, e uma lista de sinais <span class="arithmatex">\(s(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1410,7 +1410,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal ou lista de sinais</p>
+                <p>Sinal ou lista de sinais <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1472,8 +1472,22 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio da frequência.</p>
+        <p>Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem <span class="arithmatex">\(f_s\)</span> e um sinal <span class="arithmatex">\(s(t)\)</span> e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. </p>
+<div class="arithmatex">\[
+\begin{equation}
+    S(f) = \mathcal{F}\{s(t)\}
+\end{equation}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(S(f)\)</span>: Sinal no domínio da frequência.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal no domínio do tempo.</li>
+<li><span class="arithmatex">\(\mathcal{F}\)</span>: Transformada de Fourier.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1637,8 +1651,20 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio da constelação.</p>
+        <p>Classe para plotar sinais no domínio da constelação, recebendo os sinais <span class="arithmatex">\(d_I\)</span> e <span class="arithmatex">\(d_Q\)</span>, realizando o plot em fase <span class="arithmatex">\(I\)</span> e quadratura <span class="arithmatex">\(Q\)</span>, conforme a expressão abaixo.</p>
+<div class="arithmatex">\[
+s(t) = d_I(t) + j d_Q(t)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal complexo.</li>
+<li><span class="arithmatex">\(d_I(t)\)</span>: Sinal em fase.</li>
+<li><span class="arithmatex">\(d_Q(t)\)</span>: Sinal em quadratura.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1800,7 +1826,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar bits.</p>
+        <p>Classe para plotar bits, recebendo uma lista de bits <span class="arithmatex">\(b_t\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1967,7 +1993,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar bits com codificação de linha.</p>
+        <p>Classe para plotar sinais codificados com codificação de linha, recebendo um vetor de simbolos <span class="arithmatex">\(s\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2031,14 +2057,14 @@
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>bits</code>
+                <code>symbols</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits</p>
+                <p>Vetor de simbolos <span class="arithmatex">\(s\)</span></p>
               </div>
             </td>
             <td>
@@ -2114,7 +2140,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a resposta ao impulso de um filtro.</p>
+        <p>Classe para plotar a resposta ao impulso de um filtro, recebendo um vetor de tempo <span class="arithmatex">\(t_{imp}\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2279,7 +2305,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar o diagrama de treliça de um decodificador viterbi.</p>
+        <p>Classe para plotar o diagrama de treliça de um decodificador viterbi, recebendo um dicionário de treliça e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2350,8 +2376,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Dicionário do treliça. 
-            Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}</p>
+                <p>Dicionário do treliça.</p>
               </div>
             </td>
             <td>
@@ -2443,7 +2468,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar um sinal no domínio do tempo com seus pontos de amostragem.</p>
+        <p>Classe para plotar um sinal <span class="arithmatex">\(s(t)\)</span> amostrado em <span class="arithmatex">\(t_s\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2622,8 +2647,20 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a fase dos sinais IQ no domínio do tempo.</p>
+        <p>Classe para plotar a fase dos sinais <span class="arithmatex">\(d_I(t)\)</span> e <span class="arithmatex">\(d_Q(t)\)</span> no domínio do tempo, conforme a expressão abaixo.</p>
+<div class="arithmatex">\[
+    s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s(t)\)</span>: Vetor de fases por intervalo de tempo.</li>
+<li><span class="arithmatex">\(d_I(t)\)</span>: Componente sinal <span class="arithmatex">\(d_I(t)\)</span>, em fase. </li>
+<li><span class="arithmatex">\(d_Q(t)\)</span>: Componente sinal <span class="arithmatex">\(d_Q(t)\)</span>, em quadratura.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -2778,7 +2815,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a curva <span class="arithmatex">\( E_b/N_0 \)</span> versus <span class="arithmatex">\( BER \)</span> (Taxa de Erro de Bit).</p>
+        <p>Classe para plotar a curva <span class="arithmatex">\(E_b/N_0\)</span> versus <span class="arithmatex">\(BER\)</span>, uma lista de sinais <code>ber_values</code></p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2849,7 +2886,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de valores de <span class="arithmatex">\( E_b/N_0 \)</span> (em dB)</p>
+                <p>Vetor de valores de <span class="arithmatex">\(E_b/N_0\)</span> em <span class="arithmatex">\(dB\)</span></p>
               </div>
             </td>
             <td>
@@ -2865,7 +2902,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de vetores de valores de <span class="arithmatex">\( BER \)</span> para diferentes condições</p>
+                <p>Lista de vetores de valores de <span class="arithmatex">\(BER\)</span> para diferentes condições</p>
               </div>
             </td>
             <td>
@@ -2881,7 +2918,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rótulos para as curvas (por exemplo, diferentes condições ou algoritmos)</p>
+                <p>Rótulos para as curvas. </p>
               </div>
             </td>
             <td>
@@ -2941,8 +2978,20 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a distribuição Gaussiana do ruído AWGN com base na variância.</p>
+        <p>Classe para plotar a densidade de probabilidade <span class="arithmatex">\(p(x)\)</span> de uma dada variância <span class="arithmatex">\(\sigma^2\)</span>, seguindo a expressão abaixo. </p>
+<div class="arithmatex">\[
+p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(p(x)\)</span>: Densidade de probabilidade do ruído.</li>
+<li><span class="arithmatex">\(\sigma^2\)</span>: Variância do ruído.</li>
+<li><span class="arithmatex">\(x\)</span>: Amplitude do ruído.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -3077,8 +3126,20 @@
 
     <div class="doc doc-contents ">
 
-        <p>Converte a magnitude do sinal para escala logarítmica (dB), normalizada.</p>
+        <p>Converte a magnitude do sinal para escala logarítmica (<span class="arithmatex">\(dB\)</span>). O processo de conversão é dado pela expressão abaixo.</p>
+<div class="arithmatex">\[
+ dB(x) = 20 \log_{10}\left(\frac{|x|}{x_{peak} + 10^{-12}}\right)
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(x\)</span>: Sinal a ser convertido para <span class="arithmatex">\(dB\)</span>.</li>
+<li><span class="arithmatex">\(x_{peak}\)</span>: Pico de maior magnitude do sinal.</li>
+<li><span class="arithmatex">\(10^{-12}\)</span>: Constante para evitar divisão por zero.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -3126,7 +3187,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Array com o sinal convertido para dB</p>
+                <p>Array com o sinal convertido para <span class="arithmatex">\(dB\)</span></p>
               </div>
             </td>
           </tr>
@@ -3149,7 +3210,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Cria uma figura com GridSpec e retorna (fig, grid).</p>
+        <p>Cria uma figura com <code>GridSpec</code>, retornando o objeto <code>fig</code> e <code>grid</code> para desenhar os plots.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3253,7 +3314,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Salva a figura em <out_dir>/<filename> a partir do diretório onde está este script.</p>
+        <p>Salva a figura em <code>&lt;out_dir&gt;/&lt;filename&gt;</code> a partir do diretório raiz do script. </p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3276,7 +3337,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura a ser salva</p>
+                <p>Objeto <code>Figure</code> do matplotlib</p>
               </div>
             </td>
             <td>

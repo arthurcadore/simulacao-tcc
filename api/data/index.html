@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data_1" class="md-skip">
+        <a href="#data" class="md-skip">
           Skip to content
         </a>
       
@@ -889,8 +889,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -922,8 +920,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1024,8 +1020,7 @@
   
 
 
-<h1 id="data_1">Data</h1>
-
+  <h1>Data Import/Export</h1>
 
 <div class="doc doc-object doc-module">
 
@@ -1065,8 +1060,7 @@
     <div class="doc doc-contents ">
 
 
-        <p>Classe para armazenar o resultado da transmissão, incluindo o sinal modulado e o vetor de tempo.
-Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
+        <p>Instância um objeto <code>ExportData</code>, utilizado para salvar vetores em arquivos binários <code>.npy</code> ou texto <code>.txt</code>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1161,7 +1155,7 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Salva os resultados em arquivo binário (.npy) ou em TXT.</p>
+        <p>Salva os resultados em arquivo binário <code>.npy</code> ou em texto <code>.txt</code>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1184,8 +1178,7 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se True, salva em formato binário (.npy).
-          Se False, salva em formato de texto (.txt).</p>
+                <p>Se <code>True</code>, salva em formato binário <code>.npy</code>.</p>
               </div>
             </td>
             <td>
@@ -1222,7 +1215,7 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
     <div class="doc doc-contents ">
 
 
-        <p>Classe para carregar um vetor salvo em arquivo.</p>
+        <p>Instância um objeto <code>ImportData</code>, utilizado para carregar vetores de arquivos binários <code>.npy</code> ou texto <code>.txt</code>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1324,10 +1317,7 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Formato do arquivo:
-- "npy" : arquivo binário com metadados do NumPy (.npy)
-- "bin" : dados crus em binário (.bin)
-- "txt" : arquivo de texto (.txt)</p>
+                <p>Formato do arquivo: <code>npy</code> para arquivos binários, <code>txt</code> para arquivos de texto.</p>
               </div>
             </td>
             <td>
@@ -1343,7 +1333,7 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tipo de dado (usado apenas para "bin").</p>
+                <p>Tipo de codificação utilizada, necessário para <code>npy</code>.</p>
               </div>
             </td>
             <td>
@@ -1358,17 +1348,18 @@ Pode salvar um único vetor ou múltiplos vetores em um único arquivo.</p>
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>data</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>np.ndarray: Vetor carregado.</p>
+                <p>Vetor carregado.</p>
               </div>
             </td>
           </tr>

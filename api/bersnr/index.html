@@ -912,6 +912,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#bersnr" class="md-nav__link">
+    <span class="md-ellipsis">
+      bersnr
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bersnr.repetitions_for_ebn0" class="md-nav__link">
     <span class="md-ellipsis">
       repetitions_for_ebn0
@@ -1008,14 +1017,110 @@
 <h1 id="ber-vs-snr">BER vs SNR</h1>
 
 
+<div class="doc doc-object doc-module">
+
+
+
+<a id="bersnr"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
 <div class="doc doc-object doc-function">
 
 
+<h2 id="bersnr.repetitions_for_ebn0" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">repetitions_for_ebn0</span><span class="p">(</span><span class="n">ebn0</span><span class="p">)</span></code>
 
-<a id="bersnr.repetitions_for_ebn0"></a>
-    <div class="doc doc-contents first">
+</h2>
 
-        <p>Define o número de repetições em função do <span class="arithmatex">\(Eb/N0\)</span>, usa interpolação linear entre pontos de referência.</p>
+
+    <div class="doc doc-contents ">
+
+        <p>Define o número de repetições em função do <span class="arithmatex">\(Eb/N0\)</span>, usando interpolação linear entre pontos de referência, dada pela expressão abaixo.</p>
+<div class="arithmatex">\[
+r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r_{i})
+\]</div>
+
+
+<details class="onde" open>
+  <summary>Onde</summary>
+  <ul>
+<li><span class="arithmatex">\(r\)</span>: Número de repetições.</li>
+<li><span class="arithmatex">\(EBN0\)</span>: Relação <span class="arithmatex">\(Eb/N_0\)</span> em decibéis.</li>
+<li><span class="arithmatex">\(r_i\)</span> e <span class="arithmatex">\(r_{i+1}\)</span>: Número de repetições nos pontos de referência próximos.</li>
+<li><span class="arithmatex">\(EBN0_i\)</span> e <span class="arithmatex">\(EBN0_{i+1}\)</span>: Relações <span class="arithmatex">\(Eb/N_0\)</span> nos pontos de referência próximos.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ebn0</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Relação <span class="arithmatex">\(Eb/N_0\)</span> em decibéis.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>int</code></td>            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Número de repetições, arredondado para o valor inteiro mais próximo.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
     </div>
@@ -1025,11 +1130,15 @@
 <div class="doc doc-object doc-function">
 
 
+<h2 id="bersnr.simulate_argos" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">simulate_argos</span><span class="p">(</span><span class="n">ebn0_db</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span></code>
 
-<a id="bersnr.simulate_argos"></a>
-    <div class="doc doc-contents first">
+</h2>
 
-        <p>Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado <span class="arithmatex">\(Eb/N0\)</span>.</p>
+
+    <div class="doc doc-contents ">
+
+        <p>Simula a transmissão e recepção de um datagrama ARGOS-3, para um dado <span class="arithmatex">\(Eb/N0\)</span>, retornando a taxa de erro de bit (BER) simulada.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1141,11 +1250,15 @@
 <div class="doc doc-object doc-function">
 
 
+<h2 id="bersnr.simulate_qpsk" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">simulate_qpsk</span><span class="p">(</span><span class="n">ebn0_db</span><span class="p">,</span> <span class="n">num_bits</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">bits_por_simbolo</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-<a id="bersnr.simulate_qpsk"></a>
-    <div class="doc doc-contents first">
+</h2>
 
-        <p>Simula a transmissão e recepção QPSK em canal AWGN para um dado Eb/N0.</p>
+
+    <div class="doc doc-contents ">
+
+        <p>Simula a transmissão e recepção QPSK em canal AWGN para um dado <span class="arithmatex">\(Eb/N0\)</span>, retornando a taxa de erro de bit (<span class="arithmatex">\(BER\)</span>) simulada.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1168,7 +1281,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Relação Eb/N0 em dB.</p>
+                <p>Relação <span class="arithmatex">\(Eb/N0\)</span> em dB.</p>
               </div>
             </td>
             <td>
@@ -1200,7 +1313,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de bits por símbolo (QPSK = 2).</p>
+                <p>Número de bits por símbolo <span class="arithmatex">\(k\)</span>, (<span class="arithmatex">\(QPSK = 2\)</span>).</p>
               </div>
             </td>
             <td>
@@ -1237,7 +1350,8 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>float</code></td>            <td>
+<td><code>ber</code></td>            <td>
+                  <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1256,11 +1370,15 @@
 <div class="doc doc-object doc-function">
 
 
+<h2 id="bersnr.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">EbN0_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span></code>
 
-<a id="bersnr.run"></a>
-    <div class="doc doc-contents first">
+</h2>
 
-        <p>Executa a simulação completa de BER vs Eb/N0 para ARGOS e QPSK.</p>
+
+    <div class="doc doc-contents ">
+
+        <p>Executa a simulação completa de <span class="arithmatex">\(BER\)</span> vs <span class="arithmatex">\(Eb/N0\)</span> para as funções de simulação implementadas.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1283,7 +1401,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores de Eb/N0 a serem simulados.</p>
+                <p>Valores de <span class="arithmatex">\(Eb/N0\)</span> a serem simulados.</p>
               </div>
             </td>
             <td>
@@ -1320,11 +1438,12 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>list</code></td>            <td>
+<td><code>results</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].</p>
+                <p>Array de [Eb/N0, BER_ARGOS_médio, BER_QPSK_médio].</p>
               </div>
             </td>
           </tr>
@@ -1338,6 +1457,14 @@
 <li>Argos e QPSK: <img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
 </ul>
 </details>
+
+    </div>
+
+</div>
+
+
+
+  </div>
 
     </div>
 

@@ -1106,8 +1106,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit. 
-O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
+        <p>Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.</p>
 <p><img alt="pageplot" src="../../assets/blocos_demodulador.svg" /></p>
 
 
@@ -1131,7 +1130,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem em Hz. Default é 128000 Hz.</p>
+                <p>Frequência de amostragem em Hz.</p>
               </div>
             </td>
             <td>
@@ -1147,7 +1146,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Taxa de bits em bps. Default é 400 bps.</p>
+                <p>Taxa de bits em bps.</p>
               </div>
             </td>
             <td>
@@ -1163,7 +1162,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se True, imprime os vetores intermediários no console. Default é True.</p>
+                <p>Se <code>True</code>, imprime os vetores intermediários no console. </p>
               </div>
             </td>
             <td>
@@ -1179,7 +1178,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se True, gera e salva os gráficos dos processos intermediários. Default é True.</p>
+                <p>Se <code>True</code>, gera e salva os gráficos dos processos intermediários.</p>
               </div>
             </td>
             <td>
@@ -1188,6 +1187,10 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
           </tr>
       </tbody>
     </table>
+        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
+</div>
 
 
     </div>
@@ -1295,7 +1298,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro passa-baixa com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>.</p>
+        <p>Aplica o filtro passa-baixa com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1432,7 +1435,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>.</p>
+        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(-g(t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1553,7 +1556,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Realiza a decisão (amostragem e quantização) dos sinais <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
+        <p>Realiza a decisão (amostragem e quantização) dos sinais <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>, retornando os vetores de simbolos <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1674,7 +1677,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica os sinais quantizados <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>.</p>
+        <p>Decodifica os vetores de simbolos codificados <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>, retornando os vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1779,7 +1782,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Remove os 15 primeiros bits de cada sinal.</p>
+        <p>Remove os 15 primeiros bits dos vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>, correspondentes ao preâmbulo adicionado no transmissor.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1884,7 +1887,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Desembaralha os vetores de bits dos canais I e Q.</p>
+        <p>Desembaralha os vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>, retornando os vetores de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> e <span class="arithmatex">\(v_{t}^{1'}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1989,7 +1992,7 @@ O processo de demodulação é representado pelo diagrama de blocos abaixo.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica os vetores de bits dos canais I e Q.</p>
+        <p>Decodifica os vetores de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> e <span class="arithmatex">\(v_{t}^{1'}\)</span>, retornando o vetor de bits <span class="arithmatex">\(u_{t}'\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
