@@ -135,7 +135,7 @@ class Modulator:
 if __name__ == "__main__":
 
     fs = 128_000
-    fc = 2000
+    fc = 4000
     Rb = 400
     alpha = 0.8
     span = 8
