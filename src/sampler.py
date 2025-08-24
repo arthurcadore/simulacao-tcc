@@ -9,34 +9,44 @@ import numpy as np
 from plotter import save_figure, create_figure, SampledSignalPlot
 
 class Sampler:
-    def __init__(self, fs=128_000, Rb=400, t=None, output_print=True, output_plot=True):
+    def __init__(self, fs=128_000, Rb=400, t=None, delay=0):
         r"""
         Implementação de decisor (amostragem e quantização) para o receptor.
 
         Args: 
             fs (int): Frequência de amostragem.
+            delay (int): Delay de amostragem.
             Rb (int): Taxa de bits.
             t (numpy.ndarray): Vetor de tempo.
-            output_print (bool): Se True, imprime a saída.
-            output_plot (bool): Se True, plota a saída.
         """
         self.fs = fs
         self.Rb = Rb
         self.sps = int(self.fs / self.Rb)
-        self.output_print = output_print
-        self.output_plot = output_plot
-        self.delay = 0
+        self.delay = delay
         self.indexes = self.calc_indexes(t)
     
     def calc_indexes(self, t):
         r"""
-        Calcula os índices de amostragem com base no vetor de tempo.
+        Calcula os índices de amostragem $I[n]$ com base no vetor de tempo $t$. O vetor de índices de amostragem $I[n]$ é dado pela expressão abaixo. 
+
+        $$
+        \begin{align}
+        I[n] = \tau + n \cdot \left( \frac{f_s}{R_b}\right) \text{ , onde: } \quad I[n] < \text{len}(t)
+        \end{align}
+        $$
+
+        Sendo:
+            - $\tau$: Delay inicial de amostragem.
+            - $f_s$: Frequência de amostragem.
+            - $R_b$: Taxa de bits.
+            - $n$: Índice da amostra.
+            - $\text{len}(t)$: Comprimento do vetor de tempo.
 
         Args:
             t (numpy.ndarray): Vetor de tempo.
 
         Returns:
-            numpy.ndarray: Índices de amostragem.
+            indexes (numpy.ndarray): Vetor de índices de amostragem $I[n]$.
         """
         indexes = np.arange(self.delay, len(t), self.sps)
         indexes = indexes[indexes < len(t)]
@@ -44,34 +54,56 @@ class Sampler:
     
     def sample(self, signal):
         r"""
-        Amostra o sinal com base nos índices de amostragem.
+        Amostra o sinal $s(t)$ com base nos índices de amostragem $I[n]$.
+
+        $$
+            s(t) \rightarrow  s([I[n]) \rightarrow s[n]
+        $$
+
+        Sendo:
+            - $s(t)$: Sinal de entrada $s(t)$.
+            - $s[n]$ Sinal amostrado $s[n]$.
+            - $I[n]$ Índices de amostragem $I[n]$.
 
         Args:
-            signal (numpy.ndarray): Sinal a ser amostrado.
+            signal (numpy.ndarray): Sinal de entrada $s(t)$ a ser amostrado.
 
         Returns:
-            numpy.ndarray: Sinal amostrado.
+            sampled_signal (numpy.ndarray): Sinal amostrado $s[n]$.
         """
         sampled_signal = signal[self.indexes]
         return sampled_signal
 
     def quantize(self, signal):
         r"""
-        Quantiza o sinal em uma representação binária.
+        Quantiza o sinal $s[n]$ em valores discretos. O processo de quantização é dado pela expressão abaixo.
+
+        $$
+        \begin{align}
+        s'[n] = \begin{cases}
+            +1 & \text{se } s[n] \geq 0 \\
+            -1 & \text{se } s[n] < 0
+        \end{cases}
+        \end{align}
+        $$
+
+        Sendo:
+            - $s[n]$ Simbolos amostrados $s[n]$.
+            - $s'[n]$ Símbolos quantizados $s'[n]$.
 
         Args:
-            signal (numpy.ndarray): Sinal a ser quantizado.
+            signal (numpy.ndarray): Sinal de entrada $s[n]$.
 
         Returns:
-            list: Representação binária do sinal quantizado.
+            symbols (numpy.ndarray): Símbolos quantizados $s'[n]$.
         """
-        bits = []
+        symbols = []
         for i in range(len(signal)):
             if signal[i] > 0:
-                bits.append(1)
+                symbols.append(1)
             else:
-                bits.append(0)
-        return bits
+                symbols.append(0)
+        return symbols
 
 if __name__ == "__main__":
 
