@@ -19,13 +19,22 @@ plt.rc("figure", titlesize=22)
 
 def mag2db(signal: np.ndarray) -> np.ndarray:
     r"""
-    Converte a magnitude do sinal para escala logarítmica (dB), normalizada.
+    Converte a magnitude do sinal para escala logarítmica ($dB$). O processo de conversão é dado pela expressão abaixo.
+
+    $$
+     dB(x) = 20 \log_{10}\left(\frac{|x|}{x_{peak} + 10^{-12}}\right)
+    $$
+
+    Sendo:
+        - $x$: Sinal a ser convertido para $dB$.
+        - $x_{peak}$: Pico de maior magnitude do sinal.
+        - $10^{-12}$: Constante para evitar divisão por zero.
     
     Args:
         signal: Array com os dados do sinal
         
     Returns:
-        Array com o sinal convertido para dB
+        Array com o sinal convertido para $dB$
     """
     mag = np.abs(signal)
     peak = np.max(mag) if np.max(mag) != 0 else 1.0
@@ -35,7 +44,7 @@ def mag2db(signal: np.ndarray) -> np.ndarray:
 
 def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> Tuple[plt.Figure, gridspec.GridSpec]:
     r"""
-    Cria uma figura com GridSpec e retorna (fig, grid).
+    Cria uma figura com `GridSpec`, retornando o objeto `fig` e `grid` para desenhar os plots.
     
     Args:
         rows (int): Número de linhas do GridSpec
@@ -51,10 +60,10 @@ def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> T
 
 def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../out") -> None:
     r"""
-    Salva a figura em <out_dir>/<filename> a partir do diretório onde está este script.
+    Salva a figura em `<out_dir>/<filename>` a partir do diretório raiz do script. 
     
     Args:
-        fig (plt.Figure): Figura a ser salva
+        fig (plt.Figure): Objeto `Figure` do matplotlib
         filename (str): Nome do arquivo de saída
         out_dir (str): Diretório de saída
     
@@ -71,16 +80,16 @@ def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../out") -> None
 
 class BasePlot:
     r"""
-    Inicializa o plot.
+    Classe base para plotagem de gráficos, implementando funcionalidades comuns a todos os plots.
     
     Args:
-        ax (plt.Axes): Eixo do plot
-        title (str): Título do plot
-        labels (Optional[List[str]]): Lista de rótulos
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x
-        ylim (Optional[Tuple[float, float]]): Limites do eixo y
-        colors (Optional[Union[str, List[str]]]): Cores do plot
-        style (Optional[Dict[str, Any]]): Estilo do plot
+        ax (plt.Axes): Objeto `Axes` do matplotlib. 
+        title (str): Título do plot. 
+        labels (Optional[List[str]]): Lista de rótulos para os eixos. 
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x `x = [xlim[0], xlim[1]]`. 
+        ylim (Optional[Tuple[float, float]]): Limites do eixo y `y = [ylim[0], ylim[1]]`. 
+        colors (Optional[Union[str, List[str]]]): Cores do plot. 
+        style (Optional[Dict[str, Any]]): Estilo do plot.
     """
     def __init__(self,
                  ax: plt.Axes,
@@ -137,14 +146,14 @@ class BasePlot:
 
 class TimePlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio do tempo.
+    Classe para plotar sinais no domínio do tempo, recebendo um vetor de tempo $t$, e uma lista de sinais $s(t)$.
 
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
         pos (int): Posição do plot
         t (np.ndarray): Vetor de tempo
-        signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais
+        signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais $s(t)$.
 
     Exemplos:
         - Modulador: ![pageplot](assets/example_modulator_time.svg)
@@ -183,7 +192,18 @@ class TimePlot(BasePlot):
 
 class FrequencyPlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio da frequência.
+    Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
+
+    $$
+    \begin{equation}
+        S(f) = \mathcal{F}\{s(t)\}
+    \end{equation}
+    $$
+
+    Sendo:
+        - $S(f)$: Sinal no domínio da frequência.
+        - $s(t)$: Sinal no domínio do tempo.
+        - $\mathcal{F}$: Transformada de Fourier.
     
     Args:
         fig (plt.Figure): Figura do plot
@@ -242,7 +262,16 @@ class FrequencyPlot(BasePlot):
 
 class ConstellationPlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio da constelação.
+    Classe para plotar sinais no domínio da constelação, recebendo os sinais $d_I$ e $d_Q$, realizando o plot em fase $I$ e quadratura $Q$, conforme a expressão abaixo.
+
+    $$
+    s(t) = d_I(t) + j d_Q(t)
+    $$
+
+    Sendo:
+        - $s(t)$: Sinal complexo.
+        - $d_I(t)$: Sinal em fase.
+        - $d_Q(t)$: Sinal em quadratura.
     
     Args:
         fig (plt.Figure): Figura do plot
@@ -307,7 +336,7 @@ class ConstellationPlot(BasePlot):
 
 class BitsPlot(BasePlot):
     r"""
-    Classe para plotar bits.
+    Classe para plotar bits, recebendo uma lista de bits $b_t$ e realizando o plot em função do tempo $t$.
     
     Args:
         fig (plt.Figure): Figura do plot
@@ -420,13 +449,13 @@ class BitsPlot(BasePlot):
 
 class EncodedBitsPlot(BasePlot):
     r"""
-    Classe para plotar bits com codificação de linha.
+    Classe para plotar sinais codificados com codificação de linha, recebendo um vetor de simbolos $s$ e realizando o plot em função do tempo $t$.
     
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
         pos (int): Posição do plot
-        bits (np.ndarray): Vetor de bits
+        symbols (np.ndarray): Vetor de simbolos $s$
         color (str): Cor do plot
 
     Exemplos:
@@ -496,7 +525,7 @@ class EncodedBitsPlot(BasePlot):
 
 class ImpulseResponsePlot(BasePlot):
     r"""
-    Classe para plotar a resposta ao impulso de um filtro.
+    Classe para plotar a resposta ao impulso de um filtro, recebendo um vetor de tempo $t_{imp}$ e realizando o plot em função do tempo $t$.
 
     Args:
         fig (plt.Figure): Figura do plot
@@ -566,14 +595,13 @@ class ImpulseResponsePlot(BasePlot):
 
 class TrellisPlot(BasePlot):
     r"""
-    Classe para plotar o diagrama de treliça de um decodificador viterbi.
+    Classe para plotar o diagrama de treliça de um decodificador viterbi, recebendo um dicionário de treliça e realizando o plot em função do tempo $t$.
 
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
         pos (int): Posição do plot no GridSpec
-        trellis (dict): Dicionário do treliça. 
-                        Formato: {estado: {0: (prox_estado, saída), 1: (prox_estado, saída)}}
+        trellis (dict): Dicionário do treliça.
         num_steps (int): Número de passos no tempo
         initial_state (int): Estado inicial
 
@@ -661,7 +689,7 @@ class TrellisPlot(BasePlot):
 
 class SampledSignalPlot(BasePlot):
     r"""
-    Classe para plotar um sinal no domínio do tempo com seus pontos de amostragem.
+    Classe para plotar um sinal $s(t)$ amostrado em $t_s$.
 
     Args:
         fig (plt.Figure): Figura do plot
@@ -732,7 +760,16 @@ class SampledSignalPlot(BasePlot):
 
 class PhasePlot(BasePlot):
     r"""
-    Classe para plotar a fase dos sinais IQ no domínio do tempo.
+    Classe para plotar a fase dos sinais $d_I(t)$ e $d_Q(t)$ no domínio do tempo, conforme a expressão abaixo.
+
+    $$
+        s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
+    $$
+
+    Sendo: 
+        - $s(t)$: Vetor de fases por intervalo de tempo.
+        - $d_I(t)$: Componente sinal $d_I(t)$, em fase. 
+        - $d_Q(t)$: Componente sinal $d_Q(t)$, em quadratura.
 
     Args:
         fig (plt.Figure): Figura do plot
@@ -797,15 +834,15 @@ class PhasePlot(BasePlot):
 
 class BersnrPlot(BasePlot):
     r"""
-    Classe para plotar a curva \( E_b/N_0 \) versus \( BER \) (Taxa de Erro de Bit).
+    Classe para plotar a curva $E_b/N_0$ versus $BER$, uma lista de sinais `ber_values`
 
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
         pos (int): Posição do plot no GridSpec
-        ebn0 (np.ndarray): Vetor de valores de \( E_b/N_0 \) (em dB)
-        ber_values (List[np.ndarray]): Lista de vetores de valores de \( BER \) para diferentes condições
-        labels (Optional[List[str]]): Rótulos para as curvas (por exemplo, diferentes condições ou algoritmos)
+        ebn0 (np.ndarray): Vetor de valores de $E_b/N_0$ em $dB$
+        ber_values (List[np.ndarray]): Lista de vetores de valores de $BER$ para diferentes condições
+        labels (Optional[List[str]]): Rótulos para as curvas. 
 
     Exemplos:
         - Argos e QPSK: ![pageplot](assets/ber_vs_ebn0.svg)
@@ -861,7 +898,16 @@ class BersnrPlot(BasePlot):
 
 class GaussianNoisePlot(BasePlot):
     r"""
-    Classe para plotar a distribuição Gaussiana do ruído AWGN com base na variância.
+    Classe para plotar a densidade de probabilidade $p(x)$ de uma dada variância $\sigma^2$, seguindo a expressão abaixo. 
+
+    $$
+    p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
+    $$
+
+    Sendo: 
+        - $p(x)$: Densidade de probabilidade do ruído.
+        - $\sigma^2$: Variância do ruído.
+        - $x$: Amplitude do ruído.
 
     Args:
         fig (plt.Figure): Figura do plot
