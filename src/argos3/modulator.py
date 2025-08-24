@@ -225,7 +225,7 @@ if __name__ == "__main__":
         fc=fc,
         labels=["$S(f)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(-4, 4),
+        xlim=(-10, 10),
         colors="darkred",
         style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -314,7 +314,7 @@ if __name__ == "__main__":
         fc=fc,
         labels=["$S(f)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(-5.5, 5.5),
+        xlim=(-10, 10),
         colors="darkred",
         style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -326,7 +326,7 @@ if __name__ == "__main__":
         fc=fc,
         labels=["$X_I'(f)$"],
         title="Componente $I$ - Demodulado",
-        xlim=(-5.5, 5.5),
+        xlim=(-10, 10),
         colors="darkgreen",
         style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -338,7 +338,7 @@ if __name__ == "__main__":
         fc=fc,
         labels=["$Y_Q'(f)$"],
         title="Componente $Q$ - Demodulado",
-        xlim=(-5.5, 5.5),
+        xlim=(-10, 10),
         colors="navy",
         style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
