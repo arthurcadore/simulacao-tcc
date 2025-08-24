@@ -26,9 +26,9 @@ class Transmitter:
     
         Args:
             datagram (Datagram): Instância do datagrama a ser transmitido.
-            fc (float): Frequência da portadora em Hz. Default é 4000 Hz
-            fs (float): Frequência de amostragem em Hz. Default é 128000 Hz.
-            Rb (float): Taxa de bits em bps. Default é 400 b
+            fc (float): Frequência da portadora em Hz. 
+            fs (float): Frequência de amostragem em Hz. 
+            Rb (float): Taxa de bits em bps.
             output_print (bool): Se `True`, imprime os vetores intermediários no console.
             output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
 

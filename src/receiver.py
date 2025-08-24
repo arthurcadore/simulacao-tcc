@@ -21,16 +21,20 @@ from plotter import save_figure, create_figure, TimePlot, FrequencyPlot, Impulse
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
         r"""
-        Classe que encapsula todo o processo de recepção, desde o recebimento do sinal com ruído (sinal do canal), até a recuperação do vetor de bit. 
-        O processo de demodulação é representado pelo diagrama de blocos abaixo.
+        Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.
 
         ![pageplot](../assets/blocos_demodulador.svg)
 
         Args:
-            fs (int): Frequência de amostragem em Hz. Default é 128000 Hz.
-            Rb (int): Taxa de bits em bps. Default é 400 bps.
-            output_print (bool): Se True, imprime os vetores intermediários no console. Default é True.
-            output_plot (bool): Se True, gera e salva os gráficos dos processos intermediários. Default é True.
+            fs (int): Frequência de amostragem em Hz.
+            Rb (int): Taxa de bits em bps.
+            output_print (bool): Se `True`, imprime os vetores intermediários no console. 
+            output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
+        </div>
         """
         self.fs = fs
         self.Rb = Rb
@@ -139,7 +143,7 @@ class Receiver:
     
     def lowpassfilter(self, cut_off, xI_prime, yQ_prime, t):
         r"""
-        Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x'_{I}(t)$ e $y'_{Q}(t)$.
+        Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x'_{I}(t)$ e $y'_{Q}(t)$, retornando os sinais filtrados $d'_{I}(t)$ e $d'_{Q}(t)$.
 
         Args:
             cut_off (float): Frequência de corte do filtro.
@@ -204,7 +208,7 @@ class Receiver:
 
     def matchedfilter(self, dI_prime, dQ_prime, t):
         r"""
-        Aplica o filtro casado com resposta ao impuslo $h(t)$ aos sinais $d'_{I}(t)$ e $d'_{Q}(t)$.
+        Aplica o filtro casado com resposta ao impuslo $-g(t)$ aos sinais $d'_{I}(t)$ e $d'_{Q}(t)$, retornando os sinais filtrados $I'(t)$ e $Q'(t)$.
 
         Args:
             dI_prime (np.ndarray): Sinal $d'_{I}(t)$ a ser filtrado.
@@ -268,7 +272,7 @@ class Receiver:
 
     def sampler(self, It_prime, Qt_prime, t):
         r"""
-        Realiza a decisão (amostragem e quantização) dos sinais $I'(t)$ e $Q'(t)$.
+        Realiza a decisão (amostragem e quantização) dos sinais $I'(t)$ e $Q'(t)$, retornando os vetores de simbolos $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$.
 
         Args:
             It_prime (np.ndarray): Sinal $I'(t)$ a ser amostrado e quantizado.
@@ -322,7 +326,7 @@ class Receiver:
 
     def decode(self, Xnrz_prime, Yman_prime):
         r"""
-        Decodifica os sinais quantizados $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$.
+        Decodifica os vetores de simbolos codificados $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$, retornando os vetores de bits $X'n$ e $Y'n$.
 
         Args:
             Xnrz_prime (np.ndarray): Sinal $X'_{NRZ}[n]$ quantizado.
@@ -384,7 +388,7 @@ class Receiver:
 
     def remove_preamble(self, Xn_prime, Yn_prime):
         r"""
-        Remove os 15 primeiros bits de cada sinal.
+        Remove os 15 primeiros bits dos vetores de bits $X'n$ e $Y'n$, correspondentes ao preâmbulo adicionado no transmissor.
 
         Args:
             Xn_prime (np.ndarray): Sinal $X'n$ decodificado.
@@ -397,7 +401,7 @@ class Receiver:
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_remove_preamble_time.svg)
         """
-        # remove the first 15 bits from each signal
+
         Xn_prime = Xn_prime[15:]
         Yn_prime = Yn_prime[15:]
 
@@ -430,7 +434,7 @@ class Receiver:
 
     def descrambler(self, Xn_prime, Yn_prime):
         r"""
-        Desembaralha os vetores de bits dos canais I e Q.
+        Desembaralha os vetores de bits $X'n$ e $Y'n$, retornando os vetores de bits $v_{t}^{0'}$ e $v_{t}^{1'}$.
 
         Args:
             Xn_prime (np.ndarray): Vetor de bits $X'n$ embaralhados.
@@ -489,7 +493,7 @@ class Receiver:
 
     def conv_decoder(self, vt0, vt1):
         r"""
-        Decodifica os vetores de bits dos canais I e Q.
+        Decodifica os vetores de bits $v_{t}^{0'}$ e $v_{t}^{1'}$, retornando o vetor de bits $u_{t}'$.
 
         Args:
             vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
