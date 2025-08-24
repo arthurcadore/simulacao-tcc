@@ -1,8 +1,8 @@
 site_name: Simulador ARGOS-3
-site_url: "https://github.com/arthurcadore/eng-telecom-tcc"
+site_url: "https://github.com/arthurcadore/simulacao-tcc"
 
-repo_name: arthurcadore/eng-telecom-tcc
-repo_url: https://github.com/arthurcadore/eng-telecom-tcc
+repo_name: simulacao-tcc
+repo_url: https://github.com/arthurcadore/simulacao-tcc
 edit_uri: edit/main/docs/
 
 theme:
@@ -70,6 +70,14 @@ plugins:
             show_source: false
             show_submodules: true
             members_order: source
+
+badges: 
+  - name: Stars 
+    image: https://img.shields.io/github/stars/arthurcadore/simulacao-tcc?style=social 
+    link: https://github.com/arthurcadore/simulacao-tcc/stargazers 
+  - name: Forks 
+    image: https://img.shields.io/github/forks/arthurcadore/simulacao-tcc?style=social 
+    link: https://github.com/arthurcadore/simulacao-tcc/network/members 
 
 markdown_extensions:
   - pymdownx.arithmatex:  
