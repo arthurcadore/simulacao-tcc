@@ -16,7 +16,10 @@ class Noise:
         Implementação de canal para aplicação de ruido $AWGN$, com base em $SNR$.
 
         Args:
-            snr (float): Relação sinal-ruído em decibéis (dB). 
+            snr (float): Relação sinal-ruído em decibéis (dB).
+
+        Exemplo: 
+            ![pageplot](assets/example_noise_time.svg) 
         """
         self.snr = snr
     

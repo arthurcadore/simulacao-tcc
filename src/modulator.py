@@ -16,17 +16,20 @@ class Modulator:
 
         ![pageplot](../assets/modulador.svg)
 
-        <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.2.5.3)
-        </div>
-
         Args:
             fc (float): Frequência da portadora.
             fs (int): Frequência de amostragem.
 
         Raises:
             ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
+       
+        Exemplo: 
+            ![pageplot](assets/transmitter_modulator_time.svg)
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.2.5.3)
+        </div>
         """
         if fc <= 0:
             raise ValueError("A frequência da portadora deve ser maior que zero.")

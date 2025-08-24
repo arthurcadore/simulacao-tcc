@@ -16,16 +16,19 @@ class Encoder:
         r"""
         Inicializa o codificador de linha com o método de codificação especificado. 
 
-        <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.2.4)
-        </div>
-
         Args:
             method (str): Método de codificação desejado, $NRZ$ ou $Manchester$.
 
         Raises:
             ValueError: Se o método de codificação não for suportado.
+
+        Exemplo: 
+            ![pageplot](assets/example_encoder_time.svg)
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        AS3-SP-516-274-CNES (seção 3.2.4)
+        </div>
         """
         method_map = {
             "nrz": 0,

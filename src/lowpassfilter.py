@@ -22,6 +22,9 @@ class LPF:
         
         Raises:
             ValueError: Se o tipo de filtro for inválido.
+
+        Exemplo: 
+            ![pageplot](assets/example_lpf_signals.svg) 
         """
 
         self.cut_off = cut_off

@@ -22,6 +22,9 @@ class MatchedFilter:
 
         Raises:
             ValueError: Se o tipo de pulso não for suportado.
+
+        Exemplo: 
+            ![pageplot](assets/receiver_mf_time.svg) 
         """
         self.alpha = alpha
         self.fs = fs

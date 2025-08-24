@@ -29,6 +29,9 @@ class Datagram:
             ValueError: Se o número PCD não estiver entre 0 e 1048575 $(2^{20} - 1)$.
             ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
 
+        Exemplo: 
+            ![pageplot](assets/example_datagram_time.svg)
+
         <div class="referencia">
         <b>Referência:</b><br>
         AS3-SP-516-274-CNES (seção 3.1.4.2)
@@ -278,6 +281,9 @@ class Datagram:
         return json.dumps(data, indent=2)
 
 if __name__ == "__main__":
+    r"""
+
+    """
 
     print("\n\nTransmissor:")
     datagram_tx = Datagram(pcdnum=123456, numblocks=2)

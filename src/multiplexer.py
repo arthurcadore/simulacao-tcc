@@ -12,6 +12,9 @@ class Multiplexer:
     def __init__(self):
         r"""
         Inicializa o multiplexador no padrão ARGOS-3.
+        
+        Exemplo: 
+            ![pageplot](assets/example_mux.svg)
         """
         pass
 

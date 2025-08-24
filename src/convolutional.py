@@ -33,6 +33,9 @@ class EncoderConvolutional:
         Args:
             G (np.ndarray): Tupla de polinômios geradores $G$.
 
+        Exemplo: 
+            ![pageplot](assets/example_conv_time.svg)
+
         <div class="referencia">
           <b>Referência:</b>
           <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
@@ -129,10 +132,13 @@ class DecoderViterbi:
         Args:
             G (np.ndarray): Tupla de polinômios geradores $G$.
 
+        Exemplo: 
+            ![pageplot](assets/example_conv_trellis.svg)
+
         <div class="referencia">
           <b>Referência:</b>
+          <p>https://rwnobrega.page/apontamentos/codigos-convolucionais/</p>
           <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
-          <p>CCSDS 131.1-G-2</p>
         </div>
         """
         
@@ -149,9 +155,6 @@ class DecoderViterbi:
 
         Returns:
             trellis (dict): Trelica do decodificador Viterbi.
-
-        Exemplo: 
-            ![pageplot](assets/example_conv_trellis.svg)
         """
         trellis = {}
         for state in range(self.num_states):

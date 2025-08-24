@@ -18,6 +18,9 @@ class Sampler:
             delay (int): Delay de amostragem.
             Rb (int): Taxa de bits.
             t (numpy.ndarray): Vetor de tempo.
+
+        Exemplo: 
+            ![pageplot](assets/example_sampler_time.svg) 
         """
         self.fs = fs
         self.Rb = Rb

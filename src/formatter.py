@@ -22,6 +22,14 @@ class Formatter:
 
         Raises:
             ValueError: Se o tipo de pulso não for suportado.
+
+        Exemplo: 
+            ![pageplot](assets/example_formatter_time.svg)
+
+        <div class="referencia">
+        <b>Referência:</b><br>
+        EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55)
+        </div>
         """
         self.alpha = alpha
         self.fs = fs
