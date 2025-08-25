@@ -22,7 +22,7 @@ pip install argos3
 Para instalar uma versão específica, execute: 
 
 ```bash
-pip install argos3==1.0.0
+pip install argos3==1.0.1
 ```
 
 Para saber as versões disponiveis para instalação, e seu changelog, verifique as releases no [Repositório](https://github.com/arthurcadore/simulacao-tcc/releases).
