@@ -1,6 +1,6 @@
 [project]
 name = "argos3"
-version = "1.0.0"
+version = "1.0.1"
 description = "An open-source tool for analysis and simulation of ARGOS-3 standard"
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [

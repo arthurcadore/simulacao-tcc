@@ -1,6 +1,6 @@
-# Simulação TCC
+# Simulador ARGOS-3
 
-Biblioteca Python para simulação de sistemas de comunicação digital, desenvolvida como parte de um trabalho de conclusão de curso em Engenharia de Telecomunicações.
+Biblioteca Python para simulação de sistemas de comunicação digital no padrão ARGOS-3, desenvolvida como parte de um trabalho de conclusão de curso em Engenharia de Telecomunicações.
 
 ## Instalação
 
@@ -26,7 +26,7 @@ import argos3
 
 ## Documentação
 
-A documentação completa está disponível em [link para documentação].
+A documentação completa está disponível em https://arthurcadore.github.io/simulacao-tcc/.
 
 ## Licença
 
