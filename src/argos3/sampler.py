@@ -102,10 +102,10 @@ class Sampler:
         """
         symbols = []
         for i in range(len(signal)):
-            if signal[i] > 0:
-                symbols.append(1)
+            if signal[i] >= 0:
+                symbols.append(+1)
             else:
-                symbols.append(0)
+                symbols.append(-1)
         return symbols
 
 if __name__ == "__main__":
@@ -124,10 +124,10 @@ if __name__ == "__main__":
     sampled_signal2 = sampler2.sample(signal2)
     sampled_time2 = sampler2.sample(t)
 
-    bits = sampler.quantize(sampled_signal)
-    bits2 = sampler2.quantize(sampled_signal2)
-    print(bits)
-    print(bits2)
+    symbols = sampler.quantize(sampled_signal)
+    symbols2 = sampler2.quantize(sampled_signal2)
+    print(symbols[:20], "...")
+    print(symbols2[:20], "...")
 
     fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
 

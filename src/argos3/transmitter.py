@@ -290,8 +290,8 @@ class Transmitter:
         Yman = encoderManchester.encode(Yn)
         if self.output_print:
             print("\n ==== CODIFICAÇÃO DE LINHA ==== \n")
-            print("Xnrz:", ''.join(map(str, Xnrz[:80])),"...")
-            print("Yman:", ''.join(map(str, Yman[:80])),"...")
+            print("Xnrz:", ' '.join(f"{x:+d}" for x in Xnrz[:40]),"...")
+            print("Yman:", ' '.join(f"{y:+d}" for y in Yman[:40]),"...")
         if self.output_plot:
             fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
 
@@ -300,26 +300,26 @@ class Transmitter:
                 bits_list=[Xn],
                 sections=[("$X_n$", len(Xn))],
                 colors=["darkgreen"]
-            ).plot(ylabel="$X_n$")
+            ).plot(ylabel="$X_n$", xlim=(0, len(Xn)/2))
 
             EncodedBitsPlot(
                 fig_encoder, grid, (1, 0),
                 bits=Xnrz,
                 color='darkgreen',
-            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz)/2))
 
             BitsPlot(
                 fig_encoder, grid, (2, 0),
                 bits_list=[Yn],
                 sections=[("$Y_n$", len(Yn))],
                 colors=["navy"]
-            ).plot(ylabel="$Y_n$")
+            ).plot(ylabel="$Y_n$", xlim=(0, len(Yn)/2))
 
             EncodedBitsPlot(
                 fig_encoder, grid, (3, 0),
                 bits=Yman,
                 color="navy",
-            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman)/2))
 
             fig_encoder.tight_layout()
             save_figure(fig_encoder, "transmitter_encoder_time.pdf")

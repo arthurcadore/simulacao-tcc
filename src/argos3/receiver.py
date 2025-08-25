@@ -296,8 +296,8 @@ class Receiver:
 
         if self.output_print:
             print("\n ==== DECISOR ==== \n")
-            print("X'nrz:", ''.join(map(str, Xnrz_prime[:80])),"...")
-            print("Y'man:", ''.join(map(str, Yman_prime[:80])),"...")
+            print("X'nrz:", ' '.join(f"{x:+d}" for x in Xnrz_prime[:20]),"...")
+            print("Y'man:", ' '.join(f"{y:+d}" for y in Yman_prime[:20]),"...")
 
         if self.output_plot:
             fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
@@ -359,27 +359,27 @@ class Receiver:
                 fig_decoder, grid_decoder, (0, 0),
                 bits=Xnrz_prime,
                 color='darkgreen',
-            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz_prime)/2))
 
             BitsPlot(
                 fig_decoder, grid_decoder, (1, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
                 colors=["darkgreen"]
-            ).plot(ylabel="$X_n$")
+            ).plot(ylabel="$X_n$", xlim=(0, len(Xn_prime)/2))
 
             EncodedBitsPlot(
                 fig_decoder, grid_decoder, (2, 0),
                 bits=Yman_prime,
                 color="navy",
-            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman_prime)/2))
 
             BitsPlot(
                 fig_decoder, grid_decoder, (3, 0),
                 bits_list=[Yn_prime],
                 sections=[("$Y_n$", len(Yn_prime))],
                 colors=["navy"]
-            ).plot(ylabel="$Y_n$")
+            ).plot(ylabel="$Y_n$", xlim=(0, len(Yn_prime)/2))
 
             fig_decoder.tight_layout()
             save_figure(fig_decoder, "receiver_decoder_time.pdf")

@@ -6,6 +6,7 @@ import os
 from typing import Optional, List, Union, Tuple, Dict, Any
 from collections import defaultdict
 from matplotlib.lines import Line2D
+from matplotlib.ticker import FuncFormatter, MultipleLocator
 
 plt.style.use("science")
 plt.rcParams["figure.figsize"] = (16, 9)
@@ -374,7 +375,8 @@ class BitsPlot(BasePlot):
              bit_value_weight: str = 'bold',
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
-             label: Optional[str] = None) -> None:
+             label: Optional[str] = None,
+             xlim: Optional[Tuple[float, float]] = None) -> None:
 
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
@@ -382,10 +384,16 @@ class BitsPlot(BasePlot):
 
         # Ajustes de eixo
         y_upper = 1.4 if show_bit_values else 1.2
-        self.ax.set_xlim(0, len(bits_up))
+        if xlim is not None:
+            self.ax.set_xlim(xlim)
+        else:
+            self.ax.set_xlim(0, len(bits_up))
         self.ax.set_ylim(-0.2, y_upper)
         self.ax.grid(False)
         self.ax.set_yticks([0, 1])
+
+        self.ax.xaxis.set_major_locator(MultipleLocator(8))
+        self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
 
         bit_edges = np.arange(0, len(bits_up) + 1, 2)
         for pos in bit_edges:
@@ -410,10 +418,14 @@ class BitsPlot(BasePlot):
                 )
                 
                 if show_bit_values:
+                    xmin, xmax = self.ax.get_xlim()
                     section_bits = all_bits[start_bit:start_bit + sec_len]
                     for j, bit in enumerate(section_bits):
+                        xpos = (start_bit + j) * 2 + 1
+                        if xpos < xmin or xpos > xmax:
+                            continue
                         self.ax.text(
-                            (start_bit + j) * 2 + 1,
+                            xpos,
                             1.0 + bit_value_offset,
                             str(int(bit)),
                             ha='center',
@@ -428,9 +440,13 @@ class BitsPlot(BasePlot):
                          color='black', linewidth=2.0,
                          label=label if label else None)
             if show_bit_values:
+                xmin, xmax = self.ax.get_xlim()
                 for i, bit in enumerate(all_bits):
+                    xpos = i * 2 + 1
+                    if xpos < xmin or xpos > xmax:
+                        continue
                     self.ax.text(
-                        i * 2 + 1,
+                        xpos,
                         1.0 + bit_value_offset,
                         str(int(bit)),
                         ha='center',
@@ -473,14 +489,15 @@ class EncodedBitsPlot(BasePlot):
         self.bits = np.array(bits).astype(int)
         self.color = color
 
-    def plot(self,
+    def plot(self, 
              show_pairs: bool = True,
              pair_value_offset: float = 0.15,
              pair_value_size: int = 12,
              pair_value_weight: str = "bold",
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
-             label: Optional[str] = None) -> None:
+             label: Optional[str] = None,
+             xlim: Optional[Tuple[float, float]] = None) -> None:
 
         if len(self.bits) % 2 != 0:
             raise ValueError("O número de bits deve ser par para codificação em pares.")
@@ -488,12 +505,20 @@ class EncodedBitsPlot(BasePlot):
         bits_up = np.repeat(self.bits, 2)
         x = np.arange(len(bits_up))
 
-        self.ax.set_xlim(0, len(bits_up))
-        self.ax.set_ylim(-0.2, 1.4 if show_pairs else 1.2)
-        self.ax.grid(False)
-        self.ax.set_yticks([0, 1])
+        if xlim is not None:
+            self.ax.set_xlim(xlim)
+        else:
+            self.ax.set_xlim(0, len(bits_up))
 
-        pair_edges = np.arange(0, len(bits_up) + 1, 4)
+        self.ax.set_ylim(-1.2, 1.6 if show_pairs else 1.2)
+        self.ax.grid(False)
+        self.ax.set_yticks([-1, 1])
+        self.ax.set_yticklabels([r"$-1$", r"$+1$"])
+
+        self.ax.xaxis.set_major_locator(MultipleLocator(8))
+        self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
+
+        pair_edges = np.arange(0, len(bits_up) + 1, 2)
         for pos in pair_edges:
             self.ax.axvline(x=pos, color="gray", linestyle="--", linewidth=0.5)
 
@@ -502,10 +527,14 @@ class EncodedBitsPlot(BasePlot):
                      label=label if label else None)
 
         if show_pairs:
+            xmin, xmax = self.ax.get_xlim()
             for i in range(0, len(self.bits), 2):
-                pair = f"{self.bits[i]}{self.bits[i+1]}"
+                xpos = i * 2 + 2
+                if xpos < xmin or xpos > xmax:
+                    continue
+                pair = f"{self.bits[i]:+d}{self.bits[i+1]:+d}"
                 self.ax.text(
-                    i * 2 + 2,
+                    xpos,
                     1.0 + pair_value_offset,
                     pair,
                     ha="center",

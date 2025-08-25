@@ -7,6 +7,7 @@ Data: 28-07-2025
 
 import numpy as np
 from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
+from .encoder import Encoder
 
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):
@@ -112,12 +113,6 @@ class Formatter:
         Returns:
             out_symbols (np.ndarray): Vetor formatado com o pulso aplicado.
         """
-
-        # TODO: Alterar para o encoder.
-        symbols = np.asarray(symbols, dtype=float)
-        if symbols.min() >= 0.0 and symbols.max() <= 1.0:
-            # mapa 0/1 -> -1/+1
-            symbols = 2.0*symbols - 1.0
             
         pulse = self.g
         sps = self.sps
@@ -130,12 +125,18 @@ if __name__ == "__main__":
     Xnrz = np.random.randint(0, 2, 50)
     Yman = np.random.randint(0, 2, 50)
 
+    encoder_nrz = Encoder(method="NRZ")
+    encoder_man = Encoder(method="Manchester")
+
+    Xnrz = encoder_nrz.encode(Xnrz)
+    Yman = encoder_man.encode(Yman)
+    
     formatter = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC")
     dI = formatter.apply_format(Xnrz)
     dQ = formatter.apply_format(Yman)
     
-    print("Xnrz:", ''.join(str(b) for b in Xnrz))
-    print("Yman:", ''.join(str(b) for b in Yman))
+    print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz[:10]))
+    print("Yman:",  ' '.join(f"{y:+d}" for y in Yman[:10]))
     print("dI:", ''.join(str(b) for b in dI[:5]))
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
 

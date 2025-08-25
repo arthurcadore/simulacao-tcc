@@ -6,6 +6,7 @@ Data: 28-07-2025
 """
 import numpy as np
 from .formatter import Formatter
+from .encoder import Encoder
 from .plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
@@ -142,6 +143,12 @@ if __name__ == "__main__":
 
     Xnrz = np.random.randint(0, 2, 900)
     Yman = np.random.randint(0, 2, 900)
+
+    encoder_nrz = Encoder(method="NRZ")
+    encoder_man = Encoder(method="Manchester")
+
+    Xnrz = encoder_nrz.encode(Xnrz)
+    Yman = encoder_man.encode(Yman)
 
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))

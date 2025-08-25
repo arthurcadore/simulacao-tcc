@@ -50,14 +50,14 @@ class Encoder:
         \begin{aligned}
         X_{\text{NRZ}}[n] &= 
         \begin{cases}
-        11, & \text{se } X_n = 1 \\
-        00, & \text{se } X_n = 0 ,
+        +1, +1, & \text{se } X_n = 1 \\
+        -1, -1, & \text{se } X_n = 0 ,
         \end{cases}
         &\quad\quad
         Y_{\text{MAN}}[n] &=
         \begin{cases}
-        10, & \text{se } Y_n = 1 \\
-        01, & \text{se } Y_n = 0 .
+        +1,-1, & \text{se } Y_n = 1 \\
+        -1, +1, & \text{se } Y_n = 0 .
         \end{cases}
         \end{aligned}
         \end{equation}
@@ -78,20 +78,20 @@ class Encoder:
         if self.method == 0:  # NRZ
             for i, bit in enumerate(bitstream):
                 if bit == 0:
-                    out[2*i] = 0
-                    out[2*i + 1] = 0
+                    out[2*i] = -1
+                    out[2*i + 1] = -1
                 elif bit == 1:
-                    out[2*i] = 1
-                    out[2*i + 1] = 1
+                    out[2*i] = +1
+                    out[2*i + 1] = +1
 
         elif self.method == 1:  # Manchester
             for i, bit in enumerate(bitstream):
                 if bit == 0:
-                    out[2*i] = 0
-                    out[2*i + 1] = 1
+                    out[2*i] = -1
+                    out[2*i + 1] = +1
                 elif bit == 1:
-                    out[2*i] = 1
-                    out[2*i + 1] = 0
+                    out[2*i] = +1
+                    out[2*i + 1] = -1
 
         else:
             raise ValueError(f"Método de codificação não implementado: {self.method}")
@@ -108,14 +108,14 @@ class Encoder:
         \begin{aligned}
         X_n &= 
         \begin{cases}
-        1, & \text{se } X_{\text{NRZ}}[n] = 11 \\
-        0, & \text{se } X_{\text{NRZ}}[n] = 00
+        1, & \text{se } X_{\text{NRZ}}[n] = +1, +1 \\
+        0, & \text{se } X_{\text{NRZ}}[n] = -1, -1
         \end{cases}
         &\quad\quad
         Y_n &=
         \begin{cases}
-        1, & \text{se } Y_{\text{MAN}}[n] = 10 \\
-        0, & \text{se } Y_{\text{MAN}}[n] = 01
+        1, & \text{se } Y_{\text{MAN}}[n] = +1, -1 \\
+        0, & \text{se } Y_{\text{MAN}}[n] = -1, +1
         \end{cases}
         \end{aligned}
         \end{equation}
@@ -141,7 +141,7 @@ class Encoder:
         if self.method == 0:  # NRZ
             for i in range(n):
                 pair = encoded_stream[2*i:2*i + 2]
-                if np.array_equal(pair, [0, 0]):
+                if np.array_equal(pair, [-1, -1]):
                     decoded[i] = 0
                 else:
                     decoded[i] = 1
@@ -150,7 +150,7 @@ class Encoder:
         elif self.method == 1:  # Manchester
             for i in range(n):
                 pair = encoded_stream[2*i:2*i + 2]
-                if np.array_equal(pair, [0, 1]):
+                if np.array_equal(pair, [-1, 1]):
                     decoded[i] = 0
                 else:
                     decoded[i] = 1
@@ -162,8 +162,8 @@ class Encoder:
 
 if __name__ == "__main__":
 
-    Xn = np.random.randint(0, 2, 30)
-    Yn = np.random.randint(0, 2, 30)
+    Xn = np.random.randint(0, 2, 20)
+    Yn = np.random.randint(0, 2, 20)
     print("Channel Xn: ", ''.join(str(int(b)) for b in Xn))
     print("Channel Yn: ", ''.join(str(int(b)) for b in Yn))
 
@@ -172,9 +172,11 @@ if __name__ == "__main__":
     encoder_man = Encoder(method="Manchester")
 
     Xnrz = encoder_nrz.encode(Xn)
-    print("Channel X(NRZ)[n]:", ''.join(str(int(b)) for b in Xnrz))
     Yman = encoder_man.encode(Yn)
-    print("Channel Y(MAN)[n]:", ''.join(str(int(b)) for b in Yman))
+
+    # imprime +1 e -1 
+    print("Channel X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in Xnrz[:10]))
+    print("Channel Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Yman[:10]))
 
     fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
 
