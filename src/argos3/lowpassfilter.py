@@ -7,7 +7,7 @@ Data: 28-07-2025
 
 import numpy as np
 from scipy.signal import butter, filtfilt, lfilter
-from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
+from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, PoleZeroPlot
 
 class LPF:
     def __init__(self, cut_off, order, fs=128_000, type="butter"):
@@ -57,6 +57,9 @@ class LPF:
 
         Returns:
             tuple: Coeficientes $b$ e $a$ correspondentes à função de transferência do filtro Butterworth.
+
+        Exemplos:
+            ![pageplot](assets/example_lpf_pz.svg)
         """
         b, a = butter(self.order, self.cut_off / (fNyquist * self.fs), btype='low')
         return b, a
@@ -177,6 +180,11 @@ if __name__ == "__main__":
         ylim=(-4, 4),
         colors="darkred"
     ).plot()
-    
+
     fig_signal.tight_layout()
     save_figure(fig_signal, "example_lpf_signals.pdf")
+
+    fig_pz, grid_pz = create_figure(1, 1, figsize=(6, 6))
+    PoleZeroPlot(fig_pz, grid_pz, (0,0), filtro.b, filtro.a).plot()
+    save_figure(fig_pz, "example_lpf_pz.pdf")
+    

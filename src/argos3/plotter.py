@@ -915,6 +915,9 @@ class GaussianNoisePlot(BasePlot):
         pos (int): Posição do plot no GridSpec
         variance (float): Variância do ruído
         num_points (int): Número de pontos para a curva da gaussiana
+
+    Exemplos:
+        ![pageplot](assets/example_noise_gaussian_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -950,5 +953,63 @@ class GaussianNoisePlot(BasePlot):
         # Aplica xlim customizado, se passado
         if xlim is not None:
             self.ax.set_xlim(xlim)
+
+        self.apply_ax_style()
+
+
+class PoleZeroPlot(BasePlot):
+    r"""
+    Classe para plotar o diagrama de polos e zeros de uma função de transferência discreta no plano-z.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição no GridSpec
+        b (np.ndarray): Coeficientes do numerador da função de transferência
+        a (np.ndarray): Coeficientes do denominador da função de transferência
+
+    Exemplos:
+        ![pageplot](assets/example_lpf_pz.svg)
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 b: np.ndarray,
+                 a: np.ndarray,
+                 **kwargs) -> None:
+
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.b = b
+        self.a = a
+
+    def plot(self) -> None:
+        # Calcula zeros e polos
+        zeros = np.roots(self.b)
+        poles = np.roots(self.a)
+
+        # Circunferência unitária
+        theta = np.linspace(0, 2*np.pi, 512)
+        self.ax.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.6)
+
+        # Plota zeros (bolinhas) e polos (x)
+        self.ax.scatter(np.real(zeros), np.imag(zeros),
+                        marker='o', facecolors='none', edgecolors='blue',
+                        s=120, label='Zeros')
+        self.ax.scatter(np.real(poles), np.imag(poles),
+                        marker='x', color='red',
+                        s=120, label='Polos')
+
+        # Eixos
+        self.ax.axhline(0, color='black', linewidth=0.8)
+        self.ax.axvline(0, color='black', linewidth=0.8)
+
+        # Labels e limites
+        self.ax.set_xlabel("Parte Real")
+        self.ax.set_ylabel("Parte Imaginária")
+        self.ax.set_aspect('equal', adjustable='box')
+        self.ax.set_xlim([-1.2, 1.2])
+        self.ax.set_ylim([-1.2, 1.2])
 
         self.apply_ax_style()
