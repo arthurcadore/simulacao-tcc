@@ -1246,14 +1246,14 @@ AS3-SP-516-274-CNES (seção 3.2.4)
 \begin{aligned}
 X_{\text{NRZ}}[n] &amp;= 
 \begin{cases}
-11, &amp; \text{se } X_n = 1 \\
-00, &amp; \text{se } X_n = 0 ,
++1, +1, &amp; \text{se } X_n = 1 \\
+-1, -1, &amp; \text{se } X_n = 0 ,
 \end{cases}
 &amp;\quad\quad
 Y_{\text{MAN}}[n] &amp;=
 \begin{cases}
-10, &amp; \text{se } Y_n = 1 \\
-01, &amp; \text{se } Y_n = 0 .
++1,-1, &amp; \text{se } Y_n = 1 \\
+-1, +1, &amp; \text{se } Y_n = 0 .
 \end{cases}
 \end{aligned}
 \end{equation}
@@ -1343,14 +1343,14 @@ Y_{\text{MAN}}[n] &amp;=
 \begin{aligned}
 X_n &amp;= 
 \begin{cases}
-1, &amp; \text{se } X_{\text{NRZ}}[n] = 11 \\
-0, &amp; \text{se } X_{\text{NRZ}}[n] = 00
+1, &amp; \text{se } X_{\text{NRZ}}[n] = +1, +1 \\
+0, &amp; \text{se } X_{\text{NRZ}}[n] = -1, -1
 \end{cases}
 &amp;\quad\quad
 Y_n &amp;=
 \begin{cases}
-1, &amp; \text{se } Y_{\text{MAN}}[n] = 10 \\
-0, &amp; \text{se } Y_{\text{MAN}}[n] = 01
+1, &amp; \text{se } Y_{\text{MAN}}[n] = +1, -1 \\
+0, &amp; \text{se } Y_{\text{MAN}}[n] = -1, +1
 \end{cases}
 \end{aligned}
 \end{equation}
