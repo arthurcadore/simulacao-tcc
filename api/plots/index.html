@@ -1077,6 +1077,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#plotter.PoleZeroPlot" class="md-nav__link">
+    <span class="md-ellipsis">
+      PoleZeroPlot
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#plotter.mag2db" class="md-nav__link">
     <span class="md-ellipsis">
       mag2db
@@ -3205,6 +3214,156 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
       </tbody>
     </table>
 
+
+<details class="exemplos" open>
+  <summary>Exemplos</summary>
+  <p><img alt="pageplot" src="../assets/example_noise_gaussian_ebn0.svg" /></p>
+</details>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="plotter.PoleZeroPlot" class="doc doc-heading">
+            <code>PoleZeroPlot</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
+
+
+        <p>Classe para plotar o diagrama de polos e zeros de uma função de transferência discreta no plano-z.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figura do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Posição no GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Coeficientes do numerador da função de transferência</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Coeficientes do denominador da função de transferência</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="exemplos" open>
+  <summary>Exemplos</summary>
+  <p><img alt="pageplot" src="../assets/example_lpf_pz.svg" /></p>
+</details>
 
 
 
