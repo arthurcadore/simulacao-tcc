@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/convolutional/">
+        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/guia/">
       
       
-        <link rel="prev" href="../datagram/">
+        <link rel="prev" href="../api/">
       
       
-        <link rel="next" href="../scrambler/">
+        <link rel="next" href="../datagram/">
       
       
       <link rel="icon" href="../../assets/icon.svg">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Codificador Convolutional - Simulador ARGOS-3</title>
+        <title>Instalação Manual - Simulador ARGOS-3</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#convolutional.EncoderConvolutional" class="md-skip">
+        <a href="#guia-de-instalacao-manual" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Codificador Convolutional
+              Instalação Manual
             
           </span>
         </div>
@@ -227,10 +227,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../api/" class="md-tabs__link">
           
   
@@ -247,12 +249,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../datagram/" class="md-tabs__link">
           
   
@@ -414,28 +414,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -448,7 +451,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Instalação
@@ -482,10 +485,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../guia/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Instalação Manual
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -496,6 +521,161 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pré-requisitos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instalacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalação
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-clonar-o-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Clonar o repositório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-instalacao-com-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Instalação com Makefile
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Instalação com Makefile">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-instalacao-latex" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Instalação Latex
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ativar-o-ambiente-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Ativar o ambiente virtual
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gerar-documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gerar Documentação
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gerar Documentação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-visualizando-localmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Visualizando Localmente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-conversao-pdf-para-svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Conversão PDF para SVG
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-publicar-a-documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Publicar a Documentação
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suporte
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licenca" class="md-nav__link">
+    <span class="md-ellipsis">
+      Licença
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contato" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contato
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -512,31 +692,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -549,7 +726,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Componentes
@@ -583,30 +760,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Codificador Convolutional
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../convolutional/" class="md-nav__link">
         
   
   
@@ -617,69 +774,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.EncoderConvolutional" class="md-nav__link">
-    <span class="md-ellipsis">
-      EncoderConvolutional
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.EncoderConvolutional.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.EncoderConvolutional.calc_taps" class="md-nav__link">
-    <span class="md-ellipsis">
-      calc_taps
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.EncoderConvolutional.calc_free_distance" class="md-nav__link">
-    <span class="md-ellipsis">
-      calc_free_distance
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.EncoderConvolutional.encode" class="md-nav__link">
-    <span class="md-ellipsis">
-      encode
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1128,316 +1222,68 @@
   
 
 
-  <h1>Codificador Convolutional</h1>
-
-<div class="doc doc-object doc-class">
-
-
-
-<a id="convolutional.EncoderConvolutional"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.EncoderConvolutional.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]))</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Inicializa o codificador convolucional, com base em uma tupla de polinômios geradores <span class="arithmatex">\(G\)</span> que determinam a estrutura do codificador.</p>
-<div class="arithmatex">\[
-\begin{equation}
-    \begin{split}
-        G_0 &amp;= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
-        G_1 &amp;= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
-    \end{split}
-\end{equation}
-\]</div>
-<p>O codificador convolucional, considerando <span class="arithmatex">\(G_0\)</span> e <span class="arithmatex">\(G_1\)</span> pode ser representado pelo diagrama de blocos abaixo.</p>
-<p><img alt="pageplot" src="../../assets/cod_convolucional.svg" /></p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>G</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Tupla de polinômios geradores <span class="arithmatex">\(G\)</span>.</p>
-              </div>
-            </td>
-            <td>
-                  <code><span title="numpy.array">array</span>([[121, 91]])</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <p><img alt="pageplot" src="../assets/example_conv_time.svg" /></p>
-</details>        <div class="referencia">
-  <b>Referência:</b>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
-  <p>CCSDS 131.1-G-2</p>
-</div>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.EncoderConvolutional.calc_taps" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">calc_taps</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Calcula os índices dos bits ativos (<span class="arithmatex">\('1'\)</span>), ou taps, do polinômio gerador <span class="arithmatex">\(G_n\)</span>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>poly</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Polinômio gerador <span class="arithmatex">\(G_n\)</span> em formato binário. </p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>taps</code></td>            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Lista com os índices dos taps ativos.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.EncoderConvolutional.calc_free_distance" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">calc_free_distance</span><span class="p">()</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Calcula a distância livre <span class="arithmatex">\(d_{free}\)</span> do código convolucional, definida como a menor distância de Hamming entre quaisquer duas sequências de saída distintas.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>dist</code></td>            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Distância livre <span class="arithmatex">\(d_{free}\)</span> do codificador convolucional organizado com <span class="arithmatex">\(G\)</span>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.EncoderConvolutional.encode" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Codifica uma sequência binária de entrada <span class="arithmatex">\(u_t\)</span>, retornando as sequências de saida <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>. O processo de codificação pode ser representado pela expressão abaixo.</p>
-<div class="arithmatex">\[
-\begin{equation}
-\begin{bmatrix} v_t^{(0)} &amp; v_t^{(1)} \end{bmatrix}
-=
-\begin{bmatrix}
-u_{(t)} &amp; u_{(t-1)} &amp; u_{(t-2)} &amp; u_{(t-3)} &amp; u_{(t-4)} &amp; u_{(t-5)} &amp; u_{(t-6)}
-\end{bmatrix}
-\cdot
-\begin{bmatrix} G_{0} &amp; G_{1} \end{bmatrix}^{T}
-\end{equation}
-\]</div>
-
-
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>: Canais de saída do codificador.</li>
-<li><span class="arithmatex">\(u_t\)</span>: Vetor de bits de entrada.</li>
-<li><span class="arithmatex">\(G_{0}\)</span> e <span class="arithmatex">\(G_{1}\)</span>: Polinômios geradores do codificador.</li>
+<h1 id="guia-de-instalacao-manual">Guia de Instalação Manual</h1>
+<p>Guia de instalação para o Simulador ARGOS-3. </p>
+<h2 id="pre-requisitos">Pré-requisitos</h2>
+<ul>
+<li><code>Python 3.8</code> (ou superior);</li>
+<li><code>Python-venv 3.12.7</code> (ou superior);</li>
+<li><code>Git 2.43.0</code> (ou superior);</li>
+<li><code>GNU Make 4.3</code> (ou superior);</li>
+<li>Recomenda-se a distribuição <code>Ubuntu 24.04.2 LTS</code> para seguir os passos de instalação/atualização de pacotes.  </li>
 </ul>
-</details>
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>ut</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(u_t\)</span> de entrada a serem codificados.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>tuple</code></td>            <td>
-                  <code>(<span title="numpy.ndarray">ndarray</span>, <span title="numpy.ndarray">ndarray</span>)</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Tupla com os dois canais de saída <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+<h2 id="instalacao">Instalação</h2>
+<h3 id="1-clonar-o-repositorio">1. Clonar o repositório</h3>
+<p>Faça o clone do repositório, e acesse o diretório do projeto.</p>
+<pre><code class="language-bash">git clone https://github.com/arthurcadore/simulacao-tcc.git
+cd simulacao-tcc
+</code></pre>
+<h3 id="2-instalacao-com-makefile">2. Instalação com Makefile</h3>
+<p>Inicialmente, atualize os pacotes do sistema. Para sistemas baseados em Debian, como Ubuntu, use:</p>
+<pre><code class="language-bash">apt-get update &amp;&amp; apt-get upgrade -y
+</code></pre>
+<p>O projeto inclui um Makefile que automatiza a criação do ambiente virtual e a instalação das dependências listadas no <code>requirements.txt</code>.</p>
+<pre><code class="language-bash">make install
+</code></pre>
+<h4 id="21-instalacao-latex">2.1 Instalação Latex</h4>
+<p>Instala dependências adicionais para geração de PDF (Linux) utilizando latex, necessário para a documentação, para sistemas baseados em Debian, como Ubuntu, use: </p>
+<pre><code class="language-bash">make install-additional
+</code></pre>
+<p>Versões recomendadas: </p>
+<ul>
+<li><code>pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)</code></li>
+<li><code>kpathsea version 6.3.5</code></li>
+</ul>
+<h3 id="3-ativar-o-ambiente-virtual">3. Ativar o ambiente virtual</h3>
+<p>Após a instalação, ative o ambiente virtual com:</p>
+<pre><code class="language-bash">source .venv/bin/activate
+</code></pre>
+<h2 id="gerar-documentacao">Gerar Documentação</h2>
+<h3 id="1-visualizando-localmente">1. Visualizando Localmente</h3>
+<p>Para visualizar a documentação localmente, use:</p>
+<pre><code class="language-bash">make doc
+</code></pre>
+<p>Isso irá iniciar um servidor local em <code>http://localhost:8005</code></p>
+<h3 id="2-conversao-pdf-para-svg">2. Conversão PDF para SVG</h3>
+<p>Para gerar as imagens usadas na documentação web, converta os arquivos PDF para SVG com o Makefile:</p>
+<pre><code class="language-bash">make doc-images
+</code></pre>
+<h3 id="3-publicar-a-documentacao">3. Publicar a Documentação</h3>
+<p>Para publicar a documentação no GitHub Pages, use:</p>
+<pre><code class="language-bash">make deploy-docs
+</code></pre>
+<h2 id="suporte">Suporte</h2>
+<p>Para relatar problemas ou solicitar recursos, por favor <a href="https://github.com/arthurcadore/simulacao-tcc/issues">abra uma issue</a> no GitHub.</p>
+<h2 id="licenca">Licença</h2>
+<p>Este projeto faz parte do Trabalho de Conclusão de Curso em Engenharia de Telecomunicações do IFSC. Consulte o arquivo <a href="https://github.com/arthurcadore/simulacao-tcc/blob/main/LICENSE">LICENSE</a> para mais detalhes sobre os termos de uso.</p>
+<h2 id="contato">Contato</h2>
+<ul>
+<li><strong>Autor</strong>: Arthur Cadore M. Barcella</li>
+<li><strong>Orientadores</strong>: </li>
+<li>Prof. Roberto Wanderley da Nóbrega, Dr.</li>
+<li>Prof. Richard Demo Souza, Dr.</li>
+<li><strong>Instituição</strong>: IFSC - Instituto Federal de Santa Catarina</li>
+</ul>
 
 
 
