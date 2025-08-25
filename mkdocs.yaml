@@ -81,6 +81,9 @@ badges:
   - name: Forks 
     image: https://img.shields.io/github/forks/arthurcadore/simulacao-tcc?style=social 
     link: https://github.com/arthurcadore/simulacao-tcc/network/members 
+  - name: Release
+    image: https://img.shields.io/github/v/release/arthurcadore/simulacao-tcc?style=flat
+    link: https://github.com/arthurcadore/simulacao-tcc/releases/latest
     
 markdown_extensions:
   - pymdownx.arithmatex:  
