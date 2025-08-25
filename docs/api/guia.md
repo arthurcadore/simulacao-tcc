@@ -1,4 +1,4 @@
-# Guia de Instalação
+# Guia de Instalação Manual
 
 Guia de instalação para o Simulador ARGOS-3. 
 
