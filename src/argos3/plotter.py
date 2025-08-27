@@ -301,12 +301,12 @@ class ConstellationPlot(BasePlot):
 
     def plot(self) -> None:
         # Centraliza os dados em torno do zero
-        dI_c = self.dI - np.mean(self.dI)
-        dQ_c = self.dQ - np.mean(self.dQ)
+        dI_c, dQ_c = self.dI, self.dQ
 
         # Define amplitude alvo para pontos ideais
         if self.amplitude is None:
-            amp = np.mean(np.abs(np.concatenate([dI_c * 1.1, dQ_c * 1.1])))
+            power = np.mean(dI_c**2 + dQ_c**2)
+            amp = np.sqrt(power) / np.sqrt(2)
         else:
             amp = self.amplitude
             # Normaliza as amostras para a amplitude definida

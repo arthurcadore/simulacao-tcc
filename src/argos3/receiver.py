@@ -72,7 +72,7 @@ class Receiver:
                 labels=["$s(t) + $ AWGN"],
                 title="Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
                 xlim=(0, 0.1),
-                ylim=(-0.4, 0.4),
+                # ylim=(-0.4, 0.4),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -88,7 +88,7 @@ class Receiver:
                 labels=["$xI'(t)$", "$yQ'(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.6, 0.6),
+                # ylim=(-0.6, 0.6),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -187,7 +187,7 @@ class Receiver:
                 labels=["$d_I'(t)$"],  
                 title="Sinal filtrado - Componente $I$",
                 xlim=(0, 0.1),
-                ylim=(-0.4, 0.4),
+                # ylim=(-0.4, 0.4),
                 colors="darkgreen"
             ).plot()
 
@@ -198,7 +198,7 @@ class Receiver:
                 labels=["$d_Q'(t)$"],
                 title="Sinal filtrado - Componente $Q$",
                 xlim=(0, 0.1),
-                ylim=(-0.4, 0.4),
+                # ylim=(-0.4, 0.4),
                 colors="navy"
             ).plot()
 

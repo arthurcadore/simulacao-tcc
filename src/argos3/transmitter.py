@@ -341,7 +341,9 @@ class Transmitter:
             - Tempo: ![pageplot](assets/transmitter_formatter_time.svg)
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
-        formatter = Formatter()
+
+        formatter = Formatter(fs=self.fs, Rb=self.Rb)
+
         dI = formatter.apply_format(Xnrz)
         dQ = formatter.apply_format(Yman)
         if self.output_print:
@@ -365,7 +367,6 @@ class Transmitter:
                 labels=["$d_I(t)$"],
                 title="Canal $I$",
                 xlim=(0, 0.1),
-                ylim=(-0.1, 0.1),
                 colors="darkgreen",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -380,7 +381,6 @@ class Transmitter:
                 labels=["$d_Q(t)$"],
                 title="Canal $Q$",
                 xlim=(0, 0.1),
-                ylim=(-0.1, 0.1),
                 colors="darkblue",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -461,7 +461,6 @@ class Transmitter:
                 labels=["$d_I(t)$", "$d_Q(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.1, 0.1),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -476,7 +475,6 @@ class Transmitter:
                 labels=["$s(t)$"],
                 title="Sinal Modulado $IQ$",
                 xlim=(0, 0.1),
-                ylim=(-0.15, 0.15),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -548,9 +546,9 @@ class Transmitter:
                 fig_const, grid, (0, 1),
                 dI=dI[:40000:5],
                 dQ=dQ[:40000:5],
-                title="Constelação $IQ$",
                 xlim=(-0.1, 0.1),
                 ylim=(-0.1, 0.1),
+                title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
