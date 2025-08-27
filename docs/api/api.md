@@ -1,15 +1,30 @@
-# Guia de Instalação PIP
+# Guia de Instalação pip
 
 ## Requisitos
 
-- Python 3.8+
-- NumPy
-- Matplotlib (para visualizações)
-- SciPy (para processamento de sinal)
+- `Python 3.8` (ou superior);
+- `Python-venv 3.12.7` (ou superior);
+- `pip 24.0` (ou superior);
 
 ## Instalação
 
-### Instalação da última versão: 
+Para saber as versões disponiveis para instalação, e seu changelog, verifique as releases no [Repositório](https://github.com/arthurcadore/simulacao-tcc/releases).
+
+### Criar ambiente virtual
+
+Inicialmente, crie um ambiente virtual para isolar as dependências do projeto.
+
+```bash
+python -m venv .venv
+```
+
+Ative o ambiente virtual:
+
+```bash
+source .venv/bin/activate
+```
+
+### Ultima versão
 
 Para instalar a ultima versão, execute:
 
@@ -17,17 +32,17 @@ Para instalar a ultima versão, execute:
 pip install argos3
 ```
 
-### Versão específica:
+### Versão específica
 
-Para instalar uma versão específica, execute: 
+Para instalar uma versão específica, execute o comando abaixo, substituindo `1.0.1` pela versão desejada: 
 
 ```bash
 pip install argos3==1.0.1
 ```
 
-Para saber as versões disponiveis para instalação, e seu changelog, verifique as releases no [Repositório](https://github.com/arthurcadore/simulacao-tcc/releases).
+## Exemplo de Uso
 
-## Exemplo de Uso:
+Após a instalação da biblioteca, verifique a documentação de classes para mais detalhes, abaixo está um exemplo de uso:
 
 ```python
 >>> from argos3 import Datagram

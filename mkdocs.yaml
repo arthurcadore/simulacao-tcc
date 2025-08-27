@@ -40,8 +40,8 @@ extra_css:
 nav:
   - Início: index.md
   - Instalação: 
-      - Instalação PIP: api/api.md
-      - Instalação Manual: api/guia.md
+      - Instalação pip: api/api.md
+      - Instalação manual: api/guia.md
   - Componentes:
       - Datagrama: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
