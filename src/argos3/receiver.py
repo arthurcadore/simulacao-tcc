@@ -11,7 +11,7 @@ from .modulator import Modulator
 from .scrambler import Scrambler
 from .encoder import Encoder
 from .transmitter import Transmitter
-from .noise import Noise
+from .noise import NoiseEBN0
 from .lowpassfilter import LPF
 from .matchedfilter import MatchedFilter
 from .sampler import Sampler
@@ -69,10 +69,10 @@ class Receiver:
                 fig_time, grid, (0, 0),
                 t=t,
                 signals=[s],
-                labels=["$s(t) + AWGN$"],
-                title="Sinal Modulado + Ruído AWGN 15$dB$",
+                labels=["$s(t) + $ AWGN"],
+                title="Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
                 xlim=(0, 0.1),
-                ylim=(-0.2, 0.2),
+                ylim=(-0.4, 0.4),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -88,7 +88,7 @@ class Receiver:
                 labels=["$xI'(t)$", "$yQ'(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
                 xlim=(0, 0.1),
-                ylim=(-0.3, 0.3),
+                ylim=(-0.6, 0.6),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -157,6 +157,7 @@ class Receiver:
 
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_lpf_time.svg)
+            - Frequência: ![pageplot](assets/receiver_lpf_freq.svg)
         """
 
         lpf = LPF(cut_off=cut_off, order=6, fs=self.fs, type="butter")
@@ -186,7 +187,7 @@ class Receiver:
                 labels=["$d_I'(t)$"],  
                 title="Sinal filtrado - Componente $I$",
                 xlim=(0, 0.1),
-                # ylim=(-4, 4),
+                ylim=(-0.4, 0.4),
                 colors="darkgreen"
             ).plot()
 
@@ -197,12 +198,74 @@ class Receiver:
                 labels=["$d_Q'(t)$"],
                 title="Sinal filtrado - Componente $Q$",
                 xlim=(0, 0.1),
-                # ylim=(-4, 4),
+                ylim=(-0.4, 0.4),
                 colors="navy"
             ).plot()
 
             fig_signal.tight_layout()
             save_figure(fig_signal, "receiver_lpf_time.pdf")
+
+
+            fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_freq, grid_freq, (0, slice(0, 2)),
+                t_impulse, impulse_response,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+
+            FrequencyPlot(
+                fig_freq, grid_freq, (1, 0), 
+                fs=self.fs,
+                signal=xI_prime,
+                fc=self.fc,
+                labels=["$X_I'(f)$"],
+                title="Componente $I$ - Demodulada",
+                xlim=(-10, 10),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_freq, grid_freq, (1, 1), 
+                fs=self.fs,
+                signal=yQ_prime,
+                fc=self.fc,
+                labels=["$Y_Q'(f)$"],
+                title="Componente $Q$ - Demodulada",
+                xlim=(-10, 10),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_freq, grid_freq, (2, 0), 
+                fs=self.fs,
+                signal=dI_prime,
+                fc=self.fc,
+                labels=["$d_I'(f)$"],
+                title="Componente $I$ - Filtrada",
+                xlim=(-10, 10),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_freq, grid_freq, (2, 1), 
+                fs=self.fs,
+                signal=dQ_prime,
+                fc=self.fc,
+                labels=["$d_Q'(f)$"],
+                title="Componente $Q$ - Filtrada",
+                xlim=(-10, 10),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_freq.tight_layout()
+            save_figure(fig_freq, "receiver_lpf_freq.pdf")
+
 
         return dI_prime, dQ_prime
 
@@ -221,6 +284,7 @@ class Receiver:
 
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_mf_time.svg)
+            - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
         """
 
         matched_filter = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted")
@@ -233,10 +297,10 @@ class Receiver:
             print("Q'(t):", ''.join(map(str, Qt_prime[:5])),"...")
 
         if self.output_plot:
-            fig_matched, grid_matched = create_figure(3, 1, figsize=(16, 9))
+            fig_matched, grid_matched = create_figure(2, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
-                fig_matched, grid_matched, (0, 0),
+                fig_matched, grid_matched, (0, slice(0, 2)),
                 matched_filter.t_impulse, matched_filter.impulse_response,
                 t_unit="ms",
                 colors="darkorange",
@@ -254,7 +318,7 @@ class Receiver:
             ).plot()
 
             TimePlot(
-                fig_matched, grid_matched, (2, 0),
+                fig_matched, grid_matched, (1, 1),
                 t,
                 Qt_prime,
                 labels=["$Q'(t)$"],
@@ -266,6 +330,66 @@ class Receiver:
 
             fig_matched.tight_layout()
             save_figure(fig_matched, "receiver_mf_time.pdf")
+
+            fig_matched_freq, grid_matched_freq = create_figure(3, 2, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_matched_freq, grid_matched_freq, (0, slice(0, 2)),
+                matched_filter.t_impulse, matched_filter.impulse_response,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$-g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+            FrequencyPlot(
+                fig_matched_freq, grid_matched_freq, (1, 0),
+                fs=self.fs,
+                signal=dI_prime,
+                fc=self.fc,
+                labels=["$d_I'(f)$"],
+                title="Componente $I$ - Fitragem Passa-Baixa",
+                xlim=(-10, 10),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_matched_freq, grid_matched_freq, (1, 1),
+                fs=self.fs,
+                signal=dQ_prime,
+                fc=self.fc,
+                labels=["$d_Q'(f)$"],
+                title="Componente $Q$ - Fitragem Passa-Baixa",
+                xlim=(-10, 10),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_matched_freq, grid_matched_freq, (2, 0),
+                fs=self.fs,
+                signal=It_prime,
+                fc=self.fc,
+                labels=["$I'(f)$"],
+                title="Componente $I$ - Fitragem Casada",
+                xlim=(-10, 10),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_matched_freq, grid_matched_freq, (2, 1),
+                fs=self.fs,
+                signal=Qt_prime,
+                fc=self.fc,
+                labels=["$Q'(f)$"],
+                title="Componente $Q$ - Fitragem Casada",
+                xlim=(-10, 10),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_matched_freq.tight_layout()
+            save_figure(fig_matched_freq, "receiver_mf_freq.pdf")
             
 
         return It_prime, Qt_prime
@@ -578,8 +702,8 @@ if __name__ == "__main__":
     transmitter = Transmitter(datagramTX, output_print=True)
     t, s = transmitter.run()
 
-    snr_db = 15
-    add_noise = Noise(snr=snr_db)
+    ebn0_db = 20
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db)
     s_noisy = add_noise.add_noise(s)
 
     print("\n ==== CANAL ==== \n")
@@ -592,23 +716,6 @@ if __name__ == "__main__":
     try:
         datagramRX = Datagram(streambits=bitsRX)
         print("\n",datagramRX.parse_datagram())
-
-        # fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
-        # BitsPlot(
-        #     fig_datagram, grid, (0, 0),
-        #     bits_list=[datagramRX.msglength, 
-        #                datagramRX.pcdid, 
-        #                datagramRX.blocks, 
-        #                datagramRX.tail],
-        #     sections=[("Message Length", len(datagramRX.msglength)),
-        #               ("PCD ID", len(datagramRX.pcdid)),
-        #               ("Dados de App.", len(datagramRX.blocks)),
-        #               ("Tail", len(datagramRX.tail))],
-        #     colors=["green", "orange", "red", "blue"]
-        # ).plot(xlabel="Index de Bit")
-
-        # fig_datagram.tight_layout()
-        # save_figure(fig_datagram, "receiver_datagram_time.pdf")
 
     except Exception as e:
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))

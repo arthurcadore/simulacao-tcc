@@ -7,7 +7,7 @@ Data: 28-07-2025
 import numpy as np
 from .formatter import Formatter
 from .encoder import Encoder
-from .plotter import create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
+from .plotter import PhasePlot, create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
     def __init__(self, fc, fs=128_000):
@@ -242,15 +242,15 @@ if __name__ == "__main__":
 
     # PLOT 3 - Constelação
     fig_const, grid = create_figure(1, 2, figsize=(16, 8))
-    TimePlot(
+    PhasePlot(
         fig_const, grid, (0, 0),
         t=t,
         signals=[dI, dQ],
-        labels=["$dI(t)$", "$dQ(t)$"],
-        title="Sinal $IQ$ - Formatados RRC",
-        xlim=(0, 0.025),
-        ylim=(-0.1, 0.1),
-        colors=["darkgreen", "navy"],
+        labels=["Fase $I + jQ$"],
+        title="Fase $I + jQ$",
+        xlim=(0, 0.15),
+        ylim=(-np.pi, np.pi),
+        colors=["darkred"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
             "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
@@ -259,12 +259,12 @@ if __name__ == "__main__":
 
     ConstellationPlot(
         fig_const, grid, (0, 1),
-        dI=dI[:20000],
-        dQ=dQ[:20000],
+        dI=dI[:20000:5],
+        dQ=dQ[:20000:5],
         title="Constelação $IQ$",
         xlim=(-0.1, 0.1),
         ylim=(-0.1, 0.1),
-        colors=["darkgreen", "navy"],
+        colors=["darkred"],
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
 

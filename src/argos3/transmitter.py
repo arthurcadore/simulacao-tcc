@@ -338,7 +338,8 @@ class Transmitter:
             dQ (np.ndarray): Vetor formatado do canal Q, $d_Q$.
 
         Exemplo:
-            ![pageplot](assets/transmitter_formatter_time.svg)
+            - Tempo: ![pageplot](assets/transmitter_formatter_time.svg)
+            - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
         formatter = Formatter()
         dI = formatter.apply_format(Xnrz)
@@ -389,6 +390,43 @@ class Transmitter:
 
             fig_format.tight_layout()
             save_figure(fig_format, "transmitter_formatter_time.pdf")
+
+            fig_format_freq, grid_format_freq = create_figure(2, 2, figsize=(16, 9))
+
+            ImpulseResponsePlot(
+                fig_format_freq, grid_format_freq, (0, slice(0, 2)),
+                formatter.t_rc, formatter.g,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+
+            FrequencyPlot(
+                fig_format_freq, grid_format_freq, (1, 0),
+                fs=self.fs,
+                signal=dI,
+                fc=self.fc,
+                labels=["$D_I(f)$"],
+                title="Canal $I$",
+                xlim=(-1.5, 1.5),
+                colors="darkgreen",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_format_freq, grid_format_freq, (1, 1),
+                fs=self.fs,
+                signal=dQ,
+                fc=self.fc,
+                labels=["$D_Q(f)$"],
+                title="Canal $Q$",
+                xlim=(-1.5, 1.5),
+                colors="navy",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_format_freq.tight_layout()
+            save_figure(fig_format_freq, "transmitter_formatter_freq.pdf")
+
         return dI, dQ
 
     def modulate(self, dI, dQ):
@@ -406,7 +444,7 @@ class Transmitter:
         Exemplo:
             - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
             - Frequência: ![pageplot](assets/transmitter_modulator_freq.svg)
-            - Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
+            - Fase e Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
         modulator = Modulator(fc=self.fc, fs=self.fs)
         t, s = modulator.modulate(dI, dQ)
@@ -508,8 +546,8 @@ class Transmitter:
 
             ConstellationPlot(
                 fig_const, grid, (0, 1),
-                dI=dI[:40000],
-                dQ=dQ[:40000],
+                dI=dI[:40000:5],
+                dQ=dQ[:40000:5],
                 title="Constelação $IQ$",
                 xlim=(-0.1, 0.1),
                 ylim=(-0.1, 0.1),
