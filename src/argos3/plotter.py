@@ -283,7 +283,7 @@ class ConstellationPlot(BasePlot):
         amplitude (Optional[float]): Amplitude alvo para pontos ideais
 
     Exemplos:
-        - Modulador: ![pageplot](assets/example_modulator_constellation.svg)
+        - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -808,6 +808,8 @@ class PhasePlot(BasePlot):
         signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
         labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
 
+    Exemplos:
+        - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
