@@ -16,7 +16,7 @@ from .lowpassfilter import LPF
 from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -391,6 +391,9 @@ class Receiver:
             fig_matched_freq.tight_layout()
             save_figure(fig_matched_freq, "receiver_mf_freq.pdf")
             
+        #normalização: 
+        It_prime = It_prime / np.max(np.abs(It_prime))
+        Qt_prime = Qt_prime / np.max(np.abs(Qt_prime))
 
         return It_prime, Qt_prime
 
@@ -409,6 +412,7 @@ class Receiver:
         
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_sampler_time.svg)
+            - Fase e Constelação: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
         sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t)
         i_signal_sampled = sampler.sample(It_prime)
@@ -446,6 +450,39 @@ class Receiver:
 
             fig_sampler.tight_layout()
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
+
+
+            fig_phase, grid_phase = create_figure(1, 2, figsize=(16, 9))
+
+            PhasePlot(
+                fig_phase, grid_phase, (0, 0),
+                t=t,
+                signals=[It_prime, Qt_prime],
+                labels=["Fase $I + jQ$"],
+                title="Fase $I + jQ$",
+                xlim=(0, 0.15),
+                ylim=(-np.pi, np.pi),
+                colors=["darkred"],
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
+
+            ConstellationPlot(
+                fig_phase, grid_phase, (0, 1),
+                dI=i_signal_sampled,
+                dQ=q_signal_sampled,
+                xlim=(-1, 1),
+                ylim=(-1, 1),
+                title="Constelação $IQ$",
+                colors=["darkred"],
+                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot() 
+
+            fig_phase.tight_layout()
+            save_figure(fig_phase, "receiver_sampler_phase.pdf")
+
         return Xnrz_prime, Yman_prime
 
     def decode(self, Xnrz_prime, Yman_prime):

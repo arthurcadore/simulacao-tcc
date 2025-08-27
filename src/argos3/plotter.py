@@ -309,6 +309,12 @@ class ConstellationPlot(BasePlot):
             amp = np.mean(np.abs(np.concatenate([dI_c * 1.1, dQ_c * 1.1])))
         else:
             amp = self.amplitude
+            # Normaliza as amostras para a amplitude definida
+            max_val = np.max(np.sqrt(dI_c**2 + dQ_c**2))
+            if max_val > 0:
+                scale = amp / max_val
+                dI_c *= scale
+                dQ_c *= scale
 
         scatter_kwargs = {"s": 10, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
@@ -334,6 +340,7 @@ class ConstellationPlot(BasePlot):
         self.ax.set_xlabel("Componente em Fase $I$")
         self.ax.set_ylabel("Componente em Quadratura $Q$")
         self.apply_ax_style()
+
 
 class BitsPlot(BasePlot):
     r"""

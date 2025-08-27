@@ -2,7 +2,7 @@
 
 all: install 
 
-install: 
+install:
 	@echo "Verificando Python..."
 	@python3 --version || (echo "Python não encontrado. Por favor, instale o Python primeiro." && exit 1)
 	@echo "Criando ambiente virtual..."
@@ -29,8 +29,8 @@ doc-images:
 doc: 
 	@echo "Gerando documentação..."
 	mkdocs build
-	mkdocs serve -a 0.0.0.0:8002
-		
+	mkdocs serve -a 0.0.0.0:8006
+	
 freeze: 
 	@echo "Congelando dependências..."
 	.venv/bin/pip freeze > requirements.txt
