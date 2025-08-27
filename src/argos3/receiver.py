@@ -412,7 +412,8 @@ class Receiver:
         
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_sampler_time.svg)
-            - Fase e Constelação: ![pageplot](assets/receiver_sampler_phase.svg)  
+            - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
+            - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
         sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t)
         i_signal_sampled = sampler.sample(It_prime)
@@ -452,6 +453,33 @@ class Receiver:
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
 
 
+            fig_const, grid_const = create_figure(1, 2, figsize=(16, 9))
+
+            ConstellationPlot(
+                fig_const, grid_const, (0, 0),
+                dI=It_prime[:40000:5],
+                dQ=Qt_prime[:40000:5],
+                xlim=(-1, 1),
+                ylim=(-1, 1),
+                title="Constelação $IQ$",
+                colors=["darkred"],
+                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot() 
+
+            ConstellationPlot(
+                fig_const, grid_const, (0, 1),
+                dI=i_signal_sampled,
+                dQ=q_signal_sampled,
+                xlim=(-1, 1),
+                ylim=(-1, 1),
+                title="Constelação $IQ - Amostrado$",
+                colors=["darkred"],
+                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot() 
+
+            fig_const.tight_layout()
+            save_figure(fig_const, "receiver_sampler_const.pdf")
+
             fig_phase, grid_phase = create_figure(1, 2, figsize=(16, 9))
 
             PhasePlot(
@@ -469,16 +497,20 @@ class Receiver:
                 }
             ).plot()
 
-            ConstellationPlot(
+            PhasePlot(
                 fig_phase, grid_phase, (0, 1),
-                dI=i_signal_sampled,
-                dQ=q_signal_sampled,
-                xlim=(-1, 1),
-                ylim=(-1, 1),
-                title="Constelação $IQ$",
+                t=t_sampled,
+                signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
+                labels=["Fase $I + jQ$"],
+                title="Fase $I + jQ$ - Decidido",
+                xlim=(0, 0.15),
+                ylim=(-np.pi, np.pi),
                 colors=["darkred"],
-                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
-            ).plot() 
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                }
+            ).plot()
 
             fig_phase.tight_layout()
             save_figure(fig_phase, "receiver_sampler_phase.pdf")
