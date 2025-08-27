@@ -22,7 +22,7 @@
     
     
       
-        <title>Instalação Manual - Simulador ARGOS-3</title>
+        <title>Instalação manual - Simulador ARGOS-3</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#guia-de-instalacao-manual" class="md-skip">
+        <a href="#instalacao-manual" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Instalação Manual
+              Instalação manual
             
           </span>
         </div>
@@ -470,7 +470,7 @@
   
   
   <span class="md-ellipsis">
-    Instalação PIP
+    Instalação pip
     
   </span>
   
@@ -502,7 +502,7 @@
   
   
   <span class="md-ellipsis">
-    Instalação Manual
+    Instalação manual
     
   </span>
   
@@ -515,7 +515,7 @@
   
   
   <span class="md-ellipsis">
-    Instalação Manual
+    Instalação manual
     
   </span>
   
@@ -538,9 +538,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pre-requisitos" class="md-nav__link">
+  <a href="#requisitos" class="md-nav__link">
     <span class="md-ellipsis">
-      Pré-requisitos
+      Requisitos
     </span>
   </a>
   
@@ -557,42 +557,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-clonar-o-repositorio" class="md-nav__link">
+  <a href="#clonar-o-repositorio" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Clonar o repositório
+      Clonar o repositório
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-instalacao-com-makefile" class="md-nav__link">
+  <a href="#instalacao-com-makefile" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Instalação com Makefile
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Instalação com Makefile">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#21-instalacao-latex" class="md-nav__link">
-    <span class="md-ellipsis">
-      2.1 Instalação Latex
+      Instalação com Makefile
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
-  <a href="#3-ativar-o-ambiente-virtual" class="md-nav__link">
+  <a href="#ativar-o-ambiente-virtual" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Ativar o ambiente virtual
+      Ativar o ambiente virtual
     </span>
   </a>
   
@@ -604,37 +589,37 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gerar-documentacao" class="md-nav__link">
+  <a href="#documentacao" class="md-nav__link">
     <span class="md-ellipsis">
-      Gerar Documentação
+      Documentação
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Gerar Documentação">
+    <nav class="md-nav" aria-label="Documentação">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-visualizando-localmente" class="md-nav__link">
+  <a href="#visualizando-localmente" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Visualizando Localmente
+      Visualizando Localmente
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-conversao-pdf-para-svg" class="md-nav__link">
+  <a href="#conversao-pdf-para-svg" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Conversão PDF para SVG
+      Conversão PDF para SVG
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-publicar-a-documentacao" class="md-nav__link">
+  <a href="#publicar-a-documentacao" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Publicar a Documentação
+      Publicar a Documentação
     </span>
   </a>
   
@@ -1222,53 +1207,53 @@
   
 
 
-<h1 id="guia-de-instalacao-manual">Guia de Instalação Manual</h1>
-<p>Guia de instalação para o Simulador ARGOS-3. </p>
-<h2 id="pre-requisitos">Pré-requisitos</h2>
+<h1 id="instalacao-manual">Instalação Manual</h1>
+<h2 id="requisitos">Requisitos</h2>
 <ul>
 <li><code>Python 3.8</code> (ou superior);</li>
 <li><code>Python-venv 3.12.7</code> (ou superior);</li>
 <li><code>Git 2.43.0</code> (ou superior);</li>
 <li><code>GNU Make 4.3</code> (ou superior);</li>
+<li><code>pdfTeX 3.141592653-2.6-1.40.25</code> (ou superior);</li>
+<li><code>kpathsea version 6.3.5</code> (ou superior);</li>
 <li>Recomenda-se a distribuição <code>Ubuntu 24.04.2 LTS</code> para seguir os passos de instalação/atualização de pacotes.  </li>
 </ul>
 <h2 id="instalacao">Instalação</h2>
-<h3 id="1-clonar-o-repositorio">1. Clonar o repositório</h3>
-<p>Faça o clone do repositório, e acesse o diretório do projeto.</p>
+<h3 id="clonar-o-repositorio">Clonar o repositório</h3>
+<p>Inicialmente faça o clone do repositório, contendo o projeto: </p>
 <pre><code class="language-bash">git clone https://github.com/arthurcadore/simulacao-tcc.git
-cd simulacao-tcc
 </code></pre>
-<h3 id="2-instalacao-com-makefile">2. Instalação com Makefile</h3>
-<p>Inicialmente, atualize os pacotes do sistema. Para sistemas baseados em Debian, como Ubuntu, use:</p>
-<pre><code class="language-bash">apt-get update &amp;&amp; apt-get upgrade -y
+<p>Em seguida, acesse o diretório do projeto: </p>
+<pre><code class="language-bash">cd simulacao-tcc
+</code></pre>
+<h3 id="instalacao-com-makefile">Instalação com Makefile</h3>
+<p>No diretório do projeto, atualize os pacotes do sistema: </p>
+<pre><code class="language-bash">apt-get update
+</code></pre>
+<p>Instale as dependências necessárias para o Makefile:</p>
+<pre><code class="language-bash">apt-get install python3-venv git make -y
 </code></pre>
 <p>O projeto inclui um Makefile que automatiza a criação do ambiente virtual e a instalação das dependências listadas no <code>requirements.txt</code>.</p>
 <pre><code class="language-bash">make install
 </code></pre>
-<h4 id="21-instalacao-latex">2.1 Instalação Latex</h4>
-<p>Instala dependências adicionais para geração de PDF (Linux) utilizando latex, necessário para a documentação, para sistemas baseados em Debian, como Ubuntu, use: </p>
+<p>Em seguida, instale as dependências adicionais para geração de PDF (Linux) utilizando latex, necessário para a documentação: </p>
 <pre><code class="language-bash">make install-additional
 </code></pre>
-<p>Versões recomendadas: </p>
-<ul>
-<li><code>pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)</code></li>
-<li><code>kpathsea version 6.3.5</code></li>
-</ul>
-<h3 id="3-ativar-o-ambiente-virtual">3. Ativar o ambiente virtual</h3>
+<h3 id="ativar-o-ambiente-virtual">Ativar o ambiente virtual</h3>
 <p>Após a instalação, ative o ambiente virtual com:</p>
 <pre><code class="language-bash">source .venv/bin/activate
 </code></pre>
-<h2 id="gerar-documentacao">Gerar Documentação</h2>
-<h3 id="1-visualizando-localmente">1. Visualizando Localmente</h3>
+<h2 id="documentacao">Documentação</h2>
+<h3 id="visualizando-localmente">Visualizando Localmente</h3>
 <p>Para visualizar a documentação localmente, use:</p>
 <pre><code class="language-bash">make doc
 </code></pre>
 <p>Isso irá iniciar um servidor local em <code>http://localhost:8005</code></p>
-<h3 id="2-conversao-pdf-para-svg">2. Conversão PDF para SVG</h3>
+<h3 id="conversao-pdf-para-svg">Conversão PDF para SVG</h3>
 <p>Para gerar as imagens usadas na documentação web, converta os arquivos PDF para SVG com o Makefile:</p>
 <pre><code class="language-bash">make doc-images
 </code></pre>
-<h3 id="3-publicar-a-documentacao">3. Publicar a Documentação</h3>
+<h3 id="publicar-a-documentacao">Publicar a Documentação</h3>
 <p>Para publicar a documentação no GitHub Pages, use:</p>
 <pre><code class="language-bash">make deploy-docs
 </code></pre>
