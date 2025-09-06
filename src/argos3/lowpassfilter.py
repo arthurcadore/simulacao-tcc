@@ -116,11 +116,8 @@ class LPF:
         """
         signal_filtered = filtfilt(self.b, self.a, signal)
 
-        # Remover offset DC
-        signal_filtered -= np.mean(signal_filtered)
-
-        # Normalizar amplitude
-        signal_filtered *= 2
+        # normalização
+        signal_filtered *= np.sqrt(2)
 
         return signal_filtered
 

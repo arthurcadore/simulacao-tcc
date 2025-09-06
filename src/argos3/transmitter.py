@@ -551,7 +551,7 @@ class Transmitter:
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
-            ).plot()
+            ).plot(show_ideal_points=False)
 
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 

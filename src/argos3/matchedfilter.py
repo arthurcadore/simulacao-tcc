@@ -138,7 +138,12 @@ class MatchedFilter:
         Returns:
             signal_filtered (np.ndarray): Sinal filtrado $x(t)$.
         """
-        return np.convolve(signal, self.impulse_response, mode='same')
+        signal_filtered = np.convolve(signal, self.impulse_response, mode='same')
+
+        # normalização
+        signal_filtered = signal_filtered / np.max(np.abs(signal_filtered))
+
+        return signal_filtered
 
 
 if __name__ == "__main__":

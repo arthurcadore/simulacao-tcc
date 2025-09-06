@@ -61,7 +61,14 @@ class Noise:
         self.snr_linear = 10 ** (self.snr / 10)
         self.variance = self.signal_power / self.snr_linear
         noise = np.random.normal(0, np.sqrt(self.variance), len(signal))
-        return signal + noise
+        
+        # adiciona ruído
+        signal = signal + noise
+
+        # normalização
+        signal = signal / np.max(np.abs(signal))
+        
+        return signal 
 
 class NoiseEBN0:
     def __init__(self, ebn0_db=10, fs=128_000, Rb=400):
@@ -137,7 +144,14 @@ class NoiseEBN0:
         self.noise_density = self.bit_energy / self.ebn0_lin
         self.variance = (self.noise_density * self.fs) / 2.0
         noise = np.random.normal(0, np.sqrt(self.variance), len(signal))
-        return signal + noise
+
+        # adiciona ruído
+        signal = signal + noise
+
+        # normalização
+        signal = signal / np.max(np.abs(signal))
+
+        return signal 
 
 def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
     n_est = s_noisy - s
