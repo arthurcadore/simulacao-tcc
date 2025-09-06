@@ -7,6 +7,7 @@ from typing import Optional, List, Union, Tuple, Dict, Any
 from collections import defaultdict
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, MultipleLocator
+from scipy.signal import freqz
 
 plt.style.use("science")
 plt.rcParams["figure.figsize"] = (16, 9)
@@ -1050,5 +1051,81 @@ class PoleZeroPlot(BasePlot):
         self.ax.set_aspect('equal', adjustable='box')
         self.ax.set_xlim([-1.2, 1.2])
         self.ax.set_ylim([-1.2, 1.2])
+
+        self.apply_ax_style()
+
+
+class FrequencyResponsePlot(BasePlot):
+    r"""
+    Classe para plotar a resposta em frequência de um filtro a partir de seus coeficientes (b, a). 
+    Calcula a transformada de Fourier discreta da resposta ao impulso usando `scipy.signal.freqz`.
+
+    $$
+        H(f) = \sum_{n=0}^{N} b_n e^{-j 2 \pi f n} \Big/ \sum_{m=0}^{M} a_m e^{-j 2 \pi f m}
+    $$
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot no GridSpec
+        b (np.ndarray): Coeficientes do numerador do filtro
+        a (np.ndarray): Coeficientes do denominador do filtro
+        fs (float): Frequência de amostragem
+        f_cut (Optional[float]): Frequência de corte do filtro (Hz)
+        xlim (Optional[Tuple[float, float]]): Limites do eixo X (Hz)
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 b: np.ndarray,
+                 a: np.ndarray,
+                 fs: float,
+                 f_cut: float = None,
+                 xlim: tuple = None,
+                 **kwargs) -> None:
+
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.b = b
+        self.a = a
+        self.fs = fs
+        self.f_cut = f_cut
+        self.xlim = xlim
+
+    def plot(self,
+             worN: int = 1024,
+             show_phase: bool = False,
+             xlabel: str = "Frequência (Hz)",
+             ylabel: str = "Magnitude (dB)") -> None:
+
+        # calcula resposta em frequência
+        w, h = freqz(self.b, self.a, worN=worN, fs=self.fs)
+        magnitude = mag2db(h)
+
+        # plota magnitude em dB
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+        color = self.apply_color(0) or "darkorange"
+        label = self.labels[0] if self.labels else "$H(f)$"
+
+        self.ax.plot(w, magnitude, color=color, label=label, **line_kwargs)
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+        self.ax.set_ylim(-80, 5)
+
+        # define limites de frequência se fornecido
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
+
+        # adiciona a barra vertical na frequência de corte
+        if self.f_cut is not None:
+            self.ax.axvline(self.f_cut, color="red", linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
+
+        if show_phase:
+            ax2 = self.ax.twinx()
+            phase = np.unwrap(np.angle(h))
+            ax2.plot(w, phase, color="darkorange", linestyle="--", linewidth=1.5, label="Fase")
+            ax2.set_ylabel("Fase (rad)")
 
         self.apply_ax_style()

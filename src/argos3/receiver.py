@@ -16,7 +16,7 @@ from .lowpassfilter import LPF
 from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
@@ -178,7 +178,7 @@ class Receiver:
                 t_impulse, impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 8))
 
             TimePlot(
                 fig_signal, grid_signal, (1, 0),
@@ -208,12 +208,14 @@ class Receiver:
 
             fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
 
-            ImpulseResponsePlot(
+            FrequencyResponsePlot(
                 fig_freq, grid_freq, (0, slice(0, 2)),
-                t_impulse, impulse_response,
-                t_unit="ms",
-                colors="darkorange",
-            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+                lpf.b,
+                lpf.a,
+                self.fs,
+                f_cut=cut_off,
+                xlim=(0, 3*cut_off),
+            ).plot()
 
             FrequencyPlot(
                 fig_freq, grid_freq, (1, 0), 
@@ -390,10 +392,6 @@ class Receiver:
 
             fig_matched_freq.tight_layout()
             save_figure(fig_matched_freq, "receiver_mf_freq.pdf")
-            
-        #normalização: 
-        It_prime = It_prime / np.max(np.abs(It_prime))
-        Qt_prime = Qt_prime / np.max(np.abs(Qt_prime))
 
         return It_prime, Qt_prime
 
@@ -754,7 +752,7 @@ class Receiver:
         self.fc = fc
 
         xI_prime, yQ_prime = self.demodulate(s)
-        dI_prime, dQ_prime= self.lowpassfilter(self.fc*0.6, xI_prime, yQ_prime, t)
+        dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
         Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
