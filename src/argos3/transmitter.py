@@ -546,8 +546,8 @@ class Transmitter:
                 fig_const, grid, (0, 1),
                 dI=dI[:40000:5],
                 dQ=dQ[:40000:5],
-                xlim=(-0.1, 0.1),
-                ylim=(-0.1, 0.1),
+                xlim=(-1.1, 1.1),
+                ylim=(-1.1, 1.1),
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}

@@ -324,7 +324,7 @@ class ConstellationPlot(BasePlot):
         self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
 
         # Pontos ideais QPSK
-        qpsk_points = np.array([[amp, amp], [amp, -amp], [-amp, amp], [-amp, -amp]])
+        qpsk_points = np.array([[3/4, 3/4], [3/4, -3/4], [-3/4, 3/4], [-3/4, -3/4]])
         self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
                         color="blue", s=160, marker="o", label="Pontos Ideais", linewidth=2)
 

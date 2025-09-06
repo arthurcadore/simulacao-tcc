@@ -118,7 +118,11 @@ class Formatter:
         sps = self.sps
         upsampled = np.zeros(len(symbols) * sps)
         upsampled[::sps] = symbols
-        return np.convolve(upsampled, pulse, mode='same')
+        out_sys = np.convolve(upsampled, pulse, mode='same')
+
+        # normalizar amplitude: 
+        out_sys = out_sys / np.max(np.abs(out_sys))
+        return out_sys
 
 if __name__ == "__main__":
 

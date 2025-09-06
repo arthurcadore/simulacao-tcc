@@ -459,8 +459,8 @@ class Receiver:
                 fig_const, grid_const, (0, 0),
                 dI=It_prime[:40000:5],
                 dQ=Qt_prime[:40000:5],
-                xlim=(-1, 1),
-                ylim=(-1, 1),
+                xlim=(-1.1, 1.1),
+                ylim=(-1.1, 1.1),
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -470,8 +470,8 @@ class Receiver:
                 fig_const, grid_const, (0, 1),
                 dI=i_signal_sampled,
                 dQ=q_signal_sampled,
-                xlim=(-1, 1),
-                ylim=(-1, 1),
+                xlim=(-1.1, 1.1),
+                ylim=(-1.1, 1.1),
                 title="Constelação $IQ - Amostrado$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -774,6 +774,8 @@ if __name__ == "__main__":
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db)
     s_noisy = add_noise.add_noise(s)
+    
+    # s_noisy = s
 
     print("\n ==== CANAL ==== \n")
     print("s(t):", ''.join(map(str, s_noisy[:5])), "...")
