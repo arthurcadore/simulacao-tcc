@@ -10,7 +10,7 @@ from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 from .encoder import Encoder
 
 class Formatter:
-    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC"):
+    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", prefix_duration=0.082, channel=None):
         r"""
         Inicializa um formatador, utilizado preparar os símbolos para modulação.
 
@@ -20,9 +20,12 @@ class Formatter:
             Rb (int): Taxa de bits.
             span (int): Duração do pulso em termos de períodos de bit.
             type (str): Tipo de pulso, atualmente apenas $RRC$ é suportado.
+            prefix_duration (int): Duração da portadora pura no inicio do vetor
+            channel (str): Canal a ser formatado, apenas $I$ e $Q$ são suportados.
 
         Raises:
             ValueError: Se o tipo de pulso não for suportado.
+            ValueError: Se o canal não for suportado.
 
         Exemplo: 
             ![pageplot](assets/example_formatter_time.svg)
@@ -32,6 +35,12 @@ class Formatter:
         EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55)
         </div>
         """
+
+        if channel not in ["I", "Q"]:
+            raise ValueError("Canal inválido. Use 'I' ou 'Q'.")
+        
+        self.channel = channel
+        self.prefix_duration = prefix_duration  
         self.alpha = alpha
         self.fs = fs
         self.Rb = Rb
@@ -88,6 +97,7 @@ class Formatter:
                       4 * self.alpha * (ti / self.Tb) * np.cos(np.pi * ti * (1 + self.alpha) / self.Tb)
                 den = np.pi * ti * (1 - (4 * self.alpha * ti / self.Tb) ** 2) / self.Tb
                 rc[i] = num / den
+                
         # Normaliza energia para 1
         rc = rc / np.sqrt(np.sum(rc**2))
         return rc
@@ -113,6 +123,9 @@ class Formatter:
         Returns:
             out_symbols (np.ndarray): Vetor formatado com o pulso aplicado.
         """
+
+        # adiciona prefixo
+        symbols = self.add_prefix(symbols)
             
         pulse = self.g
         sps = self.sps
@@ -123,6 +136,35 @@ class Formatter:
         # normalizar amplitude: 
         out_sys = out_sys / np.max(np.abs(out_sys))
         return out_sys
+
+    def add_prefix(self, symbols):
+        """
+        Adiciona um prefixo de portadora pura no inicio do sinal. Para o canal $I$, adiciona um vetor de simbolos $+1$, para o canal $Q$, adiciona um vetor de simbolos $0$, com duração de `prefix_duration`, pois ao aplicar o modulador `IQ` temos uma portadora pura no inicio do sinal, conforme a expressão abaixo: 
+
+        $$
+            s(t) = 1(t) \cdot \cos(2\pi f_c t) - 0(t) \cdot \sin(2\pi f_c t) \mapsto s(t) = \cos(2\pi f_c t)
+        $$
+
+        Sendo: 
+            - $s(t)$: Sinal modulado.
+            - $1(t)$ e $0(t)$: Prefixo de portadora pura.
+            - $f_c$: Frequência da portadora.
+            - $t$: Vetor de tempo.
+        
+        Args:
+            symbols (np.ndarray): Vetor de símbolos a serem formatados.
+        
+        Returns:
+            symbols (np.ndarray): Vetor de símbolos com prefixo adicionado.
+        """
+        if self.channel == "I":
+            carrier = np.ones(int(self.prefix_duration * self.Rb))
+        elif self.channel == "Q":
+            carrier = np.zeros(int(self.prefix_duration * self.Rb))
+
+        symbols = np.concatenate([carrier, symbols])
+        return symbols
+
 
 if __name__ == "__main__":
 
@@ -135,9 +177,11 @@ if __name__ == "__main__":
     Xnrz = encoder_nrz.encode(Xnrz)
     Yman = encoder_man.encode(Yman)
     
-    formatter = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC")
-    dI = formatter.apply_format(Xnrz)
-    dQ = formatter.apply_format(Yman)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q")
+    
+    dI = formatterI.apply_format(Xnrz)
+    dQ = formatterQ.apply_format(Yman)
     
     print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz[:10]))
     print("Yman:",  ' '.join(f"{y:+d}" for y in Yman[:10]))
@@ -149,7 +193,7 @@ if __name__ == "__main__":
 
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0, 0),
-        formatter.t_rc, formatter.g,
+        formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
     ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
@@ -163,19 +207,19 @@ if __name__ == "__main__":
 
     ImpulseResponsePlot(
         fig_format, grid_format, (0, slice(0, 2)),
-        formatter.t_rc, formatter.g,
+        formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
     ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
     
     TimePlot(
         fig_format, grid_format, (1,0),
-        t= np.arange(len(dI)) / formatter.fs,
+        t= np.arange(len(dI)) / formatterI.fs,
         signals=[dI],
         labels=["$d_I(t)$"],
         title="Canal $I$",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        # ylim=(-0.1, 0.1),
         colors="darkgreen",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -185,12 +229,12 @@ if __name__ == "__main__":
     
     TimePlot(
         fig_format, grid_format, (1,1),
-        t= np.arange(len(dQ)) / formatter.fs,
+        t= np.arange(len(dQ)) / formatterQ.fs,
         signals=[dQ],
         labels=["$d_Q(t)$"],
         title="Canal $Q$",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        # ylim=(-0.1, 0.1),
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},

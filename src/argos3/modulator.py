@@ -157,9 +157,12 @@ if __name__ == "__main__":
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
-    formatter = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span)
-    dI = formatter.apply_format(Xnrz)
-    dQ = formatter.apply_format(Yman)
+    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="I")
+    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="Q")
+    
+    dI = formatterI.apply_format(Xnrz)
+    dQ = formatterQ.apply_format(Yman)
+    
     print("dI:", ''.join(str(b) for b in dI[:5]))
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
     
@@ -176,7 +179,7 @@ if __name__ == "__main__":
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
         xlim=(0, 0.1),
-        ylim=(-0.1, 0.1),
+        # ylim=(-0.1, 0.1),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -191,7 +194,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(0, 0.1),
-        ylim=(-0.15, 0.15),
+        # ylim=(-0.15, 0.15),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -266,8 +269,8 @@ if __name__ == "__main__":
         dI=dI[:20000:5],
         dQ=dQ[:20000:5],
         title="Constelação $IQ$",
-        xlim=(-0.1, 0.1),
-        ylim=(-0.1, 0.1),
+        xlim=(-1.2, 1.2),
+        ylim=(-1.2, 1.2),
         colors=["darkred"],
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -289,7 +292,7 @@ if __name__ == "__main__":
         labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
         xlim=(0, 0.1),
-        ylim=(-0.2, 0.2),
+        # ylim=(-0.2, 0.2),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -304,7 +307,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(0, 0.1),
-        ylim=(-0.15, 0.15),
+        # ylim=(-0.15, 0.15),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
