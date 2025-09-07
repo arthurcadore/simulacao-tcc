@@ -71,8 +71,8 @@ class Receiver:
                 fig_time, grid, (0, 0),
                 t=t,
                 signals=[s],
-                labels=["$s(t) + $ AWGN"],
-                title="Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
+                labels=[r"$s(t)$ + AWGN"],
+                title=r"Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
                 xlim=(40, 200),
                 colors="darkred",
                 style={
@@ -86,8 +86,8 @@ class Receiver:
                 fig_time, grid, (1, 0),
                 t=t,
                 signals=[xI_prime, yQ_prime],
-                labels=["$xI'(t)$", "$yQ'(t)$"],
-                title="Componentes $IQ$ - Demoduladas",
+                labels=[r"$xI'(t)$", r"$yQ'(t)$"],
+                title=r"Componentes $IQ$ - Demoduladas",
                 xlim=(40, 200),
                 colors=["darkgreen", "navy"],
                 style={
@@ -105,8 +105,8 @@ class Receiver:
                 fs=self.fs,
                 signal=s,
                 fc=self.fc,
-                labels=["$S(f)$"],
-                title="Sinal Modulado $IQ$",
+                labels=[r"$S(f)$"],
+                title=r"Sinal Modulado $IQ$",
                 xlim=(-10, 10),
                 colors="darkred",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -117,8 +117,8 @@ class Receiver:
                 fs=self.fs,
                 signal=xI_prime,
                 fc=self.fc,
-                labels=["$X_I'(f)$"],
-                title="Componente $I$ - Demodulada",
+                labels=[r"$X_I'(f)$"],
+                title=r"Componente $I$ - Demodulada",
                 xlim=(-10, 10),
                 colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -129,8 +129,8 @@ class Receiver:
                 fs=self.fs,
                 signal=yQ_prime,
                 fc=self.fc,
-                labels=["$Y_Q'(f)$"],
-                title="Componente $Q$ - Demodulada",
+                labels=[r"$Y_Q'(f)$"],
+                title=r"Componente $Q$ - Demodulada",
                 xlim=(-10, 10),
                 colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -178,14 +178,14 @@ class Receiver:
                 t_impulse, impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 8))
+            ).plot(label=r"$h(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(0, 8))
 
             TimePlot(
                 fig_signal, grid_signal, (1, 0),
                 t, 
                 dI_prime,
-                labels=["$d_I'(t)$"],  
-                title="Sinal filtrado - Componente $I$",
+                labels=[r"$d_I'(t)$"],  
+                title=r"Sinal filtrado - Componente $I$",
                 xlim=(40, 200),
                 ylim=(-1,1),
                 colors="darkgreen"
@@ -195,8 +195,8 @@ class Receiver:
                 fig_signal, grid_signal, (1, 1),
                 t, 
                 dQ_prime,
-                labels=["$d_Q'(t)$"],
-                title="Sinal filtrado - Componente $Q$",
+                labels=[r"$d_Q'(t)$"],
+                title=r"Sinal filtrado - Componente $Q$",
                 xlim=(40, 200),
                 ylim=(-1,1),
                 colors="navy"
@@ -222,8 +222,8 @@ class Receiver:
                 fs=self.fs,
                 signal=xI_prime,
                 fc=self.fc,
-                labels=["$X_I'(f)$"],
-                title="Componente $I$ - Demodulada",
+                labels=[r"$X_I'(f)$"],
+                title=r"Componente $I$ - Demodulada",
                 xlim=(-10, 10),
                 colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -234,8 +234,8 @@ class Receiver:
                 fs=self.fs,
                 signal=yQ_prime,
                 fc=self.fc,
-                labels=["$Y_Q'(f)$"],
-                title="Componente $Q$ - Demodulada",
+                labels=[r"$Y_Q'(f)$"],
+                title=r"Componente $Q$ - Demodulada",
                 xlim=(-10, 10),
                 colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -246,8 +246,8 @@ class Receiver:
                 fs=self.fs,
                 signal=dI_prime,
                 fc=self.fc,
-                labels=["$d_I'(f)$"],
-                title="Componente $I$ - Filtrada",
+                labels=[r"$d_I'(f)$"],
+                title=r"Componente $I$ - Filtrada",
                 xlim=(-10, 10),
                 colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -258,8 +258,8 @@ class Receiver:
                 fs=self.fs,
                 signal=dQ_prime,
                 fc=self.fc,
-                labels=["$d_Q'(f)$"],
-                title="Componente $Q$ - Filtrada",
+                labels=[r"$d_Q'(f)$"],
+                title=r"Componente $Q$ - Filtrada",
                 xlim=(-10, 10),
                 colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -306,14 +306,14 @@ class Receiver:
                 matched_filter.t_impulse, matched_filter.impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$-g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
                 fig_matched, grid_matched, (1, 0),
                 t,
                 It_prime,
-                labels=["$I'(t)$"],
-                title="Sinal filtrado - Componente $I$",
+                labels=[r"$I'(t)$"],
+                title=r"Sinal filtrado - Componente $I$",
                 xlim=(40, 200),
                 colors="darkgreen"
             ).plot()
@@ -322,8 +322,8 @@ class Receiver:
                 fig_matched, grid_matched, (1, 1),
                 t,
                 Qt_prime,
-                labels=["$Q'(t)$"],
-                title="Sinal filtrado - Componente $Q$",
+                labels=[r"$Q'(t)$"],
+                title=r"Sinal filtrado - Componente $Q$",
                 xlim=(40, 200),
                 colors="navy"
             ).plot()
@@ -338,15 +338,15 @@ class Receiver:
                 matched_filter.t_impulse, matched_filter.impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$-g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             FrequencyPlot(
                 fig_matched_freq, grid_matched_freq, (1, 0),
                 fs=self.fs,
                 signal=dI_prime,
                 fc=self.fc,
-                labels=["$d_I'(f)$"],
-                title="Componente $I$ - Fitragem Passa-Baixa",
+                labels=[r"$d_I'(f)$"],
+                title=r"Componente $I$ - Fitragem Passa-Baixa",
                 xlim=(-10, 10),
                 colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -357,8 +357,8 @@ class Receiver:
                 fs=self.fs,
                 signal=dQ_prime,
                 fc=self.fc,
-                labels=["$d_Q'(f)$"],
-                title="Componente $Q$ - Fitragem Passa-Baixa",
+                labels=[r"$d_Q'(f)$"],
+                title=r"Componente $Q$ - Fitragem Passa-Baixa",
                 xlim=(-10, 10),
                 colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -369,8 +369,8 @@ class Receiver:
                 fs=self.fs,
                 signal=It_prime,
                 fc=self.fc,
-                labels=["$I'(f)$"],
-                title="Componente $I$ - Fitragem Casada",
+                labels=[r"$I'(f)$"],
+                title=r"Componente $I$ - Fitragem Casada",
                 xlim=(-10, 10),
                 colors="darkgreen",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -381,8 +381,8 @@ class Receiver:
                 fs=self.fs,
                 signal=Qt_prime,
                 fc=self.fc,
-                labels=["$Q'(f)$"],
-                title="Componente $Q$ - Fitragem Casada",
+                labels=[r"$Q'(f)$"],
+                title=r"Componente $Q$ - Fitragem Casada",
                 xlim=(-10, 10),
                 colors="navy",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -548,27 +548,27 @@ class Receiver:
                 fig_decoder, grid_decoder, (0, 0),
                 bits=Xnrz_prime,
                 color='darkgreen',
-            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz_prime)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz_prime)/2))
 
             BitsPlot(
                 fig_decoder, grid_decoder, (1, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
                 colors=["darkgreen"]
-            ).plot(ylabel="$X_n$", xlim=(0, len(Xn_prime)/2))
+            ).plot(xlabel="Index de Bit", ylabel="$X_n$", xlim=(0, len(Xn_prime)/2))
 
             EncodedBitsPlot(
                 fig_decoder, grid_decoder, (2, 0),
                 bits=Yman_prime,
                 color="navy",
-            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman_prime)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman_prime)/2))
 
             BitsPlot(
                 fig_decoder, grid_decoder, (3, 0),
                 bits_list=[Yn_prime],
                 sections=[("$Y_n$", len(Yn_prime))],
                 colors=["navy"]
-            ).plot(ylabel="$Y_n$", xlim=(0, len(Yn_prime)/2))
+            ).plot(xlabel="Index de Bit", ylabel="$Y_n$", xlim=(0, len(Yn_prime)/2))
 
             fig_decoder.tight_layout()
             save_figure(fig_decoder, "receiver_decoder_time.pdf")
@@ -614,7 +614,7 @@ class Receiver:
                 bits_list=[Yn_prime],
                 sections=[("$Y_n'$", len(Yn_prime))],
                 colors=["navy"]
-            ).plot(ylabel="$Y_n$")
+            ).plot(xlabel="Index de Bit", ylabel="$Y_n$")
 
             fig_remove_preamble.tight_layout()
             save_figure(fig_remove_preamble, "receiver_remove_preamble_time.pdf")

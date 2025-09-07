@@ -142,7 +142,7 @@ if __name__ == "__main__":
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+    ).plot(label=r"$h(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(0, 5))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_lpf_impulse.pdf")
@@ -154,13 +154,13 @@ if __name__ == "__main__":
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$h(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(0, 5))
+    ).plot(label=r"$h(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(0, 5))
     
     TimePlot(
         fig_signal, grid_signal, (1, 0),
         t, 
         signal,
-        labels=["$x(t)$"],
+        labels=[r"$x(t)$"],
         title="Sinal original",
         xlim=(0, 8),
         ylim=(-4, 4),
@@ -171,7 +171,7 @@ if __name__ == "__main__":
         fig_signal, grid_signal, (1, 1),
         t, 
         signal_filtered,
-        labels=["$x'(t)$"],
+        labels=[r"$x'(t)$"],
         title="Sinal filtrado",
         xlim=(0, 8),
         ylim=(-4, 4),

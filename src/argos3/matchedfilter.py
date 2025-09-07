@@ -156,7 +156,7 @@ if __name__ == "__main__":
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$-g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+    ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse.pdf")

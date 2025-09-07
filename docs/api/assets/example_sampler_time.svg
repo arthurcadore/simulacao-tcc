@@ -494,7 +494,9 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 362.50883v1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 594.6214v-1.5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 594.6214v-1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="526.308 539.2096 548.1082 565.02877 576.77938 593.4344 601.1933 618.11386 625.9823" y="-324.4211">Tempo(ms)</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="524.2668 537.1684 546.067 562.98757 574.73818 591.3932" y="-324.4211">Tempo(</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve"><ns0:tspan x="599.2104 617.97207" y="-324.4211">ms</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="628.0914" y="-324.4211">)</ns0:tspan></ns0:text>
  <ns0:g clip-path="url(#v)">
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M50.785867 413.99507H1109.334" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </ns0:g>
@@ -980,7 +982,9 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 47.148809v1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 279.26139v-1.5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.0491 279.26139v-1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="526.308 539.2096 548.1082 565.02877 576.77938 593.4344 601.1933 618.11386 625.9823" y="-9.061119">Tempo(ms)</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="524.2668 537.1684 546.067 562.98757 574.73818 591.3932" y="-9.061119">Tempo(</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve"><ns0:tspan x="599.2104 617.97207" y="-9.061119">ms</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="628.0914" y="-9.061119">)</ns0:tspan></ns0:text>
  <ns0:g clip-path="url(#am)">
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M50.785867 55.416414H1109.334" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </ns0:g>

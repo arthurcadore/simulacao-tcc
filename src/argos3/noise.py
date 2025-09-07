@@ -245,7 +245,7 @@ if __name__ == "__main__":
         fs=transmitter.fs,
         signal=s_noisy,
         fc=transmitter.fc,
-        labels=["$S(f) + AWGN$"],
+        labels=["$S(f)$ + AWGN"],
         title="Domínio da Frequência - Com Ruído",
         xlim=(-8, 8),
         colors="darkred",

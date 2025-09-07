@@ -185,26 +185,26 @@ if __name__ == "__main__":
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
         colors=["darkgreen"]
-    ).plot(ylabel="$X_n$")
+    ).plot(xlabel="Index de Bit", ylabel="$X_n$")
 
     EncodedBitsPlot(
         fig_encoder, grid, (1, 0),
         bits=Xnrz,
         color='darkgreen',
-    ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+    ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
 
     BitsPlot(
         fig_encoder, grid, (2, 0),
         bits_list=[Yn],
         sections=[("$Y_n$", len(Yn))],
         colors=["navy"]
-    ).plot(ylabel="$Y_n$")
+    ).plot(xlabel="Index de Bit", ylabel="$Y_n$")
 
     EncodedBitsPlot(
         fig_encoder, grid, (3, 0),
         bits=Yman,
         color="navy",
-    ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
 
     fig_encoder.tight_layout()
     save_figure(fig_encoder, "example_encoder_time.pdf")

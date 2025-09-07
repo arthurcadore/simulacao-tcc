@@ -122,7 +122,7 @@ class Transmitter:
                 bits_list=[vt1],
                 sections=[("$v_t^{(1)}$", len(vt1))],
                 colors=["navy"]
-            ).plot(ylabel="$v_t^{(1)}$")
+            ).plot(ylabel="$v_t^{(1)}$", xlabel="Index de Bit")
 
             fig_conv.tight_layout()
             save_figure(fig_conv, "transmitter_conv_time.pdf")       
@@ -171,14 +171,14 @@ class Transmitter:
                 bits_list=[X],
                 sections=[("$X_n$", len(X))],
                 colors=["darkgreen"]
-            ).plot(ylabel="Embaralhado")
+            ).plot(ylabel="Embaralhado", xlabel="Index de Bit")
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (1, 1),
                 bits_list=[Y],
                 sections=[("$Y_n$", len(Y))],
                 colors=["navy"]
-            ).plot()
+            ).plot(xlabel="Index de Bit")
 
             fig_scrambler.tight_layout()
             save_figure(fig_scrambler, "transmitter_scrambler_time.pdf")
@@ -300,26 +300,26 @@ class Transmitter:
                 bits_list=[Xn],
                 sections=[("$X_n$", len(Xn))],
                 colors=["darkgreen"]
-            ).plot(ylabel="$X_n$", xlim=(0, len(Xn)/2))
+            ).plot(xlabel="Index de Bit", ylabel="$X_n$", xlim=(0, len(Xn)/2))
 
             EncodedBitsPlot(
                 fig_encoder, grid, (1, 0),
                 bits=Xnrz,
                 color='darkgreen',
-            ).plot(ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz)/2))
 
             BitsPlot(
                 fig_encoder, grid, (2, 0),
                 bits_list=[Yn],
                 sections=[("$Y_n$", len(Yn))],
                 colors=["navy"]
-            ).plot(ylabel="$Y_n$", xlim=(0, len(Yn)/2))
+            ).plot(xlabel="Index de Bit", ylabel="$Y_n$", xlim=(0, len(Yn)/2))
 
             EncodedBitsPlot(
                 fig_encoder, grid, (3, 0),
                 bits=Yman,
                 color="navy",
-            ).plot(xlabel="Bit", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman)/2))
 
             fig_encoder.tight_layout()
             save_figure(fig_encoder, "transmitter_encoder_time.pdf")
@@ -360,7 +360,7 @@ class Transmitter:
                 formatterI.t_rc, formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
                 fig_format, grid_format, (1,0),
@@ -400,7 +400,7 @@ class Transmitter:
                 formatterI.t_rc, formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             FrequencyPlot(
                 fig_format_freq, grid_format_freq, (1, 0),

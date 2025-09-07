@@ -250,7 +250,7 @@ if __name__ == "__main__":
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
         colors=["navy"]
-    ).plot(ylabel="$v_t^{(1)}$")
+    ).plot(xlabel="Index de Bit", ylabel="$v_t^{(1)}$")
 
     fig_conv.tight_layout()
     save_figure(fig_conv, "example_conv_time.pdf")

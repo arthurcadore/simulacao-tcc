@@ -196,7 +196,7 @@ if __name__ == "__main__":
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse.pdf")
@@ -210,14 +210,14 @@ if __name__ == "__main__":
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
     
     TimePlot(
         fig_format, grid_format, (1,0),
         t= np.arange(len(dI)) / formatterI.fs,
         signals=[dI],
-        labels=["$d_I(t)$"],
-        title="Canal $I$",
+        labels=[r"$d_I(t)$"],
+        title=r"Canal $I$",
         xlim=(40, 140),
         colors="darkgreen",
         style={
@@ -230,8 +230,8 @@ if __name__ == "__main__":
         fig_format, grid_format, (1,1),
         t= np.arange(len(dQ)) / formatterQ.fs,
         signals=[dQ],
-        labels=["$d_Q(t)$"],
-        title="Canal $Q$",
+        labels=[r"$d_Q(t)$"],
+        title=r"Canal $Q$",
         xlim=(40, 140),
         colors="darkblue",
         style={

@@ -195,9 +195,9 @@ class TimePlot(BasePlot):
             else:
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
-        xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
         self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel("Amplitude")
+        self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
 
 
@@ -251,9 +251,9 @@ class FrequencyPlot(BasePlot):
 
         if self.fc > 1000:
             freqs = freqs / 1000
-            self.ax.set_xlabel("Frequência (kHz)")
+            self.ax.set_xlabel(r"Frequência ($kHz$)")
         else:
-            self.ax.set_xlabel("Frequência (Hz)")
+            self.ax.set_xlabel(r"Frequência ($Hz$)")
 
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
@@ -265,7 +265,7 @@ class FrequencyPlot(BasePlot):
         else:
             self.ax.plot(freqs, y, label=label, **line_kwargs)
 
-        self.ax.set_ylabel("Magnitude (dB)")
+        self.ax.set_ylabel(r"Magnitude ($dB$)")
         if self.ylim is None:
             self.ax.set_ylim(-80, 5)
 
@@ -611,10 +611,10 @@ class ImpulseResponsePlot(BasePlot):
 
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
-            default_xlabel = "Tempo (ms)"
+            default_xlabel = r"Tempo ($ms$)"
         else:
             t_plot = self.t_imp
-            default_xlabel = "Tempo (s)"
+            default_xlabel = r"Tempo ($s$)"
 
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
@@ -799,7 +799,7 @@ class SampledSignalPlot(BasePlot):
 
         # Define o eixo X de acordo com a unidade
         if xlabel is None:
-            xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+            xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
         self.ax.set_xlabel(xlabel)
 
         if ylabel:
@@ -879,8 +879,8 @@ class PhasePlot(BasePlot):
             self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
 
         # Ajuste dos eixos
-        self.ax.set_xlabel("Tempo (s)")
-        self.ax.set_ylabel(r"Fase (rad)")
+        self.ax.set_xlabel(r"Tempo ($s$")
+        self.ax.set_ylabel(r"Fase ($rad$")
 
         # Limite de fase entre -π e π
         self.ax.set_ylim([-np.pi, np.pi])
@@ -961,9 +961,9 @@ class PhasePlot(BasePlot):
             self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
 
         # Ajuste dos eixos
-        xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
         self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(r"Fase (rad)")
+        self.ax.set_ylabel(r"Fase ($rad$)")
 
         # Limite de fase entre -π e π
         self.ax.set_ylim([-np.pi, np.pi])
@@ -1139,8 +1139,8 @@ class FrequencyResponsePlot(BasePlot):
     def plot(self,
              worN: int = 1024,
              show_phase: bool = False,
-             xlabel: str = "Frequência (Hz)",
-             ylabel: str = "Magnitude (dB)") -> None:
+             xlabel: str = r"Frequência ($Hz$)",
+             ylabel: str = r"Magnitude ($dB$)") -> None:
 
         # calcula resposta em frequência
         w, h = freqz(self.b, self.a, worN=worN, fs=self.fs)
@@ -1245,8 +1245,8 @@ class DetectionFrequencyPlot(BasePlot):
 
         # Sempre em kHz
         freqs_plot = freqs / 1000.0
-        self.ax.set_xlabel("Frequência (kHz)")
-        self.ax.set_ylabel("Potência (dB)")
+        self.ax.set_xlabel(r"Frequência ($kHz$)")
+        self.ax.set_ylabel(r"Magnitude ($dB$)")
 
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
