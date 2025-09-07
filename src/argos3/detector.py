@@ -9,7 +9,8 @@ import numpy as np
 from .plotter import create_figure, save_figure, DetectionFrequencyPlot
 from .datagram import Datagram
 from .transmitter import Transmitter
-from .noise import Noise
+from .noise import NoiseEBN0
+from .receiver import Receiver
 
 
 class CarrierDetector:
@@ -181,16 +182,23 @@ class CarrierDetector:
 
 if __name__ == "__main__":
 
+    fc = np.random.randint(2, 18)*500
+    
+    print("Frequência Portadora: ", fc)
+    
     datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=True, output_plot=False)
+    bitsTX = datagram.streambits  
+    transmitter = Transmitter(datagram, fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.run()
     
-    noise = Noise(snr=12)
-    s_noisy = noise.add_noise(s)
+    ebn0_db = 20
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db)
+    s_noisy = add_noise.add_noise(s)
     
-    threshold = -15
+    threshold = -5
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
-    results = detector.detect(s_noisy)
+    
+    results = detector.detect(s_noisy.copy())
 
     for idx, (seg, freqs) in enumerate(results, start=1):
         print(f"Segmento {idx}: {len(freqs)} frequências -> {freqs}")
@@ -210,3 +218,22 @@ if __name__ == "__main__":
     plotter.plot()
     fig.tight_layout()
     save_figure(fig, "example_detector_freq.pdf")
+
+    # Para cada frequência detectada, cria um receptor e executa a recepção
+    for idx, (seg, freqs) in enumerate(results, start=1):
+        for freq in freqs:
+            receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=True, output_plot=True)
+            bitsRX = receiver.run(s_noisy.copy(), t.copy())
+            
+            try:
+                datagramRX = Datagram(streambits=bitsRX)
+                print("\n",datagramRX.parse_datagram())
+
+            except Exception as e:
+                print("Bits TX: ", ''.join(str(b) for b in bitsTX))
+                print("Bits RX: ", ''.join(str(b) for b in bitsRX))
+                
+                num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
+                ber = num_errors / len(bitsTX)
+                
+                print(f"Número de erros: {num_errors}")

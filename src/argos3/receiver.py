@@ -19,7 +19,7 @@ from .convolutional import DecoderViterbi
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot
 
 class Receiver:
-    def __init__(self, fs=128_000, Rb=400, output_print=True, output_plot=True):
+    def __init__(self, fs=128_000, Rb=400, fc=None, output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.
 
@@ -38,15 +38,17 @@ class Receiver:
         """
         self.fs = fs
         self.Rb = Rb
+        self.fc = fc
         self.output_print = output_print
         self.output_plot = output_plot
 
-    def demodulate(self, s):
+    def demodulate(self, s, t):
         r"""
         Demodula o sinal $s'(t)$ com ruído recebido, recuperando os sinais $x'_{I}(t)$ e $y'_{Q}(t)$.
 
         Args:
             s (np.ndarray): Sinal $s'(t)$ a ser demodulado.
+            t (np.ndarray): Vetor de tempo.
 
         Returns:
             xI_prime (np.ndarray): Sinal $x'_{I}(t)$ demodulado.
@@ -728,7 +730,7 @@ class Receiver:
 
         return ut
     
-    def run(self, s, t, fc=4000):
+    def run(self, s, t):
         r"""
         Executa o processo de recepção, retornando o resultado da recepção.
 
@@ -743,11 +745,7 @@ class Receiver:
         Exemplo:
             - Tempo: ![pageplot](assets/transmitter_datagram_time.svg)
         """
-        
-        # TODO: Adicionar detecção de portadora;
-        self.fc = fc
-
-        xI_prime, yQ_prime = self.demodulate(s)
+        xI_prime, yQ_prime = self.demodulate(s, t)
         dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
         Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
