@@ -156,6 +156,7 @@ class TimePlot(BasePlot):
         pos (int): Posição do plot
         t (np.ndarray): Vetor de tempo
         signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais $s(t)$.
+        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
 
     Exemplos:
         - Modulador: ![pageplot](assets/example_modulator_time.svg)
@@ -168,10 +169,17 @@ class TimePlot(BasePlot):
                  pos,
                  t: np.ndarray,
                  signals: Union[np.ndarray, List[np.ndarray]],
+                 time_unit: str = "ms",
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
-        self.t = t
+
+        self.time_unit = time_unit.lower()
+        if self.time_unit == "ms":
+            self.t = t * 1e3
+        else:
+            self.t = t
+
         self.signals = signals if isinstance(signals, (list, tuple)) else [signals]
         if self.labels is None:
             self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
@@ -187,9 +195,11 @@ class TimePlot(BasePlot):
             else:
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
-        self.ax.set_xlabel("Tempo (s)")
+        xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+        self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel("Amplitude")
         self.apply_ax_style()
+
 
 
 class FrequencyPlot(BasePlot):
@@ -737,9 +747,7 @@ class SampledSignalPlot(BasePlot):
         signal (np.ndarray): Sinal filtrado
         t_samples (np.ndarray): Instantes de amostragem
         samples (np.ndarray): Amostras correspondentes
-
-    Exemplos:
-        - Sinal Amostrado: ![pageplot](assets/example_sampler_time.svg)
+        time_unit (str): Unidade de tempo ("ms" por padrão, pode ser "s").
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -749,19 +757,28 @@ class SampledSignalPlot(BasePlot):
                  signal: np.ndarray,
                  t_samples: np.ndarray,
                  samples: np.ndarray,
+                 time_unit: str = "ms",
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
-        self.t_signal = t_signal
+
+        self.time_unit = time_unit.lower()
+
+        if self.time_unit == "ms":
+            self.t_signal = t_signal * 1e3
+            self.t_samples = t_samples * 1e3
+        else:
+            self.t_signal = t_signal
+            self.t_samples = t_samples
+
         self.signal = signal
-        self.t_samples = t_samples
         self.samples = samples
 
     def plot(self,
              label_signal: Optional[str] = None,
              label_samples: Optional[str] = None,
-             xlabel: Optional[str] = "Tempo (s)",
+             xlabel: Optional[str] = None,
              ylabel: Optional[str] = "Amplitude",
              title: Optional[str] = None,
              xlim: Optional[Tuple[float, float]] = None) -> None:
@@ -779,8 +796,12 @@ class SampledSignalPlot(BasePlot):
         if title:
             self.title = title
             self.ax.set_title(title)
-        if xlabel:
-            self.ax.set_xlabel(xlabel)
+
+        # Define o eixo X de acordo com a unidade
+        if xlabel is None:
+            xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+        self.ax.set_xlabel(xlabel)
+
         if ylabel:
             self.ax.set_ylabel(ylabel)
         if xlim:
@@ -795,6 +816,7 @@ class SampledSignalPlot(BasePlot):
             leg.get_frame().set_facecolor("white")
             leg.get_frame().set_edgecolor("black")
             leg.get_frame().set_alpha(1.0)
+
 
 class PhasePlot(BasePlot):
     r"""
@@ -874,69 +896,88 @@ class PhasePlot(BasePlot):
         self.apply_ax_style()
 
 
-class BersnrPlot(BasePlot):
+class PhasePlot(BasePlot):
     r"""
-    Classe para plotar a curva $E_b/N_0$ versus $BER$, uma lista de sinais `ber_values`
+    Classe para plotar a fase dos sinais $d_I(t)$ e $d_Q(t)$ no domínio do tempo.
+
+    $$
+        s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
+    $$
+
+    Sendo: 
+        - $s(t)$: Vetor de fases por intervalo de tempo.
+        - $d_I(t)$: Componente sinal $d_I(t)$, em fase. 
+        - $d_Q(t)$: Componente sinal $d_Q(t)$, em quadratura.
 
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot no GridSpec
-        ebn0 (np.ndarray): Vetor de valores de $E_b/N_0$ em $dB$
-        ber_values (List[np.ndarray]): Lista de vetores de valores de $BER$ para diferentes condições
-        labels (Optional[List[str]]): Rótulos para as curvas. 
-
-    Exemplos:
-        - Argos e QPSK: ![pageplot](assets/ber_vs_ebn0.svg)
+        pos (int): Posição do plot
+        t (np.ndarray): Vetor de tempo
+        signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
+        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+        labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
     """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
-                 pos,
-                 ebn0: np.ndarray,
-                 ber_values: List[np.ndarray],
+                 pos: int,
+                 t: np.ndarray,
+                 signals: Union[np.ndarray, List[np.ndarray]],
+                 time_unit: str = "ms",
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
-        self.ebn0 = ebn0
-        self.ber_values = ber_values
-        self.labels = kwargs.get("labels", [f"Curva {i+1}" for i in range(len(ber_values))])
 
-    def plot(self, ylim: Optional[Tuple[float, float]] = None) -> None:
+        self.time_unit = time_unit.lower()
+        if self.time_unit == "ms":
+            self.t = t * 1e3
+        else:
+            self.t = t
+
+        # Garantir que os sinais estão em uma lista/tupla de tamanho 2
+        if isinstance(signals, (list, tuple)):
+            assert len(signals) == 2, "Os sinais devem conter exatamente dois componentes: I e Q."
+            self.I = signals[0]
+            self.Q = signals[1]
+        else:
+            raise ValueError("Os sinais devem ser passados como uma lista ou tupla com dois componentes (I, Q).")
+        
+        if self.labels is None:
+            self.labels = ["Fase IQ"]
+
+    def plot(self) -> None:
+        # Calcula a fase usando atan2
+        fase = np.angle(self.I + 1j * self.Q)
+
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
 
-        for i, ber in enumerate(self.ber_values):
-            color = self.apply_color(i)
-            # Plotando a curva com marcadores 'o' (círculos) para os pontos
-            if color is not None:
-                self.ax.semilogy(self.ebn0, ber, label=self.labels[i], color=color, marker='o', **line_kwargs)
-            else:
-                self.ax.semilogy(self.ebn0, ber, label=self.labels[i], marker='o', **line_kwargs)
-
-        self.ax.set_xlabel(r"$E_b/N_0$ (dB)")
-        self.ax.set_ylabel("BER")
-        self.ax.set_title("Curva \( E_b/N_0 \) vs \( BER \)")
-
-        # Definir limites para o eixo y (escala de 10^-n)
-        if ylim is not None:
-            self.ax.set_ylim(ylim)
+        # Plot da fase ao longo do tempo
+        color = self.apply_color(0)
+        if color is not None:
+            self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
         else:
-            self.ax.set_ylim(1e-5, 1)
+            self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
 
-        # Estilo da legenda
-        leg = self.ax.legend(
-            loc='upper right', frameon=True, edgecolor='black',
-            facecolor='white', fontsize=12, fancybox=True
-        )
-        leg.get_frame().set_facecolor('white')
-        leg.get_frame().set_edgecolor('black')
+        # Ajuste dos eixos
+        xlabel = "Tempo (ms)" if self.time_unit == "ms" else "Tempo (s)"
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(r"Fase (rad)")
 
-        # Estilo da grade
-        self.ax.grid(True, which="both", ls="--", alpha=0.7)
+        # Limite de fase entre -π e π
+        self.ax.set_ylim([-np.pi, np.pi])
 
-        # Aplica os estilos de eixos e legendas da classe base
+        # Definir ticks em radianos e labels em frações de pi
+        ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4]
+        labels = [r"$0\pi$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$"]
+
+        self.ax.set_yticks(ticks)
+        self.ax.set_yticklabels(labels)
+
+        self.ax.legend()
         self.apply_ax_style()
+
 
 class GaussianNoisePlot(BasePlot):
     r"""

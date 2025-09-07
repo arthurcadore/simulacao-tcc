@@ -207,8 +207,7 @@ if __name__ == "__main__":
         signals=[s],
         labels=["$s(t)$"],
         title="Domínio do Tempo - Sem Ruído",
-        xlim=(0, 0.1),
-        ylim=(-0.15, 0.15),
+        xlim=(40, 200),
         colors="darkblue",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -219,8 +218,7 @@ if __name__ == "__main__":
         signals=[s_noisy],
         labels=["$s(t) + AWGN$"],
         title="Domínio do Tempo - Com Ruído",
-        xlim=(0, 0.1),
-        ylim=(-1, 1),
+        xlim=(40, 200),
         colors="darkred",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()

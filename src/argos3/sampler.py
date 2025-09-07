@@ -138,7 +138,7 @@ if __name__ == "__main__":
         sampled_time,
         sampled_signal,
         colors='red'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.1), title="Sinal $Cos(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(40, 100), title="Sinal $Cos(t)$ amostrado")
 
     SampledSignalPlot(
         fig_sampler, grid_sampler, (1, 0),
@@ -147,7 +147,7 @@ if __name__ == "__main__":
         sampled_time2,
         sampled_signal2,
         colors='navy'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.1), title="Sinal $Sin(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(40, 100), title="Sinal $Sin(t)$ amostrado")
 
     fig_sampler.tight_layout()
     save_figure(fig_sampler, "example_sampler_time.pdf")

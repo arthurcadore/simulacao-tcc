@@ -178,7 +178,7 @@ if __name__ == "__main__":
         signals=[dI, dQ],
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
-        xlim=(0.04, 0.14),
+        xlim=(40, 140),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -192,7 +192,7 @@ if __name__ == "__main__":
         signals=[s],
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(0.04, 0.14),
+        xlim=(40, 140),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -252,7 +252,7 @@ if __name__ == "__main__":
         signals=[dI, dQ],
         labels=["Fase $I + jQ$"],
         title="Fase $I + jQ$",
-        xlim=(0.04, 0.14),
+        xlim=(40, 140),
         ylim=(-np.pi, np.pi),
         colors=["darkred"],
         style={
@@ -288,7 +288,7 @@ if __name__ == "__main__":
         signals=[i_signal, q_signal],
         labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
-        xlim=(0.04, 0.14),
+        xlim=(40, 140),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -302,7 +302,7 @@ if __name__ == "__main__":
         signals=[s],
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(0.04, 0.14),
+        xlim=(40, 140),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},

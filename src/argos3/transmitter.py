@@ -368,7 +368,7 @@ class Transmitter:
                 signals=[dI],
                 labels=["$d_I(t)$"],
                 title="Canal $I$",
-                xlim=(0.04, 0.2),
+                xlim=(40, 200),
                 colors="darkgreen",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -382,7 +382,7 @@ class Transmitter:
                 signals=[dQ],
                 labels=["$d_Q(t)$"],
                 title="Canal $Q$",
-                xlim=(0.04, 0.2),
+                xlim=(40, 200),
                 colors="darkblue",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -462,7 +462,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["$d_I(t)$", "$d_Q(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
-                xlim=(0.04, 0.2),
+                xlim=(40, 200),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -476,7 +476,7 @@ class Transmitter:
                 signals=[s],
                 labels=["$s(t)$"],
                 title="Sinal Modulado $IQ$",
-                xlim=(0.04, 0.2),
+                xlim=(40, 200),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -535,7 +535,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(0.04, 0.2),
+                xlim=(40, 200),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
