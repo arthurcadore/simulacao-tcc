@@ -218,8 +218,7 @@ if __name__ == "__main__":
         signals=[dI],
         labels=["$d_I(t)$"],
         title="Canal $I$",
-        xlim=(0, 0.1),
-        # ylim=(-0.1, 0.1),
+        xlim=(0.04, 0.14),
         colors="darkgreen",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -233,8 +232,7 @@ if __name__ == "__main__":
         signals=[dQ],
         labels=["$d_Q(t)$"],
         title="Canal $Q$",
-        xlim=(0, 0.1),
-        # ylim=(-0.1, 0.1),
+        xlim=(0.04, 0.14),
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
