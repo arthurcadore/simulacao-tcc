@@ -251,7 +251,9 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.7858 373.11915v1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.7858 617.04v-1.5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1074.7858 617.04v-1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="533.9827 546.88436 555.78298 572.7035 584.4541 601.10916 608.86807 625.7886 633.65707" y="-335.03147">Tempo(ms)</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="531.9415 544.84317 553.74179 570.6623 582.4129 599.06796" y="-335.03147">Tempo(</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve"><ns0:tspan x="606.88516 625.6468" y="-335.03147">ms</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="635.7661" y="-335.03147">)</ns0:tspan></ns0:text>
  <ns0:g clip-path="url(#c)">
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M58.33139 431.6562H1117.138" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </ns0:g>
@@ -558,7 +560,9 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m541.1703 47.148809v1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m541.1703 291.06965v-1.5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m541.1703 291.06965v-1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="252.1891 265.0907 273.98933 290.90989 302.6605 319.31556 327.07447 343.99504 351.86354" y="-9.061119">Tempo(ms)</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="250.1479 263.0495 271.94813 288.86869 300.6193 317.27436" y="-9.061119">Tempo(</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve"><ns0:tspan x="325.0915 343.85316" y="-9.061119">ms</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="353.97248" y="-9.061119">)</ns0:tspan></ns0:text>
  <ns0:g clip-path="url(#ab)">
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M58.33139 47.148809H553.5508" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </ns0:g>
@@ -866,7 +870,9 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1104.7576 47.148809v1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1104.7576 291.06965v-1.5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1104.7576 291.06965v-1.5" fill="none" stroke="#000" stroke-linejoin="round" stroke-width=".5" />
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="815.77639 828.678 837.5766 854.49716 866.24777 882.9028 890.6617 907.5822 915.4507" y="-9.061119">Tempo(ms)</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="813.73519 826.6368 835.5354 852.45596 864.20657 880.8616" y="-9.061119">Tempo(</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve"><ns0:tspan x="888.6788 907.4404" y="-9.061119">ms</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve"><ns0:tspan x="917.55978" y="-9.061119">)</ns0:tspan></ns0:text>
  <ns0:g clip-path="url(#l)">
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M621.91867 47.148809H1117.138" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </ns0:g>
