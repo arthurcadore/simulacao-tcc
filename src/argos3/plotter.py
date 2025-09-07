@@ -1172,3 +1172,103 @@ class FrequencyResponsePlot(BasePlot):
             ax2.set_ylabel("Fase (rad)")
 
         self.apply_ax_style()
+
+class DetectionFrequencyPlot(BasePlot):
+    r"""
+    Espectro para detecção sem normalização ao pico.
+    Usa periodograma por bin: P_bin = |FFT(w·x)|² / (N·U).
+    Suporta threshold em "db" ou "linear".
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 fs: float,
+                 signal: np.ndarray,
+                 threshold: float,
+                 threshold_unit: str = "db",
+                 fc: float = 0.0,
+                 title: str = "",
+                 labels: Optional[List[str]] = None,
+                 xlim: Optional[Tuple[float, float]] = None,
+                 ylim: Optional[Tuple[float, float]] = None,
+                 colors: Optional[Union[str, List[str]]] = None,
+                 style: Optional[Dict[str, Any]] = None,
+                 freqs_detected: Optional[List[float]] = None
+                 ) -> None:
+
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax,
+                         title=title,
+                         labels=labels,
+                         xlim=xlim,
+                         ylim=ylim,
+                         colors=colors,
+                         style=style)
+
+        self.fs = fs
+        self.fc = fc
+        self.signal = signal
+        self.threshold = threshold
+        self.threshold_unit = threshold_unit.lower()
+        self.freqs_detected = freqs_detected  # Frequências detectadas
+
+    def plot(self) -> None:
+        N = len(self.signal)    
+        U = 1.0
+        xw = self.signal
+
+        X = np.fft.rfft(xw, n=N)
+        P_bin = (np.abs(X) ** 2) / (N * U + 1e-20)
+        P_db = 10.0 * np.log10(P_bin + 1e-20)
+        freqs = np.fft.rfftfreq(N, d=1 / self.fs)
+
+        # Sempre em kHz
+        freqs_plot = freqs / 1000.0
+        self.ax.set_xlabel("Frequência (kHz)")
+        self.ax.set_ylabel("Potência (dB)")
+
+        line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
+        line_kwargs.update(self.style.get("line", {}))
+
+        color = self.apply_color(0) or "blue"
+        label = self.labels[0] if self.labels else "Espectro (P_bin)"
+        self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
+
+        # Threshold
+        if self.threshold_unit == "db":
+            thr_line = self.threshold
+            thr_label = f"Threshold = {self.threshold:.2f} dB"
+        elif self.threshold_unit == "linear":
+            thr_line = 10.0 * np.log10(self.threshold + 1e-20)
+            thr_label = f"Threshold = {self.threshold:.3g} (→ {thr_line:.2f} dB)"
+        else:
+            raise ValueError("threshold_unit deve ser 'db' ou 'linear'.")
+        self.ax.axhline(thr_line, color="blue", linestyle="--", linewidth=2, label=thr_label)
+
+        # Plotar frequências detectadas em kHz com ponto sobre S(f)
+        if self.freqs_detected is not None:
+            for idx, f in enumerate(self.freqs_detected, start=1):
+                f_plot = f / 1000.0  # kHz
+                # índice do bin mais próximo
+                i = np.argmin(np.abs(freqs_plot - f_plot))
+                P_at_f = P_db[i]
+
+                # ponto sobre S(f)
+                self.ax.plot(f_plot, P_at_f, 'o', color='k', markersize=6,
+                             label=f"$f_{{{idx}}} = {f_plot:.2f}$ kHz")
+
+                # linha vertical
+                self.ax.axvline(f_plot, color="k", linestyle=":", linewidth=2)
+
+        if self.ylim is None:
+            self.ax.set_ylim(np.max(P_db) - 100, np.max(P_db) + 5)
+
+        # Evitar repetição de legendas
+        handles, labels = self.ax.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        self.ax.legend(by_label.values(), by_label.keys())
+
+        self.apply_ax_style()
+
+
