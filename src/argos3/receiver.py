@@ -71,8 +71,7 @@ class Receiver:
                 signals=[s],
                 labels=["$s(t) + $ AWGN"],
                 title="Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
-                xlim=(0, 0.1),
-                # ylim=(-0.4, 0.4),
+                xlim=(0.04, 0.2),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -87,8 +86,7 @@ class Receiver:
                 signals=[xI_prime, yQ_prime],
                 labels=["$xI'(t)$", "$yQ'(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
-                xlim=(0, 0.1),
-                # ylim=(-0.6, 0.6),
+                xlim=(0.04, 0.2),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -186,8 +184,8 @@ class Receiver:
                 dI_prime,
                 labels=["$d_I'(t)$"],  
                 title="Sinal filtrado - Componente $I$",
-                xlim=(0, 0.1),
-                # ylim=(-0.4, 0.4),
+                xlim=(0.04, 0.2),
+                ylim=(-1,1),
                 colors="darkgreen"
             ).plot()
 
@@ -197,8 +195,8 @@ class Receiver:
                 dQ_prime,
                 labels=["$d_Q'(t)$"],
                 title="Sinal filtrado - Componente $Q$",
-                xlim=(0, 0.1),
-                # ylim=(-0.4, 0.4),
+                xlim=(0.04, 0.2),
+                ylim=(-1,1),
                 colors="navy"
             ).plot()
 
@@ -314,8 +312,7 @@ class Receiver:
                 It_prime,
                 labels=["$I'(t)$"],
                 title="Sinal filtrado - Componente $I$",
-                xlim=(0, 0.1),
-                # ylim=(-4, 4),
+                xlim=(0.04, 0.2),
                 colors="darkgreen"
             ).plot()
 
@@ -325,8 +322,7 @@ class Receiver:
                 Qt_prime,
                 labels=["$Q'(t)$"],
                 title="Sinal filtrado - Componente $Q$",
-                xlim=(0, 0.1),
-                # ylim=(-4, 4),
+                xlim=(0.04, 0.2),
                 colors="navy"
             ).plot()
 
@@ -413,7 +409,7 @@ class Receiver:
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
-        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t)
+        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t, delay=0.08)
         i_signal_sampled = sampler.sample(It_prime)
         q_signal_sampled = sampler.sample(Qt_prime)
         t_sampled = sampler.sample(t)
@@ -436,7 +432,7 @@ class Receiver:
                 t_sampled,
                 i_signal_sampled,
                 colors='darkgreen'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.1, title="Componente $I$ amostrado")
+            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.2), title="Componente $I$ amostrado")
 
             SampledSignalPlot(
                 fig_sampler, grid_sampler, (1, 0),
@@ -445,7 +441,7 @@ class Receiver:
                 t_sampled,
                 q_signal_sampled,
                 colors='navy'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.1, title="Componente $Q$ amostrado")
+            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.2), title="Componente $Q$ amostrado")
 
             fig_sampler.tight_layout()
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
@@ -486,7 +482,7 @@ class Receiver:
                 signals=[It_prime, Qt_prime],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(0, 0.15),
+                xlim=(0.04, 0.2),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
@@ -501,7 +497,7 @@ class Receiver:
                 signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$ - Decidido",
-                xlim=(0, 0.15),
+                xlim=(0.04, 0.2),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
