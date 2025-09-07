@@ -767,6 +767,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../detector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Detector
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../lpf/" class="md-nav__link">
         
   
@@ -1080,6 +1103,15 @@
   <a href="#plotter.FrequencyResponsePlot" class="md-nav__link">
     <span class="md-ellipsis">
       FrequencyResponsePlot
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotter.DetectionFrequencyPlot" class="md-nav__link">
+    <span class="md-ellipsis">
+      DetectionFrequencyPlot
     </span>
   </a>
   
@@ -3434,6 +3466,181 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
       </tbody>
     </table>
 
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="plotter.DetectionFrequencyPlot" class="doc doc-heading">
+            <code>DetectionFrequencyPlot</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
+
+
+        <p>Classe para plotar o espectro de uma sinal recebido, com threshold e frequências detectadas. Recebendo uma frequência de amostragem <span class="arithmatex">\(f_s\)</span> e um sinal <span class="arithmatex">\(s(t)\)</span> e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. </p>
+<div class="arithmatex">\[
+\begin{equation}
+    S(f) = \mathcal{F}\{s(t)\}
+\end{equation}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(S(f)\)</span>: Sinal no domínio da frequência.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal no domínio do tempo.</li>
+<li><span class="arithmatex">\(\mathcal{F}\)</span>: Transformada de Fourier.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figura do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Posição do plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de amostragem</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>signal</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal a ser plotado</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fc</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência central</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_detector_freq.svg" /></p>
+</details>
 
 
 

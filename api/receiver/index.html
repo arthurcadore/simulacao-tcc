@@ -767,6 +767,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../detector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Detector
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../lpf/" class="md-nav__link">
         
   
@@ -936,6 +959,33 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#detector-de-portadora" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detector de Portadora
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detector.CarrierDetector.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cadeia-de-recepcao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cadeia de Recepção
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#receiver.Receiver" class="md-nav__link">
@@ -1184,6 +1234,169 @@
 
 
 <h1 id="receptor">Receptor</h1>
+<h2 id="detector-de-portadora">Detector de Portadora</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="detector.CarrierDetector.__init__"></a>
+    <div class="doc doc-contents first">
+
+        <p>Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de amostragem [Hz]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>seg_ms</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Duração de cada segmento [ms]</p>
+              </div>
+            </td>
+            <td>
+                  <code>10.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>segments</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Número de segmentos a analisar</p>
+              </div>
+            </td>
+            <td>
+                  <code>2</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>threshold</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Limiar de potência para detecção</p>
+              </div>
+            </td>
+            <td>
+                  <code>-10</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>freq_window</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Intervalo de frequências (<code>f_min</code>, <code>f_max</code>).Frequências fora deste intervalo serão descartadas.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(1000, 9000)</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se a frequência de amostragem for menor ou igual a zero.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se o comprimento de cada segmento for menor ou igual a zero.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se o número de segmentos for menor que 1.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_detector_freq.svg" /></p>
+</details>        <div class="referencia">
+<b>Referência:</b><br>
+AS3-SP-516-2097-CNES (Seção 3.3)
+</div>
+
+
+    </div>
+
+</div><h2 id="cadeia-de-recepcao">Cadeia de Recepção</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1217,7 +1430,7 @@
 
 
 <h2 id="receiver.Receiver.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1319,7 +1532,7 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 
 
 <h2 id="receiver.Receiver.demodulate" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1350,6 +1563,22 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
             <td>
               <div class="doc-md-description">
                 <p>Sinal <span class="arithmatex">\(s'(t)\)</span> a ser demodulado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de tempo.</p>
               </div>
             </td>
             <td>
@@ -2202,7 +2431,7 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 
 
 <h2 id="receiver.Receiver.run" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
@@ -2268,7 +2497,7 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
               </div>
             </td>
             <td>
-                  <code>4000</code>
+                <em>required</em>
             </td>
           </tr>
       </tbody>
