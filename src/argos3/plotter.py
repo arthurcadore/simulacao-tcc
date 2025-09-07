@@ -764,7 +764,7 @@ class SampledSignalPlot(BasePlot):
              xlabel: Optional[str] = "Tempo (s)",
              ylabel: Optional[str] = "Amplitude",
              title: Optional[str] = None,
-             x_lim: Optional[float] = None) -> None:
+             xlim: Optional[Tuple[float, float]] = None) -> None:
 
         # Sinal filtrado - usa a cor fornecida ou azul como padrão
         signal_color = self.colors if isinstance(self.colors, str) else "blue"
@@ -783,8 +783,8 @@ class SampledSignalPlot(BasePlot):
             self.ax.set_xlabel(xlabel)
         if ylabel:
             self.ax.set_ylabel(ylabel)
-        if x_lim:
-            self.ax.set_xlim(0, x_lim)
+        if xlim:
+            self.ax.set_xlim(xlim)
 
         # Aplica os estilos da classe base, incluindo a legenda
         self.apply_ax_style()
