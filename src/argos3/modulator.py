@@ -162,7 +162,7 @@ if __name__ == "__main__":
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)
-    
+
     print("dI:", ''.join(str(b) for b in dI[:5]))
     print("dQ:", ''.join(str(b) for b in dQ[:5]))
     
@@ -178,8 +178,7 @@ if __name__ == "__main__":
         signals=[dI, dQ],
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
-        xlim=(0, 0.1),
-        # ylim=(-0.1, 0.1),
+        xlim=(0.04, 0.14),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -193,8 +192,7 @@ if __name__ == "__main__":
         signals=[s],
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(0, 0.1),
-        # ylim=(-0.15, 0.15),
+        xlim=(0.04, 0.14),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -204,7 +202,6 @@ if __name__ == "__main__":
     
     fig_time.tight_layout()
     save_figure(fig_time, "example_modulator_time.pdf")
-
 
     # PLOT 2 - Frequência
     fig_freq, grid = create_figure(2, 2, figsize=(16, 9))
@@ -255,7 +252,7 @@ if __name__ == "__main__":
         signals=[dI, dQ],
         labels=["Fase $I + jQ$"],
         title="Fase $I + jQ$",
-        xlim=(0, 0.15),
+        xlim=(0.04, 0.14),
         ylim=(-np.pi, np.pi),
         colors=["darkred"],
         style={
@@ -291,8 +288,7 @@ if __name__ == "__main__":
         signals=[i_signal, q_signal],
         labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
-        xlim=(0, 0.1),
-        # ylim=(-0.2, 0.2),
+        xlim=(0.04, 0.14),
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -306,8 +302,7 @@ if __name__ == "__main__":
         signals=[s],
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(0, 0.1),
-        # ylim=(-0.15, 0.15),
+        xlim=(0.04, 0.14),
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},

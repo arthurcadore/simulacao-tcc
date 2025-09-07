@@ -858,19 +858,21 @@ class PhasePlot(BasePlot):
 
         # Ajuste dos eixos
         self.ax.set_xlabel("Tempo (s)")
-        
-        # Usar \pi no rótulo do eixo Y para o LaTeX
-        self.ax.set_ylabel(r"Fase ($\pi$ rad)")
-        
-        # Definir limites de fase entre -π e π
+        self.ax.set_ylabel(r"Fase (rad)")
+
+        # Limite de fase entre -π e π
         self.ax.set_ylim([-np.pi, np.pi])
-        
-        # Formatando os ticks do eixo Y para múltiplos de π
-        self.ax.set_yticks(np.linspace(-np.pi, np.pi, 5))
-        self.ax.set_yticklabels([f'{-i} $\pi$' if i < 0 else f'{i} $\pi$' for i in np.linspace(-1, 1, 5)])
+
+        # Definir ticks em radianos e labels em frações de pi
+        ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4]
+        labels = [r"$0\pi$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$"]
+
+        self.ax.set_yticks(ticks)
+        self.ax.set_yticklabels(labels)
 
         self.ax.legend()
         self.apply_ax_style()
+
 
 class BersnrPlot(BasePlot):
     r"""
