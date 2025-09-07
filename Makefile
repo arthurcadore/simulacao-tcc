@@ -45,3 +45,16 @@ deploy-docs:
 	@echo "Fazendo deploy para o GitHub Pages..."
 	@mkdocs gh-deploy --force
 	@echo "Documentação publicada com sucesso no GitHub Pages!"
+
+
+clean-packages: 
+	@echo "Limpeza de pacotes..."
+	rm -rf dist/
+	
+build: clean-packages
+	@echo "Building packages..."
+	.venv/bin/python3 -m build
+
+upload: build
+	@echo "Uploading to PyPI..."
+	.venv/bin/python3 -m twine upload dist/*
