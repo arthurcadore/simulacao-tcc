@@ -342,10 +342,12 @@ class Transmitter:
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
-        formatter = Formatter(fs=self.fs, Rb=self.Rb)
+        formatterI = Formatter(fs=self.fs, Rb=self.Rb, channel="I")
+        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, channel="Q")
 
-        dI = formatter.apply_format(Xnrz)
-        dQ = formatter.apply_format(Yman)
+        dI = formatterI.apply_format(Xnrz)
+        dQ = formatterQ.apply_format(Yman)
+        
         if self.output_print:
             print("\n ==== FORMATADOR ==== \n")
             print("dI:", ''.join(map(str, dI[:5])),"...")
@@ -355,18 +357,18 @@ class Transmitter:
 
             ImpulseResponsePlot(
                 fig_format, grid_format, (0, slice(0, 2)),
-                formatter.t_rc, formatter.g,
+                formatterI.t_rc, formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
                 fig_format, grid_format, (1,0),
-                t= np.arange(len(dI)) / formatter.fs,
+                t= np.arange(len(dI)) / formatterI.fs,
                 signals=[dI],
                 labels=["$d_I(t)$"],
                 title="Canal $I$",
-                xlim=(0, 0.1),
+                xlim=(0.04, 0.2),
                 colors="darkgreen",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -376,11 +378,11 @@ class Transmitter:
 
             TimePlot(
                 fig_format, grid_format, (1,1),
-                t= np.arange(len(dQ)) / formatter.fs,
+                t= np.arange(len(dQ)) / formatterQ.fs,
                 signals=[dQ],
                 labels=["$d_Q(t)$"],
                 title="Canal $Q$",
-                xlim=(0, 0.1),
+                xlim=(0.04, 0.2),
                 colors="darkblue",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -395,7 +397,7 @@ class Transmitter:
 
             ImpulseResponsePlot(
                 fig_format_freq, grid_format_freq, (0, slice(0, 2)),
-                formatter.t_rc, formatter.g,
+                formatterI.t_rc, formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel="Tempo (ms)", ylabel="Amplitude", xlim=(-15, 15))
@@ -460,7 +462,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["$d_I(t)$", "$d_Q(t)$"],
                 title="Componentes $IQ$ - Demoduladas",
-                xlim=(0, 0.1),
+                xlim=(0.04, 0.2),
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -474,7 +476,7 @@ class Transmitter:
                 signals=[s],
                 labels=["$s(t)$"],
                 title="Sinal Modulado $IQ$",
-                xlim=(0, 0.1),
+                xlim=(0.04, 0.2),
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -533,7 +535,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(0, 0.15),
+                xlim=(0.04, 0.2),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={

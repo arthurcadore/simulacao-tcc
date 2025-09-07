@@ -9,7 +9,7 @@ import numpy as np
 from .plotter import save_figure, create_figure, SampledSignalPlot
 
 class Sampler:
-    def __init__(self, fs=128_000, Rb=400, t=None, delay=0.082):
+    def __init__(self, fs=128_000, Rb=400, t=None, delay=0.08):
         r"""
         Inicializa o decisor, utilizado para amostragem e quantização no receptor.
 
@@ -25,7 +25,7 @@ class Sampler:
         self.fs = fs
         self.Rb = Rb
         self.sps = int(self.fs / self.Rb)
-        self.delay = int(round(delay * self.Rb))
+        self.delay = int(round(delay * self.fs))
         self.indexes = self.calc_indexes(t)
     
     def calc_indexes(self, t):
@@ -112,9 +112,9 @@ if __name__ == "__main__":
 
     fs = 128_000
     Rb = 2000
-    t = np.arange(10000) / fs
-    signal = np.cos(2 * np.pi * 1000 * t) + np.cos(2 * np.pi * 4000 * t)
-    signal2 = np.sin(2 * np.pi * 1000 * t) + np.sin(2 * np.pi * 4000 * t)
+    t = np.arange(100000) / fs
+    signal = np.cos(2 * np.pi * 400 * t) + np.cos(2 * np.pi * 100 * t)
+    signal2 = np.sin(2 * np.pi * 400 * t) + np.sin(2 * np.pi * 1000 * t)
 
     sampler = Sampler(fs=fs, Rb=Rb, t=t)
     sampled_signal = sampler.sample(signal)
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         sampled_time,
         sampled_signal,
         colors='red'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.05), title="Sinal $Cos(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.1), title="Sinal $Cos(t)$ amostrado")
 
     SampledSignalPlot(
         fig_sampler, grid_sampler, (1, 0),
@@ -147,7 +147,7 @@ if __name__ == "__main__":
         sampled_time2,
         sampled_signal2,
         colors='navy'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.05), title="Sinal $Sin(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.1), title="Sinal $Sin(t)$ amostrado")
 
     fig_sampler.tight_layout()
     save_figure(fig_sampler, "example_sampler_time.pdf")
