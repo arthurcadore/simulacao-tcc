@@ -782,6 +782,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#formatter.Formatter.add_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_prefix
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1152,7 +1161,7 @@
 
 
 <h2 id="formatter.Formatter.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;RRC&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;RRC&#39;</span><span class="p">,</span> <span class="n">prefix_duration</span><span class="o">=</span><span class="mf">0.082</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1253,6 +1262,38 @@
                   <code>&#39;RRC&#39;</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>prefix_duration</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Duração da portadora pura no inicio do vetor</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.082</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>channel</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Canal a ser formatado, apenas <span class="arithmatex">\(I\)</span> e <span class="arithmatex">\(Q\)</span> são suportados.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1273,6 +1314,16 @@
             <td>
               <div class="doc-md-description">
                 <p>Se o tipo de pulso não for suportado.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se o canal não for suportado.</p>
               </div>
             </td>
           </tr>
@@ -1429,6 +1480,91 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
             <td>
               <div class="doc-md-description">
                 <p>Vetor formatado com o pulso aplicado.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="formatter.Formatter.add_prefix" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_prefix</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adiciona um prefixo de portadora pura no inicio do sinal. Para o canal <span class="arithmatex">\(I\)</span>, adiciona um vetor de simbolos <span class="arithmatex">\(+1\)</span>, para o canal <span class="arithmatex">\(Q\)</span>, adiciona um vetor de simbolos <span class="arithmatex">\(0\)</span>, com duração de <code>prefix_duration</code>, pois ao aplicar o modulador <code>IQ</code> temos uma portadora pura no inicio do sinal, conforme a expressão abaixo: </p>
+<div class="arithmatex">\[
+    s(t) = 1(t) \cdot \cos(2\pi f_c t) - 0(t) \cdot \sin(2\pi f_c t) \mapsto s(t) = \cos(2\pi f_c t)
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(s(t)\)</span>: Sinal modulado.</li>
+<li><span class="arithmatex">\(1(t)\)</span> e <span class="arithmatex">\(0(t)\)</span>: Prefixo de portadora pura.</li>
+<li><span class="arithmatex">\(f_c\)</span>: Frequência da portadora.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>symbols</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de símbolos a serem formatados.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>symbols</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de símbolos com prefixo adicionado.</p>
               </div>
             </td>
           </tr>
