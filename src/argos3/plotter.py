@@ -1116,6 +1116,9 @@ class FrequencyResponsePlot(BasePlot):
         fs (float): Frequência de amostragem
         f_cut (Optional[float]): Frequência de corte do filtro (Hz)
         xlim (Optional[Tuple[float, float]]): Limites do eixo X (Hz)
+
+    Exemplos:
+        ![pageplot](assets/example_lpf_freq_response.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
