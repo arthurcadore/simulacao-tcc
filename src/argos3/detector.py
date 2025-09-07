@@ -179,6 +179,32 @@ class CarrierDetector:
 
         return results
 
+    def check_frequencies(self, results: list[tuple[np.ndarray, list[float]]], tolerance_hz=50): 
+        """
+        Retorna apenas frequências que foram detectadas em dois segmentos consecutivos.
+
+        Args:
+            results (list[tuple[np.ndarray, list[float]]]): saída de self.detect()
+            tolerance_hz (float): diferença máxima para considerar que duas frequências são iguais
+
+        Returns:
+            list[float]: lista de frequências confirmadas como portadora
+        """
+        if len(results) < 2:
+            return []
+
+        confirmed_freqs = []
+        prev_freqs = results[0][1]
+
+        # percorre segmentos a partir do segundo
+        for seg, freqs_detected in results[1:]:
+            for f in freqs_detected:
+                if any(abs(f - pf) <= tolerance_hz for pf in prev_freqs):
+                    confirmed_freqs.append(f)
+            prev_freqs = freqs_detected
+
+        confirmed_freqs = list(sorted(set(confirmed_freqs)))
+        return confirmed_freqs
 
 if __name__ == "__main__":
 
@@ -188,14 +214,14 @@ if __name__ == "__main__":
     
     datagram = Datagram(pcdnum=1234, numblocks=1)
     bitsTX = datagram.streambits  
-    transmitter = Transmitter(datagram, fc=fc, output_print=True, output_plot=True)
+    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=False)
     t, s = transmitter.run()
     
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db)
     s_noisy = add_noise.add_noise(s)
     
-    threshold = -5
+    threshold = -8
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
     
     results = detector.detect(s_noisy.copy())
@@ -219,21 +245,23 @@ if __name__ == "__main__":
     fig.tight_layout()
     save_figure(fig, "example_detector_freq.pdf")
 
-    # Para cada frequência detectada, cria um receptor e executa a recepção
-    for idx, (seg, freqs) in enumerate(results, start=1):
-        for freq in freqs:
-            receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=True, output_plot=True)
-            bitsRX = receiver.run(s_noisy.copy(), t.copy())
-            
-            try:
-                datagramRX = Datagram(streambits=bitsRX)
-                print("\n",datagramRX.parse_datagram())
+    confirmed_freqs = detector.check_frequencies(results)
+    print("\nFrequências confirmadas:", confirmed_freqs)
 
-            except Exception as e:
-                print("Bits TX: ", ''.join(str(b) for b in bitsTX))
-                print("Bits RX: ", ''.join(str(b) for b in bitsRX))
+    # Para cada frequência confirmada, executa a recepção
+    for idx, freq in enumerate(confirmed_freqs, start=1):
+        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=False, output_plot=False)
+        bitsRX = receiver.run(s_noisy.copy(), t.copy())
+            
+        try:
+            datagramRX = Datagram(streambits=bitsRX)
+            print("\n",datagramRX.parse_datagram())
+
+        except Exception as e:
+            print("Bits TX: ", ''.join(str(b) for b in bitsTX))
+            print("Bits RX: ", ''.join(str(b) for b in bitsRX))
                 
-                num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
-                ber = num_errors / len(bitsTX)
+            num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
+            ber = num_errors / len(bitsTX)
                 
-                print(f"Número de erros: {num_errors}")
+            print(f"Número de erros: {num_errors}")

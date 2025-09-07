@@ -1175,9 +1175,29 @@ class FrequencyResponsePlot(BasePlot):
 
 class DetectionFrequencyPlot(BasePlot):
     r"""
-    Espectro para detecção sem normalização ao pico.
-    Usa periodograma por bin: P_bin = |FFT(w·x)|² / (N·U).
-    Suporta threshold em "db" ou "linear".
+    Classe para plotar o espectro de uma sinal recebido, com threshold e frequências detectadas. Recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
+
+    $$
+    \begin{equation}
+        S(f) = \mathcal{F}\{s(t)\}
+    \end{equation}
+    $$
+
+    Sendo:
+        - $S(f)$: Sinal no domínio da frequência.
+        - $s(t)$: Sinal no domínio do tempo.
+        - $\mathcal{F}$: Transformada de Fourier.
+    
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição do plot
+        fs (float): Frequência de amostragem
+        signal (np.ndarray): Sinal a ser plotado
+        fc (float): Frequência central
+
+    Exemplo: 
+        ![pageplot](assets/example_detector_freq.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
