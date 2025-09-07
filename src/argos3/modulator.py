@@ -274,6 +274,35 @@ if __name__ == "__main__":
 
     fig_const.tight_layout()
     save_figure(fig_const, "example_modulator_constellation.pdf")
+
+    # Plot 4 - Portadora pura e sinal modulado
+    fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
+    FrequencyPlot(
+        fig_portadora, grid, (0, 0),
+        fs=fs,
+        signal=s[0:(int(round(0.082 * fs)))],
+        fc=fc,
+        labels=["$S(f)$"],
+        title="Portadora Pura - $0$ a $80$ms",
+        xlim=(-10, 10),
+        colors="darkred",
+        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
+
+    FrequencyPlot(
+        fig_portadora, grid, (0, 1),
+        fs=fs,
+        signal=s[(int(round(0.082 * fs))):],
+        fc=fc,
+        labels=["$S(f)$"],
+        title="Sinal Modulado - $80$ms em diante",
+        xlim=(-10, 10),
+        colors="darkred",
+        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+    ).plot()
+
+    fig_portadora.tight_layout()
+    save_figure(fig_portadora, "example_modulator_portadora.pdf")
     
     # Demodulação
     i_signal, q_signal = modulator.demodulate(s)

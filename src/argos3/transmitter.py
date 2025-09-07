@@ -446,6 +446,7 @@ class Transmitter:
         Exemplo:
             - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
             - Frequência: ![pageplot](assets/transmitter_modulator_freq.svg)
+            - Portadora: ![pageplot](assets/transmitter_modulator_portadora.svg)
             - Fase e Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
         modulator = Modulator(fc=self.fc, fs=self.fs)
@@ -557,6 +558,36 @@ class Transmitter:
 
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
+
+            # PLOT 4 - Portadora pura e sinal modulado
+            fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
+            FrequencyPlot(
+                fig_portadora, grid, (0, 0),
+                fs=self.fs,
+                signal=s[0:(int(round(0.082 * self.fs)))],
+                fc=self.fc,
+                labels=["$S(f)$"],
+                title="Portadora Pura - $0$ a $80$ms",
+                xlim=(-10, 10),
+                colors="darkred",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            FrequencyPlot(
+                fig_portadora, grid, (0, 1),
+                fs=self.fs,
+                signal=s[(int(round(0.082 * self.fs))):],
+                fc=self.fc,
+                labels=["$S(f)$"],
+                title="Sinal Modulado - $80$ms em diante",
+                xlim=(-10, 10),
+                colors="darkred",
+                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+            ).plot()
+
+            fig_portadora.tight_layout()
+            save_figure(fig_portadora, "transmitter_modulator_portadora.pdf")
+
         return t, s
 
     def run(self):
