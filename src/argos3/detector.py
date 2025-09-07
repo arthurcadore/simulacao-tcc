@@ -208,20 +208,20 @@ class CarrierDetector:
 
 if __name__ == "__main__":
 
-    fc = np.random.randint(2, 18)*500
+    fc = np.random.randint(2, 14)*500
     
     print("Frequência Portadora: ", fc)
     
     datagram = Datagram(pcdnum=1234, numblocks=1)
     bitsTX = datagram.streambits  
-    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=False)
+    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=True)
     t, s = transmitter.run()
     
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db)
     s_noisy = add_noise.add_noise(s)
     
-    threshold = -8
+    threshold = -8.5
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
     
     results = detector.detect(s_noisy.copy())
@@ -229,19 +229,29 @@ if __name__ == "__main__":
     for idx, (seg, freqs) in enumerate(results, start=1):
         print(f"Segmento {idx}: {len(freqs)} frequências -> {freqs}")
 
-    fig, grid = create_figure(1, 1)
-    plotter = DetectionFrequencyPlot(fig, grid, 0, 
+    fig, grid = create_figure(2,1)
+    DetectionFrequencyPlot(fig, grid, 0, 
               fs=transmitter.fs, 
               signal=results[0][0], 
               threshold=threshold, 
               xlim=(1, 9),
-              title="Detecção de portadora de $s(t)$",
+              title="Detecção de portadora de $s(t)$ - Segmento 1",
               labels=["$S(f)$"],
               colors="darkred",
               freqs_detected=results[0][1]
-            )
+    ).plot()
 
-    plotter.plot()
+    DetectionFrequencyPlot(fig, grid, 1, 
+              fs=transmitter.fs, 
+              signal=results[1][0], 
+              threshold=threshold, 
+              xlim=(1, 9),
+              title="Detecção de portadora de $s(t)$ - Segmento 2",
+              labels=["$S(f)$"],
+              colors="darkred",
+              freqs_detected=results[1][1]
+    ).plot()
+
     fig.tight_layout()
     save_figure(fig, "example_detector_freq.pdf")
 
@@ -250,7 +260,7 @@ if __name__ == "__main__":
 
     # Para cada frequência confirmada, executa a recepção
     for idx, freq in enumerate(confirmed_freqs, start=1):
-        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=False, output_plot=False)
+        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=False, output_plot=True)
         bitsRX = receiver.run(s_noisy.copy(), t.copy())
             
         try:
