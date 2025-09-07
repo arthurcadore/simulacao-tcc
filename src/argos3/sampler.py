@@ -9,13 +9,13 @@ import numpy as np
 from .plotter import save_figure, create_figure, SampledSignalPlot
 
 class Sampler:
-    def __init__(self, fs=128_000, Rb=400, t=None, delay=0):
+    def __init__(self, fs=128_000, Rb=400, t=None, delay=0.082):
         r"""
         Inicializa o decisor, utilizado para amostragem e quantização no receptor.
 
         Args: 
             fs (int): Frequência de amostragem.
-            delay (int): Delay de amostragem.
+            delay (float): Delay de amostragem, em segundos.
             Rb (int): Taxa de bits.
             t (numpy.ndarray): Vetor de tempo.
 
@@ -25,7 +25,7 @@ class Sampler:
         self.fs = fs
         self.Rb = Rb
         self.sps = int(self.fs / self.Rb)
-        self.delay = delay
+        self.delay = int(round(delay * self.Rb))
         self.indexes = self.calc_indexes(t)
     
     def calc_indexes(self, t):
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         sampled_time,
         sampled_signal,
         colors='red'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.01, title="Sinal $Cos(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.05), title="Sinal $Cos(t)$ amostrado")
 
     SampledSignalPlot(
         fig_sampler, grid_sampler, (1, 0),
@@ -147,7 +147,7 @@ if __name__ == "__main__":
         sampled_time2,
         sampled_signal2,
         colors='navy'
-    ).plot(label_signal="Sinal original", label_samples="Amostras", x_lim=0.01, title="Sinal $Sin(t)$ amostrado")
+    ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(0.04, 0.05), title="Sinal $Sin(t)$ amostrado")
 
     fig_sampler.tight_layout()
     save_figure(fig_sampler, "example_sampler_time.pdf")
