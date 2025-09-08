@@ -50,17 +50,21 @@ class Formatter:
         self.t_rc = np.linspace(-span * self.Tb, span * self.Tb, span * self.sps * 2)
 
         type_map = {
-            "rrc": 0
+            "rrc": 0,
+            "manchester": 1
         }
+
 
         type = type.lower()
         if type not in type_map:
-            raise ValueError("Tipo de pulso inválido. Use 'RRC'.")
+            raise ValueError("Tipo de pulso inválido. Use 'RRC' ou 'Manchester'.")
         
         self.type = type_map[type]
 
         if self.type == 0:  # RRC
             self.g = self.rrc_pulse()
+        elif self.type == 1:  # Manchester
+            self.g = self.manchester_pulse()
 
     def rrc_pulse(self):
         r"""
@@ -101,6 +105,62 @@ class Formatter:
         # Normaliza energia para 1
         rc = rc / np.sqrt(np.sum(rc**2))
         return rc
+    
+    def manchester_pulse(self):
+        r"""
+        Gera o pulso Manchester centralizado em `self.t_rc`, convoluindo com o pulso RRC. Conforme a expressão abaixo.
+
+        $$
+            g(t) = \sum_{n=0}^{N-1} x[n] * g_{RRC}(t - nT_b)
+        $$
+
+        Sendo: 
+            - $g(t)$: Pulso Manchester no dominio do tempo.
+            - $x[n]$ : Sinal Manchester ideal.
+            - $g_{RRC}(t)$: Pulso formatador $RRC$ no dominio do tempo.
+            - $T_b$: Período de bit.
+            - $n$: Indice de bit.
+            - $t$: Vetor de tempo.
+
+        Returns:
+            g (np.ndarray): Pulso Manchester no dominio do tempo.
+
+        Exemplo: 
+            - ![pageplot](assets/example_formatter_impulse_man.svg)
+        """
+        t_rc = np.array(self.t_rc, dtype=float)
+        tlen = len(t_rc)
+        sps = int(self.sps) if int(self.sps) >= 2 else 2
+        self.sps = sps
+
+        half1 = sps // 2
+        half2 = sps - half1
+
+        # cria pulso Manchester centralizado (zeros nas bordas)
+        g_raw = np.zeros(tlen, dtype=float)
+        center = tlen // 2
+        start = center - (sps // 2)
+        if start < 0:
+            start = 0
+        end = start + sps
+        if end > tlen:
+            end = tlen
+            start = end - sps
+
+        g_raw[start:start + half1] = 1.0
+        g_raw[start + half1:start + half1 + half2] = -1.0
+
+        # gera pulso RRC e aplica convolução
+        rrc = self.rrc_pulse() 
+        g = np.convolve(g_raw, rrc, mode='same')
+
+        # normaliza energia para 1
+        energy = np.sqrt(np.sum(g**2))
+        if energy > 0:
+            g = g / energy
+
+        self.g = g
+        return g
 
     def apply_format(self, symbols):
         r"""
@@ -180,13 +240,13 @@ if __name__ == "__main__":
     formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q")
     
-    dI = formatterI.apply_format(Xnrz)
-    dQ = formatterQ.apply_format(Yman)
+    dI1 = formatterI.apply_format(Xnrz)
+    dQ1 = formatterQ.apply_format(Yman)
     
     print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz[:10]))
     print("Yman:",  ' '.join(f"{y:+d}" for y in Yman[:10]))
-    print("dI:", ''.join(str(b) for b in dI[:5]))
-    print("dQ:", ''.join(str(b) for b in dQ[:5]))
+    print("dI:", ''.join(str(b) for b in dI1[:5]))
+    print("dQ:", ''.join(str(b) for b in dQ1[:5]))
 
     # Plotando a resposta ao impulso
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
@@ -214,8 +274,8 @@ if __name__ == "__main__":
     
     TimePlot(
         fig_format, grid_format, (1,0),
-        t= np.arange(len(dI)) / formatterI.fs,
-        signals=[dI],
+        t= np.arange(len(dI1)) / formatterI.fs,
+        signals=[dI1],
         labels=[r"$d_I(t)$"],
         title=r"Canal $I$",
         xlim=(40, 140),
@@ -228,8 +288,8 @@ if __name__ == "__main__":
     
     TimePlot(
         fig_format, grid_format, (1,1),
-        t= np.arange(len(dQ)) / formatterQ.fs,
-        signals=[dQ],
+        t= np.arange(len(dQ1)) / formatterQ.fs,
+        signals=[dQ1],
         labels=[r"$d_Q(t)$"],
         title=r"Canal $Q$",
         xlim=(40, 140),
@@ -242,3 +302,85 @@ if __name__ == "__main__":
     
     fig_format.tight_layout()
     save_figure(fig_format, "example_formatter_time.pdf")
+
+
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q")
+
+    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (0, 0),
+        formatterQ.t_rc, formatterQ.g,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    fig_impulse.tight_layout()
+    save_figure(fig_impulse, "example_formatter_impulse_man.pdf")   
+
+    # Plotando os sinais formatados
+    
+    dI2 = formatterI.apply_format(Xnrz)
+    dQ2 = formatterQ.apply_format(Yman)
+
+    fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
+    
+    TimePlot(
+        fig_format, grid_format, (0,0),
+        t= np.arange(len(dI1)) / formatterI.fs,
+        signals=[dI1],
+        labels=[r"$d_I(t)$"],
+        title=r"Canal $I$",
+        xlim=(40, 140),
+        colors="darkgreen",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_format, grid_format, (0,1),
+        t= np.arange(len(dI2)) / formatterI.fs,
+        signals=[dI2],
+        labels=[r"$d_I(t)$"],
+        title=r"Canal $I$",
+        xlim=(40, 140),
+        colors="darkgreen",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_format, grid_format, (1,0),
+        t= np.arange(len(dQ1)) / formatterQ.fs,
+        signals=[dQ1],
+        labels=[r"$d_Q(t)$"],
+        title=r"Canal $Q$",
+        xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+
+    TimePlot(
+        fig_format, grid_format, (1,1),
+        t= np.arange(len(dQ2)) / formatterQ.fs,
+        signals=[dQ2],
+        labels=[r"$d_Q(t)$"],
+        title=r"Canal $Q$",
+        xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+    
+    fig_format.tight_layout()
+    save_figure(fig_format, "example_formatter_time_2.pdf")
