@@ -47,14 +47,29 @@ class CarrierDetector:
         if segments < 1:
             raise ValueError("Deve haver pelo menos 1 segmento.")
 
+        # Amostragem
         self.fs = fs
-        self.ts = 1 / fs
-        self.seg_ms = seg_ms / 1000.0
-        self.seg_samples = int(fs * self.seg_ms)
+        self.ts = 1 / self.fs
+
+        # Duração do segmento (em segundos)
+        self.seg_s = seg_ms / 1000.0
+
+        # Número de amostras por segmento
+        self.N = int(self.fs * self.seg_s)
+
+        # Número de segmentos
         self.segments = segments
+
+        # Limiar de potência
         self.threshold = threshold
+
+        # Faixa de frequências de interesse
         self.freq_window = freq_window
-        self.delta_f = fs / self.seg_samples
+
+        # Resolução espectral da FFT 
+        self.delta_f = self.fs / self.N
+
+        # Span da FFT
         self.span = self.delta_f / 2
 
     def segment_signal(self, signal: np.ndarray) -> list[np.ndarray]:
@@ -78,18 +93,24 @@ class CarrierDetector:
         Returns:
             list[np.ndarray]: lista de segmentos de tempo
         """
-        total_samples = self.seg_samples * self.segments
 
+        # Calcula o número total de amostras necessárias a serem copiadas do vetor original
+        total_samples = self.N * self.segments
+
+        # Verifica se o sinal recebido tem pelo menos o número de amostras necessárias
         if len(signal) < total_samples:
             raise ValueError(
                 f"Sinal insuficiente: esperado {total_samples} amostras, mas recebido {len(signal)}."
             )
 
+        # Copia as amostras necessárias do sinal recebido
         signal = signal[:total_samples]
+        
+        # Divide o sinal recebido em segmentos de tempo
         segments = []
         for i in range(self.segments):
-            start = i * self.seg_samples
-            end = start + self.seg_samples
+            start = i * self.N
+            end = start + self.N
             segments.append(signal[start:end])
         return segments
 
@@ -110,34 +131,38 @@ class CarrierDetector:
             - $T_s$ : Período de amostragem.
             - $e^{-j2\pi km/N}$ : Exponencial complexa.
 
-        Em seguida, calcula a potência espectral $P_n[k]$ em $dB$, conforme a expressão abaixo.
+        Em seguida, calcula a potência espectral $P_n[k]$ em $dB$, e divide pelo número de amostras $N$ contidas no segmento para normalização.
 
         $$
             P_n[k] = \frac{|X_n[k]|^2}{N}
         $$
 
         Sendo: 
-            - $P_n[k]$ : Potência espectral do segmento $n$.
+            - $P_n[k]$ : Potência espectral do segmento $n$, normalizada em $dB$.
             - $X_n[k]$ : Transformada de Fourier do segmento $n$.
             - $N$ : Número de amostras do segmento.
-            '
+
         Args:
             segment (np.ndarray): segmento de tempo
 
         Returns:
-            tuple[np.ndarray, np.ndarray]: tupla com as frequências e a potência espectral em $dB$
+            freqs (tuple[np.ndarray,np.ndarray]): tupla com as frequências e a potência espectral em $dB$
         """
-        N = len(segment)
-        X = np.fft.rfft(segment, n=N)
-        P_bin = (np.abs(X) ** 2) / (N + 1e-20)
-        P_db = 10.0 * np.log10(P_bin + 1e-20)
 
-        freqs = np.fft.rfftfreq(N, d=self.ts)
+        # Transformada de Fourier do segmento
+        X = np.fft.rfft(segment, n=self.N)
+
+        # Potência espectral por bin (normalizada pelo número de pontos)
+        P_bin = (np.abs(X) ** 2) / (self.N)
+        P_db = 10.0 * np.log10(P_bin)
+
+        # Frequências do espectro
+        freqs = np.fft.rfftfreq(self.N, d=self.ts)
         return freqs, P_db
 
     def detect(self, s: np.ndarray) -> list[tuple[np.ndarray, list[float]]]:
         r"""
-        Detecta possíveis portadoras no sinal, comparando $P_n[k]$ com o limiar $P_t$.  
+        Detecta possíveis portadoras no sinal, comparando $P_n[k]$ com o limiar $P_t$, para cada índice $k$ da FFT.
 
         $$
             f_n[k] =
@@ -160,36 +185,53 @@ class CarrierDetector:
             s (np.ndarray): sinal recebido
 
         Returns:
-            list[tuple[np.ndarray, list[float]]]: lista de tuplas com os segmentos e as frequências detectadas
+            results (list[tuple[np.ndarray, list[float]]]): lista de tuplas com os segmentos e as frequências detectadas
         """
+
+        # Divide o sinal recebido em segmentos
         segments = self.segment_signal(s)
         results = []
 
+
+        # Processa cada segmento
         for seg in segments:
             freqs, P_db = self.analyze_segment(seg)
 
+            # Aplica o limiar
             mask = P_db > self.threshold
 
+            # Aplica a faixa de frequências
             if self.freq_window is not None:
                 fmin, fmax = self.freq_window
                 mask &= (freqs >= fmin) & (freqs <= fmax)
 
+            # Frequências detectadas
             freqs_detected = freqs[mask]
             results.append((seg, freqs_detected.tolist()))
 
         return results
 
-    def check_frequencies(self, results: list[tuple[np.ndarray, list[float]]], tolerance_hz=50): 
+    def check_frequencies(self, results: list[tuple[np.ndarray, list[float]]]): 
         """
-        Retorna apenas frequências que foram detectadas em dois segmentos consecutivos.
+        Retorna apenas frequências que foram detectadas em dois segmentos consecutivos. A tolerância é dada pela resolução espectral da FFT, $\Delta f$, conforme a expressão abaixo. 
+
+        $$
+            \Delta f = \dfrac{f_s}{N}
+        $$
+
+        Sendo: 
+            - $\Delta f$ : resolução espectral da FFT.
+            - $f_s$ : frequência de amostragem.
+            - $N$ : número de amostras do segmento.
 
         Args:
             results (list[tuple[np.ndarray, list[float]]]): saída de self.detect()
-            tolerance_hz (float): diferença máxima para considerar que duas frequências são iguais
 
         Returns:
-            list[float]: lista de frequências confirmadas como portadora
+            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
         """
+
+        # se tiver menos de 2 segmentos, não há como confirmar
         if len(results) < 2:
             return []
 
@@ -198,8 +240,12 @@ class CarrierDetector:
 
         # percorre segmentos a partir do segundo
         for seg, freqs_detected in results[1:]:
+
+            # percorre as frequências detectadas
             for f in freqs_detected:
-                if any(abs(f - pf) <= tolerance_hz for pf in prev_freqs):
+
+                # se a frequência estiver dentro da tolerância, adiciona à lista de frequências confirmadas
+                if any(abs(f - pf) <= self.delta_f for pf in prev_freqs):
                     confirmed_freqs.append(f)
             prev_freqs = freqs_detected
 
@@ -224,7 +270,7 @@ if __name__ == "__main__":
     # cria um sinal só de ruído para teste sem portadora
     # s_noisy = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
     
-    threshold = -8.5
+    threshold = -8.2
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
     
     results = detector.detect(s_noisy.copy())
