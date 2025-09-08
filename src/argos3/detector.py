@@ -220,6 +220,9 @@ if __name__ == "__main__":
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db)
     s_noisy = add_noise.add_noise(s)
+
+    # cria um sinal só de ruído para teste sem portadora
+    # s_noisy = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
     
     threshold = -8.5
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
