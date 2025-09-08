@@ -79,6 +79,9 @@ class NoiseEBN0:
             ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
             fs (int): Taxa de amostragem do sinal em $Hz$.
             Rb (int): Taxa de bits em bits/s.
+        
+        Exemplo: 
+            ![pageplot](assets/example_noise_time.svg)
         """
         self.ebn0_db = ebn0_db
         self.ebn0_lin = 10 ** (ebn0_db / 10)
