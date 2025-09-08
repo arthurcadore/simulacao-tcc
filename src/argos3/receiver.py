@@ -758,9 +758,12 @@ class Receiver:
 
 
 if __name__ == "__main__":
+
+    fc = 4000
+
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     bitsTX = datagramTX.streambits  
-    transmitter = Transmitter(datagramTX, output_print=True)
+    transmitter = Transmitter(fc=fc, datagram=datagramTX, output_print=True)
     t, s = transmitter.run()
 
     ebn0_db = 20
@@ -773,7 +776,7 @@ if __name__ == "__main__":
     print("s(t):", ''.join(map(str, s_noisy[:5])), "...")
     print("t:   ", ''.join(map(str, t[:5])), "...")
 
-    receiver = Receiver(output_print=True)
+    receiver = Receiver(fc=fc, output_print=True)
     bitsRX = receiver.run(s_noisy, t)
 
     try:
