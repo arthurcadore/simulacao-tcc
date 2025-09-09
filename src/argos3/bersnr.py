@@ -308,9 +308,9 @@ if __name__ == "__main__":
     BersnrPlot(fig, grid, 0,
                EbN0=EbN0_vec,
                ber_curves=[ber_values_argos, ber_values_qpsk],
-               labels=["Argos3", "QPSK Teórico"],
+               labels=["ARGOS-3", "QPSK"],
                title="Curva BER vs Eb/N0",
-               ylim=(1e-8, 1)
+               ylim=(1e-6, 1)
     ).plot()
     
     save_figure(fig, "ber_vs_ebn0.pdf")

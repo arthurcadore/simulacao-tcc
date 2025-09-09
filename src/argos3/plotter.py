@@ -1305,6 +1305,9 @@ class BersnrPlot(BasePlot):
         EbN0 (np.ndarray): Vetor de valores Eb/N0 (dB)
         ber_curves (List[np.ndarray]): Lista de curvas BER correspondentes
         labels (List[str]): Rótulos de cada curva
+    
+    Exemplo:
+        ![pageplot](assets/ber_vs_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
