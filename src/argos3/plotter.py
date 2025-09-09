@@ -1294,4 +1294,56 @@ class DetectionFrequencyPlot(BasePlot):
 
         self.apply_ax_style()
 
+class BersnrPlot(BasePlot):
+    r"""
+    Classe para plotar curvas de BER em função de Eb/N0.
 
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int): Posição no GridSpec
+        EbN0 (np.ndarray): Vetor de valores Eb/N0 (dB)
+        ber_curves (List[np.ndarray]): Lista de curvas BER correspondentes
+        labels (List[str]): Rótulos de cada curva
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos: int,
+                 EbN0: np.ndarray,
+                 ber_curves: List[np.ndarray],
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.EbN0 = EbN0
+        self.ber_curves = ber_curves if isinstance(ber_curves, (list, tuple)) else [ber_curves]
+
+        if self.labels is None:
+            self.labels = [f"Curva {i+1}" for i in range(len(self.ber_curves))]
+
+    def plot(self,
+             xlabel: str = r"$E_b/N_0$ (dB)",
+             ylabel: str = "Taxa de Erro de Bit (BER)",
+             logy: bool = True) -> None:
+
+        line_kwargs = {"linewidth": 2, "alpha": 1.0, "marker": "o"}
+        line_kwargs.update(self.style.get("line", {}))
+
+        for i, curve in enumerate(self.ber_curves):
+            color = self.apply_color(i)
+            label = self.labels[i]
+            if color is not None:
+                self.ax.plot(self.EbN0, curve, label=label, color=color, **line_kwargs)
+            else:
+                self.ax.plot(self.EbN0, curve, label=label, **line_kwargs)
+
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+
+        # Escala logarítmica no eixo Y
+        if logy:
+            self.ax.set_yscale("log")
+            self.ax.grid(True, which="both", axis="y", linestyle="--", color="gray", alpha=0.6)
+
+
+        self.apply_ax_style()

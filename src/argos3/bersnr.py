@@ -15,6 +15,7 @@ from .transmitter import Transmitter
 from .receiver import Receiver
 from .noise import NoiseEBN0
 from .data import ExportData, ImportData
+from .plotter import create_figure, save_figure, BersnrPlot
 
 def interpolate(positions, ref_points, ref_values):
     r"""
@@ -298,11 +299,6 @@ if __name__ == "__main__":
     bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, numblocks=8, max_repetitions=20000)
     results = bersnr_argos.run()
     ExportData(results, "bersnr_argos").save()
-    
-    # extrair os valores de Eb/N0 e BER
-    bersnr_argos = ImportData("bersnr_argos").load()
-    EbN0_values_argos = bersnr_argos[:, 0]
-    ber_values_argos = bersnr_argos[:, 1]
 
     ### QPSK
     bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=50_000, max_repetitions=5000)
@@ -310,28 +306,20 @@ if __name__ == "__main__":
     ExportData(results_qpsk, "bersnr_qpsk").save()
 
     # extrair os valores de Eb/N0 e BER
-    results_qpsk = ImportData("bersnr_qpsk").load()
-    EbN0_values_qpsk = [result[0] for result in results_qpsk]
-    ber_values_qpsk = [result[1] for result in results_qpsk]
+    bersnr_argos = ImportData("bersnr_argos").load()
+    ber_values_argos = bersnr_argos[:, 1]
 
-    # Criar o gráfico
-    plt.figure(figsize=(16, 9))
-    plt.plot(EbN0_values_argos, ber_values_argos, marker='o', linestyle='-', color='b', label='Argos3')
-    plt.plot(EbN0_values_qpsk, ber_values_qpsk, marker='s', linestyle='--', color='r', label='QPSK Teórico')
+    # extrair os valores de Eb/N0 e BER
+    bersnr_qpsk = ImportData("bersnr_qpsk").load()
+    ber_values_qpsk = bersnr_qpsk[:, 1]
 
-    # Adicionar título e rótulos aos eixos
-    plt.title("Curva BER vs Eb/N0", fontsize=16)
-    plt.xlabel("Eb/N0 (dB)", fontsize=14)
-    plt.ylabel("Taxa de Erro de Bit (BER)", fontsize=14)
-
-    # Configurar o grid para aparecer na escala logarítmica no eixo y
-    plt.grid(True, which='both', axis='y', linestyle='--', color='gray')
-
-    # Definir os limites do eixo y de 10^-10 até 10^-5
-    plt.ylim(10**-7, 1)
-    # Alterar escala do eixo y para ser logarítmica
-    plt.yscale('log')
-
-    # Exibir o gráfico
-    plt.grid(True)
-    plt.savefig("bersnr.pdf")
+    fig, grid = create_figure(1, 1)
+    BersnrPlot(fig, grid, 0,
+               EbN0=EbN0_vec,
+               ber_curves=[ber_values_argos, ber_values_qpsk],
+               labels=["Argos3", "QPSK Teórico"],
+               title="Curva BER vs Eb/N0",
+               ylim=(1e-7, 1)
+    ).plot()
+    
+    save_figure(fig, "ber_vs_ebn0.pdf")
