@@ -1468,7 +1468,7 @@ x_n[m] = s(t_{n} + mT_s)
 <li><span class="arithmatex">\(T_s\)</span> : Período de amostragem.</li>
 <li><span class="arithmatex">\(e^{-j2\pi km/N}\)</span> : Exponencial complexa.</li>
 </ul>
-</details>        <p>Em seguida, calcula a potência espectral <span class="arithmatex">\(P_n[k]\)</span> em <span class="arithmatex">\(dB\)</span>, conforme a expressão abaixo.</p>
+</details>        <p>Em seguida, calcula a potência espectral <span class="arithmatex">\(P_n[k]\)</span> em <span class="arithmatex">\(dB\)</span>, e divide pelo número de amostras <span class="arithmatex">\(N\)</span> contidas no segmento para normalização.</p>
 <div class="arithmatex">\[
     P_n[k] = \frac{|X_n[k]|^2}{N}
 \]</div>
@@ -1477,31 +1477,59 @@ x_n[m] = s(t_{n} + mT_s)
 <details class="sendo" open>
   <summary>Sendo</summary>
   <ul>
-<li><span class="arithmatex">\(P_n[k]\)</span> : Potência espectral do segmento <span class="arithmatex">\(n\)</span>.</li>
+<li><span class="arithmatex">\(P_n[k]\)</span> : Potência espectral do segmento <span class="arithmatex">\(n\)</span>, normalizada em <span class="arithmatex">\(dB\)</span>.</li>
 <li><span class="arithmatex">\(X_n[k]\)</span> : Transformada de Fourier do segmento <span class="arithmatex">\(n\)</span>.</li>
-<li><span class="arithmatex">\(N\)</span> : Número de amostras do segmento.
-'</li>
+<li><span class="arithmatex">\(N\)</span> : Número de amostras do segmento.</li>
 </ul>
-</details>        <p>Args:
-    segment (np.ndarray): segmento de tempo</p>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>segment</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>segmento de tempo</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>freqs</code></td>            <td>
                   <code><span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="numpy.ndarray">ndarray</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>tuple[np.ndarray, np.ndarray]: tupla com as frequências e a potência espectral em <span class="arithmatex">\(dB\)</span></p>
+                <p>tupla com as frequências e a potência espectral em <span class="arithmatex">\(dB\)</span></p>
               </div>
             </td>
           </tr>
@@ -1524,7 +1552,7 @@ x_n[m] = s(t_{n} + mT_s)
 
     <div class="doc doc-contents ">
 
-        <p>Detecta possíveis portadoras no sinal, comparando <span class="arithmatex">\(P_n[k]\)</span> com o limiar <span class="arithmatex">\(P_t\)</span>.  </p>
+        <p>Detecta possíveis portadoras no sinal, comparando <span class="arithmatex">\(P_n[k]\)</span> com o limiar <span class="arithmatex">\(P_t\)</span>, para cada índice <span class="arithmatex">\(k\)</span> da FFT.</p>
 <div class="arithmatex">\[
     f_n[k] =
     \begin{cases}
@@ -1582,18 +1610,18 @@ x_n[m] = s(t_{n} + mT_s)
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>results</code></td>            <td>
                   <code><span title="list">list</span>[<span title="tuple">tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="list">list</span>[<span title="float">float</span>]]]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>list[tuple[np.ndarray, list[float]]]: lista de tuplas com os segmentos e as frequências detectadas</p>
+                <p>lista de tuplas com os segmentos e as frequências detectadas</p>
               </div>
             </td>
           </tr>
@@ -1609,15 +1637,27 @@ x_n[m] = s(t_{n} + mT_s)
 
 
 <h2 id="detector.CarrierDetector.check_frequencies" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">check_frequencies</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">tolerance_hz</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">check_frequencies</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Retorna apenas frequências que foram detectadas em dois segmentos consecutivos.</p>
+        <p>Retorna apenas frequências que foram detectadas em dois segmentos consecutivos. A tolerância é dada pela resolução espectral da FFT, <span class="arithmatex">\(\Delta f\)</span>, conforme a expressão abaixo. </p>
+<div class="arithmatex">\[
+    \Delta f = \dfrac{f_s}{N}
+\]</div>
 
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\Delta f\)</span> : resolução espectral da FFT.</li>
+<li><span class="arithmatex">\(f_s\)</span> : frequência de amostragem.</li>
+<li><span class="arithmatex">\(N\)</span> : número de amostras do segmento.</li>
+</ul>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1646,22 +1686,6 @@ x_n[m] = s(t_{n} + mT_s)
                 <em>required</em>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>tolerance_hz</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>diferença máxima para considerar que duas frequências são iguais</p>
-              </div>
-            </td>
-            <td>
-                  <code>50</code>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -1670,17 +1694,18 @@ x_n[m] = s(t_{n} + mT_s)
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>confirmed_freqs</code></td>            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>list[float]: lista de frequências confirmadas como portadora</p>
+                <p>lista de frequências confirmadas como portadora</p>
               </div>
             </td>
           </tr>
