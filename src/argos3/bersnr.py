@@ -93,16 +93,6 @@ class BERSNR_ARGOS:
         self.receiver = Receiver(fc=self.fc, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb) 
 
     def simulate(self, ebn0_db):
-        r"""
-        Simula a transmissão e recepção ARGOS-3 em canal AWGN para um dado $Eb/N0$, retornando o número de erros.
-
-        Args:
-            ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
-        
-        Returns:
-            num_errors (int): Número de erros na simulação
-        """
-
         # Adicionando ruído ao sinal
         add_noise = NoiseEBN0(ebn0_db, fs=self.fs, Rb=self.Rb)
         s_noisy = add_noise.add_noise(self.s)
@@ -116,7 +106,7 @@ class BERSNR_ARGOS:
 
     def run(self):
         r"""
-        Executa a simulação de TX e RX ARGOS-3 para cada valor de $Eb/N0$, retornando a lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
+        Executa a simulação de BER vs Eb/N0 para o padrão ARGOS-3.
 
         Returns:
             ber_results (list): Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
@@ -192,10 +182,6 @@ class BERSNR_QPSK:
 
     @staticmethod
     def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
-        r"""
-        Simula a transmissão e recepção QPSK em canal AWGN para um dado $Eb/N0$, retornando a taxa de erro de bit ($BER$) simulada.
-        """
-
         # Seed do gerador de números aleatórios
         rng = rng if rng is not None else np.random.default_rng()
 
@@ -233,7 +219,10 @@ class BERSNR_QPSK:
 
     def run(self):
         r"""
-        Executa a simulação de TX e RX QPSK para cada valor de $Eb/N0$, retornando a lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
+        Executa a simulação de BER vs Eb/N0 para o padrão QPSK.
+
+        Returns:
+            ber_results (list): Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
         """
         ber_results = []
 
