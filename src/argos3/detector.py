@@ -254,14 +254,21 @@ class CarrierDetector:
 
 if __name__ == "__main__":
 
-    fc = np.random.randint(2, 14)*500
+    fc = np.random.randint(2, 12)*500
+    fc2 = fc + 2000
     
     print("Frequência Portadora: ", fc)
     
     datagram = Datagram(pcdnum=1234, numblocks=1)
     bitsTX = datagram.streambits  
     transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=True)
+    transmitter2 = Transmitter(datagram, fc=fc2, output_print=False, output_plot=True)
+
     t, s = transmitter.run()
+    t2, s2 = transmitter2.run()
+
+    # soma os sinais
+    s = s + s2
     
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db)
@@ -309,7 +316,8 @@ if __name__ == "__main__":
 
     # Para cada frequência confirmada, executa a recepção
     for idx, freq in enumerate(confirmed_freqs, start=1):
-        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=False, output_plot=True)
+        print(f"\nRecepção de $s(t)$ com $f_c = {freq} Hz$")
+        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=True, output_plot=True)
         bitsRX = receiver.run(s_noisy.copy(), t.copy())
             
         try:
