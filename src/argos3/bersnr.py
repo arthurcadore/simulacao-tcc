@@ -286,9 +286,9 @@ class BERSNR_QPSK:
 if __name__ == "__main__":
 
     # Define os valores de Eb/N0 para a simulação
-    EbN0_vec = np.arange(0, 12, 1)
+    EbN0_vec = np.arange(0, 12, 0.5)
 
-    ref_values = [5000, 800, 200, 20]
+    ref_values = [10000, 5000, 800, 200]
     ref_points = [0, 3, 6, 12]
     error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
@@ -296,7 +296,9 @@ if __name__ == "__main__":
     for ebn0, error in zip(EbN0_vec, error_values):
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
-    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, numblocks=8, max_repetitions=20000)
+    reps = (288 * 174) * 10 # Tamanho datagrama ARGOS-3 (8bits) até 50.000 bits * 10 reps
+    print(f"[ARGOS-3] Maximo de bits transmitidos por Eb/N0: {reps}")
+    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=64, numblocks=8, max_repetitions=reps)
     results = bersnr_argos.run()
     ExportData(results, "bersnr_argos").save()
 
@@ -319,7 +321,7 @@ if __name__ == "__main__":
                ber_curves=[ber_values_argos, ber_values_qpsk],
                labels=["Argos3", "QPSK Teórico"],
                title="Curva BER vs Eb/N0",
-               ylim=(1e-7, 1)
+               ylim=(1e-8, 1)
     ).plot()
     
     save_figure(fig, "ber_vs_ebn0.pdf")
