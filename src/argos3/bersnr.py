@@ -52,104 +52,273 @@ def interpolate(positions, ref_points, ref_values):
 
 class BERSNR_ARGOS: 
     def __init__(self, EbN0_values=np.arange(0, 10, 1), num_workers=56, numblocks=8, max_repetitions=2000, error_values=None):
+        r"""
+        Implementa a simulação de BER vs Eb/N0 para o padrão ARGOS-3.
+
+        Args:
+            EbN0_values (array-like): Valores de Eb/N0 para os quais a simulação será realizada.
+            num_workers (int): Número de threads para paralelização.
+            numblocks (int): Número de blocos de dados para cada datagrama.
+            max_repetitions (int): Número máximo de repetições para cada valor de Eb/N0.
+            error_values (array-like): Número máximo de erros para cada valor de Eb/N0.
+        
+        Raises:
+            ValueError: Se o número de erros não for o mesmo que o número de valores de Eb/N0.
+        """
         if len(error_values) != len(EbN0_values):
             raise ValueError("error_values deve ter o mesmo tamanho que EbN0_values")
 
+        # Parâmetros fixos do sistema
         self.fs = 128_000
         self.Rb = 400
         self.fc = 4000
+
+        # Parâmetros variáveis
         self.EbN0_values = EbN0_values
         self.num_workers = num_workers
         self.numblocks = numblocks
         self.max_repetitions = max_repetitions
         self.error_values = error_values
+
+        # Cadeia de TX
         self.datagramTX = Datagram(pcdnum=1234, numblocks=numblocks)
         self.bitsTX = self.datagramTX.streambits
         self.bitsSent = len(self.bitsTX)
+
+        # Gerando sinal fixo s(t)
         self.t, self.s = Transmitter(fc=self.fc, datagram=self.datagramTX, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb).run() 
+
+        # Cadeia de RX
         self.receiver = Receiver(fc=self.fc, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb) 
 
     def simulate(self, ebn0_db):
+        r"""
+        Simula a transmissão e recepção ARGOS-3 em canal AWGN para um dado $Eb/N0$, retornando o número de erros.
+
+        Args:
+            ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
+        
+        Returns:
+            num_errors (int): Número de erros na simulação
+        """
+
+        # Adicionando ruído ao sinal
         add_noise = NoiseEBN0(ebn0_db, fs=self.fs, Rb=self.Rb)
         s_noisy = add_noise.add_noise(self.s)
         
+        # Recebendo bits
         bitsRX = self.receiver.run(s_noisy, self.t)
 
+        # Contando erros entre bitsTX e bitsRX
         num_errors = sum(1 for tx, rx in zip(self.bitsTX, bitsRX) if tx != rx)
         return num_errors
 
     def run(self):
-        # Lista para armazenar os valores de BER e Eb/N0
+        r"""
+        Executa a simulação de TX e RX ARGOS-3 para cada valor de $Eb/N0$, retornando a lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
+
+        Returns:
+            ber_results (list): Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
+        """
         ber_results = []
 
         # Paralelizar as simulações para cada Eb/N0 usando Pool de Workers
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.num_workers) as executor:
-            # Usa o tqdm para monitorar o progresso da simulação em cada iteração de Eb/N0
+            # monitorar o progresso da simulação em cada iteração de Eb/N0
             for ebn0_db in self.EbN0_values:
                 total_errors = 0
                 repetitions = 0
 
-                # Usa o tqdm para monitorar o progresso da simulação
                 with tqdm(total=self.max_repetitions, desc=f"Simulando Eb/N0 = {ebn0_db} dB", ncols=100) as pbar:
-                    # Realiza a simulação de forma paralela usando executor.map
                     while repetitions < self.max_repetitions and total_errors < self.error_values[int(ebn0_db)]:
-                        futures = [executor.submit(self.simulate, ebn0_db) for _ in range(self.num_workers)]  # Cria múltiplas simulações
+
+                        # Cria múltiplas simulações (uma para cada worker)
+                        futures = [executor.submit(self.simulate, ebn0_db) for _ in range(self.num_workers)]  
 
                         for future in futures:
-                            num_errors = future.result()  # Aguarda a conclusão da tarefa
+                            # Aguarda a conclusão da tarefa
+                            num_errors = future.result() 
                             total_errors += num_errors
                             repetitions += 1
-                            pbar.update(1)  # Atualiza o progresso do tqdm
+                            pbar.update(1)  
 
                         # Se atingiu o limite de erros, interrompe a simulação
                         if total_errors >= self.error_values[int(ebn0_db)]:
                             break
 
-                # Calcula o número total de bits transmitidos
+                # Calcula o número total de bits transmitidos (Repetições * Bits do datagrama)
                 total_bits_transmitted = repetitions * self.bitsSent
-                print(f"Total de bits transmitidos: {total_bits_transmitted}")
-                print(f"Total de erros: {total_errors}")
 
                 # Calcula a BER
                 if total_bits_transmitted > 0:
                     ber = (total_errors + 1) / (total_bits_transmitted + 1)
-                    print(f"BER: {ber}")
                 else:
                     ber = 0
+
+                # Status da simulação
+                print(f"[ARGOS-3] Eb/N0={ebn0_db} dB -> Bits={total_bits_transmitted}, Erros={total_errors}, BER={ber}")
 
                 # Armazena a tupla (Eb/N0, BER) na lista
                 ber_results.append((ebn0_db, ber))
 
-        # Retorna a lista de tuplas com (Eb/N0, BER)
+        return ber_results
+
+class BERSNR_QPSK:
+    def __init__(self, EbN0_values=np.arange(0, 10, 1), num_workers=8, num_bits=10_000, max_repetitions=2000, error_values=None):
+        r"""
+        Implementa a simulação de BER vs Eb/N0 para o padrão QPSK.
+
+        Args:
+            EbN0_values (array-like): Valores de Eb/N0 para os quais a simulação será realizada.
+            num_workers (int): Número de threads para paralelização.
+            num_bits (int): Número de bits para cada simulação.
+            max_repetitions (int): Número máximo de repetições para cada valor de Eb/N0.
+            error_values (array-like): Número máximo de erros para cada valor de Eb/N0.
+        
+        Raises:
+            ValueError: Se o número de erros não for o mesmo que o número de valores de Eb/N0.
+        """
+
+        if error_values is None or len(error_values) != len(EbN0_values):
+            raise ValueError("error_values deve ter o mesmo tamanho que EbN0_values")
+
+        # Parâmetros variáveis
+        self.EbN0_values = EbN0_values
+        self.num_workers = num_workers
+        self.num_bits = num_bits
+        self.max_repetitions = max_repetitions
+        self.error_values = error_values
+
+    @staticmethod
+    def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
+        r"""
+        Simula a transmissão e recepção QPSK em canal AWGN para um dado $Eb/N0$, retornando a taxa de erro de bit ($BER$) simulada.
+        """
+
+        # Seed do gerador de números aleatórios
+        rng = rng if rng is not None else np.random.default_rng()
+
+        # Geração dos bits (I e Q independentes)
+        bI = rng.integers(0, 2, size=(num_bits,))
+        bQ = rng.integers(0, 2, size=(num_bits,))
+
+        # Mapeamento QPSK
+        I = (2*bI - 1) / np.sqrt(2)
+        Q = (2*bQ - 1) / np.sqrt(2)
+
+        # Sinal complexo
+        signal = I + 1j*Q
+
+        # Cálculo do Eb/N0
+        ebn0_lin = 10 ** (ebn0_db / 10)
+        signal_power = np.mean(np.abs(signal)**2)
+        bit_energy = signal_power / bits_por_simbolo
+        noise_density = bit_energy / ebn0_lin
+        variance = noise_density / 2
+        sigma = np.sqrt(variance)
+
+        # Canal AWGN
+        noise = rng.normal(0.0, sigma, size=signal.shape) + 1j * rng.normal(0.0, sigma, size=signal.shape)
+        r = signal + noise
+
+        # Demodulação
+        bI_dec = (r.real >= 0).astype(int)
+        bQ_dec = (r.imag >= 0).astype(int)
+
+        # Contagem de erros
+        erros = np.count_nonzero(bI_dec != bI) + np.count_nonzero(bQ_dec != bQ)
+        ber = erros / (2 * num_bits)
+        return ber
+
+    def run(self):
+        r"""
+        Executa a simulação de TX e RX QPSK para cada valor de $Eb/N0$, retornando a lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.
+        """
+        ber_results = []
+
+        # Paralelizar as simulações para cada Eb/N0 usando Pool de Workers
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.num_workers) as executor:
+            for ebn0_db in self.EbN0_values:
+                total_errors = 0
+                repetitions = 0
+                total_bits = 0
+
+                # Monitorar o progresso da simulação em cada iteração de Eb/N0
+                with tqdm(total=self.max_repetitions, desc=f"QPSK Eb/N0 = {ebn0_db} dB", ncols=100) as pbar:
+
+                    # Executar as simulações para cada worker
+                    while repetitions < self.max_repetitions and total_errors < self.error_values[int(ebn0_db)]:
+                        futures = [executor.submit(self.simulate_qpsk, ebn0_db, num_bits=self.num_bits, rng=np.random.default_rng())
+                                   for _ in range(self.num_workers)]
+
+                        # Aguardar a conclusão das simulações para cada worker
+                        for future in concurrent.futures.as_completed(futures):
+                            ber = future.result()
+
+                            # Contagem de erros (2 bits por símbolo)
+                            errors = int(ber * self.num_bits * 2) 
+                            total_errors += errors
+                            total_bits += self.num_bits * 2
+                            repetitions += 1
+                            pbar.update(1)
+
+                        # Se atingiu o limite de erros, interrompe a simulação
+                        if total_errors >= self.error_values[int(ebn0_db)]:
+                            break
+
+                # Calcula a BER final
+                if total_bits > 0:
+                    ber_final = (total_errors + 1) / (total_bits + 1)
+                else:
+                    ber_final = 0
+
+                # Status da simulação
+                print(f"[QPSK] Eb/N0={ebn0_db} dB -> Bits={total_bits}, Erros={total_errors}, BER={ber_final}")
+
+                # Armazena a tupla (Eb/N0, BER) na lista
+                ber_results.append((ebn0_db, ber_final))
+
         return ber_results
 
 
+
 if __name__ == "__main__":
-    EbN0_values = np.arange(0, 8, 0.5)
 
-    ref_values = [20, 10, 2]
-    ref_points = [0, 3, 10]
+    # Define os valores de Eb/N0 para a simulação
+    EbN0_vec = np.arange(0, 5, 0.5)
 
-    error_values = interpolate(len(EbN0_values), ref_points, ref_values)
+    # ref_values = [2000, 500, 20, 1]
+    ref_values = [20, 10, 2, 1]
+    ref_points = [0, 3, 6, 12]
+    error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
     # Imprime os valores de erro máximo para cada Eb/N0
-    for ebn0, error in zip(EbN0_values, error_values):
+    for ebn0, error in zip(EbN0_vec, error_values):
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
-    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_values, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=2000)
+    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=20000)
     results = bersnr_argos.run()
-    
     ExportData(results, "bersnr_argos").save()
-
+    
+    # extrair os valores de Eb/N0 e BER
     bersnr_argos = ImportData("bersnr_argos").load()
+    EbN0_values_argos = bersnr_argos[:, 0]
+    ber_values_argos = bersnr_argos[:, 1]
+
+    ### QPSK
+    bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, num_bits=50_000, max_repetitions=5000)
+    results_qpsk = bersnr_qpsk.run()
+    ExportData(results_qpsk, "bersnr_qpsk").save()
 
     # extrair os valores de Eb/N0 e BER
-    EbN0_values = bersnr_argos[:, 0]
-    ber_values = bersnr_argos[:, 1]
+    results_qpsk = ImportData("bersnr_qpsk").load()
+    EbN0_values_qpsk = [result[0] for result in results_qpsk]
+    ber_values_qpsk = [result[1] for result in results_qpsk]
 
     # Criar o gráfico
     plt.figure(figsize=(16, 9))
-    plt.plot(EbN0_values, ber_values, marker='o', linestyle='-', color='b')
+    plt.plot(EbN0_values_argos, ber_values_argos, marker='o', linestyle='-', color='b', label='Argos3')
+    plt.plot(EbN0_values_qpsk, ber_values_qpsk, marker='s', linestyle='--', color='r', label='QPSK Teórico')
 
     # Adicionar título e rótulos aos eixos
     plt.title("Curva BER vs Eb/N0", fontsize=16)
@@ -160,10 +329,10 @@ if __name__ == "__main__":
     plt.grid(True, which='both', axis='y', linestyle='--', color='gray')
 
     # Definir os limites do eixo y de 10^-10 até 10^-5
-    plt.ylim(10**-5, 1)
+    plt.ylim(10**-7, 1)
     # Alterar escala do eixo y para ser logarítmica
     plt.yscale('log')
 
     # Exibir o gráfico
     plt.grid(True)
-    plt.savefig("bersnr_argos.pdf")
+    plt.savefig("bersnr.pdf")
