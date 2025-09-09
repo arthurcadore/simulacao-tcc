@@ -273,7 +273,7 @@ class Receiver:
 
     def matchedfilter(self, dI_prime, dQ_prime, t):
         r"""
-        Aplica o filtro casado com resposta ao impuslo $-g(t)$ aos sinais $d'_{I}(t)$ e $d'_{Q}(t)$, retornando os sinais filtrados $I'(t)$ e $Q'(t)$.
+        Aplica o filtro casado com resposta ao impuslo $g(-t)$ aos sinais $d'_{I}(t)$ e $d'_{Q}(t)$, retornando os sinais filtrados $I'(t)$ e $Q'(t)$.
 
         Args:
             dI_prime (np.ndarray): Sinal $d'_{I}(t)$ a ser filtrado.
@@ -306,7 +306,7 @@ class Receiver:
                 matched_filter.t_impulse, matched_filter.impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
                 fig_matched, grid_matched, (1, 0),
@@ -338,7 +338,7 @@ class Receiver:
                 matched_filter.t_impulse, matched_filter.impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             FrequencyPlot(
                 fig_matched_freq, grid_matched_freq, (1, 0),

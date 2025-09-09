@@ -52,22 +52,22 @@ class MatchedFilter:
 
     def rrc_inverted_pulse(self):
         r"""
-        Gera o pulso Root Raised Cosine ($RRC$) invertido $-g(t)$ para filtragem casada do sinal de entrada.
+        Gera o pulso Root Raised Cosine ($RRC$) invertido $g(-t)$ para filtragem casada do sinal de entrada.
         
         $$
         \begin{equation}
-            -g(t) = - \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
+            g(-t) = \frac{(1 - \alpha) sinc((1- \alpha) (-t) / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) (-t) / T_b)}{1 - (4 \alpha (-t) / T_b)^2}
         \end{equation}
         $$
 
         Sendo: 
-            - $-g(t)$: Pulso formatador $RRC$ invertido no dominio do tempo.
+            - $g(-t)$: Pulso formatador $RRC$ invertido no dominio do tempo.
             - $\alpha$: Fator de roll-off do pulso.
             - $T_b$: Período de bit.
-            - $t$: Vetor de tempo.
+            - $(-t)$: Vetor de tempo invertido.
 
         Returns:
-           rc (np.ndarray): Pulso RRC invertido $-g(t)$.
+           rc (np.ndarray): Pulso RRC invertido $g(-t)$.
 
         Exemplo: 
             ![pageplot](assets/example_mf_impulse.svg)
@@ -121,16 +121,16 @@ class MatchedFilter:
         
     def apply_filter(self, signal):
         r"""
-        Aplica o filtro casado com resposta ao impulso $-g(t)$ ao sinal de entrada $s(t)$. O processo de filtragem é dado pela expressão abaixo. 
+        Aplica o filtro casado com resposta ao impulso $g(-t)$ ao sinal de entrada $s(t)$. O processo de filtragem é dado pela expressão abaixo. 
 
         $$
-            x(t) = s(t) \ast h(t)
+            x(t) = s(t) \ast g(-t)
         $$
 
         Sendo: 
             - $x(t)$: Sinal filtrado.
             - $s(t)$: Sinal de entrada.
-            - $-g(t)$: Pulso formatador $RRC$ invertido.
+            - $g(-t)$: Pulso formatador $RRC$ invertido.
 
         Args:
             signal (np.ndarray): Sinal de entrada $s(t)$.
@@ -156,7 +156,7 @@ if __name__ == "__main__":
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$-g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+    ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse.pdf")
