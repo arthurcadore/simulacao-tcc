@@ -285,10 +285,9 @@ class BERSNR_QPSK:
 if __name__ == "__main__":
 
     # Define os valores de Eb/N0 para a simulação
-    EbN0_vec = np.arange(0, 5, 0.5)
+    EbN0_vec = np.arange(0, 12, 1)
 
-    # ref_values = [2000, 500, 20, 1]
-    ref_values = [20, 10, 2, 1]
+    ref_values = [5000, 800, 200, 20]
     ref_points = [0, 3, 6, 12]
     error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
@@ -296,7 +295,7 @@ if __name__ == "__main__":
     for ebn0, error in zip(EbN0_vec, error_values):
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
-    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=20000)
+    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, numblocks=8, max_repetitions=20000)
     results = bersnr_argos.run()
     ExportData(results, "bersnr_argos").save()
     
@@ -306,7 +305,7 @@ if __name__ == "__main__":
     ber_values_argos = bersnr_argos[:, 1]
 
     ### QPSK
-    bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, num_bits=50_000, max_repetitions=5000)
+    bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=50_000, max_repetitions=5000)
     results_qpsk = bersnr_qpsk.run()
     ExportData(results_qpsk, "bersnr_qpsk").save()
 
