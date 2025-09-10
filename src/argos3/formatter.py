@@ -6,7 +6,7 @@ Data: 28-07-2025
 """
 
 import numpy as np
-from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
+from .plotter import ImpulseResponsePlot, TimePlot, EncodedBitsPlot, create_figure, save_figure
 from .encoder import Encoder
 
 class Formatter:
@@ -108,56 +108,46 @@ class Formatter:
     
     def manchester_pulse(self):
         r"""
-        Gera o pulso Manchester centralizado em `self.t_rc`, convoluindo com o pulso RRC. Conforme a expressão abaixo.
-
-        $$
-            g(t) = \sum_{n=0}^{N-1} x[n] * g_{RRC}(t - nT_b)
-        $$
-
-        Sendo: 
-            - $g(t)$: Pulso Manchester no dominio do tempo.
-            - $x[n]$ : Sinal Manchester ideal.
-            - $g_{RRC}(t)$: Pulso formatador $RRC$ no dominio do tempo.
-            - $T_b$: Período de bit.
-            - $n$: Indice de bit.
-            - $t$: Vetor de tempo.
-
-        Returns:
-            g (np.ndarray): Pulso Manchester no dominio do tempo.
-
-        Exemplo: 
-            - ![pageplot](assets/example_formatter_impulse_man.svg)
+        Pulso Manchester como diferença de dois RRC simetricamente deslocados:
+            g(t) = g_RRC(t + T_b/4) - g_RRC(t - T_b/4)
         """
-        t_rc = np.array(self.t_rc, dtype=float)
-        tlen = len(t_rc)
-        sps = int(self.sps) if int(self.sps) >= 2 else 2
-        self.sps = sps
+        # Base temporal e parâmetros
+        t = np.asarray(self.t_rc, dtype=float)
+        Tb = self.Tb
+        sps = int(self.sps)
+        if sps < 2:
+            sps = 2
+            self.sps = sps
 
-        half1 = sps // 2
-        half2 = sps - half1
+        # Gera o RRC centrado em 0
+        g_rrc = self.rrc_pulse()
 
-        # cria pulso Manchester centralizado (zeros nas bordas)
-        g_raw = np.zeros(tlen, dtype=float)
-        center = tlen // 2
-        start = center - (sps // 2)
-        if start < 0:
-            start = 0
-        end = start + sps
-        if end > tlen:
-            end = tlen
-            start = end - sps
+        # Função utilitária: desloca em amostras com zeros (sem "wrap")
+        def shift_with_zeros(x, k):
+            y = np.zeros_like(x)
+            N = len(x)
+            if k > 0:           # desloca para a direita
+                y[k:] = x[:N-k]
+            elif k < 0:         # desloca para a esquerda
+                k = -k
+                y[:N-k] = x[k:]
+            else:
+                y[:] = x
+            return y
 
-        g_raw[start:start + half1] = 1.0
-        g_raw[start + half1:start + half1 + half2] = -1.0
+        # Deslocamento de +/- T_b/4 em amostras (≈ sps/4)
+        q = max(1, int(round(sps/4)))   # garante ao menos 1 amostra de deslocamento
 
-        # gera pulso RRC e aplica convolução
-        rrc = self.rrc_pulse() 
-        g = np.convolve(g_raw, rrc, mode='same')
+        # g(t) = g_RRC(t + Tb/4) - g_RRC(t - Tb/4)
+        # (t + Tb/4) ⇒ deslocar para a ESQUERDA; (t - Tb/4) ⇒ para a DIREITA
+        g_left  = shift_with_zeros(g_rrc, -q)   # centro em -Tb/4
+        g_right = shift_with_zeros(g_rrc,  +q)  # centro em +Tb/4
+        g = g_left - g_right
 
-        # normaliza energia para 1
-        energy = np.sqrt(np.sum(g**2))
-        if energy > 0:
-            g = g / energy
+        # Normaliza a amplitude para 1 (sem normalizar a energia)
+        # g_max = np.max(np.abs(g))
+        # if g_max > 0:
+        #     g = g / g_max
 
         self.g = g
         return g
@@ -228,23 +218,23 @@ class Formatter:
 
 if __name__ == "__main__":
 
-    Xnrz = np.random.randint(0, 2, 50)
-    Yman = np.random.randint(0, 2, 50)
+    bitN = np.random.randint(0, 2, 10)
+    bitM = np.random.randint(0, 2, 10)
 
     encoder_nrz = Encoder(method="NRZ")
     encoder_man = Encoder(method="Manchester")
 
-    Xnrz = encoder_nrz.encode(Xnrz)
-    Yman = encoder_man.encode(Yman)
+    Xnrz1 = encoder_nrz.encode(bitN)
+    Yman1 = encoder_man.encode(bitM)
     
     formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q")
     
-    dI1 = formatterI.apply_format(Xnrz)
-    dQ1 = formatterQ.apply_format(Yman)
+    dI1 = formatterI.apply_format(Xnrz1)
+    dQ1 = formatterQ.apply_format(Yman1)
     
-    print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz[:10]))
-    print("Yman:",  ' '.join(f"{y:+d}" for y in Yman[:10]))
+    print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz1[:10]))
+    print("Yman:",  ' '.join(f"{y:+d}" for y in Yman1[:10]))
     print("dI:", ''.join(str(b) for b in dI1[:5]))
     print("dQ:", ''.join(str(b) for b in dQ1[:5]))
 
@@ -304,8 +294,18 @@ if __name__ == "__main__":
     save_figure(fig_format, "example_formatter_time.pdf")
 
 
+    ##### TESTE V1.0.3
+    encoder_nrz = Encoder(method="NRZ")
+    encoder_man = Encoder(method="NRZ")
+
+    Xnrz2 = encoder_nrz.encode(bitN)
+    Yman2 = encoder_man.encode(bitM)
+
     formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q")
+
+    dI2 = formatterI.apply_format(Xnrz2)
+    dQ2 = formatterQ.apply_format(Yman2)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
     ImpulseResponsePlot(
@@ -313,45 +313,26 @@ if __name__ == "__main__":
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-30, 30))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse_man.pdf")   
 
     # Plotando os sinais formatados
-    
-    dI2 = formatterI.apply_format(Xnrz)
-    dQ2 = formatterQ.apply_format(Yman)
-
     fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
     
-    TimePlot(
-        fig_format, grid_format, (0,0),
-        t= np.arange(len(dI1)) / formatterI.fs,
-        signals=[dI1],
-        labels=[r"$d_I(t)$"],
-        title=r"Canal $I$",
-        xlim=(40, 140),
-        colors="darkgreen",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
-    ).plot()
+    EncodedBitsPlot(
+        fig_format, grid_format, (0, 0),
+        bits=Yman1,
+        color='darkgreen',
+    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
 
-    TimePlot(
-        fig_format, grid_format, (0,1),
-        t= np.arange(len(dI2)) / formatterI.fs,
-        signals=[dI2],
-        labels=[r"$d_I(t)$"],
-        title=r"Canal $I$",
-        xlim=(40, 140),
-        colors="darkgreen",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
-    ).plot()
+    EncodedBitsPlot(
+        fig_format, grid_format, (0, 1),
+        bits=Yman2,
+        color='darkgreen',
+    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+
 
     TimePlot(
         fig_format, grid_format, (1,0),

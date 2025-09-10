@@ -214,5 +214,5 @@ if __name__ == "__main__":
     Yn_prime = encoder_man.decode(Yman)
     print("Channel Y'n:", ''.join(str(int(b)) for b in Yn_prime))
 
-    print("Xn = Y'n: ", np.array_equal(Xn, Xn_prime))
-    print("Yn = X'n: ", np.array_equal(Yn, Yn_prime))
+    print("Xn = X'n: ", np.array_equal(Xn, Xn_prime))
+    print("Yn = Y'n: ", np.array_equal(Yn, Yn_prime))
