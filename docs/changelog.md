@@ -41,6 +41,7 @@
 - [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
 - [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
 - [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
+- [ ] Otimizar MatchedFilter para consumir formatter.
 
 ---
 ### v1.0.4 - Sincronismo perfeito

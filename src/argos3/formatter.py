@@ -122,7 +122,6 @@ class Formatter:
         # Gera o RRC centrado em 0
         g_rrc = self.rrc_pulse()
 
-        # Função utilitária: desloca em amostras com zeros (sem "wrap")
         def shift_with_zeros(x, k):
             y = np.zeros_like(x)
             N = len(x)
@@ -139,15 +138,9 @@ class Formatter:
         q = max(1, int(round(sps/4)))   # garante ao menos 1 amostra de deslocamento
 
         # g(t) = g_RRC(t + Tb/4) - g_RRC(t - Tb/4)
-        # (t + Tb/4) ⇒ deslocar para a ESQUERDA; (t - Tb/4) ⇒ para a DIREITA
         g_left  = shift_with_zeros(g_rrc, -q)   # centro em -Tb/4
         g_right = shift_with_zeros(g_rrc,  +q)  # centro em +Tb/4
         g = g_left - g_right
-
-        # Normaliza a amplitude para 1 (sem normalizar a energia)
-        # g_max = np.max(np.abs(g))
-        # if g_max > 0:
-        #     g = g / g_max
 
         self.g = g
         return g

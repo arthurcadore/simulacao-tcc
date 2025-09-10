@@ -18,10 +18,10 @@ class MatchedFilter:
             fs (int): Frequência de amostragem.
             Rb (int): Taxa de bits.
             span (int): Duração do pulso em termos de períodos de bit.
-            type (str): Tipo de filtro, atualmente apenas "RRC-Inverted" é suportado.
+            type (str): Tipo de filtro, atualmente apenas "RRC-Inverted" e "Manchester-Inverted" são suportados.
 
-        Raises:
-            ValueError: Se o tipo de pulso não for suportado.
+        Raises:     
+            ValueError: Se o tipo de filtro não for suportado.
 
         Exemplo: 
             ![pageplot](assets/receiver_mf_time.svg) 
@@ -35,18 +35,21 @@ class MatchedFilter:
         self.t_rc = np.linspace(-span * self.Tb, span * self.Tb, span * self.sps * 2)
 
         type_map = {
-            "rrc-inverted": 0
+            "rrc-inverted": 0,
+            "manchester-inverted": 1
         }
 
         type = type.lower()
         if type not in type_map:
-            raise ValueError("Tipo de filtro inválido. Use 'RRC-inverted'.")
+            raise ValueError("Tipo de filtro inválido. Use 'RRC-inverted' ou 'Manchester-inverted'.")
         
         self.type = type_map[type]
 
         if self.type == 0:  # RRC
             self.g = self.rrc_inverted_pulse()
-            
+        elif self.type == 1:  # Manchester
+            self.g = self.manchester_inverted_pulse()
+        
         # Calculate impulse response
         self.impulse_response, self.t_impulse = self.calc_impulse_response()
 
@@ -93,6 +96,49 @@ class MatchedFilter:
         # Inverte o pulso no tempo para criar o filtro casado
         rc = rc[::-1]
         return rc
+
+    def manchester_inverted_pulse(self):
+        """
+        Gera o pulso Manchester invertido como um filtro casado.
+
+        g(-t) = g_RRC((-t) + T_b/4) - g_RRC((-t) - T_b/4)
+
+        Exemplo: 
+            ![pageplot](assets/example_mf_impulse_manchester.svg)
+        """
+        # Base temporal e parâmetros
+        t = np.asarray(self.t_rc, dtype=float)
+        Tb = self.Tb
+        sps = int(self.sps)
+        if sps < 2:
+            sps = 2
+            self.sps = sps
+
+        # Gera o RRC centrado em 0
+        g_rrc = self.rrc_inverted_pulse()  # Pode usar o mesmo pulso RRC invertido
+
+        # Função utilitária: desloca em amostras com zeros (sem "wrap")
+        def shift_with_zeros(x, k):
+            y = np.zeros_like(x)
+            N = len(x)
+            if k > 0:           # desloca para a direita
+                y[k:] = x[:N-k]
+            elif k < 0:         # desloca para a esquerda
+                k = -k
+                y[:N-k] = x[k:]
+            else:
+                y[:] = x
+            return y
+
+        # Deslocamento de +/- T_b/4 em amostras (≈ sps/4)
+        q = max(1, int(round(sps/4)))   # garante ao menos 1 amostra de deslocamento
+
+        g_left  = shift_with_zeros(g_rrc, +q)   # centro em +Tb/4
+        g_right = shift_with_zeros(g_rrc, -q)  # centro em -Tb/4
+        g = g_left - g_right
+
+
+        return g
 
     def calc_impulse_response(self, impulse_len=512):
         r"""
@@ -161,3 +207,16 @@ if __name__ == "__main__":
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse.pdf")
     
+    filtro = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester-Inverted")
+
+    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
+
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (0, 0),
+        filtro.t_impulse, filtro.impulse_response,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    fig_impulse.tight_layout()
+    save_figure(fig_impulse, "example_mf_impulse_manchester.pdf")
