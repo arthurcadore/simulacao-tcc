@@ -37,6 +37,7 @@
 ### v1.0.3 - Channel Encoding 
 - [X] Alterar calculo de SNR vs BER para considerar erro de bit
     - [X] Fixar a seed do gerador de números aleatórios para classe noise.
+    - [X] Fixar a seed no gerador de números aleatórios para classe datagrama.
 - [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
 - [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
 - [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester

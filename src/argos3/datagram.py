@@ -13,7 +13,7 @@ import json
 from .plotter import BitsPlot, create_figure, save_figure
 
 class Datagram: 
-    def __init__(self, pcdnum=None, numblocks=None, streambits=None):
+    def __init__(self, pcdnum=None, numblocks=None, streambits=None, seed=None):
         r"""
         Gera um datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
@@ -23,6 +23,7 @@ class Datagram:
             pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
             numblocks (int): Quantidade de blocos de dados. Necessário para o modo TX.
             streambits (np.ndarray): Sequência de bits do datagrama. Necessário para o modo RX.
+            seed (int): Seed do gerador de números aleatórios.
         
         Raises:
             ValueError: Se o número de blocos não estiver entre 1 e 8.
@@ -47,6 +48,7 @@ class Datagram:
 
             self.pcdnum = pcdnum
             self.numblocks = numblocks
+            self.rng = np.random.default_rng(seed)
             self.blocks = self.generate_blocks()
             self.pcdid = self.generate_pcdid()
             self.tail = self.generate_tail()
@@ -86,7 +88,7 @@ class Datagram:
 
         length = [24] + [32] * (self.numblocks - 1)
         total_length = sum(length)
-        return np.random.randint(0, 2, size=total_length, dtype=np.uint8)
+        return self.rng.integers(0, 2, size=total_length, dtype=np.uint8)
 
     def generate_pcdid(self):
         r"""
@@ -286,7 +288,7 @@ if __name__ == "__main__":
     """
 
     print("\n\nTransmissor:")
-    datagram_tx = Datagram(pcdnum=123456, numblocks=2)
+    datagram_tx = Datagram(pcdnum=123456, numblocks=2, seed=10)
     print(datagram_tx.parse_datagram())
     print("Stream bits: ", ''.join(str(b) for b in datagram_tx.streambits))
 
