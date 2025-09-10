@@ -82,7 +82,7 @@ class BERSNR_ARGOS:
         self.error_values = error_values
 
         # Cadeia de TX
-        self.datagramTX = Datagram(pcdnum=1234, numblocks=numblocks)
+        self.datagramTX = Datagram(pcdnum=1234, numblocks=numblocks, seed=10)
         self.bitsTX = self.datagramTX.streambits
         self.bitsSent = len(self.bitsTX)
 
@@ -94,7 +94,7 @@ class BERSNR_ARGOS:
 
     def simulate(self, ebn0_db):
         # Adicionando ruído ao sinal
-        add_noise = NoiseEBN0(ebn0_db, fs=self.fs, Rb=self.Rb)
+        add_noise = NoiseEBN0(ebn0_db, fs=self.fs, Rb=self.Rb, seed=10)
         s_noisy = add_noise.add_noise(self.s)
         
         # Recebendo bits
@@ -181,9 +181,9 @@ class BERSNR_QPSK:
         self.error_values = error_values
 
     @staticmethod
-    def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=None):
+    def simulate_qpsk(ebn0_db, num_bits=1000, bits_por_simbolo=2, rng=10):
         # Seed do gerador de números aleatórios
-        rng = rng if rng is not None else np.random.default_rng()
+        rng = np.random.default_rng(rng)
 
         # Geração dos bits (I e Q independentes)
         bI = rng.integers(0, 2, size=(num_bits,))
@@ -275,10 +275,10 @@ class BERSNR_QPSK:
 if __name__ == "__main__":
 
     # Define os valores de Eb/N0 para a simulação
-    EbN0_vec = np.arange(0, 12, 0.5)
+    EbN0_vec = np.arange(0, 10, 1)
 
-    ref_values = [10000, 5000, 800, 200]
-    ref_points = [0, 3, 6, 12]
+    ref_values = [100, 50,1,1]
+    ref_points = [0, 3, 6, 10]
     error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
     # Imprime os valores de erro máximo para cada Eb/N0
@@ -287,7 +287,7 @@ if __name__ == "__main__":
 
     reps = (288 * 174) * 10 # Tamanho datagrama ARGOS-3 (8bits) até 50.000 bits * 10 reps
     print(f"[ARGOS-3] Maximo de bits transmitidos por Eb/N0: {reps}")
-    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=64, numblocks=8, max_repetitions=reps)
+    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=reps)
     results = bersnr_argos.run()
     ExportData(results, "bersnr_argos").save()
 
