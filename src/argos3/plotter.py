@@ -1285,7 +1285,7 @@ class DetectionFrequencyPlot(BasePlot):
                 self.ax.axvline(f_plot, color="k", linestyle=":", linewidth=2)
 
         if self.ylim is None:
-            self.ax.set_ylim(np.max(P_db) - 100, np.max(P_db) + 5)
+            self.ax.set_ylim(np.max(P_db) - 50, np.max(P_db) + 5)
 
         # Evitar repetição de legendas
         handles, labels = self.ax.get_legend_handles_labels()
