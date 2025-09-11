@@ -275,18 +275,25 @@ class BERSNR_QPSK:
         Calcula a curva teórica de $BER$ vs $Eb/N_0$ para QPSK, segundo a expressão abaixo.
 
         $$
-        P_b(x) = \frac{1}{2} \operatorname{erfc}\Big(\frac{x}{\sqrt{2}}\Big), \text{ onde } x = \sqrt{2 \cdot \frac{E_b}{N_0}}
+        P_b(x) = Q \left(x\right) \mapsto P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\frac{x}{\sqrt{2}}\right), \text{ onde } x = \sqrt{2 \cdot \frac{E_b}{N_0}}
         $$
 
-        onde:
+        Podendo simplificar como: 
+
+        $$
+        P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\sqrt{\frac{E_b}{N_0}}\right)
+        $$
+
+        Sendo:
             - $P_b(x)$: Probabilidade de erro. 
+            - $Q(x)$: Função de erro complementar.
             - $x$: Argumento da função $Q(x)$.
             - $E_b$: Energia por bit.
             - $N_0$: Potência do ruído. 
             - $erfc$: Função de erro complementar.
 
         Returns:
-            np.ndarray: Vetor de valores de BER teórica para cada Eb/N0 da classe.
+            ber_teorico (np.ndarray): Vetor de valores de BER teórica para cada Eb/N0 da classe.
         """
         # Converter Eb/N0 de dB para valor linear
         ebn0_lin = 10 ** (self.EbN0_values / 10)
@@ -349,9 +356,9 @@ if __name__ == "__main__":
     BersnrPlot(fig, grid, 0,
                EbN0=EbN0_vec,
                ber_curves=[ber_values_argos, ber_values_qpsk, bersnr_qpsk_teorico],
-               labels=["ARGOS-3", "QPSK", "QPSK teórico"],
-               linestyles=["-", "--", ":"],
-               markers=["o", "s", None],   # None = sem marcador
+               labels=["ARGOS-3", "QPSK Simulado", "QPSK Ideal"],
+               linestyles=["-", "-", ":"],
+               markers=["o", "s", "x"],
                title="Curva BER vs Eb/N0",
                ylim=(1e-6, 1)
     ).plot()
