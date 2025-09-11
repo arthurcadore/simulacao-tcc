@@ -7,7 +7,7 @@
 
 import numpy as np
 import concurrent.futures
-import matplotlib.pyplot as plt
+from scipy.special import erfc
 from tqdm import tqdm
 
 from .datagram import Datagram
@@ -270,31 +270,71 @@ class BERSNR_QPSK:
 
         return ber_results
 
+    def teorical_qpsk(self):
+        r"""
+        Calcula a curva teórica de $BER$ vs $Eb/N_0$ para QPSK, segundo a expressão abaixo.
+
+        $$
+        P_b(x) = \frac{1}{2} \operatorname{erfc}\Big(\frac{x}{\sqrt{2}}\Big), \text{ onde } x = \sqrt{2 \cdot \frac{E_b}{N_0}}
+        $$
+
+        onde:
+            - $P_b(x)$: Probabilidade de erro. 
+            - $x$: Argumento da função $Q(x)$.
+            - $E_b$: Energia por bit.
+            - $N_0$: Potência do ruído. 
+            - $erfc$: Função de erro complementar.
+
+        Returns:
+            np.ndarray: Vetor de valores de BER teórica para cada Eb/N0 da classe.
+        """
+        # Converter Eb/N0 de dB para valor linear
+        ebn0_lin = 10 ** (self.EbN0_values / 10)
+
+        # Calcular o argumento da função Q
+        argument = np.sqrt(2 * ebn0_lin)
+
+        # Aplicar Q(x) = 0.5 * erfc(x / sqrt(2))
+        ber_teorico = 0.5 * erfc(argument / np.sqrt(2))
+
+        return ber_teorico
+
 
 
 if __name__ == "__main__":
 
     # Define os valores de Eb/N0 para a simulação
-    EbN0_vec = np.arange(0, 10, 1)
+    EbN0_vec = np.arange(0, 12, 0.5)
 
-    ref_values = [100, 50,1,1]
-    ref_points = [0, 3, 6, 10]
+    ref_values = [10000, 5000, 800, 200]
+    ref_points = [0, 3, 6, 12]
     error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
     # Imprime os valores de erro máximo para cada Eb/N0
     for ebn0, error in zip(EbN0_vec, error_values):
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
-    reps = (288 * 174) * 10 # Tamanho datagrama ARGOS-3 (8bits) até 50.000 bits * 10 reps
+    ### ARGOS-3
+    reps = 256000
     print(f"[ARGOS-3] Maximo de bits transmitidos por Eb/N0: {reps}")
     bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=reps)
-    results = bersnr_argos.run()
-    ExportData(results, "bersnr_argos").save()
 
     ### QPSK
     bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=50_000, max_repetitions=5000)
+    bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
+    print(bersnr_qpsk_teorico)
+
+    # Simulação
+    # ###############################################
+
+    results = bersnr_argos.run()
+    ExportData(results, "bersnr_argos").save()
+
     results_qpsk = bersnr_qpsk.run()
     ExportData(results_qpsk, "bersnr_qpsk").save()
+    
+    # PLOT
+    # ###############################################
 
     # extrair os valores de Eb/N0 e BER
     bersnr_argos = ImportData("bersnr_argos").load()
@@ -304,11 +344,14 @@ if __name__ == "__main__":
     bersnr_qpsk = ImportData("bersnr_qpsk").load()
     ber_values_qpsk = bersnr_qpsk[:, 1]
 
+    # extrair os valores de Eb/N0 e BER teórico
     fig, grid = create_figure(1, 1)
     BersnrPlot(fig, grid, 0,
                EbN0=EbN0_vec,
-               ber_curves=[ber_values_argos, ber_values_qpsk],
-               labels=["ARGOS-3", "QPSK"],
+               ber_curves=[ber_values_argos, ber_values_qpsk, bersnr_qpsk_teorico],
+               labels=["ARGOS-3", "QPSK", "QPSK teórico"],
+               linestyles=["-", "--", ":"],
+               markers=["o", "s", None],   # None = sem marcador
                title="Curva BER vs Eb/N0",
                ylim=(1e-6, 1)
     ).plot()

@@ -1305,9 +1305,8 @@ class BersnrPlot(BasePlot):
         EbN0 (np.ndarray): Vetor de valores Eb/N0 (dB)
         ber_curves (List[np.ndarray]): Lista de curvas BER correspondentes
         labels (List[str]): Rótulos de cada curva
-    
-    Exemplo:
-        ![pageplot](assets/ber_vs_ebn0.svg)
+        linestyles (List[str], opcional): Lista com estilos de linha (e.g., ["-", "--", "-."])
+        markers (List[str], opcional): Lista com formatos de marcadores (e.g., ["o", "s", "d"])
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1315,6 +1314,8 @@ class BersnrPlot(BasePlot):
                  pos: int,
                  EbN0: np.ndarray,
                  ber_curves: List[np.ndarray],
+                 linestyles: List[str] = None,
+                 markers: List[str] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
@@ -1324,29 +1325,35 @@ class BersnrPlot(BasePlot):
         if self.labels is None:
             self.labels = [f"Curva {i+1}" for i in range(len(self.ber_curves))]
 
+        # Estilos personalizados
+        self.linestyles = linestyles if linestyles is not None else ["-"] * len(self.ber_curves)
+        self.markers = markers if markers is not None else ["o"] * len(self.ber_curves)
+
     def plot(self,
              xlabel: str = r"$E_b/N_0$ (dB)",
              ylabel: str = "Taxa de Erro de Bit (BER)",
              logy: bool = True) -> None:
 
-        line_kwargs = {"linewidth": 2, "alpha": 1.0, "marker": "o"}
-        line_kwargs.update(self.style.get("line", {}))
-
         for i, curve in enumerate(self.ber_curves):
             color = self.apply_color(i)
             label = self.labels[i]
+            linestyle = self.linestyles[i % len(self.linestyles)]
+            marker = self.markers[i % len(self.markers)]
+
+            plot_kwargs = {"linewidth": 2, "alpha": 1.0,
+                           "linestyle": linestyle,
+                           "marker": marker}
+
             if color is not None:
-                self.ax.plot(self.EbN0, curve, label=label, color=color, **line_kwargs)
+                self.ax.plot(self.EbN0, curve, label=label, color=color, **plot_kwargs)
             else:
-                self.ax.plot(self.EbN0, curve, label=label, **line_kwargs)
+                self.ax.plot(self.EbN0, curve, label=label, **plot_kwargs)
 
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
 
-        # Escala logarítmica no eixo Y
         if logy:
             self.ax.set_yscale("log")
             self.ax.grid(True, which="both", axis="y", linestyle="--", color="gray", alpha=0.6)
-
 
         self.apply_ax_style()

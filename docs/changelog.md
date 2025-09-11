@@ -35,9 +35,9 @@
 
 ---
 ### v1.0.3 - Channel Encoding 
-    - [X] Alterar escala y do detector para até -40dB
-    - [] Adicionar opcionalmente um vetor de payload para o datagrama argos.
-    - [] Adicionar curva QPSK teórico (q sqrt(2ebn0))
+- [X] Alterar escala y do detector para até -40dB
+- [X] Adicionar opcionalmente um vetor de payload para o datagrama argos.
+- [X] Adicionar curva QPSK teórico (q sqrt(2ebn0))
 - [X] Alterar calculo de SNR vs BER para considerar erro de bit
     - [X] Fixar a seed do gerador de números aleatórios para classe noise.
     - [X] Fixar a seed no gerador de números aleatórios para classe datagrama.
