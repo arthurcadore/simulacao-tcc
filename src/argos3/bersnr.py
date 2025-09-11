@@ -295,14 +295,12 @@ class BERSNR_QPSK:
         Returns:
             ber_teorico (np.ndarray): Vetor de valores de BER teórica para cada Eb/N0 da classe.
         """
-        # Converter Eb/N0 de dB para valor linear
+
         ebn0_lin = 10 ** (self.EbN0_values / 10)
-
-        # Calcular o argumento da função Q
-        argument = np.sqrt(2 * ebn0_lin)
-
-        # Aplicar Q(x) = 0.5 * erfc(x / sqrt(2))
-        ber_teorico = 0.5 * erfc(argument / np.sqrt(2))
+        
+        # argumento da função Q(x)
+        x = np.sqrt(2 * ebn0_lin)
+        ber_teorico = 0.5 * erfc(x / np.sqrt(2))
 
         return ber_teorico
 
