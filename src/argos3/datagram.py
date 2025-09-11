@@ -13,7 +13,7 @@ import json
 from .plotter import BitsPlot, create_figure, save_figure
 
 class Datagram: 
-    def __init__(self, pcdnum=None, numblocks=None, streambits=None, seed=None):
+    def __init__(self, pcdnum=None, numblocks=None, streambits=None, seed=None, payload=None):
         r"""
         Gera um datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
@@ -24,11 +24,13 @@ class Datagram:
             numblocks (int): Quantidade de blocos de dados. Necessário para o modo TX.
             streambits (np.ndarray): Sequência de bits do datagrama. Necessário para o modo RX.
             seed (int): Seed do gerador de números aleatórios.
-        
+            payload (np.ndarray): Payload do datagrama. 
+
         Raises:
             ValueError: Se o número de blocos não estiver entre 1 e 8.
             ValueError: Se o número PCD não estiver entre 0 e 1048575 $(2^{20} - 1)$.
             ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
+            ValueError: Se o payload não for fornecido ou se o comprimento do payload não for o mesmo que o número de blocos.
 
         Exemplo: 
             ![pageplot](assets/example_datagram_time.svg)
@@ -45,17 +47,24 @@ class Datagram:
                 raise ValueError("O número de blocos deve estar entre 1 e 8.")
             if not (0 <= pcdnum <= 1048575):  # 2^20 - 1
                 raise ValueError("O número PCD deve estar entre 0 e 1048575.")
+            if (payload is not None) and (len(payload) != (numblocks -1) * 32 + 24):
+                raise ValueError("O payload deve ter o mesmo comprimento que o número de blocos.")
 
             self.pcdnum = pcdnum
             self.numblocks = numblocks
             self.rng = np.random.default_rng(seed)
-            self.blocks = self.generate_blocks()
+
+            if payload is not None:
+                self.blocks = payload
+            else:
+                self.blocks = self.generate_blocks()
+
             self.pcdid = self.generate_pcdid()
             self.tail = self.generate_tail()
             self.msglength = self.generate_msglength()
             self.streambits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
             self.blocks_json = self.parse_datagram()
-        
+
         # construtor RX  
         elif streambits is not None:
             self.streambits = streambits
@@ -283,10 +292,6 @@ class Datagram:
         return json.dumps(data, indent=2)
 
 if __name__ == "__main__":
-    r"""
-
-    """
-
     print("\n\nTransmissor:")
     datagram_tx = Datagram(pcdnum=123456, numblocks=2, seed=10)
     print(datagram_tx.parse_datagram())
@@ -311,6 +316,23 @@ if __name__ == "__main__":
     save_figure(fig_datagram, "example_datagram_time.pdf")
 
     # Receptor
+    bits = datagram_tx.streambits
+
+    print("\n\nReceptor: ")
+    datagram_rx = Datagram(streambits=bits)
+    print(datagram_rx.parse_datagram())
+    print("Stream bits: ", ''.join(str(b) for b in datagram_rx.streambits))
+
+
+    # Teste com payload:
+
+    # Gera um vetor com 24 uns
+    payload = np.ones(24, dtype=np.uint8)
+
+    datagram_tx = Datagram(pcdnum=123456, numblocks=1, payload=payload, seed=10)
+    print(datagram_tx.parse_datagram())
+    print("Stream bits: ", ''.join(str(b) for b in datagram_tx.streambits))
+
     bits = datagram_tx.streambits
 
     print("\n\nReceptor: ")
