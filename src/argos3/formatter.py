@@ -64,9 +64,9 @@ class Formatter:
         if self.type == 0:  # RRC
             self.g = self.rrc_pulse()
         elif self.type == 1:  # Manchester
-            self.g = self.manchester_pulse()
+            self.g, self.g_left, self.g_right = self.manchester_pulse()
 
-    def rrc_pulse(self):
+    def rrc_pulse(self, shift=0.0):
         r"""
         Gera o pulso Root Raised Cosine ($RRC$). O pulso $RRC$ no dominio do tempo é definido pela expressão abaixo.
 
@@ -80,15 +80,18 @@ class Formatter:
             - $T_b$: Período de bit.
             - $t$: Vetor de tempo.
 
-        Returns:
-           rc (np.ndarray): Pulso RRC.
+        Args: 
+            - shift: Deslocamento no tempo.
 
-        Exemplo: 
-            - ![pageplot](assets/example_formatter_impulse.svg)
+        Returns:
+           rc (np.ndarray): Pulso RRC normalizado.
         """
-        self.t_rc = np.array(self.t_rc, dtype=float) 
-        rc = np.zeros_like(self.t_rc)
-        for i, ti in enumerate(self.t_rc):
+        self.t_rc = np.array(self.t_rc, dtype=float)
+        # aplica deslocamento no tempo
+        t_shifted = self.t_rc - shift
+
+        rc = np.zeros_like(t_shifted)
+        for i, ti in enumerate(t_shifted):
             if np.isclose(ti, 0.0):
                 rc[i] = 1.0 + self.alpha * (4/np.pi - 1)
             elif self.alpha != 0 and np.isclose(np.abs(ti), self.Tb/(4*self.alpha)):
@@ -101,49 +104,33 @@ class Formatter:
                       4 * self.alpha * (ti / self.Tb) * np.cos(np.pi * ti * (1 + self.alpha) / self.Tb)
                 den = np.pi * ti * (1 - (4 * self.alpha * ti / self.Tb) ** 2) / self.Tb
                 rc[i] = num / den
-                
+
         # Normaliza energia para 1
         rc = rc / np.sqrt(np.sum(rc**2))
         return rc
     
     def manchester_pulse(self):
         r"""
-        Pulso Manchester como diferença de dois RRC simetricamente deslocados:
-            g(t) = g_RRC(t + T_b/4) - g_RRC(t - T_b/4)
+        Pulso Manchester como diferença de dois RRC simetricamente deslocados. 
+
+        $$
+            g_{MAN}(t) = g_{RRC}(t + T_b/2) - g_{RRC}(t - T_b/2)
+        $$
+
+        Sendo: 
+            - $g_{MAN}(t)$: Pulso formatador Manchester no dominio do tempo.
+            - $g_{RRC}(t)$: Pulso formatador $RRC$ no dominio do tempo.
+            - $T_b$: Período de bit.
+            - $t$: Vetor de tempo.
+
+        Exemplo: 
+            ![pageplot](assets/example_formatter_impulse_man.svg)
         """
-        # Base temporal e parâmetros
-        t = np.asarray(self.t_rc, dtype=float)
-        Tb = self.Tb
-        sps = int(self.sps)
-        if sps < 2:
-            sps = 2
-            self.sps = sps
+        g_left = self.rrc_pulse(shift=self.Tb/2)
+        g_right = -self.rrc_pulse(shift=-self.Tb/2)
+        g = g_left + g_right
 
-        # Gera o RRC centrado em 0
-        g_rrc = self.rrc_pulse()
-
-        def shift_with_zeros(x, k):
-            y = np.zeros_like(x)
-            N = len(x)
-            if k > 0:           # desloca para a direita
-                y[k:] = x[:N-k]
-            elif k < 0:         # desloca para a esquerda
-                k = -k
-                y[:N-k] = x[k:]
-            else:
-                y[:] = x
-            return y
-
-        # Deslocamento de +/- T_b/4 em amostras (≈ sps/4)
-        q = max(1, int(round(sps/4)))   # garante ao menos 1 amostra de deslocamento
-
-        # g(t) = g_RRC(t + Tb/4) - g_RRC(t - Tb/4)
-        g_left  = shift_with_zeros(g_rrc, -q)   # centro em -Tb/4
-        g_right = shift_with_zeros(g_rrc,  +q)  # centro em +Tb/4
-        g = g_left - g_right
-
-        self.g = g
-        return g
+        return g, g_left, g_right
 
     def apply_format(self, symbols, add_prefix=True):
         r"""
@@ -288,7 +275,7 @@ if __name__ == "__main__":
     save_figure(fig_format, "example_formatter_time.pdf")
 
 
-    ##### TESTE V1.0.3
+    ##### TESTE V1.0.5
     encoder_nrz = Encoder(method="NRZ")
     encoder_man = Encoder(method="NRZ")
 
@@ -301,13 +288,27 @@ if __name__ == "__main__":
     dI2 = formatterI.apply_format(Xnrz2)
     dQ2 = formatterQ.apply_format(Yman2)
 
-    fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
+    fig_impulse, grid_impulse = create_figure(3, 1, figsize=(16, 9))
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0, 0),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-30, 30))
+    ).plot(label=r"$g_{MAN}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (1, 0),
+        formatterQ.t_rc, formatterQ.g_left,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g_{L}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    ImpulseResponsePlot(
+        fig_impulse, grid_impulse, (2, 0),
+        formatterQ.t_rc, formatterQ.g_right,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g_{R}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse_man.pdf")   

@@ -34,35 +34,31 @@
     - [X] instanciar cadeia de recepção para cada portadora
 
 ---
-### v1.0.3 - BERSNR
+### v1.0.3 - BERSNR e Sincronização
 - [X] Alterar escala y do detector para até -40dB
 - [X] Adicionar opcionalmente um vetor de payload para o datagrama argos.
 - [X] Adicionar curva QPSK teórico (q sqrt(2ebn0))
 - [X] Alterar calculo de SNR vs BER para considerar erro de bit
     - [X] Fixar a seed do gerador de números aleatórios para classe noise.
     - [X] Fixar a seed no gerador de números aleatórios para classe datagrama.
-
----
-### v1.0.4 - Sincronismo perfeito
 - [X] Adicionar sincronismo perfeito
     - [X] Criar vetor de sincronismo com mesmo fs e sequencia esperada
     - [X] Criar função de correlação entre sinal recebido e vetor de sincronismo
     - [X] Identificar instante de maior correlação, instante otimo para amostragem. 
-    - [ ] Alterar cadeia do receiver para comportar o uso do sincronismo
+    - [X] Alterar cadeia do receiver para comportar o uso do sincronismo
+
+### v1.0.5 - Channel Encoding 
+- [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
+- [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
+- [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
+- [ ] Otimizar MatchedFilter para consumir formatter.
 
 
 ---
-### v1.0.5 - Documentation
+### v1.0.6 - Documentation
 - [ ] Otimizar classes de plots
     - [ ] Verificar plot de constelação, normalização do sinal recebido
 - [ ] Adicionar documentação interna as classes
     - [ ] Verificar equacionamento sklar e alterar nome das variáveis.
     - [ ] Otimizar parse do datagrama ARGOS-3
     - [ ] Adicionar melhor documentação a aba inicio
-
-
-### v1.0.6 - Channel Encoding 
-- [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
-- [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
-- [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
-- [ ] Otimizar MatchedFilter para consumir formatter.
