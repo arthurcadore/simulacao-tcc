@@ -291,7 +291,7 @@ if __name__ == "__main__":
     dI2 = formatterI.apply_format(Xnrz2)
     dQ2 = formatterQ.apply_format(Yman2)
 
-    fig_impulse, grid_impulse = create_figure(3, 1, figsize=(16, 9))
+    fig_impulse, grid_impulse = create_figure(2, 1, figsize=(16, 9))
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0, 0),
         formatterQ.t_rc, formatterQ.g,
@@ -301,17 +301,15 @@ if __name__ == "__main__":
 
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (1, 0),
-        formatterQ.t_rc, formatterQ.g_left,
+        formatterQ.t_rc, [formatterQ.g_left, formatterQ.g_right],
         t_unit="ms",
-        colors="darkorange",
-    ).plot(label=r"$g_{L}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
-
-    ImpulseResponsePlot(
-        fig_impulse, grid_impulse, (2, 0),
-        formatterQ.t_rc, formatterQ.g_right,
-        t_unit="ms",
-        colors="darkorange",
-    ).plot(label=r"$g_{R}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        colors=["darkorange", "steelblue"],
+    ).plot(
+        label=[r"$g_{L}(t)$", r"$g_{R}(t)$"],
+        xlabel=r"Tempo ($ms$)",
+        ylabel="Amplitude",
+        xlim=(-15, 15)
+    )
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse_man.pdf")   

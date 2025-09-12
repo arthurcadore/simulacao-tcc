@@ -593,18 +593,23 @@ class ImpulseResponsePlot(BasePlot):
                  grid: gridspec.GridSpec,
                  pos,
                  t_imp: np.ndarray,
-                 impulse_response: np.ndarray,
+                 impulse_response: Union[np.ndarray, List[np.ndarray]],
                  t_unit: str = "ms",
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t_imp = t_imp
-        self.impulse_response = impulse_response
+
+        if isinstance(impulse_response, np.ndarray):
+            self.impulse_response = [impulse_response]
+        else:
+            self.impulse_response = impulse_response
+
         self.t_unit = t_unit
 
     def plot(self,
-             label: Optional[str] = None,
+             label: Optional[Union[str, List[str]]] = None,
              xlabel: Optional[str] = None,
              ylabel: Optional[str] = None,
              xlim: Optional[Tuple[float, float]] = None) -> None:
@@ -619,21 +624,18 @@ class ImpulseResponsePlot(BasePlot):
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
 
-        color = self.apply_color(0) or "red"
-        lbl = label if label else (self.labels[0] if self.labels else None)
-
-        self.ax.plot(t_plot, self.impulse_response,
-                     color=color, label=lbl, **line_kwargs)
-
-        if xlabel is not None:
-            self.ax.set_xlabel(xlabel)
+        if isinstance(label, str) or label is None:
+            labels = [label] * len(self.impulse_response)
         else:
-            self.ax.set_xlabel(default_xlabel)
+            labels = label
 
-        if ylabel is not None:
-            self.ax.set_ylabel(ylabel)
-        else:
-            self.ax.set_ylabel("Amplitude")
+        for i, resp in enumerate(self.impulse_response):
+            color = self.apply_color(i) or None
+            lbl = labels[i] if labels and i < len(labels) else None
+            self.ax.plot(t_plot, resp, color=color, label=lbl, **line_kwargs)
+
+        self.ax.set_xlabel(xlabel if xlabel is not None else default_xlabel)
+        self.ax.set_ylabel(ylabel if ylabel is not None else "Amplitude")
 
         if xlim is not None:
             self.ax.set_xlim(xlim)
