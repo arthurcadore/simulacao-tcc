@@ -10,7 +10,7 @@ from .plotter import ImpulseResponsePlot, TimePlot, EncodedBitsPlot, create_figu
 from .encoder import Encoder
 
 class Formatter:
-    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", prefix_duration=0.082, channel=None):
+    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", prefix_duration=0.082, channel=None, bits_per_symbol=1):
         r"""
         Inicializa um formatador, utilizado preparar os símbolos para modulação.
 
@@ -22,6 +22,7 @@ class Formatter:
             type (str): Tipo de pulso, atualmente apenas $RRC$ é suportado.
             prefix_duration (int): Duração da portadora pura no inicio do vetor
             channel (str): Canal a ser formatado, apenas $I$ e $Q$ são suportados.
+            bits_per_symbol (int): Número de bits por símbolo.
 
         Raises:
             ValueError: Se o tipo de pulso não for suportado.
@@ -47,6 +48,7 @@ class Formatter:
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
         self.span = span
+        self.bits_per_symbol = bits_per_symbol
         self.t_rc = np.linspace(-span * self.Tb, span * self.Tb, span * self.sps * 2)
 
         type_map = {
@@ -126,8 +128,8 @@ class Formatter:
         Exemplo: 
             ![pageplot](assets/example_formatter_impulse_man.svg)
         """
-        g_left = self.rrc_pulse(shift=self.Tb/2)
-        g_right = -self.rrc_pulse(shift=-self.Tb/2)
+        g_left = -self.rrc_pulse(shift=self.Tb/2)
+        g_right = +self.rrc_pulse(shift=-self.Tb/2)
         g = g_left + g_right
 
         return g, g_left, g_right
@@ -157,14 +159,15 @@ class Formatter:
         # adiciona prefixo
         if add_prefix:
             symbols = self.add_prefix(symbols)
-            
+
         pulse = self.g
-        sps = self.sps
+        # samples per symbol agora é por bit dividido pelo número de bits por símbolo
+        sps = int(self.fs / (self.Rb / self.bits_per_symbol))
+
         upsampled = np.zeros(len(symbols) * sps)
         upsampled[::sps] = symbols
         out_sys = np.convolve(upsampled, pulse, mode='same')
 
-        # normalizar amplitude: 
         out_sys = out_sys / np.max(np.abs(out_sys))
         return out_sys
 
@@ -189,9 +192,9 @@ class Formatter:
             symbols (np.ndarray): Vetor de símbolos com prefixo adicionado.
         """
         if self.channel == "I":
-            carrier = np.ones(int(self.prefix_duration * self.Rb))
+            carrier = np.ones(int(self.prefix_duration * self.Rb / self.bits_per_symbol))
         elif self.channel == "Q":
-            carrier = np.zeros(int(self.prefix_duration * self.Rb))
+            carrier = np.zeros(int(self.prefix_duration * self.Rb / self.bits_per_symbol))
 
         symbols = np.concatenate([carrier, symbols])
         return symbols
@@ -208,8 +211,8 @@ if __name__ == "__main__":
     Xnrz1 = encoder_nrz.encode(bitN)
     Yman1 = encoder_man.encode(bitM)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q")
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q", bits_per_symbol=1)
     
     dI1 = formatterI.apply_format(Xnrz1)
     dQ1 = formatterQ.apply_format(Yman1)
@@ -282,8 +285,8 @@ if __name__ == "__main__":
     Xnrz2 = encoder_nrz.encode(bitN)
     Yman2 = encoder_man.encode(bitM)
 
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q")
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
 
     dI2 = formatterI.apply_format(Xnrz2)
     dQ2 = formatterQ.apply_format(Yman2)
@@ -335,7 +338,7 @@ if __name__ == "__main__":
         signals=[dQ1],
         labels=[r"$d_Q(t)$"],
         title=r"Canal $Q$",
-        xlim=(40, 140),
+        # xlim=(40, 140),
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -350,7 +353,7 @@ if __name__ == "__main__":
         signals=[dQ2],
         labels=[r"$d_Q(t)$"],
         title=r"Canal $Q$",
-        xlim=(40, 140),
+        # xlim=(40, 140),
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -359,4 +362,4 @@ if __name__ == "__main__":
     ).plot()
     
     fig_format.tight_layout()
-    save_figure(fig_format, "example_formatter_time_2.pdf")
+    save_figure(fig_format, "example_formatter_time_comparison.pdf")
