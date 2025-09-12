@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from .preamble import Preamble
 from .formatter import Formatter
 from .encoder import Encoder
-from .plotter import create_figure, save_figure, TimePlot, SincronizationPlot
+from .plotter import create_figure, save_figure, TimePlot, SincronizationPlot, CorrelationPlot
 from .multiplexer import Multiplexer
 
 class Synchronizer:
@@ -35,7 +35,20 @@ class Synchronizer:
 
     def create_sincronized_word(self, sync_word):
         r"""
-        Cria a palavra de sincronismo para o canal I e Q.
+        Monta os vetores de simbolo $S_I(t)$ e $S_Q(t)$, correspondente a palavra de sincronismo do canal $I$ e $Q$, respectivamente. O comprimento da palavra de sincronismo é dado por $\Delta \tau$, conforme a expressão abaixo.
+
+        $$
+        \Delta \tau = L_{sync} \cdot \frac{f_s}{R_b}
+        $$
+
+        Sendo: 
+            - $\Delta \tau$ é o comprimento da palavra de sincronismo.
+            - $L_{sync}$ é o comprimento da palavra de sincronismo de $S_I(t)$ e $S_Q(t)$.
+            - $R_b$ é a taxa de bits.
+            - $f_s$ é a frequência de amostragem.
+
+        Args:
+            sync_word (str): Palavra de sincronismo.
 
         Exemplo: 
             ![pageplot](assets/example_synchronizer_word.svg)
@@ -62,7 +75,7 @@ class Synchronizer:
 
         Sendo: 
             - $s(t)$ e $d(t)$ são os vetores de simbolos do sinal recebido e da palavra de sincronismo, respectivamente.
-            - $k$ é o index de tempo.
+            - $k$ é o index de tempo no vetor de correlação cruzada.
             - $c[k]$ é o valor da correlação cruzada para o index $k$.
 
         Em seguida localiza-se o indice de $c[k]$ com maior valor, resultando em $k_{max}$, este é o indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo, por fim, calcula-se o delay $\tau$. 
@@ -72,25 +85,31 @@ class Synchronizer:
         $$
 
         Sendo: 
-            $\tau$: Delay entre o sinal recebido e a palavra de sincronismo.
-            $f_s$: Frequência de amostragem do sinal recebido.
-            $k_{max}$: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.
+            - $\tau$: Delay entre o sinal recebido e a palavra de sincronismo.
+            - $f_s$: Frequência de amostragem do sinal recebido.
+            - $k_{max}$: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.
 
         Args:
             signal (np.ndarray): Sinal recebido.
-            channel (str): Canal de recebimento, 'I' ou 'Q'.
+            channel (str): Canal de recebimento, $I$ ou $Q$.
 
         Returns:
            delay (tuple): Tupla contendo o delay $\tau$, o delay $\tau_{min}$ e o delay $\tau_{max}$.
         
-        
+        Exemplo: 
+            ![pageplot](assets/example_synchronizer_corr.svg)
         """
         if channel == "I":
-            max_correlation_index = np.correlate(signal, self.sincronized_word_I, mode="same").argmax()
+            correlation_vec = np.correlate(signal, self.sincronized_word_I, mode="same")
+            max_correlation_index = correlation_vec.argmax()
         elif channel == "Q":
-            max_correlation_index = np.correlate(signal, self.sincronized_word_Q, mode="same").argmax()
+            correlation_vec = np.correlate(signal, self.sincronized_word_Q, mode="same")
+            max_correlation_index = correlation_vec.argmax()
         else:
             raise ValueError("Canal inválido. Use 'I' ou 'Q'.")
+        
+        # normaliza o vetor
+        correlation_vec = (correlation_vec - correlation_vec.min()) / (correlation_vec.max() - correlation_vec.min())
         
         # calcula o index do início e fim da palavra de sincronismo
         low_index = max_correlation_index - len(self.sincronized_word_I) // 2
@@ -100,7 +119,7 @@ class Synchronizer:
         low_delay = low_index / self.fs
         high_delay = high_index / self.fs
         delay = max_correlation_index / self.fs
-        return low_delay, high_delay, delay
+        return low_delay, high_delay, delay, correlation_vec
 
 if __name__ == "__main__":
     
@@ -112,7 +131,7 @@ if __name__ == "__main__":
         fig_format, grid_format, (0,0),
         t= np.arange(len(synchronizer.sincronized_word_I)) / synchronizer.formatterI.fs,
         signals=[synchronizer.sincronized_word_I],
-        labels=[r"$d_I(t)$"],
+        labels=[r"$S_I(t)$"],
         title=r"Canal $I$",
         colors="darkgreen",
         style={
@@ -125,7 +144,7 @@ if __name__ == "__main__":
         fig_format, grid_format, (1,0),
         t= np.arange(len(synchronizer.sincronized_word_Q)) / synchronizer.formatterQ.fs,
         signals=[synchronizer.sincronized_word_Q],
-        labels=[r"$d_Q(t)$"],
+        labels=[r"$S_Q(t)$"],
         title=r"Canal $Q$",
         colors="darkblue",
         style={
@@ -160,7 +179,7 @@ if __name__ == "__main__":
     dQ = formatterQ.apply_format(Yman)
     
     # Faz a sincronização apenas no canal Q, pois o canal I é apenas uns.
-    delayQ_min, delayQ_max, delayQ = synchronizer.correlation(dQ, "Q")
+    delayQ_min, delayQ_max, delayQ, corr_vec = synchronizer.correlation(dQ, "Q")
     delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
 
     print("Delay I (ms):", delayI_min)
@@ -204,6 +223,21 @@ if __name__ == "__main__":
 
     fig_sync.tight_layout()
     save_figure(fig_sync, "example_synchronizer_sync.pdf")
+
+    fig_corr, grid_corr = create_figure(1, 1, figsize=(16, 9))
+    CorrelationPlot(
+        fig_corr, grid_corr, (0, 0),
+        corr_vec=corr_vec,  
+        fs=formatterQ.fs,
+        xlim_ms=(40, 200),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        },
+    ).plot()
+    fig_corr.tight_layout()
+    save_figure(fig_corr, "example_synchronizer_corr.pdf")
     
     
     

@@ -259,7 +259,7 @@ if __name__ == "__main__":
     
     print("Frequência Portadora: ", fc)
     
-    datagram = Datagram(pcdnum=1234, numblocks=1)
+    datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
     bitsTX = datagram.streambits  
     transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=True)
     transmitter2 = Transmitter(datagram, fc=fc2, output_print=False, output_plot=True)
@@ -271,7 +271,7 @@ if __name__ == "__main__":
     s = s + s2
     
     ebn0_db = 20
-    add_noise = NoiseEBN0(ebn0_db=ebn0_db)
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
     s_noisy = add_noise.add_noise(s)
 
     # cria um sinal só de ruído para teste sem portadora

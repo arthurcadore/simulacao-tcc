@@ -17,7 +17,7 @@ from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
 from .synchronizer import Synchronizer
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, fc=None, output_print=True, output_plot=True):
@@ -407,11 +407,12 @@ class Receiver:
             delayQ (float): Delay do sinal $Q'(t)$.
 
         Exemplo:
-            ![pageplot](assets/receiver_sync_time.svg)
+            Tempo: ![pageplot](assets/receiver_sync_time.svg)
+            Módulo Correlação: ![pageplot](assets/receiver_sync_corr.svg)
         """
         synchronizer = Synchronizer(fs=self.fs, Rb=self.Rb)
 
-        delayQ_min, delayQ_max, delayQ = synchronizer.correlation(Qt_prime, "Q")
+        delayQ_min, delayQ_max, delayQ, corr_vec = synchronizer.correlation(Qt_prime, "Q")
 
         # Configurado para sincronização dos canais.
         delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
@@ -423,6 +424,22 @@ class Receiver:
             print("Delay Corr :", delayQ)
         
         if self.output_plot:
+
+            fig_corr, grid_corr = create_figure(1, 1, figsize=(16, 9))
+            CorrelationPlot(
+                fig_corr, grid_corr, (0, 0),
+                corr_vec=corr_vec,  
+                fs=self.fs,
+                xlim_ms=(40, 200),
+                colors="darkblue",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                },
+            ).plot()
+            fig_corr.tight_layout()
+            save_figure(fig_corr, "receiver_sync_corr.pdf")
+    
             fig_sync, grid_sync = create_figure(2,1, figsize=(16, 9))
 
             SincronizationPlot(
@@ -839,7 +856,7 @@ if __name__ == "__main__":
     t, s = transmitter.run()
 
     ebn0_db = 20
-    add_noise = NoiseEBN0(ebn0_db=ebn0_db)
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
     s_noisy = add_noise.add_noise(s)
     
     # s_noisy = s
