@@ -16,7 +16,8 @@ from .lowpassfilter import LPF
 from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot
+from .synchronizer import Synchronizer
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, fc=None, output_print=True, output_plot=True):
@@ -393,7 +394,77 @@ class Receiver:
 
         return It_prime, Qt_prime
 
-    def sampler(self, It_prime, Qt_prime, t):
+    def synchronizer(self, It_prime, Qt_prime):
+        r"""
+        Realiza a sincronização do sinal recebido, retornando o sinal sincronizado.
+
+        Args:
+            It_prime (np.ndarray): Sinal $I'(t)$ a ser sincronizado.
+            Qt_prime (np.ndarray): Sinal $Q'(t)$ a ser sincronizado.
+
+        Returns:
+            delayI (float): Delay do sinal $I'(t)$.
+            delayQ (float): Delay do sinal $Q'(t)$.
+
+        Exemplo:
+            ![pageplot](assets/receiver_sync_time.svg)
+        """
+        synchronizer = Synchronizer(fs=self.fs, Rb=self.Rb)
+
+        delayQ_min, delayQ_max, delayQ = synchronizer.correlation(Qt_prime, "Q")
+
+        # Configurado para sincronização dos canais.
+        delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
+
+        if self.output_print:
+            print("\n ==== SINCRONIZADOR ==== \n")
+            print("Delay Min  :", delayQ_min)
+            print("Delay Max  :", delayQ_max)
+            print("Delay Corr :", delayQ)
+        
+        if self.output_plot:
+            fig_sync, grid_sync = create_figure(2,1, figsize=(16, 9))
+
+            SincronizationPlot(
+                fig_sync, grid_sync, (0,0),
+                t= np.arange(len(It_prime)) / self.fs,
+                signal=It_prime,
+                sync_start=delayI_min,
+                sync_end=delayI_max,
+                max_corr=delayI,
+                title=r"Canal $I$",
+                labels=[r"$d_I(t)$"],
+                colors="darkgreen",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                },
+                xlim=(40, 200),
+            ).plot()
+
+            SincronizationPlot(
+                fig_sync, grid_sync, (1,0),
+                t=np.arange(len(Qt_prime)) / self.fs,
+                signal=Qt_prime,
+                sync_start=delayQ_min,
+                sync_end=delayQ_max,
+                max_corr=delayQ,
+                title=r"Canal $Q$",
+                labels=[r"$d_Q(t)$"],
+                colors="darkblue",
+                style={
+                    "line": {"linewidth": 2, "alpha": 1},
+                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+                },
+                xlim=(40, 200),
+            ).plot()
+
+            fig_sync.tight_layout()
+            save_figure(fig_sync, "receiver_sync_time.pdf")
+
+        return delayI_min, delayQ_min
+
+    def sampler(self, It_prime, Qt_prime, t, delayI, delayQ):
         r"""
         Realiza a decisão (amostragem e quantização) dos sinais $I'(t)$ e $Q'(t)$, retornando os vetores de simbolos $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$.
 
@@ -411,7 +482,7 @@ class Receiver:
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
-        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t, delay=0.08)
+        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t, delay=delayQ)
         i_signal_sampled = sampler.sample(It_prime)
         q_signal_sampled = sampler.sample(Qt_prime)
         t_sampled = sampler.sample(t)
@@ -748,7 +819,8 @@ class Receiver:
         xI_prime, yQ_prime = self.demodulate(s, t)
         dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
-        Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
+        delayI, delayQ = self.synchronizer(It_prime, Qt_prime)
+        Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t, delayI, delayQ)
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
         Xn_prime, Yn_prime = self.remove_preamble(Xn_prime, Yn_prime)
         vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
