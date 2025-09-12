@@ -290,9 +290,10 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
         """
 
-        matched_filter = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted")
-        It_prime = matched_filter.apply_filter(dI_prime)
-        Qt_prime = matched_filter.apply_filter(dQ_prime)
+        matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I")
+        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="Q")
+        It_prime = matched_filter_I.apply_filter(dI_prime)
+        Qt_prime = matched_filter_Q.apply_filter(dQ_prime)
 
         if self.output_print:
             print("\n ==== FILTRAGEM CASADA ==== \n")
@@ -303,8 +304,15 @@ class Receiver:
             fig_matched, grid_matched = create_figure(2, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
-                fig_matched, grid_matched, (0, slice(0, 2)),
-                matched_filter.t_impulse, matched_filter.impulse_response,
+                fig_matched, grid_matched, (0, 0),
+                matched_filter_I.t_rc, matched_filter_I.g_inverted,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+            ImpulseResponsePlot(
+                fig_matched, grid_matched, (0, 1),
+                matched_filter_Q.t_rc, matched_filter_Q.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -335,8 +343,15 @@ class Receiver:
             fig_matched_freq, grid_matched_freq = create_figure(3, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
-                fig_matched_freq, grid_matched_freq, (0, slice(0, 2)),
-                matched_filter.t_impulse, matched_filter.impulse_response,
+                fig_matched_freq, grid_matched_freq, (0, 0),
+                matched_filter_I.t_rc, matched_filter_I.g_inverted,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+            ImpulseResponsePlot(
+                fig_matched_freq, grid_matched_freq, (0, 1),
+                matched_filter_Q.t_rc, matched_filter_Q.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
