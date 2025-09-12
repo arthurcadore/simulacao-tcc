@@ -55,6 +55,7 @@ nav:
       - Detector: api/detector.md
       - Filtro Passa-Baixa: api/lpf.md
       - Filtro Casado: api/matchedfilter.md
+      - Sincronizador: api/synchronizer.md
       - Decisor: api/sampler.md
       - Viterbi: api/viterbi.md
   - Transmissor: api/transmitter.md

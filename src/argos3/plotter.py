@@ -1357,3 +1357,79 @@ class BersnrPlot(BasePlot):
             self.ax.grid(True, which="both", axis="y", linestyle="--", color="gray", alpha=0.6)
 
         self.apply_ax_style()
+
+class SincronizationPlot(BasePlot):
+    r"""
+    Classe para plotar um sinal no domínio do tempo com marcações de sincronismo.
+
+    Args:
+        fig (plt.Figure): Figura do plot
+        grid (gridspec.GridSpec): GridSpec do plot
+        pos (int ou tuple): Posição no GridSpec
+        t (np.ndarray): Vetor de tempo
+        signal (np.ndarray): Sinal no tempo
+        sync_start (float): Instante de início da palavra de sincronismo
+        sync_end (float): Instante de fim da palavra de sincronismo
+        max_corr (float): Instante do pico de correlação
+        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 t: np.ndarray,
+                 signal: np.ndarray,
+                 sync_start: float,
+                 sync_end: float,
+                 max_corr: float,
+                 time_unit: str = "ms",
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+
+        self.time_unit = time_unit.lower()
+        if self.time_unit == "ms":
+            self.t = t * 1e3
+            self.sync_start = sync_start * 1e3
+            self.sync_end = sync_end * 1e3
+            self.max_corr = max_corr * 1e3
+        else:
+            self.t = t
+            self.sync_start = sync_start
+            self.sync_end = sync_end
+            self.max_corr = max_corr
+
+        # Sempre armazenar o sinal como lista para seguir padrão do TimePlot
+        self.signals = [signal]
+        if self.labels is None:
+            self.labels = ["Signal"]
+
+    def plot(self) -> None:
+        line_kwargs = {"linewidth": 2, "alpha": 1.0}
+        line_kwargs.update(self.style.get("line", {}))
+
+        # Plot do sinal
+        for i, sig in enumerate(self.signals):
+            color = self.apply_color(i)
+            if color is not None:
+                self.ax.plot(self.t, sig, label=self.labels[i], color=color, **line_kwargs)
+            else:
+                self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
+
+        # Área de fundo entre início e fim de sincronismo
+        self.ax.axvspan(self.sync_start, self.sync_end,
+                        color="yellow", alpha=0.2, label="Preâmbulo")
+
+        # Linhas verticais de sincronismo
+        self.ax.axvline(self.sync_start, color="red", linestyle="--", linewidth=2, label="Início/Fim")
+        self.ax.axvline(self.sync_end, color="red", linestyle="--", linewidth=2)
+        self.ax.axvline(self.max_corr, color="k", linestyle="--", linewidth=2, label="Max. Corr")
+    
+        # Labels de eixo
+        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(r"Amplitude")
+
+        # Aplica estilo, limites e legenda
+        self.apply_ax_style()
+

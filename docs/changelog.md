@@ -44,11 +44,12 @@
 
 ---
 ### v1.0.4 - Sincronismo perfeito
-- [ ] Adicionar sincronismo perfeito
-    - [ ] Criar vetor de sincronismo com mesmo fs e sequencia esperada
-    - [ ] Criar função de correlação entre sinal recebido e vetor de sincronismo
-    - [ ] Identificar instante de maior correlação, instante otimo para amostragem. 
+- [X] Adicionar sincronismo perfeito
+    - [X] Criar vetor de sincronismo com mesmo fs e sequencia esperada
+    - [X] Criar função de correlação entre sinal recebido e vetor de sincronismo
+    - [X] Identificar instante de maior correlação, instante otimo para amostragem. 
     - [ ] Alterar cadeia do receiver para comportar o uso do sincronismo
+
 
 ---
 ### v1.0.5 - Documentation

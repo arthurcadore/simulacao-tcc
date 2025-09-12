@@ -6,27 +6,101 @@ Data: 28-07-2025
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
+
 from .preamble import Preamble
 from .formatter import Formatter
 from .encoder import Encoder
-from .plotter import create_figure, save_figure, TimePlot
+from .plotter import create_figure, save_figure, TimePlot, SincronizationPlot
+from .multiplexer import Multiplexer
 
 class Synchronizer:
-    def __init__(self, fs=128_000, Rb=400):
+    def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF"):
+        r"""
+         Inicializa o sincronizador de simbolos para identificar o momento de maior correlação entre o sinal recebido e o sinal de sincronismo.
+
+        Args:
+            fs (int): Frequência de amostragem do sinal recebido.
+            Rb (int): Taxa de transmissão do sinal recebido.
+            sync_word (str): Palavra de sincronismo.
+
+        Exemplo: 
+            ![pageplot](assets/example_synchronizer_sync.svg)
+        """
         self.fs = fs
         self.Rb = Rb
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
-        self.preamble = Preamble()
+        self.create_sincronized_word(sync_word)
+
+    def create_sincronized_word(self, sync_word):
+        r"""
+        Cria a palavra de sincronismo para o canal I e Q.
+
+        Exemplo: 
+            ![pageplot](assets/example_synchronizer_word.svg)
+        """
+        self.preamble = Preamble(sync_word)
         self.preamble_sI = self.preamble.preamble_sI
         self.preamble_sQ = self.preamble.preamble_sQ
         self.encoder_I = Encoder(method="NRZ")
         self.encoder_Q = Encoder(method="Manchester")
-        self.formatterI = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=6, type="RRC", channel="I")
-        self.formatterQ = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=6, type="RRC", channel="Q")
+        self.formatterI = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="I")
+        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="Q")
         self.sincronized_word_I = self.formatterI.apply_format(self.encoder_I.encode(self.preamble_sI), add_prefix=False)
         self.sincronized_word_Q = self.formatterQ.apply_format(self.encoder_Q.encode(self.preamble_sQ), add_prefix=False)
-    
+
+
+    def correlation(self, signal, channel):
+        r"""
+
+        Realiza a correlação cruzada entre o sinal recebido $s(t)$ e a palavra de sincronismo $d(t)$, para cada index de tempo $t$.
+
+        $$
+        c[k] = \sum_{t=0} s[t] d[t - k]
+        $$ 
+
+        Sendo: 
+            - $s(t)$ e $d(t)$ são os vetores de simbolos do sinal recebido e da palavra de sincronismo, respectivamente.
+            - $k$ é o index de tempo.
+            - $c[k]$ é o valor da correlação cruzada para o index $k$.
+
+        Em seguida localiza-se o indice de $c[k]$ com maior valor, resultando em $k_{max}$, este é o indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo, por fim, calcula-se o delay $\tau$. 
+
+        $$
+            \tau = \frac{k_{max}}{f_s}
+        $$
+
+        Sendo: 
+            $\tau$: Delay entre o sinal recebido e a palavra de sincronismo.
+            $f_s$: Frequência de amostragem do sinal recebido.
+            $k_{max}$: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.
+
+        Args:
+            signal (np.ndarray): Sinal recebido.
+            channel (str): Canal de recebimento, 'I' ou 'Q'.
+
+        Returns:
+           delay (tuple): Tupla contendo o delay $\tau$, o delay $\tau_{min}$ e o delay $\tau_{max}$.
+        
+        
+        """
+        if channel == "I":
+            max_correlation_index = np.correlate(signal, self.sincronized_word_I, mode="same").argmax()
+        elif channel == "Q":
+            max_correlation_index = np.correlate(signal, self.sincronized_word_Q, mode="same").argmax()
+        else:
+            raise ValueError("Canal inválido. Use 'I' ou 'Q'.")
+        
+        # calcula o index do início e fim da palavra de sincronismo
+        low_index = max_correlation_index - len(self.sincronized_word_I) // 2
+        high_index = max_correlation_index + len(self.sincronized_word_I) // 2
+
+        # calcula o delay com base no index: 
+        low_delay = low_index / self.fs
+        high_delay = high_index / self.fs
+        delay = max_correlation_index / self.fs
+        return low_delay, high_delay, delay
 
 if __name__ == "__main__":
     
@@ -62,5 +136,75 @@ if __name__ == "__main__":
     
     fig_format.tight_layout()
     save_figure(fig_format, "example_synchronizer_word.pdf")
+
+    # TESTE
+    preamble = Preamble()  
+    SI = preamble.preamble_sI
+    SQ = preamble.preamble_sQ
+    X = np.random.randint(0, 2, 60)
+    Y = np.random.randint(0, 2, 60)
+    
+    mux = Multiplexer()
+    Xn, Yn = mux.concatenate(SI, SQ, X, Y)
+
+    encoder_nrz = Encoder(method="NRZ")
+    encoder_man = Encoder(method="Manchester")
+    
+    Xnrz = encoder_nrz.encode(Xn)
+    Yman = encoder_man.encode(Yn)
+    
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I")
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q")
+    
+    dI = formatterI.apply_format(Xnrz)
+    dQ = formatterQ.apply_format(Yman)
+    
+    # Faz a sincronização apenas no canal Q, pois o canal I é apenas uns.
+    delayQ_min, delayQ_max, delayQ = synchronizer.correlation(dQ, "Q")
+    delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
+
+    print("Delay I (ms):", delayI_min)
+    print("Delay Q (ms):", delayQ_min)
+
+    fig_sync, grid_sync = create_figure(2,1, figsize=(16, 9))
+    
+    SincronizationPlot(
+        fig_sync, grid_sync, (0,0),
+        t= np.arange(len(dI)) / formatterI.fs,
+        signal=dI,
+        sync_start=delayI_min,
+        sync_end=delayI_max,
+        max_corr=delayI,
+        title=r"Canal $I$",
+        labels=[r"$d_I(t)$"],
+        colors="darkgreen",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        },
+        xlim=(40, 200),
+    ).plot()
+
+    SincronizationPlot(
+        fig_sync, grid_sync, (1,0),
+        t=np.arange(len(dQ)) / formatterQ.fs,
+        signal=dQ,
+        sync_start=delayQ_min,
+        sync_end=delayQ_max,
+        max_corr=delayQ,
+        title=r"Canal $Q$",
+        labels=[r"$d_Q(t)$"],
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        },
+        xlim=(40, 200),
+    ).plot()
+
+    fig_sync.tight_layout()
+    save_figure(fig_sync, "example_synchronizer_sync.pdf")
+    
+    
     
         
