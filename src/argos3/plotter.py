@@ -1372,6 +1372,9 @@ class SincronizationPlot(BasePlot):
         sync_end (float): Instante de fim da palavra de sincronismo
         max_corr (float): Instante do pico de correlação
         time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+
+    Exemplo: 
+        ![pageplot](assets/example_synchronizer_sync.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
