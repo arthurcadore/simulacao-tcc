@@ -931,6 +931,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../synchronizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sincronizador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sampler/" class="md-nav__link">
         
   
@@ -1448,52 +1471,11 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
 
     <div class="doc doc-contents ">
 
-        <p>Gera o pulso Manchester centralizado em <code>self.t_rc</code>, convoluindo com o pulso RRC. Conforme a expressão abaixo.</p>
-<div class="arithmatex">\[
-    g(t) = \sum_{n=0}^{N-1} x[n] * g_{RRC}(t - nT_b)
-\]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(g(t)\)</span>: Pulso Manchester no dominio do tempo.</li>
-<li><span class="arithmatex">\(x[n]\)</span> : Sinal Manchester ideal.</li>
-<li><span class="arithmatex">\(g_{RRC}(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> no dominio do tempo.</li>
-<li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
-<li><span class="arithmatex">\(n\)</span>: Indice de bit.</li>
-<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
-</ul>
-</details>
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>g</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Pulso Manchester no dominio do tempo.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <ul>
-<li><img alt="pageplot" src="../assets/example_formatter_impulse_man.svg" /></li>
-</ul>
+<details class="pulso-manchester-como-diferença-de-dois-rrc-simetricamente-deslocados" open>
+  <summary>Pulso Manchester como diferença de dois RRC simetricamente deslocados</summary>
+  <p>g(t) = g_RRC(t + T_b/4) - g_RRC(t - T_b/4)</p>
 </details>
 
     </div>
@@ -1504,7 +1486,7 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
 
 
 <h2 id="formatter.Formatter.apply_format" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">apply_format</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">apply_format</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">add_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 

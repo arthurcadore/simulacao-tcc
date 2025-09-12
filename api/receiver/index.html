@@ -836,6 +836,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../synchronizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sincronizador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sampler/" class="md-nav__link">
         
   
@@ -1027,6 +1050,15 @@
   <a href="#receiver.Receiver.matchedfilter" class="md-nav__link">
     <span class="md-ellipsis">
       matchedfilter
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.synchronizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      synchronizer
     </span>
   </a>
   
@@ -1783,7 +1815,7 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(-g(t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
+        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(g(-t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1897,8 +1929,111 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 <div class="doc doc-object doc-function">
 
 
+<h2 id="receiver.Receiver.synchronizer" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">synchronizer</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Realiza a sincronização do sinal recebido, retornando o sinal sincronizado.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>It_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> a ser sincronizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>Qt_prime</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> a ser sincronizado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>delayI</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Delay do sinal <span class="arithmatex">\(I'(t)\)</span>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>delayQ</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Delay do sinal <span class="arithmatex">\(Q'(t)\)</span>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/receiver_sync_time.svg" /></p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h2 id="receiver.Receiver.sampler" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">delayI</span><span class="p">,</span> <span class="n">delayQ</span><span class="p">)</span></code>
 
 </h2>
 

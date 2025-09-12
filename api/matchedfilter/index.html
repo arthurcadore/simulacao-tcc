@@ -14,7 +14,7 @@
         <link rel="prev" href="../lpf/">
       
       
-        <link rel="next" href="../sampler/">
+        <link rel="next" href="../synchronizer/">
       
       
       <link rel="icon" href="../../assets/icon.svg">
@@ -893,6 +893,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#matchedfilter.MatchedFilter.manchester_inverted_pulse" class="md-nav__link">
+    <span class="md-ellipsis">
+      manchester_inverted_pulse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#matchedfilter.MatchedFilter.calc_impulse_response" class="md-nav__link">
     <span class="md-ellipsis">
       calc_impulse_response
@@ -914,6 +923,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synchronizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sincronizador
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1283,7 +1315,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tipo de filtro, atualmente apenas "RRC-Inverted" é suportado.</p>
+                <p>Tipo de filtro, atualmente apenas "RRC-Inverted" e "Manchester-Inverted" são suportados.</p>
               </div>
             </td>
             <td>
@@ -1309,7 +1341,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se o tipo de pulso não for suportado.</p>
+                <p>Se o tipo de filtro não for suportado.</p>
               </div>
             </td>
           </tr>
@@ -1337,10 +1369,10 @@
 
     <div class="doc doc-contents ">
 
-        <p>Gera o pulso Root Raised Cosine (<span class="arithmatex">\(RRC\)</span>) invertido <span class="arithmatex">\(-g(t)\)</span> para filtragem casada do sinal de entrada.</p>
+        <p>Gera o pulso Root Raised Cosine (<span class="arithmatex">\(RRC\)</span>) invertido <span class="arithmatex">\(g(-t)\)</span> para filtragem casada do sinal de entrada.</p>
 <div class="arithmatex">\[
 \begin{equation}
-    -g(t) = - \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
+    g(-t) = \frac{(1 - \alpha) sinc((1- \alpha) (-t) / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) (-t) / T_b)}{1 - (4 \alpha (-t) / T_b)^2}
 \end{equation}
 \]</div>
 
@@ -1348,10 +1380,10 @@
 <details class="sendo" open>
   <summary>Sendo</summary>
   <ul>
-<li><span class="arithmatex">\(-g(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido no dominio do tempo.</li>
+<li><span class="arithmatex">\(g(-t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido no dominio do tempo.</li>
 <li><span class="arithmatex">\(\alpha\)</span>: Fator de roll-off do pulso.</li>
 <li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
-<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
+<li><span class="arithmatex">\((-t)\)</span>: Vetor de tempo invertido.</li>
 </ul>
 </details>
 
@@ -1370,7 +1402,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Pulso RRC invertido <span class="arithmatex">\(-g(t)\)</span>.</p>
+                <p>Pulso RRC invertido <span class="arithmatex">\(g(-t)\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1381,6 +1413,30 @@
 <details class="exemplo" open>
   <summary>Exemplo</summary>
   <p><img alt="pageplot" src="../assets/example_mf_impulse.svg" /></p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="matchedfilter.MatchedFilter.manchester_inverted_pulse" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">manchester_inverted_pulse</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Gera o pulso Manchester invertido como um filtro casado.</p>
+<p>g(-t) = g_RRC((-t) + T_b/4) - g_RRC((-t) - T_b/4)</p>
+
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_mf_impulse_manchester.svg" /></p>
 </details>
 
     </div>
@@ -1470,9 +1526,9 @@
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro casado com resposta ao impulso <span class="arithmatex">\(-g(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>. O processo de filtragem é dado pela expressão abaixo. </p>
+        <p>Aplica o filtro casado com resposta ao impulso <span class="arithmatex">\(g(-t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>. O processo de filtragem é dado pela expressão abaixo. </p>
 <div class="arithmatex">\[
-    x(t) = s(t) \ast h(t)
+    x(t) = s(t) \ast g(-t)
 \]</div>
 
 
@@ -1481,7 +1537,7 @@
   <ul>
 <li><span class="arithmatex">\(x(t)\)</span>: Sinal filtrado.</li>
 <li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada.</li>
-<li><span class="arithmatex">\(-g(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido.</li>
+<li><span class="arithmatex">\(g(-t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> invertido.</li>
 </ul>
 </details>
 

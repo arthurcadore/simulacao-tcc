@@ -940,6 +940,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../synchronizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sincronizador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sampler/" class="md-nav__link">
         
   
@@ -1202,7 +1225,7 @@
 
 
 <h2 id="datagram.Datagram.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">pcdnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">streambits</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">pcdnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">streambits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1272,6 +1295,38 @@
                   <code>None</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>seed</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Seed do gerador de números aleatórios.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>payload</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Payload do datagrama. </p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1312,6 +1367,16 @@
             <td>
               <div class="doc-md-description">
                 <p>Se os parâmetros <code>pcdnum</code> e <code>numblocks</code> ou <code>streambits</code> não forem fornecidos.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se o payload não for fornecido ou se o comprimento do payload não for o mesmo que o número de blocos.</p>
               </div>
             </td>
           </tr>

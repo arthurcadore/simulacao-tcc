@@ -836,6 +836,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../synchronizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sincronizador
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sampler/" class="md-nav__link">
         
   
@@ -1106,6 +1129,15 @@
   <a href="#bersnr.BERSNR_QPSK.run" class="md-nav__link">
     <span class="md-ellipsis">
       run
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bersnr.BERSNR_QPSK.teorical_qpsk" class="md-nav__link">
+    <span class="md-ellipsis">
+      teorical_qpsk
     </span>
   </a>
   
@@ -1689,6 +1721,66 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             <td>
               <div class="doc-md-description">
                 <p>Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="bersnr.BERSNR_QPSK.teorical_qpsk" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">teorical_qpsk</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calcula a curva teórica de <span class="arithmatex">\(BER\)</span> vs <span class="arithmatex">\(Eb/N_0\)</span> para QPSK, segundo a expressão abaixo.</p>
+<div class="arithmatex">\[
+P_b(x) = Q \left(x\right) \mapsto P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\frac{x}{\sqrt{2}}\right), \text{ onde } x = \sqrt{2 \cdot \frac{E_b}{N_0}}
+\]</div>
+<p>Podendo simplificar como: </p>
+<div class="arithmatex">\[
+P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\sqrt{\frac{E_b}{N_0}}\right)
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(P_b(x)\)</span>: Probabilidade de erro. </li>
+<li><span class="arithmatex">\(Q(x)\)</span>: Função de erro complementar.</li>
+<li><span class="arithmatex">\(x\)</span>: Argumento da função <span class="arithmatex">\(Q(x)\)</span>.</li>
+<li><span class="arithmatex">\(E_b\)</span>: Energia por bit.</li>
+<li><span class="arithmatex">\(N_0\)</span>: Potência do ruído. </li>
+<li><span class="arithmatex">\(erfc\)</span>: Função de erro complementar.</li>
+</ul>
+</details>
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>ber_teorico</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de valores de BER teórica para cada Eb/N0 da classe.</p>
               </div>
             </td>
           </tr>
