@@ -200,7 +200,7 @@ class Formatter:
 if __name__ == "__main__":
 
     bitN = np.random.randint(0, 2, 10)
-    bitM = np.random.randint(0, 2, 10)
+    bitM = np.ones(10)
 
     encoder_nrz = Encoder(method="NRZ")
     encoder_man = Encoder(method="Manchester")
@@ -277,7 +277,7 @@ if __name__ == "__main__":
 
     ##### TESTE V1.0.5
     encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="NRZ")
+    encoder_man = Encoder(method="NRZ2")
 
     Xnrz2 = encoder_nrz.encode(bitN)
     Yman2 = encoder_man.encode(bitM)

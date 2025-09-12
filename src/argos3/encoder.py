@@ -32,12 +32,13 @@ class Encoder:
         """
         method_map = {
             "nrz": 0,
-            "manchester": 1
+            "manchester": 1,
+            "nrz2": 2
         }
 
         method = method.lower()
         if method not in method_map:
-            raise ValueError("Método de codificação inválido. Use 'NRZ' ou 'Manchester'.")
+            raise ValueError("Método de codificação inválido. Use 'NRZ', 'Manchester' ou 'NRZ2'.")
                 
         self.method = method_map[method]
 
@@ -92,6 +93,15 @@ class Encoder:
                 elif bit == 1:
                     out[2*i] = +1
                     out[2*i + 1] = -1
+
+        # NRZ sem duplicata
+        elif self.method == 2:
+            out = np.empty(bitstream.size, dtype=int)
+            for i, bit in enumerate(bitstream):
+                if bit == 0:
+                    out[i] = -1
+                elif bit == 1:
+                    out[i] = +1
 
         else:
             raise ValueError(f"Método de codificação não implementado: {self.method}")
@@ -154,6 +164,12 @@ class Encoder:
                     decoded[i] = 0
                 else:
                     decoded[i] = 1
+        
+        elif self.method == 2:  # NRZ sem duplicata
+            n = encoded_stream.size 
+            decoded = np.empty(n, dtype=int)
+            for i in range(n):
+                decoded[i] = encoded_stream[i]
 
         else:
             raise ValueError(f"Método de decodificação não implementado: {self.method}")
