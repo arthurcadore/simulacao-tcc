@@ -1296,7 +1296,51 @@
 
     <div class="doc doc-contents ">
 
-        <p>Cria a palavra de sincronismo para o canal I e Q.</p>
+        <p>Monta os vetores de simbolo <span class="arithmatex">\(S_I(t)\)</span> e <span class="arithmatex">\(S_Q(t)\)</span>, correspondente a palavra de sincronismo do canal <span class="arithmatex">\(I\)</span> e <span class="arithmatex">\(Q\)</span>, respectivamente. O comprimento da palavra de sincronismo é dado por <span class="arithmatex">\(\Delta \tau\)</span>, conforme a expressão abaixo.</p>
+<div class="arithmatex">\[
+\Delta \tau = L_{sync} \cdot \frac{f_s}{R_b}
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\Delta \tau\)</span> é o comprimento da palavra de sincronismo.</li>
+<li><span class="arithmatex">\(L_{sync}\)</span> é o comprimento da palavra de sincronismo de <span class="arithmatex">\(S_I(t)\)</span> e <span class="arithmatex">\(S_Q(t)\)</span>.</li>
+<li><span class="arithmatex">\(R_b\)</span> é a taxa de bits.</li>
+<li><span class="arithmatex">\(f_s\)</span> é a frequência de amostragem.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>sync_word</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Palavra de sincronismo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
 <details class="exemplo" open>
@@ -1329,7 +1373,7 @@ c[k] = \sum_{t=0} s[t] d[t - k]
   <summary>Sendo</summary>
   <ul>
 <li><span class="arithmatex">\(s(t)\)</span> e <span class="arithmatex">\(d(t)\)</span> são os vetores de simbolos do sinal recebido e da palavra de sincronismo, respectivamente.</li>
-<li><span class="arithmatex">\(k\)</span> é o index de tempo.</li>
+<li><span class="arithmatex">\(k\)</span> é o index de tempo no vetor de correlação cruzada.</li>
 <li><span class="arithmatex">\(c[k]\)</span> é o valor da correlação cruzada para o index <span class="arithmatex">\(k\)</span>.</li>
 </ul>
 </details>        <p>Em seguida localiza-se o indice de <span class="arithmatex">\(c[k]\)</span> com maior valor, resultando em <span class="arithmatex">\(k_{max}\)</span>, este é o indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo, por fim, calcula-se o delay <span class="arithmatex">\(\tau\)</span>. </p>
@@ -1340,9 +1384,11 @@ c[k] = \sum_{t=0} s[t] d[t - k]
 
 <details class="sendo" open>
   <summary>Sendo</summary>
-  <p><span class="arithmatex">\(\tau\)</span>: Delay entre o sinal recebido e a palavra de sincronismo.
-<span class="arithmatex">\(f_s\)</span>: Frequência de amostragem do sinal recebido.
-<span class="arithmatex">\(k_{max}\)</span>: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.</p>
+  <ul>
+<li><span class="arithmatex">\(\tau\)</span>: Delay entre o sinal recebido e a palavra de sincronismo.</li>
+<li><span class="arithmatex">\(f_s\)</span>: Frequência de amostragem do sinal recebido.</li>
+<li><span class="arithmatex">\(k_{max}\)</span>: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.</li>
+</ul>
 </details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1381,7 +1427,7 @@ c[k] = \sum_{t=0} s[t] d[t - k]
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Canal de recebimento, 'I' ou 'Q'.</p>
+                <p>Canal de recebimento, <span class="arithmatex">\(I\)</span> ou <span class="arithmatex">\(Q\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1414,6 +1460,11 @@ c[k] = \sum_{t=0} s[t] d[t - k]
       </tbody>
     </table>
 
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_synchronizer_corr.svg" /></p>
+</details>
 
     </div>
 
