@@ -145,7 +145,7 @@ class Formatter:
         self.g = g
         return g
 
-    def apply_format(self, symbols):
+    def apply_format(self, symbols, add_prefix=True):
         r"""
         Formata os símbolos de entrada usando o pulso inicializado. O processo de formatação é dado por: 
 
@@ -168,7 +168,8 @@ class Formatter:
         """
 
         # adiciona prefixo
-        symbols = self.add_prefix(symbols)
+        if add_prefix:
+            symbols = self.add_prefix(symbols)
             
         pulse = self.g
         sps = self.sps

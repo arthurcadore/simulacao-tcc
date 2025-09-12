@@ -34,17 +34,13 @@
     - [X] instanciar cadeia de recepção para cada portadora
 
 ---
-### v1.0.3 - Channel Encoding 
+### v1.0.3 - BERSNR
 - [X] Alterar escala y do detector para até -40dB
 - [X] Adicionar opcionalmente um vetor de payload para o datagrama argos.
 - [X] Adicionar curva QPSK teórico (q sqrt(2ebn0))
 - [X] Alterar calculo de SNR vs BER para considerar erro de bit
     - [X] Fixar a seed do gerador de números aleatórios para classe noise.
     - [X] Fixar a seed no gerador de números aleatórios para classe datagrama.
-- [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
-- [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
-- [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
-- [ ] Otimizar MatchedFilter para consumir formatter.
 
 ---
 ### v1.0.4 - Sincronismo perfeito
@@ -62,3 +58,10 @@
     - [ ] Verificar equacionamento sklar e alterar nome das variáveis.
     - [ ] Otimizar parse do datagrama ARGOS-3
     - [ ] Adicionar melhor documentação a aba inicio
+
+
+### v1.0.6 - Channel Encoding 
+- [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
+- [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
+- [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
+- [ ] Otimizar MatchedFilter para consumir formatter.
