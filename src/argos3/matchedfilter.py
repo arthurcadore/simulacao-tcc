@@ -6,8 +6,9 @@ Data: 15-08-2025
 """
 
 import numpy as np
-from .plotter import create_figure, save_figure, ImpulseResponsePlot
+from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot
 from .formatter import Formatter
+from .encoder import Encoder
 
 class MatchedFilter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel=None, bits_per_symbol=1):
@@ -102,13 +103,30 @@ class MatchedFilter:
         return signal_filtered
 
 if __name__ == "__main__":
-    filtro = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="I")
+
+    bitN = np.random.randint(0, 2, 10)
+    bitM = np.ones(10)
+
+    encoder_nrz = Encoder(method="NRZ")
+    encoder_man = Encoder(method="NRZ2")
+
+    Xnrz2 = encoder_nrz.encode(bitN)
+    Yman2 = encoder_man.encode(bitM)
+
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+
+    dI2 = formatterI.apply_format(Xnrz2)
+    dQ2 = formatterQ.apply_format(Yman2)
+
+    filtroI = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+    filtroQ = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
 
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
-        filtro.t_rc, [filtro.g, filtro.g_inverted],
+        filtroI.t_rc, [filtroI.g, filtroI.g_inverted],
         t_unit="ms",
         colors=["darkorange", "steelblue"],
     ).plot(
@@ -121,13 +139,12 @@ if __name__ == "__main__":
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse.pdf")
     
-    filtro = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester-Inverted", channel="Q")
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
 
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
-        filtro.t_rc, [filtro.g, filtro.g_inverted],
+        filtroQ.t_rc, [filtroQ.g, filtroQ.g_inverted],
         t_unit="ms",
         colors=["darkorange", "steelblue"],
     ).plot(
@@ -139,3 +156,68 @@ if __name__ == "__main__":
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse_man.pdf")
+
+
+    dI2_filtered = filtroI.apply_filter(dI2)
+    dQ2_filtered = filtroQ.apply_filter(dQ2)
+
+    fig_time, grid_time = create_figure(2, 2, figsize=(16, 9))
+
+    TimePlot(
+        fig_time, grid_time, (0,0),
+        t= np.arange(len(dI2)) / formatterI.fs,
+        signals=[dI2],
+        labels=[r"$d_I(t)$"],
+        title=r"Canal $I$",
+        # xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (0,1),
+        t= np.arange(len(dQ2)) / formatterQ.fs,
+        signals=[dQ2],
+        labels=[r"$d_Q(t)$"],
+        title=r"Canal $Q$",
+        # xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+    
+    TimePlot(
+        fig_time, grid_time, (1,0),
+        t= np.arange(len(dI2_filtered)) / formatterI.fs,
+        signals=[dI2_filtered],
+        labels=[r"$d_I(t)$"],
+        title=r"Canal $I$",
+        # xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (1,1),
+        t= np.arange(len(dQ2_filtered)) / formatterQ.fs,
+        signals=[dQ2_filtered],
+        labels=[r"$d_Q(t)$"],
+        title=r"Canal $Q$",
+        # xlim=(40, 140),
+        colors="darkblue",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_mf_time.pdf")

@@ -494,7 +494,7 @@ class Receiver:
             fig_sync.tight_layout()
             save_figure(fig_sync, "receiver_sync_time.pdf")
 
-        return delayI_min, delayQ_min
+        return delayI_max, delayQ_max
 
     def sampler(self, It_prime, Qt_prime, t, delayI, delayQ):
         r"""
@@ -537,7 +537,7 @@ class Receiver:
                 t_sampled,
                 i_signal_sampled,
                 colors='darkgreen'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(40, 200), title="Componente $I$ amostrado")
+            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $I$ amostrado")
 
             SampledSignalPlot(
                 fig_sampler, grid_sampler, (1, 0),
@@ -546,7 +546,7 @@ class Receiver:
                 t_sampled,
                 q_signal_sampled,
                 colors='navy'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(40, 200), title="Componente $Q$ amostrado")
+            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $Q$ amostrado")
 
             fig_sampler.tight_layout()
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
@@ -587,7 +587,7 @@ class Receiver:
                 signals=[It_prime, Qt_prime],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(40, 200),
+                xlim=(80, 240),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
@@ -602,7 +602,7 @@ class Receiver:
                 signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$ - Decidido",
-                xlim=(40, 200),
+                xlim=(80, 240),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
@@ -676,52 +676,6 @@ class Receiver:
             fig_decoder.tight_layout()
             save_figure(fig_decoder, "receiver_decoder_time.pdf")
                  
-        return Xn_prime, Yn_prime
-
-    def remove_preamble(self, Xn_prime, Yn_prime):
-        r"""
-        Remove os 15 primeiros bits dos vetores de bits $X'n$ e $Y'n$, correspondentes ao preâmbulo adicionado no transmissor.
-
-        Args:
-            Xn_prime (np.ndarray): Sinal $X'n$ decodificado.
-            Yn_prime (np.ndarray): Sinal $Y'n$ decodificado.
-
-        Returns:
-            Xn_prime (np.ndarray): Sinal $X'n$ sem preâmbulo.
-            Yn_prime (np.ndarray): Sinal $Y'n$ sem preâmbulo.
-
-        Exemplo:
-            - Tempo: ![pageplot](assets/receiver_remove_preamble_time.svg)
-        """
-
-        Xn_prime = Xn_prime[15:]
-        Yn_prime = Yn_prime[15:]
-
-        if self.output_print:
-            print("\n ==== REMOÇÃO DO PREÂMBULO ==== \n")
-            print("X'n:", ''.join(map(str, Xn_prime)))
-            print("Y'n:", ''.join(map(str, Yn_prime)))
-        
-        if self.output_plot:
-            fig_remove_preamble, grid_remove_preamble = create_figure(2, 1, figsize=(16, 9))
-
-            BitsPlot(
-                fig_remove_preamble, grid_remove_preamble, (0, 0),
-                bits_list=[Xn_prime],
-                sections=[("$X_n'$", len(Xn_prime))],
-                colors=["darkgreen"]
-            ).plot(ylabel="$X_n$")
-
-            BitsPlot(
-                fig_remove_preamble, grid_remove_preamble, (1, 0),
-                bits_list=[Yn_prime],
-                sections=[("$Y_n'$", len(Yn_prime))],
-                colors=["navy"]
-            ).plot(xlabel="Index de Bit", ylabel="$Y_n$")
-
-            fig_remove_preamble.tight_layout()
-            save_figure(fig_remove_preamble, "receiver_remove_preamble_time.pdf")
-
         return Xn_prime, Yn_prime
 
     def descrambler(self, Xn_prime, Yn_prime):
@@ -854,7 +808,6 @@ class Receiver:
         delayI, delayQ = self.synchronizer(It_prime, Qt_prime)
         Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t, delayI, delayQ)
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
-        Xn_prime, Yn_prime = self.remove_preamble(Xn_prime, Yn_prime)
         vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
         ut = self.conv_decoder(vt0, vt1)
         return ut 
