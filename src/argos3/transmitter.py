@@ -285,9 +285,10 @@ class Transmitter:
         """
 
         encoderNRZ = Encoder("nrz")
-        encoderManchester = Encoder("manchester")
+        encoderManchester = Encoder("nrz2")
         Xnrz = encoderNRZ.encode(Xn)
         Yman = encoderManchester.encode(Yn)
+
         if self.output_print:
             print("\n ==== CODIFICAÇÃO DE LINHA ==== \n")
             print("Xnrz:", ' '.join(f"{x:+d}" for x in Xnrz[:40]),"...")
@@ -342,8 +343,8 @@ class Transmitter:
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
-        formatterI = Formatter(fs=self.fs, Rb=self.Rb, channel="I")
-        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, channel="Q")
+        formatterI = Formatter(fs=self.fs, Rb=self.Rb, type="RRC", channel="I", bits_per_symbol=1)
+        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2)
 
         dI = formatterI.apply_format(Xnrz)
         dQ = formatterQ.apply_format(Yman)
@@ -352,12 +353,20 @@ class Transmitter:
             print("\n ==== FORMATADOR ==== \n")
             print("dI:", ''.join(map(str, dI[:5])),"...")
             print("dQ:", ''.join(map(str, dQ[:5])),"...")
+            
         if self.output_plot:
             fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
-                fig_format, grid_format, (0, slice(0, 2)),
+                fig_format, grid_format, (0, 0),
                 formatterI.t_rc, formatterI.g,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+            ImpulseResponsePlot(
+                fig_format, grid_format, (0, 1),
+                formatterQ.t_rc, formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -396,8 +405,15 @@ class Transmitter:
             fig_format_freq, grid_format_freq = create_figure(2, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
-                fig_format_freq, grid_format_freq, (0, slice(0, 2)),
+                fig_format_freq, grid_format_freq, (0, 0),
                 formatterI.t_rc, formatterI.g,
+                t_unit="ms",
+                colors="darkorange",
+            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+            ImpulseResponsePlot(
+                fig_format_freq, grid_format_freq, (0, 1),
+                formatterQ.t_rc, formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))

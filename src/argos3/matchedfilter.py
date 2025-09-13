@@ -10,7 +10,7 @@ from .plotter import create_figure, save_figure, ImpulseResponsePlot
 from .formatter import Formatter
 
 class MatchedFilter:
-    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel=None):
+    def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel=None, bits_per_symbol=1):
         r"""
         Inicializa um filtro casado. O filtro casado é usado para maximizar a SNR do sinal recebido.
 
@@ -34,7 +34,7 @@ class MatchedFilter:
         self.sps = int(fs / Rb)
         self.span = span
         self.channel = channel
-
+        self.bits_per_symbol=bits_per_symbol
         type_map = {
             "rrc-inverted": 0,
             "manchester-inverted": 1
@@ -47,9 +47,9 @@ class MatchedFilter:
         self.type = type_map[type]
 
         if self.type == 0:  # RRC
-            self.formatter = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="RRC", channel=self.channel)
+            self.formatter = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="RRC", channel=self.channel, bits_per_symbol=self.bits_per_symbol)
         elif self.type == 1:  # Manchester
-            self.formatter = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="Manchester", channel=self.channel)
+            self.formatter = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="Manchester", channel=self.channel, bits_per_symbol=self.bits_per_symbol)
         
         self.g = self.formatter.g
         self.t_rc = self.formatter.t_rc
