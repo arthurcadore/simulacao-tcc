@@ -1216,7 +1216,7 @@
 
 
 <h2 id="formatter.Formatter.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;RRC&#39;</span><span class="p">,</span> <span class="n">prefix_duration</span><span class="o">=</span><span class="mf">0.082</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;RRC&#39;</span><span class="p">,</span> <span class="n">prefix_duration</span><span class="o">=</span><span class="mf">0.082</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1349,6 +1349,22 @@
                   <code>None</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>bits_per_symbol</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Número de bits por símbolo.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1403,7 +1419,7 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
 
 
 <h2 id="formatter.Formatter.rrc_pulse" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">rrc_pulse</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">rrc_pulse</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1426,6 +1442,37 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
 </ul>
 </details>
 
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>-</code>
+            </td>
+            <td>
+                  <code><span title="shift">shift</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Deslocamento no tempo.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
     <p><span class="doc-section-title">Returns:</span></p>
     <table>
       <thead>
@@ -1441,20 +1488,13 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Pulso RRC.</p>
+                <p>Pulso RRC normalizado.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
 
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <ul>
-<li><img alt="pageplot" src="../assets/example_formatter_impulse.svg" /></li>
-</ul>
-</details>
 
     </div>
 
@@ -1471,11 +1511,25 @@ EEL7062 – Princípios de Sistemas de Comunicação, Richard Demo Souza (Pg. 55
 
     <div class="doc doc-contents ">
 
+        <p>Pulso Manchester como diferença de dois RRC simetricamente deslocados. </p>
+<div class="arithmatex">\[
+    g_{MAN}(t) = g_{RRC}(t + T_b/2) - g_{RRC}(t - T_b/2)
+\]</div>
 
 
-<details class="pulso-manchester-como-diferença-de-dois-rrc-simetricamente-deslocados" open>
-  <summary>Pulso Manchester como diferença de dois RRC simetricamente deslocados</summary>
-  <p>g(t) = g_RRC(t + T_b/4) - g_RRC(t - T_b/4)</p>
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(g_{MAN}(t)\)</span>: Pulso formatador Manchester no dominio do tempo.</li>
+<li><span class="arithmatex">\(g_{RRC}(t)\)</span>: Pulso formatador <span class="arithmatex">\(RRC\)</span> no dominio do tempo.</li>
+<li><span class="arithmatex">\(T_b\)</span>: Período de bit.</li>
+<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
+</ul>
+</details>
+
+<details class="exemplo" open>
+  <summary>Exemplo</summary>
+  <p><img alt="pageplot" src="../assets/example_formatter_impulse_man.svg" /></p>
 </details>
 
     </div>

@@ -1083,15 +1083,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.remove_preamble" class="md-nav__link">
-    <span class="md-ellipsis">
-      remove_preamble
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#receiver.Receiver.descrambler" class="md-nav__link">
     <span class="md-ellipsis">
       descrambler
@@ -2251,111 +2242,6 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
   <summary>Exemplo</summary>
   <ul>
 <li>Tempo: <img alt="pageplot" src="../assets/receiver_decoder_time.svg" /></li>
-</ul>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="receiver.Receiver.remove_preamble" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">remove_preamble</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Remove os 15 primeiros bits dos vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>, correspondentes ao preâmbulo adicionado no transmissor.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>Xn_prime</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(X'n\)</span> decodificado.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>Yn_prime</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Y'n\)</span> decodificado.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>Xn_prime</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(X'n\)</span> sem preâmbulo.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td><code>Yn_prime</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Y'n\)</span> sem preâmbulo.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_remove_preamble_time.svg" /></li>
 </ul>
 </details>
 
