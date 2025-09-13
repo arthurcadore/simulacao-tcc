@@ -13,6 +13,7 @@ from .formatter import Formatter
 from .encoder import Encoder
 from .plotter import create_figure, save_figure, TimePlot, SincronizationPlot, CorrelationPlot
 from .multiplexer import Multiplexer
+from .matchedfilter import MatchedFilter
 
 class Synchronizer:
     def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF"):
@@ -31,6 +32,12 @@ class Synchronizer:
         self.Rb = Rb
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
+        self.encoder_I = Encoder(method="NRZ")
+        self.encoder_Q = Encoder(method="nrz2")
+        self.formatterI = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="I", bits_per_symbol=1)
+        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+        self.matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+        self.matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=1)
         self.create_sincronized_word(sync_word)
 
     def create_sincronized_word(self, sync_word):
@@ -53,16 +60,16 @@ class Synchronizer:
         Exemplo: 
             ![pageplot](assets/example_synchronizer_word.svg)
         """
+
         self.preamble = Preamble(sync_word)
         self.preamble_sI = self.preamble.preamble_sI
         self.preamble_sQ = self.preamble.preamble_sQ
-        self.encoder_I = Encoder(method="NRZ")
-        self.encoder_Q = Encoder(method="Manchester")
-        self.formatterI = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="I")
-        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="Q")
+
         self.sincronized_word_I = self.formatterI.apply_format(self.encoder_I.encode(self.preamble_sI), add_prefix=False)
         self.sincronized_word_Q = self.formatterQ.apply_format(self.encoder_Q.encode(self.preamble_sQ), add_prefix=False)
 
+        self.sincronized_word_I = self.matched_filter_I.apply_filter(self.sincronized_word_I)
+        self.sincronized_word_Q = self.matched_filter_Q.apply_filter(self.sincronized_word_Q)
 
     def correlation(self, signal, channel):
         r"""

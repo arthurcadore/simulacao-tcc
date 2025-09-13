@@ -80,13 +80,26 @@ class MatchedFilter:
         Returns:
             signal_filtered (np.ndarray): Sinal filtrado $x(t)$.
         """
-        signal_filtered = np.convolve(signal, self.g_inverted, mode='same')
+        # convolução completa
+        y_full = np.convolve(signal, self.g_inverted, mode='full')
 
-        # normalização
-        signal_filtered = signal_filtered / np.max(np.abs(signal_filtered))
+        # atraso do filtro (group delay)
+        delay = (len(self.g_inverted) - 1) // 2
+
+        # compensação: extrai a parte alinhada com o sinal original
+        start = delay
+        end = start + len(signal)
+        if end > len(y_full):  # padding de segurança
+            y_full = np.pad(y_full, (0, end - len(y_full)), mode='constant')
+
+        signal_filtered = y_full[start:end]
+
+        # normalização segura
+        maxv = np.max(np.abs(signal_filtered))
+        if maxv > 0:
+            signal_filtered = signal_filtered / maxv
 
         return signal_filtered
-
 
 if __name__ == "__main__":
     filtro = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="I")
