@@ -518,9 +518,6 @@ class EncodedBitsPlot(BasePlot):
              label: Optional[str] = None,
              xlim: Optional[Tuple[float, float]] = None) -> None:
 
-        if len(self.bits) % 2 != 0:
-            raise ValueError("O número de bits deve ser par para codificação em pares.")
-
         bits_up = np.repeat(self.bits, 2)
         x = np.arange(len(bits_up))
 

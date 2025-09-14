@@ -261,8 +261,8 @@ if __name__ == "__main__":
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
     bitsTX = datagram.streambits  
-    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=True)
-    transmitter2 = Transmitter(datagram, fc=fc2, output_print=False, output_plot=True)
+    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=False)
+    transmitter2 = Transmitter(datagram, fc=fc2, output_print=True, output_plot=True)
 
     t, s = transmitter.run()
     t2, s2 = transmitter2.run()

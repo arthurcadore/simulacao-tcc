@@ -142,9 +142,7 @@ class Encoder:
             out (np.ndarray): Vetor de bits decodificado.
 
         """
-        if encoded_stream.size % 2 != 0:
-            raise ValueError("Tamanho do vetor codificado inválido. Deve ser múltiplo de 2.")
-
+        
         n = encoded_stream.size // 2
         decoded = np.empty(n, dtype=int)
 
