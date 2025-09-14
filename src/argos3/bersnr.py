@@ -345,13 +345,14 @@ if __name__ == "__main__":
 
     print(ber_values_argos)
 
+    # QPSK Teorico
+    bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
+    
     # extrair os valores de Eb/N0 e BER
     bersnr_qpsk = ImportData("bersnr_qpsk").load()
     ber_values_qpsk = bersnr_qpsk[:, 1]
 
     print(ber_values_qpsk)
-    
-    bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
     print(bersnr_qpsk_teorico)
 
 
@@ -364,8 +365,8 @@ if __name__ == "__main__":
                linestyles=["-", "-", ":"],
                markers=["o", "s", "x"],
                title="Curva BER vs Eb/N0",
-               ylim=(1e-6, 1),
-               xlim=(-1, 12)
+               ylim=(1e-5, 1),
+               xlim=(-1, 10)
     ).plot()
     
     save_figure(fig, "ber_vs_ebn0.pdf")

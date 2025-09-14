@@ -58,6 +58,7 @@
 ### v1.0.6 - Documentation
 - [ ] Otimizar classes de plots
     - [ ] Verificar plot de constelação, normalização do sinal recebido
+- [ ] Otimizar classes de tx/rx, instânciar direto no construtor.
 - [ ] Adicionar documentação interna as classes
     - [ ] Verificar equacionamento sklar e alterar nome das variáveis.
     - [ ] Otimizar parse do datagrama ARGOS-3
