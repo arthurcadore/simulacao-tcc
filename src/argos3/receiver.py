@@ -291,7 +291,7 @@ class Receiver:
         """
 
         matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
         It_prime = matched_filter_I.apply_filter(dI_prime)
         Qt_prime = matched_filter_Q.apply_filter(dQ_prime)
 

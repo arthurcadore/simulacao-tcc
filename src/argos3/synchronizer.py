@@ -33,11 +33,11 @@ class Synchronizer:
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
         self.encoder_I = Encoder(method="NRZ")
-        self.encoder_Q = Encoder(method="nrz2")
+        self.encoder_Q = Encoder(method="Manchester")
         self.formatterI = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="I", bits_per_symbol=1)
-        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="Q", bits_per_symbol=1)
         self.matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        self.matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+        self.matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
         self.create_sincronized_word(sync_word)
 
     def create_sincronized_word(self, sync_word):
