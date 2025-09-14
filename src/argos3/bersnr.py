@@ -320,7 +320,7 @@ if __name__ == "__main__":
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
     ### ARGOS-3
-    reps = 256000
+    reps = 1048576
     print(f"[ARGOS-3] Maximo de bits transmitidos por Eb/N0: {reps}")
     bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=reps)
 
@@ -362,7 +362,8 @@ if __name__ == "__main__":
                linestyles=["-", "-", ":"],
                markers=["o", "s", "x"],
                title="Curva BER vs Eb/N0",
-               ylim=(1e-6, 1)
+               ylim=(1e-6, 1),
+               xlim=(-1, 12)
     ).plot()
     
     save_figure(fig, "ber_vs_ebn0.pdf")
