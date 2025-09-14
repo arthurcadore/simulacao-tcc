@@ -309,7 +309,7 @@ class BERSNR_QPSK:
 if __name__ == "__main__":
 
     # Define os valores de Eb/N0 para a simulação
-    EbN0_vec = np.arange(0, 12, 0.5)
+    EbN0_vec = np.arange(0, 9.5, 0.5)
 
     ref_values = [10000, 5000, 800, 200]
     ref_points = [0, 3, 6, 12]
@@ -345,9 +345,13 @@ if __name__ == "__main__":
     bersnr_argos = ImportData("bersnr_argos").load()
     ber_values_argos = bersnr_argos[:, 1]
 
+    print(ber_values_argos)
+
     # extrair os valores de Eb/N0 e BER
     bersnr_qpsk = ImportData("bersnr_qpsk").load()
     ber_values_qpsk = bersnr_qpsk[:, 1]
+
+    print(ber_values_qpsk)
 
     # extrair os valores de Eb/N0 e BER teórico
     fig, grid = create_figure(1, 1)
