@@ -322,12 +322,10 @@ if __name__ == "__main__":
     ### ARGOS-3
     reps = 1048576
     print(f"[ARGOS-3] Maximo de bits transmitidos por Eb/N0: {reps}")
-    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=8, numblocks=1, max_repetitions=reps)
+    bersnr_argos = BERSNR_ARGOS(EbN0_values=EbN0_vec, error_values=error_values, num_workers=64, numblocks=1, max_repetitions=reps)
 
     ### QPSK
     bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=50_000, max_repetitions=5000)
-    bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
-    print(bersnr_qpsk_teorico)
 
     # Simulação
     # ###############################################
@@ -352,6 +350,10 @@ if __name__ == "__main__":
     ber_values_qpsk = bersnr_qpsk[:, 1]
 
     print(ber_values_qpsk)
+    
+    bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
+    print(bersnr_qpsk_teorico)
+
 
     # extrair os valores de Eb/N0 e BER teórico
     fig, grid = create_figure(1, 1)
