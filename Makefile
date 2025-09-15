@@ -1,3 +1,9 @@
+LOG_DIR := ./logs
+LOG_FILE := $(LOG_DIR)/test.log
+
+$(LOG_DIR):
+	@mkdir -p $(LOG_DIR)
+
 .PHONY: all install test export-pdf export-pdf-show export-all clean
 
 all: install 
@@ -58,15 +64,17 @@ upload: build
 	@echo "Uploading to PyPI..."
 	.venv/bin/python3 -m twine upload dist/*
 
-test:
-	@echo "Rodando testes..."
+test: $(LOG_DIR)
+	@echo "Rodando testes..." | tee $(LOG_FILE)
 	@for f in src/argos3/*.py; do \
 		module=$$(basename $$f .py); \
 		if [ "$$module" != "bersnr" ] && [ "$$module" != "__init__" ] && [ "$$module" != "data" ]; then \
-			echo ""; \
-			echo "--------------------------------"; \
-			echo "Rodando $$module..."; \
-			echo ""; \
-			PYTHONWARNINGS="ignore" .venv/bin/python3 -m src.argos3.$$module; \
+			{ \
+				echo ""; \
+				echo "--------------------------------"; \
+				echo "Rodando $$module..."; \
+				echo ""; \
+				PYTHONWARNINGS="ignore" .venv/bin/python3 -m src.argos3.$$module; \
+			} | tee -a $(LOG_FILE); \
 		fi; \
 	done
