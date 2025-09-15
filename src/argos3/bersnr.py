@@ -101,7 +101,7 @@ class BERSNR_ARGOS:
         s_noisy = add_noise.add_noise(self.s)
         
         # Recebendo bits
-        bitsRX = self.receiver.run(s_noisy, self.t)
+        bitsRX = self.receiver.receive(s_noisy)
 
         # Contando erros entre bitsTX e bitsRX
         num_errors = sum(1 for tx, rx in zip(self.bitsTX, bitsRX) if tx != rx)

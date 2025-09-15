@@ -49,12 +49,15 @@ class Receiver:
         self.output_plot = output_plot
         self.preamble = preamble
         self.G = G
+        self.alpha = 0.8
+        self.span = 6
+        self.lpf_order = 6
 
         # Submodulos
         self.demodulator = Modulator(fc=self.fc, fs=self.fs)
-        self.lpf = LPF(cut_off=self.lpf_cutoff, order=6, fs=self.fs, type="butter")
-        self.matched_filterI = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb/2, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        self.matched_filterQ = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+        self.lpf = LPF(cut_off=self.lpf_cutoff, order=self.lpf_order, fs=self.fs, type="butter")
+        self.matched_filterI = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb/2, span=self.span, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+        self.matched_filterQ = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
         self.synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
         self.synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
         self.decoderI = Encoder("nrz")
@@ -846,24 +849,24 @@ class Receiver:
                 fig_datagram.tight_layout()
                 save_figure(fig_datagram, "receiver_datagram_time.pdf")
             
-            return datagramRX.parse_datagram(), True
+            return datagramRX, True
 
         except Exception as e:
             return ut, False
     
-    def run(self, s, t):
+    def receive(self, s):
         r"""
         Executa o processo de recepção, retornando o resultado da recepção.
 
         Args:
             s (np.ndarray): Sinal $s(t)$ recebido.
-            t (np.ndarray): Vetor de tempo.
-            fc (float): Frequência de portadora.
 
         Returns:
             datagramRX (np.ndarray): Datagrama gerado, ou vetor ut se houver erro.
-
         """
+
+        t = np.arange(0, len(s)/self.fs, 1/self.fs)
+
         xI_prime, yQ_prime = self.demodulate(s, t)
         dI_prime, dQ_prime= self.lowpassfilter(xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
@@ -878,38 +881,37 @@ class Receiver:
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
         vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
         ut = self.conv_decoder(vt0, vt1)
-        datagramRX = self.datagram(ut)
-        return datagramRX 
+
+        datagramRX, success = self.datagram(ut)
+        return datagramRX, success 
 
 
 if __name__ == "__main__":
 
-    fc = 4000
-
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
+    transmitter = Transmitter(fc=4000, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
-    bitsTX = datagramTX.streambits  
 
+    # Adicionando ruído ao sinal
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
-    s_noisy = add_noise.add_noise(s)
+    s = add_noise.add_noise(s)
     
-    # s_noisy = s
-
     print("\n ==== CANAL ==== \n")
-    print("s(t):", ''.join(map(str, s_noisy[:5])), "...")
+    print("s(t):", ''.join(map(str, s[:5])), "...")
     print("t:   ", ''.join(map(str, t[:5])), "...")
 
-    receiver = Receiver(fc=fc, output_print=True)
-    bitsRX, success = receiver.run(s_noisy, t)
+    receiver = Receiver(fc=4000, output_print=True)
+    datagramRX, success = receiver.receive(s)
         
     if not success:
+        bitsTX = datagramTX.streambits 
+        bitsRX = datagramRX
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))
-        num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
-        
+
         # Calcula a Taxa de Erro de Bit (BER)
+        num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
         ber = num_errors / len(bitsTX)
 
         print(f"Número de erros: {num_errors}")

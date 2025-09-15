@@ -254,40 +254,42 @@ class CarrierDetector:
 
 if __name__ == "__main__":
 
-    fc = np.random.randint(2, 12)*500
-    fc2 = fc + 2000
+    fc1 = np.random.randint(10, 50)*100
+    fc2 = fc1 + 2000
     
-    print("Frequência Portadora: ", fc)
+    print("Frequência Portadora 1: ", fc1)
+    print("Frequência Portadora 2: ", fc2)
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
     bitsTX = datagram.streambits  
-    transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=False)
-    transmitter2 = Transmitter(datagram, fc=fc2, output_print=True, output_plot=True)
+    transmitter1 = Transmitter(fc=fc1, output_print=False, output_plot=False)
+    transmitter2 = Transmitter(fc=fc2, output_print=True, output_plot=True)
 
-    t, s = transmitter.transmit()
-    t2, s2 = transmitter2.transmit()
+    t1, s1 = transmitter1.transmit(datagram)
+    t2, s2 = transmitter2.transmit(datagram)
+    st = s1 + s2
 
-    # soma os sinais
-    s = s + s2
-    
+    # Adicionando ruído ao sinal
+    print("\n ==== CANAL ==== \n")
+    print("s(t):", ''.join(map(str, st[:5])), "...")
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
-    s_noisy = add_noise.add_noise(s)
+    st = add_noise.add_noise(st)
 
     # cria um sinal só de ruído para teste sem portadora
-    # s_noisy = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
+    # st = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
     
+    # Detecção de portadora
     threshold = -8
-    detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
-    
-    results = detector.detect(s_noisy.copy())
+    detector = CarrierDetector(fs=transmitter1.fs, seg_ms=20, segments=2, threshold=threshold) 
+    results = detector.detect(st.copy())
 
     for idx, (seg, freqs) in enumerate(results, start=1):
         print(f"Segmento {idx}: {len(freqs)} frequências -> {freqs}")
 
     fig, grid = create_figure(2,1)
     DetectionFrequencyPlot(fig, grid, 0, 
-              fs=transmitter.fs, 
+              fs=transmitter1.fs, 
               signal=results[0][0], 
               threshold=threshold, 
               xlim=(1, 9),
@@ -298,7 +300,7 @@ if __name__ == "__main__":
     ).plot()
 
     DetectionFrequencyPlot(fig, grid, 1, 
-              fs=transmitter.fs, 
+              fs=transmitter1.fs, 
               signal=results[1][0], 
               threshold=threshold, 
               xlim=(1, 9),
@@ -317,8 +319,8 @@ if __name__ == "__main__":
     # Para cada frequência confirmada, executa a recepção
     for idx, freq in enumerate(confirmed_freqs, start=1):
         print(f"\nRecepção de $s(t)$ com $f_c = {freq} Hz$")
-        receiver = Receiver(fc=freq, fs=transmitter.fs, Rb=transmitter.Rb, output_print=True, output_plot=True)
-        bitsRX = receiver.run(s_noisy.copy(), t.copy())
+        receiver = Receiver(fc=freq, fs=transmitter1.fs, Rb=transmitter1.Rb, output_print=True, output_plot=True)
+        bitsRX = receiver.receive(st.copy())
             
         try:
             datagramRX = Datagram(streambits=bitsRX)
