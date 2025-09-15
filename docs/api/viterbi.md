@@ -1,5 +1,3 @@
-# Convolutional Decoder (Viterbi)
-
 ::: convolutional.DecoderViterbi
     options:
         extra:

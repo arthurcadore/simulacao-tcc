@@ -1,5 +1,3 @@
-# Filtro Passa Baixa
-
 ::: lowpassfilter.LPF
     options:
         extra:

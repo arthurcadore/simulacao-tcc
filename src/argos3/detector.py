@@ -1,9 +1,9 @@
-"""
-Implementação de um detector de portadora para recepção PTT-A3.
+# """
+# Implementação de um detector de portadora para recepção PTT-A3.
 
-Autor: Arthur Cadore
-Data: 07-09-2025
-"""
+# Autor: Arthur Cadore
+# Data: 07-09-2025
+# """
 
 import numpy as np
 from .plotter import create_figure, save_figure, DetectionFrequencyPlot

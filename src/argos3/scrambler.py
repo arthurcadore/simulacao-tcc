@@ -1,12 +1,12 @@
-"""
-Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
+# """
+# Implementação do embaralhador e desembaralhador compatível com o padrão PPT-A3.
 
-Referência:
-    AS3-SP-516-274-CNES (3.1.4.5)
+# Referência:
+#     AS3-SP-516-274-CNES (3.1.4.5)
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 from .plotter import save_figure, create_figure, BitsPlot

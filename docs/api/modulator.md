@@ -1,5 +1,3 @@
-# Modulador
-
 ::: modulator.Modulator
     options:
         extra:

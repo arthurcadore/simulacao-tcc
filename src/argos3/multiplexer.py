@@ -1,9 +1,9 @@
-"""
-Implementação do multiplexador. O multiplexador concatena os vetores I e Q de dois canais, conforme o padrão PPT-A3.
+# """
+# Implementação do multiplexador. O multiplexador concatena os vetores I e Q de dois canais, conforme o padrão PPT-A3.
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 from .plotter import create_figure, save_figure, BitsPlot

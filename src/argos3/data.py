@@ -1,3 +1,10 @@
+# """
+# Import e Export de dados para arquivos numpy. 
+
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
+
 import os
 import numpy as np
 

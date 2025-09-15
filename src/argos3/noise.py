@@ -1,9 +1,9 @@
-"""
-Implementação de um canal para aplicação de ruido AWGN.
+# """
+# Implementação de um canal para aplicação de ruido AWGN.
 
-Autor: Arthur Cadore
-Data: 16-08-2025
-"""
+# Autor: Arthur Cadore
+# Data: 16-08-2025
+# """
 
 import numpy as np
 from .datagram import Datagram

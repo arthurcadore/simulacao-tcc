@@ -1,9 +1,10 @@
-"""
-Implementação de um transmissor PTT-A3 com seus componentes.
+# """
+# Implementação de um transmissor PTT-A3 com seus componentes.
 
-Autor: Arthur Cadore
-Data: 16-08-2025
-"""
+# Autor: Arthur Cadore
+# Data: 16-08-2025
+# """
+
 import numpy as np
 from .formatter import Formatter
 from .convolutional import EncoderConvolutional

@@ -1,5 +1,3 @@
-# Decisor
-
 ::: sampler.Sampler
     options:
         extra:

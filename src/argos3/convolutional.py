@@ -1,12 +1,12 @@
-"""
-Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2, utilizado no sistema PTT-A3.
+# """
+# Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2, utilizado no sistema PTT-A3.
 
-Referência:
-    AS3-SP-516-274-CNES (seção 3.1.4.4)
+# Referência:
+#     AS3-SP-516-274-CNES (seção 3.1.4.4)
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 import komm 

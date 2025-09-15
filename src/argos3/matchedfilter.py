@@ -1,9 +1,9 @@
-"""
-Implementa uma classe de filtro casado para maximizar a SNR do sinal recebido.
+# """
+# Implementa uma classe de filtro casado para maximizar a SNR do sinal recebido.
 
-Autor: Arthur Cadore
-Data: 15-08-2025
-"""
+# Autor: Arthur Cadore
+# Data: 15-08-2025
+# """
 
 import numpy as np
 from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, BitsPlot

@@ -1,9 +1,10 @@
-"""
-Implementação de um modulador IQ para transmissão de sinais digitais.
+# """
+# Implementação de um modulador IQ para transmissão de sinais digitais.
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
+
 import numpy as np
 from .formatter import Formatter
 from .encoder import Encoder

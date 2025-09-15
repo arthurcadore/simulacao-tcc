@@ -1,12 +1,12 @@
-"""
-Implementa um datagrama compatível com o padrão PPT-A3.
+# """
+# Implementa um datagrama compatível com o padrão PPT-A3.
 
-Referência:
-    AS3-SP-516-274-CNES (seção 3.1.4)
+# Referência:
+#     AS3-SP-516-274-CNES (seção 3.1.4)
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 import json

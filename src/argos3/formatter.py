@@ -1,9 +1,9 @@
-"""
-Implementa um formatador de pulso para transmissão de sinais digitais. 
+# """
+# Implementa um formatador de pulso para transmissão de sinais digitais. 
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 from .plotter import ImpulseResponsePlot, TimePlot, EncodedBitsPlot, create_figure, save_figure

@@ -1,5 +1,3 @@
-# Sincronizador
-
 ::: synchronizer.Synchronizer
     options:
         extra:

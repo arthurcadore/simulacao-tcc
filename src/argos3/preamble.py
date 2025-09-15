@@ -1,12 +1,12 @@
-"""
-Implementa uma palavra de sincronismo compatível com o padrão PPT-A3.
+# """
+# Implementa uma palavra de sincronismo compatível com o padrão PPT-A3.
 
-Referência:
-    AS3-SP-516-274-CNES (seção 3.1.4.6)
+# Referência:
+#     AS3-SP-516-274-CNES (seção 3.1.4.6)
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 from .plotter import save_figure, create_figure, BitsPlot

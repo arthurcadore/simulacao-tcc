@@ -1,5 +1,3 @@
-# Filtro Casado
-
 ::: matchedfilter.MatchedFilter
     options:
         extra:

@@ -1,5 +1,3 @@
-# Plotter
-
 ::: plotter
     options:
         extra:

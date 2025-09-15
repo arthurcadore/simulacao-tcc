@@ -67,7 +67,7 @@
 - [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
 - [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
 - [] Adicionar documentação interna as classes
-    - [] Alterar "exemplo" para "example" nos comentários. 
+    - [X] Alterar "exemplo" para "example" nos comentários. 
     - [] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
     - [] Verificar equacionamento sklar e alterar nome das variáveis.
     - [] Alterar documentação da classe de encoder

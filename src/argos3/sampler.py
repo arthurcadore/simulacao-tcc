@@ -1,9 +1,9 @@
-"""
-Implementação de um decisor (amostrador e quantizador) para recepção.
+# """
+# Implementação de um decisor (amostrador e quantizador) para recepção.
 
-Autor: Arthur Cadore
-Data: 15-08-2025
-"""
+# Autor: Arthur Cadore
+# Data: 15-08-2025
+# """
 
 import numpy as np
 from .plotter import save_figure, create_figure, SampledSignalPlot

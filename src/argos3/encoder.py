@@ -1,12 +1,12 @@
-"""
-Codificação de canais I e Q usando NRZ e Manchester conforme o padrão PPT-A3.
+# """
+# Codificação de canais I e Q usando NRZ e Manchester conforme o padrão PPT-A3.
 
-Referência:
-    AS3-SP-516-274-CNES (seção 3.2.4)
+# Referência:
+#     AS3-SP-516-274-CNES (seção 3.2.4)
 
-Autor: Arthur Cadore
-Data: 28-07-2025
-"""
+# Autor: Arthur Cadore
+# Data: 28-07-2025
+# """
 
 import numpy as np
 from .plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
