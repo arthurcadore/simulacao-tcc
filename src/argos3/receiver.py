@@ -795,6 +795,50 @@ class Receiver:
             save_figure(fig_conv_decoder, "receiver_conv_time.pdf")     
 
         return ut
+
+    
+    def datagram(self, ut):
+        r"""
+        Gera um datagrama no padrão ARGOS-3.
+
+        Args:
+            ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+
+        Returns:
+            - datagram (np.ndarray): Datagrama gerado.
+            - success (bool): Indica se a operação foi bem-sucedida.
+
+        Example:
+            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
+        """
+        try:
+            datagramRX = Datagram(streambits=ut)
+
+            if self.output_print:
+                print("\n ==== DATAGRAMA ==== \n")
+                print("\n",datagramRX.parse_datagram())
+
+            if self.output_plot:
+                fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
+                BitsPlot(
+                    fig_datagram, grid, (0, 0),
+                    bits_list=[datagramRX.msglength, 
+                               datagramRX.pcdid, 
+                               datagramRX.blocks, 
+                               datagramRX.tail],
+                    sections=[("Message Length", len(datagramRX.msglength)),
+                              ("PCD ID", len(datagramRX.pcdid)),
+                              ("Dados de App.", len(datagramRX.blocks)),
+                              ("Tail", len(datagramRX.tail))],
+                    colors=["green", "orange", "red", "blue"]
+                ).plot(xlabel="Index de Bit")
+                fig_datagram.tight_layout()
+                save_figure(fig_datagram, "receiver_datagram_time.pdf")
+            
+            return datagramRX.parse_datagram(), True
+
+        except Exception as e:
+            return ut, False
     
     def run(self, s, t):
         r"""
@@ -806,10 +850,8 @@ class Receiver:
             fc (float): Frequência de portadora.
 
         Returns:
-            ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+            datagramRX (np.ndarray): Datagrama gerado, ou vetor ut se houver erro.
 
-        Example:
-            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
         """
         xI_prime, yQ_prime = self.demodulate(s, t)
         dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
@@ -819,8 +861,8 @@ class Receiver:
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
         vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
         ut = self.conv_decoder(vt0, vt1)
-        return ut 
-    
+        datagramRX = self.datagram(ut)
+        return datagramRX 
 
 
 if __name__ == "__main__":
@@ -843,38 +885,16 @@ if __name__ == "__main__":
     print("t:   ", ''.join(map(str, t[:5])), "...")
 
     receiver = Receiver(fc=fc, output_print=True)
-    bitsRX = receiver.run(s_noisy, t)
-
-    try:
-        datagramRX = Datagram(streambits=bitsRX)
-        print("\n",datagramRX.parse_datagram())
-
-        fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
-
-        BitsPlot(
-            fig_datagram, grid, (0, 0),
-            bits_list=[datagramRX.msglength, 
-                       datagramRX.pcdid, 
-                       datagramRX.blocks, 
-                       datagramRX.tail],
-            sections=[("Message Length", len(datagramRX.msglength)),
-                      ("PCD ID", len(datagramRX.pcdid)),
-                      ("Dados de App.", len(datagramRX.blocks)),
-                      ("Tail", len(datagramRX.tail))],
-            colors=["green", "orange", "red", "blue"]
-        ).plot(xlabel="Index de Bit")
-        fig_datagram.tight_layout()
-        save_figure(fig_datagram, "receiver_datagram_time.pdf")
-
-    except Exception as e:
+    bitsRX, success = receiver.run(s_noisy, t)
+        
+    if not success:
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))
-        
         num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
         
         # Calcula a Taxa de Erro de Bit (BER)
         ber = num_errors / len(bitsTX)
-        
+
         print(f"Número de erros: {num_errors}")
         print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
 
