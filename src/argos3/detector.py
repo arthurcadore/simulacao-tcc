@@ -254,16 +254,18 @@ class CarrierDetector:
 
 if __name__ == "__main__":
 
+    fs = 128_000
+    Rb = 400
+    
     fc1 = np.random.randint(10, 50)*100
-    fc2 = fc1 + 2000
+    fc2 = fc1 + 1000
     
     print("Frequência Portadora 1: ", fc1)
     print("Frequência Portadora 2: ", fc2)
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
-    bitsTX = datagram.streambits  
-    transmitter1 = Transmitter(fc=fc1, output_print=False, output_plot=False)
-    transmitter2 = Transmitter(fc=fc2, output_print=True, output_plot=True)
+    transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=1)
+    transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=True, output_plot=True, carrier_length=1)
 
     t1, s1 = transmitter1.transmit(datagram)
     t2, s2 = transmitter2.transmit(datagram)
@@ -318,19 +320,22 @@ if __name__ == "__main__":
 
     # Para cada frequência confirmada, executa a recepção
     for idx, freq in enumerate(confirmed_freqs, start=1):
-        print(f"\nRecepção de $s(t)$ com $f_c = {freq} Hz$")
-        receiver = Receiver(fc=freq, fs=transmitter1.fs, Rb=transmitter1.Rb, output_print=True, output_plot=True)
-        bitsRX = receiver.receive(st.copy())
-            
-        try:
-            datagramRX = Datagram(streambits=bitsRX)
-            print("\n",datagramRX.parse_datagram())
+        print(f"\n ==============================================")
+        print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq} Hz ==== \n")
 
-        except Exception as e:
+        # executa a recepção
+        receiver = Receiver(fc=freq, fs=fs, Rb=Rb, output_print=True, output_plot=True)
+        datagramRX, success = receiver.receive(st.copy())
+
+        if not success:
+            bitsTX = datagram.streambits 
+            bitsRX = datagramRX
             print("Bits TX: ", ''.join(str(b) for b in bitsTX))
             print("Bits RX: ", ''.join(str(b) for b in bitsRX))
-                
+
+            # Calcula a Taxa de Erro de Bit (BER)
             num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
             ber = num_errors / len(bitsTX)
                 
             print(f"Número de erros: {num_errors}")
+            print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
