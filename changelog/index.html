@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/changelog/">
       
       
+        <link rel="prev" href="../api/guia/">
+      
+      
+        <link rel="next" href="../api/datagram/">
       
       
       <link rel="icon" href="../assets/icon.svg">
@@ -18,7 +22,7 @@
     
     
       
-        <title>CHANGELOG/ROADMAP - Simulador ARGOS-3</title>
+        <title>Changelog - Simulador ARGOS-3</title>
       
     
     
@@ -74,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#changelogroadmap" class="md-skip">
+        <a href="#changelog-roadmap" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CHANGELOG/ROADMAP
+              Changelog
             
           </span>
         </div>
@@ -223,10 +227,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../api/api/" class="md-tabs__link">
           
   
@@ -283,17 +289,18 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../api/receiver/" class="md-tabs__link">
-        
-  
-  
     
+    
+      <li class="md-tabs__item">
+        <a href="../api/noiseSNR/" class="md-tabs__link">
+          
   
-  Receptor
+  
+  Canal
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -303,13 +310,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../api/plots/" class="md-tabs__link">
+      <a href="../api/receiver/" class="md-tabs__link">
         
   
   
     
   
-  Plotter
+  Receptor
 
       </a>
     </li>
@@ -408,28 +415,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -442,7 +452,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Instalação
@@ -490,6 +500,116 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v101-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.1 - Base
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v102-carrier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.2 - Carrier detection
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v103-bersnr-e-sincronizacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.3 - BERSNR e Sincronização
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v104-channel-encoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.4 - Channel Encoding
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v105-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.5 - Optimization
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -674,7 +794,7 @@
   
   
   <span class="md-ellipsis">
-    Codificador NRZ e MAN
+    Codificador de Canal
     
   </span>
   
@@ -721,29 +841,6 @@
   
   <span class="md-ellipsis">
     Modulador
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/noise/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Noise
     
   </span>
   
@@ -881,7 +978,7 @@
   
   
   <span class="md-ellipsis">
-    Viterbi
+    Decodificador Viterbi
     
   </span>
   
@@ -927,18 +1024,94 @@
   
   
   
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Canal
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Canal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../api/receiver/" class="md-nav__link">
+      <a href="../api/noiseSNR/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Receptor
+    Ruido SNR
     
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/noiseEBN0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ruido EBN0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -950,12 +1123,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../api/plots/" class="md-nav__link">
+      <a href="../api/receiver/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Plotter
+    Receptor
     
   </span>
   
@@ -1040,6 +1213,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/data/" class="md-nav__link">
         
   
@@ -1082,7 +1278,7 @@
   
 
 
-<h1 id="changelogroadmap">CHANGELOG/ROADMAP</h1>
+<h1 id="changelog-roadmap">CHANGELOG / ROADMAP</h1>
 <hr />
 <h3 id="v101-base">v1.0.1 - Base</h3>
 <ul>
@@ -1145,25 +1341,41 @@
 </ul>
 </li>
 </ul>
-<h3 id="v105-channel-encoding">v1.0.5 - Channel Encoding</h3>
+<hr />
+<h3 id="v104-channel-encoding">v1.0.4 - Channel Encoding</h3>
 <ul>
-<li>[ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)</li>
-<li>[ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)</li>
-<li>[ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester</li>
-<li>[ ] Otimizar MatchedFilter para consumir formatter.</li>
+<li>[X] Alterar codificação de linha pra ficar apenas em NRZ</li>
+<li>[X] Alterar pulso formatador NRZ para ser soma de 2x RRC deslocados</li>
+<li>[X] Aplicar pulso formatador RRC no canal I e pulso MAN no canal Q</li>
+<li>[X] Otimizar MatchedFilter para consumir formatter.</li>
+<li>[X] Otimizar Encoder para ter apenas NRZ e Manchester</li>
 </ul>
 <hr />
-<h3 id="v106-documentation">v1.0.6 - Documentation</h3>
+<h3 id="v105-optimization">v1.0.5 - Optimization</h3>
 <ul>
-<li>[ ] Otimizar classes de plots<ul>
-<li>[ ] Verificar plot de constelação, normalização do sinal recebido</li>
+<li>[] Otimizar classes de tx/rx, instânciar direto no construtor.</li>
+<li>[] Otimizar parse do datagrama ARGOS-3</li>
+<li>[] Adicionar documentação interna as classes<ul>
+<li>[] Alterar "exemplo" para "example" nos comentários. </li>
+<li>[] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py</li>
+<li>[] Verificar equacionamento sklar e alterar nome das variáveis.</li>
+<li>[] Alterar documentação da classe de encoder</li>
+<li>[] adicionar prints de impulso casado na documentação</li>
 </ul>
 </li>
-<li>[ ] Otimizar classes de tx/rx, instânciar direto no construtor.</li>
-<li>[ ] Adicionar documentação interna as classes<ul>
-<li>[ ] Verificar equacionamento sklar e alterar nome das variáveis.</li>
-<li>[ ] Otimizar parse do datagrama ARGOS-3</li>
-<li>[ ] Adicionar melhor documentação a aba inicio</li>
+<li>[] Otimizar plots<ul>
+<li>[] Verificar plot de constelação, normalização do sinal recebido</li>
+<li>[] Otimizar plot do encoder. </li>
+<li>[] Criar método para testar todas as classes no makefile. </li>
+<li>[] Padronizar cor dos plots.</li>
+<li>[] Alterar tamanho do plot pz fpb</li>
+</ul>
+</li>
+<li>[] Adicionar melhor documentação a aba inicio</li>
+<li>[] Diagrama de blocos<ul>
+<li>[] Alterar diagrama do modulador</li>
+<li>[] Alterar nome das variáveis</li>
+<li>[] Alterar bloco do receptor pra ficar dentro de detector.</li>
 </ul>
 </li>
 </ul>

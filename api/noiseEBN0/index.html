@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/noise/">
+        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/noiseEBN0/">
       
       
-        <link rel="prev" href="../modulator/">
+        <link rel="prev" href="../noiseSNR/">
       
       
-        <link rel="next" href="../detector/">
+        <link rel="next" href="../receiver/">
       
       
       <link rel="icon" href="../../assets/icon.svg">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Noise - Simulador ARGOS-3</title>
+        <title>Ruido EBN0 - Simulador ARGOS-3</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#noise" class="md-skip">
+        <a href="#noise.NoiseEBN0" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Noise
+              Ruido EBN0
             
           </span>
         </div>
@@ -247,12 +247,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../datagram/" class="md-tabs__link">
           
   
@@ -288,18 +286,21 @@
   
   
   
-  
-    <li class="md-tabs__item">
-      <a href="../receiver/" class="md-tabs__link">
-        
+    
   
   
     
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../noiseSNR/" class="md-tabs__link">
+          
   
-  Receptor
+  
+  Canal
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -309,13 +310,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../plots/" class="md-tabs__link">
+      <a href="../receiver/" class="md-tabs__link">
         
   
   
     
   
-  Plotter
+  Receptor
 
       </a>
     </li>
@@ -501,6 +502,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -512,31 +536,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -549,7 +570,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Componentes
@@ -683,7 +704,7 @@
   
   
   <span class="md-ellipsis">
-    Codificador NRZ e MAN
+    Codificador de Canal
     
   </span>
   
@@ -735,125 +756,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Noise
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Noise
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#noise.Noise" class="md-nav__link">
-    <span class="md-ellipsis">
-      Noise
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#noise.Noise.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#noise.Noise.add_noise" class="md-nav__link">
-    <span class="md-ellipsis">
-      add_noise
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#noise.NoiseEBN0" class="md-nav__link">
-    <span class="md-ellipsis">
-      NoiseEBN0
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#noise.NoiseEBN0.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#noise.NoiseEBN0.add_noise" class="md-nav__link">
-    <span class="md-ellipsis">
-      add_noise
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -986,7 +888,7 @@
   
   
   <span class="md-ellipsis">
-    Viterbi
+    Decodificador Viterbi
     
   </span>
   
@@ -1030,20 +932,164 @@
       
   
   
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Canal
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Canal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
   
   
     <li class="md-nav__item">
-      <a href="../receiver/" class="md-nav__link">
+      <a href="../noiseSNR/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Receptor
+    Ruido SNR
     
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Ruido EBN0
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ruido EBN0
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0" class="md-nav__link">
+    <span class="md-ellipsis">
+      NoiseEBN0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise.NoiseEBN0.add_noise" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_noise
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1055,12 +1101,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../plots/" class="md-nav__link">
+      <a href="../receiver/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Plotter
+    Receptor
     
   </span>
   
@@ -1145,6 +1191,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plotter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../data/" class="md-nav__link">
         
   
@@ -1187,215 +1256,7 @@
   
 
 
-<h1 id="noise">Noise</h1>
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<a id="noise.Noise"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="noise.Noise.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Implementação de canal para aplicação de ruido <span class="arithmatex">\(AWGN\)</span>, com base em <span class="arithmatex">\(SNR\)</span>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>snr</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Relação sinal-ruído em decibéis (dB).</p>
-              </div>
-            </td>
-            <td>
-                  <code>15</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>seed</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Seed do gerador de números aleatórios.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <p><img alt="pageplot" src="../assets/example_noise_time.svg" /></p>
-</details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="noise.Noise.add_noise" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">add_noise</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Adiciona ruído AWGN <span class="arithmatex">\(n(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>, com base na <span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span> definida na inicialização. </p>
-<div class="arithmatex">\[
-r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
-\]</div>
-
-
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(r(t)\)</span>: Sinal retornado com ruído AWGN adicionado.</li>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada sem ruído. </li>
-<li><span class="arithmatex">\(n(t)\)</span>: Ruído adicionado, com distribuição normal <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
-</ul>
-</details>        <p>A variância do ruído <span class="arithmatex">\(\sigma^2\)</span> é dada por:</p>
-<div class="arithmatex">\[
-\sigma^2 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{10^{\frac{\mathrm{SNR}_{dB}}{10}}}
-\]</div>
-
-
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(\sigma^2\)</span>: A variância do ruído.</li>
-<li><span class="arithmatex">\(\mathbb{E}\!\left[ |s(t)|^2 \right]\)</span>: Potência média do sinal de entrada.</li>
-<li><span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span>: Relação sinal-ruído em decibéis (dB).</li>
-</ul>
-</details>
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>signal</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal transmitido <span class="arithmatex">\(s(t)\)</span>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>signal</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(r(t)\)</span>, com ruído AWGN adicionado.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="exemplo" open>
-  <summary>Exemplo</summary>
-  <p><img alt="pageplot" src="../assets/example_noise_gaussian_snr.svg" /></p>
-</details>
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+  <h1>Ruido EBN0</h1>
 
 <div class="doc doc-object doc-class">
 
