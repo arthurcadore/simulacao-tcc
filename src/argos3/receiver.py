@@ -20,7 +20,7 @@ from .synchronizer import Synchronizer
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot
 
 class Receiver:
-    def __init__(self, fs=128_000, Rb=400, fc=None, output_print=True, output_plot=True):
+    def __init__(self, fs=128_000, Rb=400, lpf_cutoff=600, fc=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.
 
@@ -29,6 +29,8 @@ class Receiver:
         Args:
             fs (int): Frequência de amostragem em Hz.
             Rb (int): Taxa de bits em bps.
+            lpf_cutoff (int): Frequência de corte do filtro passa-baixa em Hz.
+            fc (int): Frequência de portadora em Hz.
             output_print (bool): Se `True`, imprime os vetores intermediários no console. 
             output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
 
@@ -37,11 +39,28 @@ class Receiver:
         AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
         </div>
         """
+
+        # Parâmetros
         self.fs = fs
         self.Rb = Rb
         self.fc = fc
+        self.lpf_cutoff = lpf_cutoff
         self.output_print = output_print
         self.output_plot = output_plot
+        self.preamble = preamble
+        self.G = G
+
+        # Submodulos
+        self.demodulator = Modulator(fc=self.fc, fs=self.fs)
+        self.lpf = LPF(cut_off=self.lpf_cutoff, order=6, fs=self.fs, type="butter")
+        self.matched_filterI = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb/2, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+        self.matched_filterQ = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+        self.synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
+        self.synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
+        self.decoderI = Encoder("nrz")
+        self.decoderQ = Encoder("nrz")
+        self.unscrambler = Scrambler()
+        self.conv_viterbi = DecoderViterbi(G=self.G)
 
     def demodulate(self, s, t):
         r"""
@@ -59,15 +78,17 @@ class Receiver:
             - Tempo: ![pageplot](assets/receiver_demodulator_time.svg)
             - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
-        demodulator = Modulator(fc=self.fc, fs=self.fs)
-        xI_prime, yQ_prime = demodulator.demodulate(s)
+
+        xI_prime, yQ_prime = self.demodulator.demodulate(s)
 
         if self.output_print:
             print("\n ==== DEMODULADOR ==== \n")
             print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
             print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
+
         if self.output_plot:
             fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+
             TimePlot(
                 fig_time, grid, (0, 0),
                 t=t,
@@ -82,7 +103,6 @@ class Receiver:
                 }
             ).plot()
 
-            
             TimePlot(
                 fig_time, grid, (1, 0),
                 t=t,
@@ -101,6 +121,7 @@ class Receiver:
             save_figure(fig_time, "receiver_demodulator_time.pdf")
 
             fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
+
             FrequencyPlot(
                 fig_freq, grid, (0, 0),
                 fs=self.fs,
@@ -142,12 +163,11 @@ class Receiver:
 
         return xI_prime, yQ_prime
     
-    def lowpassfilter(self, cut_off, xI_prime, yQ_prime, t):
+    def lowpassfilter(self, xI_prime, yQ_prime, t):
         r"""
         Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x'_{I}(t)$ e $y'_{Q}(t)$, retornando os sinais filtrados $d'_{I}(t)$ e $d'_{Q}(t)$.
 
         Args:
-            cut_off (float): Frequência de corte do filtro.
             xI_prime (np.ndarray): Sinal $x'_{I}(t)$ a ser filtrado.
             yQ_prime (np.ndarray): Sinal $y'_{Q}(t)$ a ser filtrado.
             t (np.ndarray): Vetor de tempo.
@@ -161,10 +181,10 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_lpf_freq.svg)
         """
 
-        lpf = LPF(cut_off=cut_off, order=6, fs=self.fs, type="butter")
-        impulse_response, t_impulse = lpf.calc_impulse_response()
-        dI_prime = lpf.apply_filter(xI_prime)
-        dQ_prime = lpf.apply_filter(yQ_prime)
+        impulse_response, t_impulse = self.lpf.calc_impulse_response()
+
+        dI_prime = self.lpf.apply_filter(xI_prime)
+        dQ_prime = self.lpf.apply_filter(yQ_prime)
 
         if self.output_print:
             print("\n ==== FILTRAGEM PASSA-BAIXA ==== \n")
@@ -206,16 +226,15 @@ class Receiver:
             fig_signal.tight_layout()
             save_figure(fig_signal, "receiver_lpf_time.pdf")
 
-
             fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
 
             FrequencyResponsePlot(
                 fig_freq, grid_freq, (0, slice(0, 2)),
-                lpf.b,
-                lpf.a,
+                self.lpf.b,
+                self.lpf.a,
                 self.fs,
-                f_cut=cut_off,
-                xlim=(0, 3*cut_off),
+                f_cut=self.lpf_cutoff,
+                xlim=(0, 3*self.lpf_cutoff),
             ).plot()
 
             FrequencyPlot(
@@ -290,10 +309,8 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
         """
 
-        matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb/2, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
-        It_prime = matched_filter_I.apply_filter(dI_prime)
-        Qt_prime = matched_filter_Q.apply_filter(dQ_prime)
+        It_prime = self.matched_filterI.apply_filter(dI_prime)
+        Qt_prime = self.matched_filterQ.apply_filter(dQ_prime)
 
         if self.output_print:
             print("\n ==== FILTRAGEM CASADA ==== \n")
@@ -305,14 +322,14 @@ class Receiver:
 
             ImpulseResponsePlot(
                 fig_matched, grid_matched, (0, 0),
-                matched_filter_I.t_rc, matched_filter_I.g_inverted,
+                self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             ImpulseResponsePlot(
                 fig_matched, grid_matched, (0, 1),
-                matched_filter_Q.t_rc, matched_filter_Q.g_inverted,
+                self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -344,14 +361,14 @@ class Receiver:
 
             ImpulseResponsePlot(
                 fig_matched_freq, grid_matched_freq, (0, 0),
-                matched_filter_I.t_rc, matched_filter_I.g_inverted,
+                self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             ImpulseResponsePlot(
                 fig_matched_freq, grid_matched_freq, (0, 1),
-                matched_filter_Q.t_rc, matched_filter_Q.g_inverted,
+                self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -425,11 +442,9 @@ class Receiver:
             Tempo: ![pageplot](assets/receiver_sync_time.svg)
             Módulo Correlação: ![pageplot](assets/receiver_sync_corr.svg)
         """
-        synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb)
-        delayI_min, delayI_max, delayI, corr_vec_I = synchronizerI.correlation(It_prime, "I")
 
-        synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb)
-        delayQ_min, delayQ_max, delayQ, corr_vec_Q = synchronizerQ.correlation(Qt_prime, "Q")
+        delayI_min, delayI_max, delayI, corr_vec_I = self.synchronizerI.correlation(It_prime, "I")
+        delayQ_min, delayQ_max, delayQ, corr_vec_Q = self.synchronizerQ.correlation(Qt_prime, "Q")
 
         if self.output_print:
             print("\n ==== SINCRONIZADOR ==== \n")
@@ -502,7 +517,7 @@ class Receiver:
 
         return delayI_max, delayQ_max
 
-    def sampler(self, It_prime, Qt_prime, t, delayI, delayQ):
+    def sampler(self, It_prime, Qt_prime, t):
         r"""
         Realiza a decisão (amostragem e quantização) dos sinais $I'(t)$ e $Q'(t)$, retornando os vetores de simbolos $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$.
 
@@ -520,21 +535,19 @@ class Receiver:
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
-        samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayI)
-        samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayQ)
-        i_signal_sampled = samplerI.sample(It_prime)
-        q_signal_sampled = samplerQ.sample(Qt_prime)
 
-        t_sampledI = samplerI.sample(t)
-        t_sampledQ = samplerQ.sample(t)
+        s_sampledI = self.samplerI.sample(It_prime)
+        t_sampledI = self.samplerI.sample(t)
+        Xi_prime = self.samplerI.quantize(s_sampledI)
 
-        Xnrz_prime = samplerI.quantize(i_signal_sampled)
-        Yman_prime = samplerQ.quantize(q_signal_sampled)
+        s_sampledQ = self.samplerQ.sample(Qt_prime)
+        t_sampledQ = self.samplerQ.sample(t)
+        Yq_prime = self.samplerQ.quantize(s_sampledQ)
 
         if self.output_print:
             print("\n ==== DECISOR ==== \n")
-            print("X'nrz:", ' '.join(f"{x:+d}" for x in Xnrz_prime[:20]),"...")
-            print("Y'man:", ' '.join(f"{y:+d}" for y in Yman_prime[:20]),"...")
+            print("X'i:", ' '.join(f"{x:+d}" for x in Xi_prime[:20]),"...")
+            print("Y'q:", ' '.join(f"{y:+d}" for y in Yq_prime[:20]),"...")
 
         if self.output_plot:
             fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
@@ -544,7 +557,7 @@ class Receiver:
                 t,
                 It_prime,
                 t_sampledI,
-                i_signal_sampled,
+                s_sampledI,
                 colors='darkgreen'
             ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $I$ amostrado")
 
@@ -553,13 +566,12 @@ class Receiver:
                 t,
                 Qt_prime,
                 t_sampledQ,
-                q_signal_sampled,
+                s_sampledQ,
                 colors='navy'
             ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $Q$ amostrado")
 
             fig_sampler.tight_layout()
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
-
 
             fig_const, grid_const = create_figure(1, 2, figsize=(16, 9))
 
@@ -576,8 +588,8 @@ class Receiver:
 
             ConstellationPlot(
                 fig_const, grid_const, (0, 1),
-                dI=i_signal_sampled,
-                dQ=q_signal_sampled,
+                dI=s_sampledI,
+                dQ=s_sampledQ,
                 xlim=(-1.1, 1.1),
                 ylim=(-1.1, 1.1),
                 title="Constelação $IQ - Amostrado$",
@@ -608,7 +620,7 @@ class Receiver:
             PhasePlot(
                 fig_phase, grid_phase, (0, 1),
                 t=t_sampledI,
-                signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
+                signals=[np.array(Xi_prime), np.array(Yq_prime)],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$ - Decidido",
                 xlim=(40, 320),
@@ -623,7 +635,7 @@ class Receiver:
             fig_phase.tight_layout()
             save_figure(fig_phase, "receiver_sampler_phase.pdf")
 
-        return Xnrz_prime, Yman_prime
+        return Xi_prime, Yq_prime
 
     def decode(self, Xnrz_prime, Yman_prime):
         r"""
@@ -640,13 +652,12 @@ class Receiver:
         Example:
             - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
         """
-        decoderNRZ = Encoder("nrz")
-        decoderManchester = Encoder("nrz")
+
         i_quantized = np.array(Xnrz_prime)
         q_quantized = np.array(Yman_prime)
         
-        Xn_prime = decoderNRZ.decode(i_quantized)
-        Yn_prime = decoderManchester.decode(q_quantized)
+        Xn_prime = self.decoderI.decode(i_quantized)
+        Yn_prime = self.decoderQ.decode(q_quantized)
 
         if self.output_print:
             print("\n ==== DECODIFICADOR DE LINHA ==== \n")
@@ -702,8 +713,8 @@ class Receiver:
         Example:
             - Tempo: ![pageplot](assets/receiver_descrambler_time.svg)
         """
-        descrambler = Scrambler()
-        vt0, vt1 = descrambler.descramble(Xn_prime, Yn_prime)
+
+        vt0, vt1 = self.unscrambler.descramble(Xn_prime, Yn_prime)
 
         if self.output_print:
             print("\n ==== DESEMBARALHADOR ==== \n")
@@ -760,8 +771,8 @@ class Receiver:
         Example:
             - Tempo: ![pageplot](assets/receiver_conv_time.svg)
         """
-        conv_decoder = DecoderViterbi()
-        ut = conv_decoder.decode(vt0, vt1)
+
+        ut = self.conv_viterbi.decode(vt0, vt1)
 
         if self.output_print:
             print("\n ==== DECODIFICADOR VITERBI ==== \n")
@@ -808,7 +819,7 @@ class Receiver:
             datagram (np.ndarray): Datagrama gerado, ou o vetor de bits $u_{t}'$ se houver erro.
             success (bool): Indica se a operação foi bem-sucedida.
 
-        Example:print
+        Example:
             - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
         """
         try:
@@ -854,10 +865,16 @@ class Receiver:
 
         """
         xI_prime, yQ_prime = self.demodulate(s, t)
-        dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
+        dI_prime, dQ_prime= self.lowpassfilter(xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
-        delayI, delayQ = self.synchronizer(It_prime, Qt_prime)
-        Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t, delayI, delayQ)
+        self.delayI, self.delayQ = self.synchronizer(It_prime, Qt_prime)
+
+        # Cria o sampler passando o delay como parâmetro.
+        # TODO: Tirar sampler daqui, criar método pra atualizar delay'
+        self.samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=self.delayI)
+        self.samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=self.delayQ)
+
+        Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
         vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
         ut = self.conv_decoder(vt0, vt1)
