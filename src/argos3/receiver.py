@@ -52,6 +52,8 @@ class Receiver:
         self.alpha = 0.8
         self.span = 6
         self.lpf_order = 6
+        self.delayI = 0
+        self.delayQ = 0
 
         # Submodulos
         self.demodulator = Modulator(fc=self.fc, fs=self.fs)
@@ -60,6 +62,8 @@ class Receiver:
         self.matched_filterQ = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
         self.synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
         self.synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
+        self.samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, delay=self.delayI)
+        self.samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, delay=self.delayQ)
         self.decoderI = Encoder("nrz")
         self.decoderQ = Encoder("nrz")
         self.unscrambler = Scrambler()
@@ -872,10 +876,9 @@ class Receiver:
         It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
         self.delayI, self.delayQ = self.synchronizer(It_prime, Qt_prime)
 
-        # Cria o sampler passando o delay como parâmetro.
-        # TODO: Tirar sampler daqui, criar método pra atualizar delay'
-        self.samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=self.delayI)
-        self.samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=self.delayQ)
+        # Atualiza o delay do sampler
+        self.samplerI.update_sampler(self.delayI, t)
+        self.samplerQ.update_sampler(self.delayQ, t)
 
         Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
         Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)

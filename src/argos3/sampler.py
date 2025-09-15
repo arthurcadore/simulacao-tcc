@@ -26,6 +26,12 @@ class Sampler:
         self.Rb = Rb
         self.sps = int(self.fs / self.Rb)
         self.delay = int(round(delay * self.fs))
+
+        if t is not None:
+            self.indexes = self.calc_indexes(t)
+
+    def update_sampler(self, delay, t):
+        self.delay = int(round(delay * self.fs))
         self.indexes = self.calc_indexes(t)
     
     def calc_indexes(self, t):
