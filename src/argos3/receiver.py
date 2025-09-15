@@ -888,7 +888,7 @@ if __name__ == "__main__":
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
-    t, s = transmitter.run(datagramTX)
+    t, s = transmitter.transmit(datagramTX)
     bitsTX = datagramTX.streambits  
 
     ebn0_db = 20

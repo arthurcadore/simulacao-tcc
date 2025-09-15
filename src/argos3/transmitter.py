@@ -13,7 +13,7 @@ from .preamble import Preamble
 from .scrambler import Scrambler
 from .multiplexer import Multiplexer
 from .encoder import Encoder
-from .data import ExportData, ImportData
+from .data import ExportData
 from .plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
 
 class Transmitter:
@@ -28,6 +28,9 @@ class Transmitter:
             fc (float): Frequência da portadora em Hz. 
             fs (float): Frequência de amostragem em Hz. 
             Rb (float): Taxa de bits em bps.
+            carrier_length (float): Comprimento do prefixo em segundos, se `None`, gera um valor aleatório entre 82 e 122 ms.
+            preamble (str): String de preâmbulo em hex.
+            G (np.ndarray): Matriz de geração para codificação convolucional.
             output_print (bool): Se `True`, imprime os vetores intermediários no console.
             output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
 
@@ -43,6 +46,8 @@ class Transmitter:
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
+        self.alpha = 0.8
+        self.span = 6
 
         if carrier_length:
             self.prefix_duration = carrier_length
@@ -57,8 +62,8 @@ class Transmitter:
         self.multiplexer = Multiplexer()
         self.c_encoderI = Encoder("nrz")
         self.c_encoderQ = Encoder("nrz")
-        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=self.prefix_duration)
-        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=self.prefix_duration)
+        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
+        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
         self.modulator = Modulator(fc=self.fc, fs=self.fs)
 
     def prepare_datagram(self, datagram: Datagram):
@@ -635,9 +640,9 @@ class Transmitter:
 
         return t, s
 
-    def run(self, datagram: Datagram):
+    def transmit(self, datagram: Datagram):
         r"""
-        Executa o processo de transmissão, retornando o sinal modulado $s(t)$ e o vetor de tempo $t$.
+        Executa toda a cadeia de transmissão para um datagrama, retornando o sinal modulado $s(t)$ e o vetor de tempo $t$.
 
         Args:
             datagram (Datagram): Instância do datagrama a ser transmitido.
@@ -666,8 +671,8 @@ if __name__ == "__main__":
     datagram2 = Datagram(pcdnum=1234, numblocks=1, seed=10)
 
     # Transmite o datagrama 1
-    t1, s1 = transmitter.run(datagram1)
-    t2, s2 = transmitter.run(datagram2)
+    t1, s1 = transmitter.transmit(datagram1)
+    t2, s2 = transmitter.transmit(datagram2)
 
     # Verifica se os vetores são iguais
     if np.array_equal(s1, s2):

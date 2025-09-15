@@ -264,8 +264,8 @@ if __name__ == "__main__":
     transmitter = Transmitter(datagram, fc=fc, output_print=False, output_plot=False)
     transmitter2 = Transmitter(datagram, fc=fc2, output_print=True, output_plot=True)
 
-    t, s = transmitter.run()
-    t2, s2 = transmitter2.run()
+    t, s = transmitter.transmit()
+    t2, s2 = transmitter2.transmit()
 
     # soma os sinais
     s = s + s2

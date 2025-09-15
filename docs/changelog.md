@@ -57,8 +57,14 @@
 
 ---
 ### v1.0.5 - Optimization
+- [X] Otimizar parse do datagrama ARGOS-3
 - [] Otimizar classes de tx/rx, instânciar direto no construtor.
-- [] Otimizar parse do datagrama ARGOS-3
+- [] Remover vetor de tempo no rx, criar interno.
+- [] Alterar construção do synchornize para permitir alterar o delay do sinal recebido.
+- [] Adicionar defaults na construção de classes (argumentos que forem possiveis).
+- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
+- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
+- [] Diminuir passo de frequência aleatória na classe detector. 
 - [] Adicionar documentação interna as classes
     - [] Alterar "exemplo" para "example" nos comentários. 
     - [] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
@@ -71,8 +77,25 @@
     - [] Criar método para testar todas as classes no makefile. 
     - [] Padronizar cor dos plots.
     - [] Alterar tamanho do plot pz fpb
+    - [] Otimizar conversor de plots pra permitir darkTheme
 - [] Adicionar melhor documentação a aba inicio
+- [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
+- [] Verificar adição de diagrama de olho no sklar. 
 - [] Diagrama de blocos
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
+
+---
+### v1.0.6 - Channel and Doppler
+- [] Montar classe de canal para instanciar ruido e aplicar ao sinal recebido
+- [] Montar classe Doppler para testar distorção em frequência do sinal
+    - [] Coletar dataset de passada de satélite e montar plot. 
+    - [] calcular com base na velocidade de trajetória o desvio doppler. 
+    - [] Aplicar distorção doppler no sinal recebido
+        - [] Tempo de estabilização 80ms
+        - [] Desvio de fase <= 20° no máximo. 
+        - [] Fator de amortecimento e=1 
+        - [] Máximo desvio de frequência inicial 50Hz
+- [] Montar classe PLL (Phased Locked Loop) para corrigir o desvio de frequência do sinal recebido
+    - [] Testar aplicação do PLL ao sinal distorcido em frequência.
