@@ -174,12 +174,12 @@ if __name__ == "__main__":
     Xn, Yn = mux.concatenate(SI, SQ, X, Y)
 
     encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="NRZ2")
+    encoder_man = Encoder(method="NRZ")
     
     Xnrz = encoder_nrz.encode(Xn)
     Yman = encoder_man.encode(Yn)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=200, span=6, type="RRC", channel="I", bits_per_symbol=1)
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
     
     dI = formatterI.apply_format(Xnrz)

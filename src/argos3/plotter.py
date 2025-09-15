@@ -1305,6 +1305,9 @@ class BersnrPlot(BasePlot):
         labels (List[str]): Rótulos de cada curva
         linestyles (List[str], opcional): Lista com estilos de linha (e.g., ["-", "--", "-."])
         markers (List[str], opcional): Lista com formatos de marcadores (e.g., ["o", "s", "d"])
+
+    Exemplo: 
+        - ![pageplot](assets/ber_vs_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,

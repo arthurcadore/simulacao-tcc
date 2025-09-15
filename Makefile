@@ -46,8 +46,7 @@ deploy-docs:
 	@mkdocs gh-deploy --force
 	@echo "Documentação publicada com sucesso no GitHub Pages!"
 
-
-clean-packages: 
+clean-packages:
 	@echo "Limpeza de pacotes..."
 	rm -rf dist/
 	
@@ -58,3 +57,16 @@ build: clean-packages
 upload: build
 	@echo "Uploading to PyPI..."
 	.venv/bin/python3 -m twine upload dist/*
+
+test:
+	@echo "Rodando testes..."
+	@for f in src/argos3/*.py; do \
+		module=$$(basename $$f .py); \
+		if [ "$$module" != "bersnr" ] && [ "$$module" != "__init__" ] && [ "$$module" != "data" ]; then \
+			echo ""; \
+			echo "--------------------------------"; \
+			echo "Rodando $$module..."; \
+			echo ""; \
+			PYTHONWARNINGS="ignore" .venv/bin/python3 -m src.argos3.$$module; \
+		fi; \
+	done

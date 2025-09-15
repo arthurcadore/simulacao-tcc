@@ -26,6 +26,7 @@ theme:
     - content.code.highlight
     - content.tooltips
     - navigation.expand
+    - navigation.top
     - repository.icon 
   icon:
     repo: fontawesome/brands/github 

@@ -87,6 +87,9 @@ class Formatter:
 
         Returns:
            rc (np.ndarray): Pulso RRC normalizado.
+
+        Exemplo: 
+            ![pageplot](assets/example_formatter_impulse.svg)
         """
         self.t_rc = np.array(self.t_rc, dtype=float)
         # aplica deslocamento no tempo
@@ -235,8 +238,29 @@ if __name__ == "__main__":
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse.pdf")
 
+
+    # Plotando a resposta ao impulso (man)
+    fig_impulse_man, grid_impulse_man = create_figure(2, 1, figsize=(16, 9))
+
+    ImpulseResponsePlot(
+        fig_impulse_man, grid_impulse_man, (0, 0),
+        formatterQ.t_rc, formatterQ.g,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    ImpulseResponsePlot(
+        fig_impulse_man, grid_impulse_man, (1, 0),
+        formatterQ.t_rc, 
+        [formatterQ.g_left, formatterQ.g_right],
+        t_unit="ms",
+        colors=["darkorange", "navy"],
+    ).plot(label=[r"$g_{L}(t)$", r"$g_{R}(t)$"], xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    fig_impulse_man.tight_layout()
+    save_figure(fig_impulse_man, "example_formatter_impulse_man.pdf")
+
     # Plotando os sinais formatados
-    
     fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
 
     ImpulseResponsePlot(

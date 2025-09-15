@@ -145,11 +145,11 @@ if __name__ == "__main__":
     alpha = 0.8
     span = 8
 
-    Xnrz = np.random.randint(0, 2, 900)
-    Yman = np.random.randint(0, 2, 900)
+    Xnrz = np.random.randint(0, 2, 200)
+    Yman = np.random.randint(0, 2, 200)
 
     encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="Manchester")
+    encoder_man = Encoder(method="NRZ")
 
     Xnrz = encoder_nrz.encode(Xnrz)
     Yman = encoder_man.encode(Yman)
@@ -157,8 +157,8 @@ if __name__ == "__main__":
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
-    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="I")
-    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="Q")
+    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb/2, span=span, channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="Q", bits_per_symbol=2)
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)

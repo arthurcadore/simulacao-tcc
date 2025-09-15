@@ -59,6 +59,20 @@ class MatchedFilter:
         self.g_inverted = self.inverted_pulse(self.g)
 
     def inverted_pulse(self, pulse):
+        r"""
+        Inverte o pulso.
+
+        Args:
+            pulse (np.ndarray): Pulso a ser invertido.
+
+        Returns:
+            pulse_inverted (np.ndarray): Pulso invertido.
+
+        Exemplo:
+            - RRC: ![pageplot](assets/example_mf_impulse.svg)
+            - Manchester: ![pageplot](assets/example_mf_impulse_man.svg)
+
+        """
         return pulse[::-1]
 
 
@@ -108,7 +122,7 @@ if __name__ == "__main__":
     bit2 = bit1
 
     encoder_1 = Encoder(method="Manchester")
-    encoder_2 = Encoder(method="NRZ2")
+    encoder_2 = Encoder(method="NRZ")
 
     Yman1 = encoder_1.encode(bit1)
     Yman2 = encoder_2.encode(bit2)

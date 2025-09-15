@@ -65,6 +65,9 @@ class BERSNR_ARGOS:
         
         Raises:
             ValueError: Se o número de erros não for o mesmo que o número de valores de Eb/N0.
+
+        Exemplo: 
+            ![pageplot](assets/ber_vs_ebn0.svg)
         """
         if len(error_values) != len(EbN0_values):
             raise ValueError("error_values deve ter o mesmo tamanho que EbN0_values")

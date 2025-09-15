@@ -657,7 +657,7 @@
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 517.79299V617.04" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </ns0:g>
  <ns0:g clip-path="url(#bx)">
-  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 592.2282h265.01357v-62.02932h53.0027v62.02932h53.0027v-62.02932h53.00274v62.02932h53.00276v-62.02932h265.0135v62.02932h53.0027v-62.02932h53.00278v62.02932h53.00269v-62.02932h53.00273v62.02932h53.0027v-62.02932h26.5013" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
+  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 592.2282h106.00542v-62.02932h53.00272v62.02932h53.00273v-62.02932h371.019v62.02932h53.0027v-62.02932h106.0054v62.02932h106.00548v-62.02932h159.00812v62.02932h26.5013" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
  </ns0:g>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 517.79299V617.04" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 517.79299V617.04" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
@@ -665,24 +665,24 @@
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 617.04H1113.236" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="76.75659" y="-603.85726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="129.75931" y="-603.85726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="182.76201" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="182.76201" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="235.76473" y="-603.85726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="288.76747" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="288.76747" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="341.77018" y="-603.85726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="394.7729" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="394.7729" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="447.77558" y="-603.85726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="500.7783" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="500.7783" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="553.781" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="606.78378" y="-603.85726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="659.78646" y="-603.85726">0</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="659.78646" y="-603.85726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="712.7892" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="765.7919" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="818.7946" y="-603.85726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="871.7973" y="-603.85726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="924.8" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="871.7973" y="-603.85726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="924.8" y="-603.85726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="977.80276" y="-603.85726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1030.8054" y="-603.85726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1083.8081" y="-603.85726">0</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1030.8054" y="-603.85726">0</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1083.8081" y="-603.85726">1</ns0:tspan></ns0:text>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1051.5827 590.7154h53.2533c1.6 0 2.4 0.8 2.4 2.4v15.5246c0 1.6-0.8 2.4-2.4 2.4h-53.2533c-1.6001 0-2.4001-0.8-2.4001-2.4v-15.5246c0-1.6 0.8-2.4 2.4001-2.4z" fill="#fff" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1051.5827 590.7154h53.2533c1.6 0 2.4 0.8 2.4 2.4v15.5246c0 1.6-0.8 2.4-2.4 2.4h-53.2533c-1.6001 0-2.4001-0.8-2.4001-2.4v-15.5246c0-1.6 0.8-2.4 2.4001-2.4z" fill="none" stroke="#000" stroke-miterlimit="10" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1053.9826 602.04h24" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
@@ -900,22 +900,22 @@
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 360.11296V459.36" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </ns0:g>
  <ns0:g clip-path="url(#aq)">
-  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 438.09278h265.01357v-70.89074h53.0027v70.89074h53.0027v-70.89074h53.00274v70.89074h53.00276v-70.89074h265.0135v70.89074h53.0027v-70.89074h53.00278v70.89074h53.00269v-70.89074h53.00273v70.89074h53.0027v-70.89074h26.5013" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
+  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 438.09278h106.00542v-70.89074h53.00272v70.89074h53.00273v-70.89074h371.019v70.89074h53.0027v-70.89074h106.0054v70.89074h106.00548v-70.89074h159.00812v70.89074h26.5013" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
  </ns0:g>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 360.11296V459.36" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 360.11296V459.36" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 360.11296H1113.236" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 459.36H1113.236" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="91.2268 100.324687 106.17076 115.26865" y="-445.73417">+1+1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="197.23223 206.33011 212.1762 221.27408" y="-445.73417">+1+1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="305.839 314.93687 320.78294 324.6803" y="-445.73417">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="411.84443 420.9423 426.78837 430.68574" y="-445.73417">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="517.84988 526.94778 532.7938 536.6912" y="-445.73417">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="626.4566 630.354 636.2001 640.0975" y="-445.73417">-1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="199.83356 203.73094 209.57703 218.67491" y="-445.73417">-1+1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="308.4403 312.3377 318.18379 322.08119" y="-445.73417">-1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="414.44575 418.34315 424.1892 428.0866" y="-445.73417">-1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="520.4512 524.3486 530.19467 534.09207" y="-445.73417">-1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="623.8553 627.7527 633.59878 642.69668" y="-445.73417">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="732.46206 736.35946 742.2055 746.1029" y="-445.73417">-1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="835.86618 844.96408 850.8101 854.7075" y="-445.73417">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="941.8716 950.9695 956.81558 960.71298" y="-445.73417">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1047.877 1056.9749 1062.8209 1066.7183" y="-445.73417">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="833.2648 842.3627 848.20877 857.30667" y="-445.73417">+1+1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="944.4729 948.3703 954.2164 958.1138" y="-445.73417">-1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1047.877 1051.7743 1057.6204 1066.7183" y="-445.73417">-1+1</ns0:tspan></ns0:text>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1022.4326 431.80485h82.4034c1.6 0 2.4 0.79999 2.4 2.39999v16.75516c0 1.6-0.8 2.4-2.4 2.4h-82.4034c-1.59993 0-2.39992-0.8-2.39992-2.4v-16.75516c0-1.6 0.79999-2.39999 2.39992-2.39999z" fill="#fff" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1022.4326 431.80485h82.4034c1.6 0 2.4 0.79999 2.4 2.39999v16.75516c0 1.6-0.8 2.4-2.4 2.4h-82.4034c-1.59993 0-2.39992-0.8-2.39992-2.4v-16.75516c0-1.6 0.79999-2.39999 2.39992-2.39999z" fill="none" stroke="#000" stroke-miterlimit="10" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1024.8327 443.7936h24" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
@@ -1144,7 +1144,7 @@
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 202.43296V301.68" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </ns0:g>
  <ns0:g clip-path="url(#j)">
-  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 214.83882h106.00542v62.02942h159.00815v-62.02942h53.0027v62.02942h318.0163v-62.02942h106.0054v62.02942h159.00817v-62.02942h53.00273v62.02942h53.0027v-62.02942h26.5013" fill="none" stroke="#000080" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
+  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 214.83882h106.00542v62.02942h53.00272v-62.02942h53.00273v62.02942h318.01629v-62.02942h53.00271v62.02942h53.0027v-62.02942h53.00277v62.02942h53.00263v-62.02942h106.00548v62.02942h53.00269v-62.02942h132.50673" fill="none" stroke="#000080" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
  </ns0:g>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 202.43296V301.68" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 202.43296V301.68" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
@@ -1153,22 +1153,22 @@
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="76.75659" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="129.75931" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="182.76201" y="-288.49726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="235.76473" y="-288.49726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="235.76473" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="288.76747" y="-288.49726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="341.77018" y="-288.49726">0</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="341.77018" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="394.7729" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="447.77558" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="500.7783" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="553.781" y="-288.49726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="606.78378" y="-288.49726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="606.78378" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="659.78646" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="712.7892" y="-288.49726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="765.7919" y="-288.49726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="818.7946" y="-288.49726">1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="871.7973" y="-288.49726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="765.7919" y="-288.49726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="818.7946" y="-288.49726">0</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="871.7973" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="924.8" y="-288.49726">1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="977.80276" y="-288.49726">0</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1030.8054" y="-288.49726">1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1030.8054" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1083.8081" y="-288.49726">0</ns0:tspan></ns0:text>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1054.506 275.3554h50.33c1.6 0 2.4 0.8 2.4 2.4v15.5246c0 1.6-0.8 2.4-2.4 2.4h-50.33c-1.6 0-2.4-0.8-2.4-2.4v-15.5246c0-1.6 0.8-2.4 2.4-2.4z" fill="#fff" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1054.506 275.3554h50.33c1.6 0 2.4 0.8 2.4 2.4v15.5246c0 1.6-0.8 2.4-2.4 2.4h-50.33c-1.6 0-2.4-0.8-2.4-2.4v-15.5246c0-1.6 0.8-2.4 2.4-2.4z" fill="none" stroke="#000" stroke-miterlimit="10" />
@@ -1547,7 +1547,7 @@
   <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 44.752946V144" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </ns0:g>
  <ns0:g clip-path="url(#cp)">
-  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 51.842023h26.501354v70.890747h26.50136v-70.890747h26.50135v70.890747h53.00271v-70.890747h26.50137v70.890747h26.50136v-70.890747h26.50137v70.890747h26.50135v-70.890747h53.00272v70.890747h53.00271v-70.890747h26.50132v70.890747h26.5014v-70.890747h26.50134v70.890747h26.50136v-70.890747h26.5014v70.890747h26.5013v-70.890747h26.50139v70.890747h26.50131v-70.890747h26.5014v70.890747h26.50138v-70.890747h53.00268v70.890747h26.50141v-70.890747h26.50133v70.890747h53.00269v-70.890747h26.50131v70.890747h26.5014v-70.890747h26.50138v70.890747h26.50132v-70.890747h53.00277v70.890747h53.00263v-70.890747h53.0027v70.890747h13.2508" fill="none" stroke="#000080" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
+  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m53.181726 51.842023h26.501354v70.890747h26.50136v-70.890747h26.50135v70.890747h53.00271v-70.890747h53.00273v70.890747h53.00272v-70.890747h26.50135v70.890747h26.50137v-70.890747h26.50133v70.890747h26.50138v-70.890747h26.50132v70.890747h26.5014v-70.890747h26.50134v70.890747h26.50136v-70.890747h26.5014v70.890747h26.5013v-70.890747h53.0027v70.890747h53.00278v-70.890747h53.00268v70.890747h53.00274v-70.890747h53.00269v70.890747h26.50131v-70.890747h26.5014v70.890747h53.0027v-70.890747h53.00277v70.890747h26.50133v-70.890747h26.5013v70.890747h26.5014v-70.890747h26.5013v70.890747h13.2508" fill="none" stroke="#000080" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
  </ns0:g>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M53.181726 44.752946V144" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="M1113.236 44.752946V144" fill="none" stroke="#000" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" />
@@ -1556,22 +1556,22 @@
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="67.32677 71.22415 77.07023 86.16811" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="120.32948 124.22687 130.07295 139.17084" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="173.3322 182.43009 188.27617 192.17356" y="-130.37418">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="226.33492 235.4328 241.27889 245.17627" y="-130.37418">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="226.33492 230.2323 236.07839 245.17627" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="279.33763 288.4355 294.28157 298.17897" y="-130.37418">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="332.34034 336.23774 342.0838 351.18168" y="-130.37418">-1+1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="332.34034 341.4382 347.28428 351.18165" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="385.34306 394.44093 400.287 404.1844" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="438.34577 447.44364 453.2897 457.18708" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="491.34849 500.44636 506.29243 510.18983" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="544.3512 553.4491 559.29519 563.19259" y="-130.37418">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="597.35397 606.45187 612.2979 616.1953" y="-130.37418">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="597.35397 601.25137 607.0974 616.1953" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="650.3566 659.4545 665.3006 669.198" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="703.3593 707.2567 713.1028 722.2007" y="-130.37418">-1+1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="756.36209 760.25949 766.1055 775.2034" y="-130.37418">-1+1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="809.36477 818.46267 824.3087 828.2061" y="-130.37418">+1-1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="862.3675 871.4654 877.31149 881.20889" y="-130.37418">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="756.36209 765.45999 771.306 775.2034" y="-130.37418">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="809.36477 813.26217 819.1082 828.2061" y="-130.37418">-1+1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="862.3675 866.2649 872.11099 881.20889" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="915.3702 924.4681 930.31417 934.21157" y="-130.37418">+1-1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="968.3729 972.2703 978.1164 987.2143" y="-130.37418">-1+1</ns0:tspan></ns0:text>
- <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1021.3756 1030.4735 1036.3196 1040.2169" y="-130.37418">+1-1</ns0:tspan></ns0:text>
+ <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1021.3756 1025.273 1031.119 1040.2169" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve"><ns0:tspan x="1074.3783 1078.2756 1084.1217 1093.2196" y="-130.37418">-1+1</ns0:tspan></ns0:text>
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1022.7602 116.44483h82.07584c1.6 0 2.4 0.800008 2.4 2.4v16.75517c0 1.6-0.8 2.4-2.4 2.4h-82.07584c-1.59998 0-2.39997-0.8-2.39997-2.4v-16.75517c0-1.599992 0.79999-2.4 2.39997-2.4z" fill="#fff" />
  <ns0:path transform="matrix(2,0,0,-2,0,1241.28)" d="m1022.7602 116.44483h82.07584c1.6 0 2.4 0.800008 2.4 2.4v16.75517c0 1.6-0.8 2.4-2.4 2.4h-82.07584c-1.59998 0-2.39997-0.8-2.39997-2.4v-16.75517c0-1.599992 0.79999-2.4 2.39997-2.4z" fill="none" stroke="#000" stroke-miterlimit="10" />
