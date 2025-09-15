@@ -316,8 +316,7 @@ class ConstellationPlot(BasePlot):
 
         # Define amplitude alvo para pontos ideais
         if self.amplitude is None:
-            power = np.mean(dI_c**2 + dQ_c**2)
-            amp = np.sqrt(power) / np.sqrt(2)
+            amp = np.sqrt(3)/2
         else:
             amp = self.amplitude
             # Normaliza as amostras para a amplitude definida
@@ -335,7 +334,7 @@ class ConstellationPlot(BasePlot):
         self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
 
         # Pontos ideais QPSK
-        qpsk_points = np.array([[1/np.sqrt(2), 1/np.sqrt(2)], [1/np.sqrt(2), -1/np.sqrt(2)], [-1/np.sqrt(2), 1/np.sqrt(2)], [-1/np.sqrt(2), -1/np.sqrt(2)]])
+        qpsk_points = np.array([[amp, amp], [amp, -amp], [-amp, amp], [-amp, -amp]])
         if show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
                             color="blue", s=160, marker="o", label="Pontos Ideais", linewidth=2)

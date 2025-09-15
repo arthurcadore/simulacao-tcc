@@ -277,7 +277,7 @@ if __name__ == "__main__":
     # cria um sinal só de ruído para teste sem portadora
     # s_noisy = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
     
-    threshold = -8.5
+    threshold = -8
     detector = CarrierDetector(fs=transmitter.fs, seg_ms=20, segments=2, threshold=threshold)
     
     results = detector.detect(s_noisy.copy())

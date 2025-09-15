@@ -1,4 +1,4 @@
-# CHANGELOG/ROADMAP
+# CHANGELOG / ROADMAP
 
 ---
 ### v1.0.1 - Base
@@ -75,3 +75,4 @@
 - [] Diagrama de blocos
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
+    - [] Alterar bloco do receptor pra ficar dentro de detector.

@@ -42,6 +42,7 @@ nav:
   - Instalação: 
       - Instalação pip: api/api.md
       - Instalação manual: api/guia.md
+      - Changelog: changelog.md
   - Componentes:
       - Datagrama: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
