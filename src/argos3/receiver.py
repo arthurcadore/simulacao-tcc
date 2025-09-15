@@ -634,8 +634,8 @@ class Receiver:
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
         """
-        decoderNRZ = Encoder("nrz2")
-        decoderManchester = Encoder("nrz2")
+        decoderNRZ = Encoder("nrz")
+        decoderManchester = Encoder("nrz")
         i_quantized = np.array(Xnrz_prime)
         q_quantized = np.array(Yman_prime)
         

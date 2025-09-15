@@ -284,8 +284,8 @@ class Transmitter:
             ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
-        encoderNRZ = Encoder("nrz2")
-        encoderManchester = Encoder("nrz2")
+        encoderNRZ = Encoder("nrz")
+        encoderManchester = Encoder("nrz")
         Xnrz = encoderNRZ.encode(Xn)
         Yman = encoderManchester.encode(Yn)
 

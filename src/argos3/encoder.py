@@ -32,8 +32,7 @@ class Encoder:
         """
         method_map = {
             "nrz": 0,
-            "manchester": 1,
-            "nrz2": 2
+            "manchester": 1
         }
 
         method = method.lower()
@@ -74,34 +73,24 @@ class Encoder:
         Returns:
             out (np.ndarray): Vetor de simbolos codificados.
         """
-        out = np.empty(bitstream.size * 2, dtype=int)
 
         if self.method == 0:  # NRZ
-            for i, bit in enumerate(bitstream):
-                if bit == 0:
-                    out[2*i] = -1
-                    out[2*i + 1] = -1
-                elif bit == 1:
-                    out[2*i] = +1
-                    out[2*i + 1] = +1
-
-        elif self.method == 1:  # Manchester
-            for i, bit in enumerate(bitstream):
-                if bit == 0:
-                    out[2*i] = -1
-                    out[2*i + 1] = +1
-                elif bit == 1:
-                    out[2*i] = +1
-                    out[2*i + 1] = -1
-
-        # NRZ sem duplicata
-        elif self.method == 2:
             out = np.empty(bitstream.size, dtype=int)
             for i, bit in enumerate(bitstream):
                 if bit == 0:
                     out[i] = -1
                 elif bit == 1:
                     out[i] = +1
+
+        elif self.method == 1:  # Manchester
+            out = np.empty(bitstream.size * 2, dtype=int)
+            for i, bit in enumerate(bitstream):
+                if bit == 0:
+                    out[2*i] = -1
+                    out[2*i + 1] = +1
+                elif bit == 1:
+                    out[2*i] = +1
+                    out[2*i + 1] = -1
 
         else:
             raise ValueError(f"Método de codificação não implementado: {self.method}")
@@ -142,28 +131,8 @@ class Encoder:
             out (np.ndarray): Vetor de bits decodificado.
 
         """
-        
-        n = encoded_stream.size // 2
-        decoded = np.empty(n, dtype=int)
 
         if self.method == 0:  # NRZ
-            for i in range(n):
-                pair = encoded_stream[2*i:2*i + 2]
-                if np.array_equal(pair, [-1, -1]):
-                    decoded[i] = 0
-                else:
-                    decoded[i] = 1
-
-
-        elif self.method == 1:  # Manchester
-            for i in range(n):
-                pair = encoded_stream[2*i:2*i + 2]
-                if np.array_equal(pair, [-1, 1]):
-                    decoded[i] = 0
-                else:
-                    decoded[i] = 1
-        
-        elif self.method == 2:  # NRZ sem duplicata
             n = encoded_stream.size 
             decoded = np.empty(n, dtype=int)
             for i in range(n):
@@ -171,7 +140,17 @@ class Encoder:
                     decoded[i] = 0
                 else:
                     decoded[i] = 1
-                
+
+
+        elif self.method == 1:  # Manchester
+            n = encoded_stream.size // 2
+            decoded = np.empty(n, dtype=int)
+            for i in range(n):
+                pair = encoded_stream[2*i:2*i + 2]
+                if np.array_equal(pair, [-1, 1]):
+                    decoded[i] = 0
+                else:
+                    decoded[i] = 1
 
         else:
             raise ValueError(f"Método de decodificação não implementado: {self.method}")
