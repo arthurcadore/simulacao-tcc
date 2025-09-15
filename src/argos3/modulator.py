@@ -10,7 +10,7 @@ from .encoder import Encoder
 from .plotter import PhasePlot, create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 
 class Modulator:
-    def __init__(self, fc, fs=128_000):
+    def __init__(self, fc=None, fs=128_000):
         r"""
         Inicializa um modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
 
@@ -31,7 +31,7 @@ class Modulator:
         AS3-SP-516-274-CNES (seção 3.2.5.3)
         </div>
         """
-        if fc <= 0:
+        if fc is None or fc <= 0:
             raise ValueError("A frequência da portadora deve ser maior que zero.")
         
         if fs <= fc*2:

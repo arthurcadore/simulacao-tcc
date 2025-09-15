@@ -14,7 +14,7 @@ from .receiver import Receiver
 
 
 class CarrierDetector:
-    def __init__(self, fs: float, seg_ms: float = 10.0, segments: int = 2,
+    def __init__(self, fs: float = 128_000, seg_ms: float = 10.0, segments: int = 2,
                  threshold: float = -10,
                  freq_window: tuple[float, float] = (1000, 9000)):
         """

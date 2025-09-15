@@ -10,7 +10,7 @@ from scipy.signal import butter, filtfilt, lfilter
 from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, PoleZeroPlot, FrequencyResponsePlot
 
 class LPF:
-    def __init__(self, cut_off, order, fs=128_000, type="butter"):
+    def __init__(self, cut_off=600, order=6, fs=128_000, type="butter"):
         r"""
         Inicializa um filtro passa-baixa com base em uma frequência de corte $f_{cut}$ e uma ordem $N$.
 

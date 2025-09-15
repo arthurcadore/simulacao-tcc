@@ -62,10 +62,10 @@
 - [X] Otimizar classes de tx/rx, instânciar direto no construtor.
 - [X] Alterar detector para checkfrequencies ser chamado dentro da classe
 - [X] Adicionar método update para alterar delay do sinal recebido
-- [] Adicionar defaults na construção de classes (argumentos que forem possiveis).
+- [X] Diminuir passo de frequência aleatória na classe detector. 
+- [X] Adicionar defaults na construção de classes (argumentos que forem possiveis).
 - [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
 - [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
-- [] Diminuir passo de frequência aleatória na classe detector. 
 - [] Adicionar documentação interna as classes
     - [] Alterar "exemplo" para "example" nos comentários. 
     - [] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py

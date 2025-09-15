@@ -12,7 +12,7 @@ import numpy as np
 from .plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
 
 class Encoder:
-    def __init__(self, method):
+    def __init__(self, method="NRZ"):
         r"""
         Inicializa o codificador de linha com o método de codificação especificado. 
 
@@ -98,7 +98,7 @@ class Encoder:
         return out
 
 
-    def decode(self, encoded_stream):
+    def decode(self, encodedstream):
         r"""
         Decodifica o vetor de simbolos usando o método especificado na inicialização. O processo de decodificação de linha é dado pelas expressões abaixo correspondente a cada método.
 
@@ -133,20 +133,20 @@ class Encoder:
         """
 
         if self.method == 0:  # NRZ
-            n = encoded_stream.size 
+            n = encodedstream.size 
             decoded = np.empty(n, dtype=int)
             for i in range(n):
-                if encoded_stream[i] == -1:
+                if encodedstream[i] == -1:
                     decoded[i] = 0
                 else:
                     decoded[i] = 1
 
 
         elif self.method == 1:  # Manchester
-            n = encoded_stream.size // 2
+            n = encodedstream.size // 2
             decoded = np.empty(n, dtype=int)
             for i in range(n):
-                pair = encoded_stream[2*i:2*i + 2]
+                pair = encodedstream[2*i:2*i + 2]
                 if np.array_equal(pair, [-1, 1]):
                     decoded[i] = 0
                 else:
