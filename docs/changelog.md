@@ -47,15 +47,15 @@
     - [X] Identificar instante de maior correlação, instante otimo para amostragem. 
     - [X] Alterar cadeia do receiver para comportar o uso do sincronismo
 
-### v1.0.5 - Channel Encoding 
+---
+### v1.0.4 - Channel Encoding 
 - [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
 - [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
 - [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
 - [ ] Otimizar MatchedFilter para consumir formatter.
 
-
 ---
-### v1.0.6 - Documentation
+### v1.0.5 - Optimization
 - [ ] Otimizar classes de plots
     - [ ] Verificar plot de constelação, normalização do sinal recebido
 - [ ] Otimizar classes de tx/rx, instânciar direto no construtor.

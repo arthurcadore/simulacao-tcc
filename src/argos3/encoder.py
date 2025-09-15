@@ -167,7 +167,11 @@ class Encoder:
             n = encoded_stream.size 
             decoded = np.empty(n, dtype=int)
             for i in range(n):
-                decoded[i] = encoded_stream[i]
+                if encoded_stream[i] == -1:
+                    decoded[i] = 0
+                else:
+                    decoded[i] = 1
+                
 
         else:
             raise ValueError(f"Método de decodificação não implementado: {self.method}")

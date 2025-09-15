@@ -290,8 +290,8 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
         """
 
-        matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
+        matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb/2, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+        matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
         It_prime = matched_filter_I.apply_filter(dI_prime)
         Qt_prime = matched_filter_Q.apply_filter(dQ_prime)
 
@@ -514,13 +514,16 @@ class Receiver:
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
-        sampler = Sampler(fs=self.fs, Rb=self.Rb, t=t, delay=delayQ)
-        i_signal_sampled = sampler.sample(It_prime)
-        q_signal_sampled = sampler.sample(Qt_prime)
-        t_sampled = sampler.sample(t)
+        samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayQ)
+        samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayQ)
+        i_signal_sampled = samplerI.sample(It_prime)
+        q_signal_sampled = samplerQ.sample(Qt_prime)
 
-        Xnrz_prime = sampler.quantize(i_signal_sampled)
-        Yman_prime = sampler.quantize(q_signal_sampled)
+        t_sampledI = samplerI.sample(t)
+        t_sampledQ = samplerQ.sample(t)
+
+        Xnrz_prime = samplerI.quantize(i_signal_sampled)
+        Yman_prime = samplerQ.quantize(q_signal_sampled)
 
         if self.output_print:
             print("\n ==== DECISOR ==== \n")
@@ -534,7 +537,7 @@ class Receiver:
                 fig_sampler, grid_sampler, (0, 0),
                 t,
                 It_prime,
-                t_sampled,
+                t_sampledI,
                 i_signal_sampled,
                 colors='darkgreen'
             ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $I$ amostrado")
@@ -543,7 +546,7 @@ class Receiver:
                 fig_sampler, grid_sampler, (1, 0),
                 t,
                 Qt_prime,
-                t_sampled,
+                t_sampledQ,
                 q_signal_sampled,
                 colors='navy'
             ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $Q$ amostrado")
@@ -598,7 +601,7 @@ class Receiver:
 
             PhasePlot(
                 fig_phase, grid_phase, (0, 1),
-                t=t_sampled,
+                t=t_sampledI,
                 signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$ - Decidido",
@@ -631,8 +634,8 @@ class Receiver:
         Exemplo:
             - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
         """
-        decoderNRZ = Encoder("nrz")
-        decoderManchester = Encoder("manchester")
+        decoderNRZ = Encoder("nrz2")
+        decoderManchester = Encoder("nrz2")
         i_quantized = np.array(Xnrz_prime)
         q_quantized = np.array(Yman_prime)
         

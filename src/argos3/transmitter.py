@@ -284,8 +284,8 @@ class Transmitter:
             ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
-        encoderNRZ = Encoder("nrz")
-        encoderManchester = Encoder("Manchester")
+        encoderNRZ = Encoder("nrz2")
+        encoderManchester = Encoder("nrz2")
         Xnrz = encoderNRZ.encode(Xn)
         Yman = encoderManchester.encode(Yn)
 
@@ -343,8 +343,8 @@ class Transmitter:
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
-        formatterI = Formatter(fs=self.fs, Rb=self.Rb, type="RRC", channel="I", bits_per_symbol=1)
-        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="RRC", channel="Q", bits_per_symbol=1)
+        formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1)
+        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2)
 
         dI = formatterI.apply_format(Xnrz)
         dQ = formatterQ.apply_format(Yman)
