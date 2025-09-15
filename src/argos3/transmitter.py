@@ -17,8 +17,7 @@ from .data import ExportData, ImportData
 from .plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
 
 class Transmitter:
-    def __init__(self, fc=4000, fs=128_000, Rb=400, 
-                 output_print=True, output_plot=True):
+    def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.
 
@@ -38,21 +37,28 @@ class Transmitter:
         </div>
         """
 
+        # Parâmetros
         self.fc = fc
         self.fs = fs
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
 
+        if carrier_length:
+            self.prefix_duration = carrier_length
+        else:
+            # Gera um valor aleatório entre 82 e 122 ms
+            self.prefix_duration = np.random.uniform(0.082, 0.122)
+
         # Submodulos
-        self.encoder = EncoderConvolutional()
+        self.encoder = EncoderConvolutional(G=G)
         self.scrambler = Scrambler()
-        self.preamble = Preamble()
+        self.preamble = Preamble(preamble_hex=preamble)
         self.multiplexer = Multiplexer()
         self.c_encoderI = Encoder("nrz")
         self.c_encoderQ = Encoder("nrz")
-        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1)
-        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2)
+        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=self.prefix_duration)
+        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=self.prefix_duration)
         self.modulator = Modulator(fc=self.fc, fs=self.fs)
 
     def prepare_datagram(self, datagram: Datagram):
@@ -374,6 +380,7 @@ class Transmitter:
             print("\n ==== FORMATADOR ==== \n")
             print("dI:", ''.join(map(str, dI[:5])),"...")
             print("dQ:", ''.join(map(str, dQ[:5])),"...")
+            print("Prefix Duration:", self.prefix_duration)
             
         if self.output_plot:
             fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
@@ -652,16 +659,22 @@ class Transmitter:
 
 if __name__ == "__main__":
 
-    datagram = Datagram(pcdnum=1234, numblocks=1)
-    datagram2 = Datagram(pcdnum=6789, numblocks=8)
-
     # Cria uma instância de transmissor
     transmitter = Transmitter(output_print=True, output_plot=True)
 
-    # Transmite o datagrama 1
-    t, s = transmitter.run(datagram)
-    ExportData([s, t], "transmitter_st").save()
+    datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=10)
+    datagram2 = Datagram(pcdnum=1234, numblocks=1, seed=10)
 
-    # Transmite o datagrama 2
+    # Transmite o datagrama 1
+    t1, s1 = transmitter.run(datagram1)
     t2, s2 = transmitter.run(datagram2)
-    
+
+    # Verifica se os vetores são iguais
+    if np.array_equal(s1, s2):
+        print("S1 == S2")
+    else:
+        print("S1 != S2")
+
+    # Exporta os dados
+    ExportData([s1, t1], "transmitter_st").save()
+

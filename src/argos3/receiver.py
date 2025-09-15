@@ -799,16 +799,16 @@ class Receiver:
     
     def datagram(self, ut):
         r"""
-        Gera um datagrama no padrão ARGOS-3.
+        Recebe um vetor de bits $u_{t}'$ decodificado e retorna um datagrama no padrão ARGOS-3, ou o vetor de bits $u_{t}'$ se houver erro.
 
         Args:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
 
         Returns:
-            - datagram (np.ndarray): Datagrama gerado.
-            - success (bool): Indica se a operação foi bem-sucedida.
+            datagram (np.ndarray): Datagrama gerado, ou o vetor de bits $u_{t}'$ se houver erro.
+            success (bool): Indica se a operação foi bem-sucedida.
 
-        Example:
+        Example:print
             - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
         """
         try:
@@ -870,9 +870,9 @@ if __name__ == "__main__":
     fc = 4000
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
+    transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
+    t, s = transmitter.run(datagramTX)
     bitsTX = datagramTX.streambits  
-    transmitter = Transmitter(fc=fc, datagram=datagramTX, output_print=True, output_plot=True)
-    t, s = transmitter.run()
 
     ebn0_db = 20
     add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
