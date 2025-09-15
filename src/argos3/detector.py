@@ -259,17 +259,21 @@ if __name__ == "__main__":
     
     fc1 = np.random.randint(10, 50)*100
     fc2 = fc1 + 1000
+    fc3 = fc2 + 1000
     
     print("Frequência Portadora 1: ", fc1)
     print("Frequência Portadora 2: ", fc2)
+    print("Frequência Portadora 3: ", fc3)
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
-    transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=1)
-    transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=True, output_plot=True, carrier_length=1)
+    transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+    transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+    transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=True, output_plot=True, carrier_length=0.08)
 
     t1, s1 = transmitter1.transmit(datagram)
     t2, s2 = transmitter2.transmit(datagram)
-    st = s1 + s2
+    t3, s3 = transmitter3.transmit(datagram)
+    st = s1 + s2 + s3
 
     # Adicionando ruído ao sinal
     print("\n ==== CANAL ==== \n")
