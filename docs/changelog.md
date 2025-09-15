@@ -49,19 +49,29 @@
 
 ---
 ### v1.0.4 - Channel Encoding 
-- [X] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
-- [X] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
-- [X] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
+- [X] Alterar codificação de linha pra ficar apenas em NRZ
+- [X] Alterar pulso formatador NRZ para ser soma de 2x RRC deslocados
+- [X] Aplicar pulso formatador RRC no canal I e pulso MAN no canal Q
 - [X] Otimizar MatchedFilter para consumir formatter.
+- [X] Otimizar Encoder para ter apenas NRZ e Manchester
 
 ---
 ### v1.0.5 - Optimization
-- [] Otimizar plot do encoder. 
-- [] Alterar documentação da classe de encoder
-- [ ] Otimizar classes de plots
-    - [ ] Verificar plot de constelação, normalização do sinal recebido
-- [ ] Otimizar classes de tx/rx, instânciar direto no construtor.
-- [ ] Adicionar documentação interna as classes
-    - [ ] Verificar equacionamento sklar e alterar nome das variáveis.
-    - [ ] Otimizar parse do datagrama ARGOS-3
-    - [ ] Adicionar melhor documentação a aba inicio
+- [] Otimizar classes de tx/rx, instânciar direto no construtor.
+- [] Otimizar parse do datagrama ARGOS-3
+- [] Adicionar documentação interna as classes
+    - [] Alterar "exemplo" para "example" nos comentários. 
+    - [] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
+    - [] Verificar equacionamento sklar e alterar nome das variáveis.
+    - [] Alterar documentação da classe de encoder
+    - [] adicionar prints de impulso casado na documentação
+- [] Otimizar plots
+    - [] Verificar plot de constelação, normalização do sinal recebido
+    - [] Otimizar plot do encoder. 
+    - [] Criar método para testar todas as classes no makefile. 
+    - [] Padronizar cor dos plots.
+    - [] Alterar tamanho do plot pz fpb
+- [] Adicionar melhor documentação a aba inicio
+- [] Diagrama de blocos
+    - [] Alterar diagrama do modulador
+    - [] Alterar nome das variáveis
