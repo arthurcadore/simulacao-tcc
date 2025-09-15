@@ -6,7 +6,9 @@ readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
     { name = "Arthur Cadore", email = "arthurbarcella.ifsc@gmail.com" }
 ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
+
 dependencies = [
     "numpy>=1.21.0",
     "matplotlib>=3.4.0",
