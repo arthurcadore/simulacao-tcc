@@ -17,7 +17,7 @@ from .data import ExportData, ImportData
 from .plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
 
 class Transmitter:
-    def __init__(self, datagram: Datagram, fc=4000, fs=128_000, Rb=400, 
+    def __init__(self, fc=4000, fs=128_000, Rb=400, 
                  output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.
@@ -37,14 +37,25 @@ class Transmitter:
         AS3-SP-516-274-CNES (seção 3.1 e 3.2)
         </div>
         """
-        self.datagram = datagram
+
         self.fc = fc
         self.fs = fs
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
 
-    def prepare_datagram(self):
+        # Submodulos
+        self.encoder = EncoderConvolutional()
+        self.scrambler = Scrambler()
+        self.preamble = Preamble()
+        self.multiplexer = Multiplexer()
+        self.c_encoderI = Encoder("nrz")
+        self.c_encoderQ = Encoder("nrz")
+        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1)
+        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2)
+        self.modulator = Modulator(fc=self.fc, fs=self.fs)
+
+    def prepare_datagram(self, datagram: Datagram):
         r"""
         Gera o datagrama para transmissão, retornando o vetor de bits $u_t$.
 
@@ -54,24 +65,27 @@ class Transmitter:
         Example:
             ![pageplot](assets/transmitter_datagram_time.svg)
         """
-        ut = self.datagram.streambits
+
+        ut = datagram.streambits
+
         if self.output_print:
             print("\n ==== MONTAGEM DATAGRAMA ==== \n")
-            print(self.datagram.parse_datagram())
+            print(datagram.parse_datagram())
             print("\nut:", ''.join(map(str, ut)))
+
         if self.output_plot:
             fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
 
             BitsPlot(
                 fig_datagram, grid, (0, 0),
-                bits_list=[self.datagram.msglength, 
-                           self.datagram.pcdid, 
-                           self.datagram.blocks, 
-                           self.datagram.tail],
-                sections=[("Message Length", len(self.datagram.msglength)),
-                          ("PCD ID", len(self.datagram.pcdid)),
-                          ("Dados de App.", len(self.datagram.blocks)),
-                          ("Tail", len(self.datagram.tail))],
+                bits_list=[datagram.msglength, 
+                           datagram.pcdid, 
+                           datagram.blocks, 
+                           datagram.tail],
+                sections=[("Message Length", len(datagram.msglength)),
+                          ("PCD ID", len(datagram.pcdid)),
+                          ("Dados de App.", len(datagram.blocks)),
+                          ("Tail", len(datagram.tail))],
                 colors=["green", "orange", "red", "blue"]
             ).plot(xlabel="Index de Bit")
 
@@ -94,12 +108,14 @@ class Transmitter:
         Example:
             ![pageplot](assets/transmitter_conv_time.svg)
         """
-        encoder = EncoderConvolutional()
-        vt0, vt1 = encoder.encode(ut)
+
+        vt0, vt1 = self.encoder.encode(ut)
+
         if self.output_print:
             print("\n ==== CODIFICADOR CONVOLUCIONAL ==== \n")
             print("vt0:", ''.join(map(str, vt0)))
             print("vt1:", ''.join(map(str, vt1)))
+
         if self.output_plot:
             fig_conv, grid_conv = create_figure(3, 1, figsize=(16, 9))
 
@@ -143,12 +159,14 @@ class Transmitter:
         Example:
             ![pageplot](assets/transmitter_scrambler_time.svg)
         """
-        scrambler = Scrambler()
-        X, Y = scrambler.scramble(vt0, vt1)
+
+        X, Y = self.scrambler.scramble(vt0, vt1)
+
         if self.output_print:
             print("\n ==== EMBARALHADOR ==== \n")
             print("Xn:", ''.join(map(str, X)))
             print("Yn:", ''.join(map(str, Y)))
+            
         if self.output_plot:
             fig_scrambler, grid_scrambler = create_figure(2, 2, figsize=(16, 9))
 
@@ -196,11 +214,14 @@ class Transmitter:
         Example:
             ![pageplot](assets/transmitter_preamble_time.svg)
         """
-        sI, sQ = Preamble().generate_preamble()
+        
+        sI, sQ = self.preamble.generate_preamble()
+
         if self.output_print:
             print("\n ==== MONTAGEM PREAMBULO ==== \n")
             print("sI:", ''.join(map(str, sI)))
             print("sQ:", ''.join(map(str, sQ)))
+
         if self.output_plot:
             fig_preamble, grid_preamble = create_figure(2, 1, figsize=(16, 9))
 
@@ -220,6 +241,7 @@ class Transmitter:
 
             fig_preamble.tight_layout()
             save_figure(fig_preamble, "transmitter_preamble_time.pdf")
+
         return sI, sQ
 
     def multiplex(self, sI, sQ, X, Y):
@@ -240,14 +262,16 @@ class Transmitter:
             ![pageplot](assets/transmitter_mux_time.svg)
         """
 
-        multiplexer = Multiplexer()
-        Xn, Yn = multiplexer.concatenate(sI, sQ, X, Y)
+        Xn, Yn = self.multiplexer.concatenate(sI, sQ, X, Y)
+
         if self.output_print:
             print("\n ==== MULTIPLEXADOR ==== \n")
             print("Xn:", ''.join(map(str, Xn)))
             print("Yn:", ''.join(map(str, Yn)))
+
         if self.output_plot:
             fig_mux, grid_mux = create_figure(2, 1, figsize=(16, 9))
+
             BitsPlot(
                 fig_mux, grid_mux, (0,0),
                 bits_list=[sI, X],
@@ -284,15 +308,14 @@ class Transmitter:
             ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
-        encoderNRZ = Encoder("nrz")
-        encoderManchester = Encoder("nrz")
-        Xnrz = encoderNRZ.encode(Xn)
-        Yman = encoderManchester.encode(Yn)
+        Xi = self.c_encoderI.encode(Xn)
+        Yq = self.c_encoderQ.encode(Yn)
 
         if self.output_print:
             print("\n ==== CODIFICAÇÃO DE LINHA ==== \n")
-            print("Xnrz:", ' '.join(f"{x:+d}" for x in Xnrz[:40]),"...")
-            print("Yman:", ' '.join(f"{y:+d}" for y in Yman[:40]),"...")
+            print("Xi:", ' '.join(f"{x:+d}" for x in Xi[:40]),"...")
+            print("Yq:", ' '.join(f"{y:+d}" for y in Yq[:40]),"...")
+
         if self.output_plot:
             fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
 
@@ -305,9 +328,9 @@ class Transmitter:
 
             EncodedBitsPlot(
                 fig_encoder, grid, (1, 0),
-                bits=Xnrz,
+                bits=Xi,
                 color='darkgreen',
-            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xi)/2))
 
             BitsPlot(
                 fig_encoder, grid, (2, 0),
@@ -318,15 +341,16 @@ class Transmitter:
 
             EncodedBitsPlot(
                 fig_encoder, grid, (3, 0),
-                bits=Yman,
+                bits=Yq,
                 color="navy",
-            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman)/2))
+            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yq)/2))
 
             fig_encoder.tight_layout()
             save_figure(fig_encoder, "transmitter_encoder_time.pdf")
-        return Xnrz, Yman
 
-    def format_signals(self, Xnrz, Yman):
+        return Xi, Yq
+
+    def format_signals(self, Xi, Yq):
         r"""
         Formata os vetores de sinal codificados $X_{NRZ}$ e $Y_{MAN}$ usando filtro RRC, retornando os vetores formatados $d_I$ e $d_Q$.
 
@@ -343,11 +367,8 @@ class Transmitter:
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
-        formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1)
-        formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2)
-
-        dI = formatterI.apply_format(Xnrz)
-        dQ = formatterQ.apply_format(Yman)
+        dI = self.formatterI.apply_format(Xi)
+        dQ = self.formatterQ.apply_format(Yq)
         
         if self.output_print:
             print("\n ==== FORMATADOR ==== \n")
@@ -359,21 +380,21 @@ class Transmitter:
 
             ImpulseResponsePlot(
                 fig_format, grid_format, (0, 0),
-                formatterI.t_rc, formatterI.g,
+                self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             ImpulseResponsePlot(
                 fig_format, grid_format, (0, 1),
-                formatterQ.t_rc, formatterQ.g,
+                self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             TimePlot(
                 fig_format, grid_format, (1,0),
-                t= np.arange(len(dI)) / formatterI.fs,
+                t= np.arange(len(dI)) / self.formatterI.fs,
                 signals=[dI],
                 labels=["$d_I(t)$"],
                 title="Canal $I$",
@@ -387,7 +408,7 @@ class Transmitter:
 
             TimePlot(
                 fig_format, grid_format, (1,1),
-                t= np.arange(len(dQ)) / formatterQ.fs,
+                t= np.arange(len(dQ)) / self.formatterQ.fs,
                 signals=[dQ],
                 labels=["$d_Q(t)$"],
                 title="Canal $Q$",
@@ -406,14 +427,14 @@ class Transmitter:
 
             ImpulseResponsePlot(
                 fig_format_freq, grid_format_freq, (0, 0),
-                formatterI.t_rc, formatterI.g,
+                self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
 
             ImpulseResponsePlot(
                 fig_format_freq, grid_format_freq, (0, 1),
-                formatterQ.t_rc, formatterQ.g,
+                self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
             ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -465,14 +486,17 @@ class Transmitter:
             - Portadora: ![pageplot](assets/transmitter_modulator_portadora.svg)
             - Fase e Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
-        modulator = Modulator(fc=self.fc, fs=self.fs)
-        t, s = modulator.modulate(dI, dQ)
+
+        t, s = self.modulator.modulate(dI, dQ)
+
         if self.output_print:
             print("\n ==== MODULADOR ==== \n")
             print("s(t):", ''.join(map(str, s[:5])),"...")
             print("t:   ", ''.join(map(str, t[:5])),"...")
+
         if self.output_plot:
             fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+
             TimePlot(
                 fig_time, grid, (0, 0),
                 t=t,
@@ -604,15 +628,18 @@ class Transmitter:
 
         return t, s
 
-    def run(self):
+    def run(self, datagram: Datagram):
         r"""
         Executa o processo de transmissão, retornando o sinal modulado $s(t)$ e o vetor de tempo $t$.
+
+        Args:
+            datagram (Datagram): Instância do datagrama a ser transmitido.
 
         Returns:
             t (np.ndarray): Vetor de tempo, $t$.
             s (np.ndarray): Sinal modulado, $s(t)$.
         """
-        ut = self.prepare_datagram()
+        ut = self.prepare_datagram(datagram)
         vt0, vt1 = self.encode_convolutional(ut)
         X, Y = self.scramble(vt0, vt1)
         sI, sQ = self.generate_preamble()
@@ -624,7 +651,17 @@ class Transmitter:
 
 
 if __name__ == "__main__":
+
     datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=True, output_plot=True)
-    t, s = transmitter.run()
+    datagram2 = Datagram(pcdnum=6789, numblocks=8)
+
+    # Cria uma instância de transmissor
+    transmitter = Transmitter(output_print=True, output_plot=True)
+
+    # Transmite o datagrama 1
+    t, s = transmitter.run(datagram)
     ExportData([s, t], "transmitter_st").save()
+
+    # Transmite o datagrama 2
+    t2, s2 = transmitter.run(datagram2)
+    
