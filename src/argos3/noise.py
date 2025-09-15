@@ -177,8 +177,8 @@ def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(datagram, output_print=False, output_plot=False)
-    t, s = transmitter.transmit()
+    transmitter = Transmitter(output_print=False, output_plot=False)
+    t, s = transmitter.transmit(datagram)
 
     # ADIÇÃO DE RUIDO USANDO SNR
     snr_db = 15

@@ -61,7 +61,7 @@
 - [X] Remover vetor de tempo no rx, criar interno.
 - [X] Otimizar classes de tx/rx, instânciar direto no construtor.
 - [X] Alterar detector para checkfrequencies ser chamado dentro da classe
-- [] Alterar construção do synchornize para permitir alterar o delay do sinal recebido.
+- [X] Adicionar método update para alterar delay do sinal recebido
 - [] Adicionar defaults na construção de classes (argumentos que forem possiveis).
 - [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
 - [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
@@ -79,6 +79,7 @@
     - [] Padronizar cor dos plots.
     - [] Alterar tamanho do plot pz fpb
     - [] Otimizar conversor de plots pra permitir darkTheme
+    - [] Alterar xlim para plots necessários. 
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
 - [] Verificar adição de diagrama de olho no sklar. 
