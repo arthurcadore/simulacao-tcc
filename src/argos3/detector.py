@@ -192,7 +192,6 @@ class CarrierDetector:
         segments = self.segment_signal(s)
         results = []
 
-
         # Processa cada segmento
         for seg in segments:
             freqs, P_db = self.analyze_segment(seg)
@@ -209,7 +208,9 @@ class CarrierDetector:
             freqs_detected = freqs[mask]
             results.append((seg, freqs_detected.tolist()))
 
-        return results
+        confirmed_freqs = self.check_frequencies(results)
+
+        return results, confirmed_freqs
 
     def check_frequencies(self, results: list[tuple[np.ndarray, list[float]]]): 
         """
@@ -226,6 +227,7 @@ class CarrierDetector:
 
         Args:
             results (list[tuple[np.ndarray, list[float]]]): saída de self.detect()
+            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
 
         Returns:
             confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
@@ -288,10 +290,12 @@ if __name__ == "__main__":
     # Detecção de portadora
     threshold = -8
     detector = CarrierDetector(fs=transmitter1.fs, seg_ms=20, segments=2, threshold=threshold) 
-    results = detector.detect(st.copy())
+    results, confirmed_freqs = detector.detect(st.copy())
 
     for idx, (seg, freqs) in enumerate(results, start=1):
         print(f"Segmento {idx}: {len(freqs)} frequências -> {freqs}")
+   
+    print("\nFrequências confirmadas:", confirmed_freqs)
 
     fig, grid = create_figure(2,1)
     DetectionFrequencyPlot(fig, grid, 0, 
@@ -318,9 +322,6 @@ if __name__ == "__main__":
 
     fig.tight_layout()
     save_figure(fig, "example_detector_freq.pdf")
-
-    confirmed_freqs = detector.check_frequencies(results)
-    print("\nFrequências confirmadas:", confirmed_freqs)
 
     # Para cada frequência confirmada, executa a recepção
     for idx, freq in enumerate(confirmed_freqs, start=1):

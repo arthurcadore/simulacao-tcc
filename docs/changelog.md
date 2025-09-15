@@ -60,7 +60,7 @@
 - [X] Otimizar parse do datagrama ARGOS-3
 - [X] Remover vetor de tempo no rx, criar interno.
 - [X] Otimizar classes de tx/rx, instânciar direto no construtor.
-- [] Alterar detector para checkfrequencies ser chamado dentro da classe, plots acredito que tmb.
+- [X] Alterar detector para checkfrequencies ser chamado dentro da classe
 - [] Alterar construção do synchornize para permitir alterar o delay do sinal recebido.
 - [] Adicionar defaults na construção de classes (argumentos que forem possiveis).
 - [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
