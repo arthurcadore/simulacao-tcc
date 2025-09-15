@@ -544,7 +544,6 @@ class Transmitter:
             fig_freq.tight_layout()
             save_figure(fig_freq, "transmitter_modulator_freq.pdf")
 
-            # PLOT 3 - Constelação
             fig_const, grid = create_figure(1, 2, figsize=(16, 8))
             PhasePlot(
                 fig_const, grid, (0, 0),
@@ -552,7 +551,7 @@ class Transmitter:
                 signals=[dI, dQ],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(40, 200),
+                xlim=(40, 320),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
@@ -575,7 +574,6 @@ class Transmitter:
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
 
-            # PLOT 4 - Portadora pura e sinal modulado
             fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
             FrequencyPlot(
                 fig_portadora, grid, (0, 0),
@@ -629,20 +627,4 @@ if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(datagram, output_print=True, output_plot=True)
     t, s = transmitter.run()
-
     ExportData([s, t], "transmitter_st").save()
-
-    # ## TESTE DE IMPORT:
-
-    # # Importa os dados    
-    # import_data = ImportData("transmitter_st")
-    # st = import_data.load()
-    
-    # print("s(t):", ''.join(map(str, s[:5])),"...")
-    # print("t:   ", ''.join(map(str, t[:5])),"...")
-
-
-    # # Verifica se os dados importados são iguais aos dados exportados
-    # if np.array_equal(s, st[0]) and np.array_equal(t, st[1]):
-    #     print("\nOs dados importados são iguais aos dados exportados.")
-    

@@ -425,25 +425,30 @@ class Receiver:
             Tempo: ![pageplot](assets/receiver_sync_time.svg)
             Módulo Correlação: ![pageplot](assets/receiver_sync_corr.svg)
         """
-        synchronizer = Synchronizer(fs=self.fs, Rb=self.Rb)
+        synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb)
+        delayI_min, delayI_max, delayI, corr_vec_I = synchronizerI.correlation(It_prime, "I")
 
-        delayQ_min, delayQ_max, delayQ, corr_vec = synchronizer.correlation(Qt_prime, "Q")
-
-        # Configurado para sincronização dos canais.
-        delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
+        synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb)
+        delayQ_min, delayQ_max, delayQ, corr_vec_Q = synchronizerQ.correlation(Qt_prime, "Q")
 
         if self.output_print:
             print("\n ==== SINCRONIZADOR ==== \n")
-            print("Delay Min  :", delayQ_min)
-            print("Delay Max  :", delayQ_max)
-            print("Delay Corr :", delayQ)
+            print("Delay Q Min  :", delayQ_min)
+            print("Delay Q Max  :", delayQ_max)
+            print("Delay Q Corr :", delayQ)
+            print("Delay I Min  :", delayI_min)
+            print("Delay I Max  :", delayI_max)
+            print("Delay I Corr :", delayI)
+
+        # Nota: delayI e delayQ devem ser iguais, portanto, delayI é ajustado para ser igual a delayQ
+        # O ajuste deve ser feito pois o canal I não suporta sincronização.
+        delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
         
         if self.output_plot:
-
             fig_corr, grid_corr = create_figure(1, 1, figsize=(16, 9))
             CorrelationPlot(
                 fig_corr, grid_corr, (0, 0),
-                corr_vec=corr_vec,  
+                corr_vec=corr_vec_Q,  
                 fs=self.fs,
                 xlim_ms=(40, 200),
                 colors="darkblue",
@@ -453,6 +458,7 @@ class Receiver:
                 },
             ).plot()
             fig_corr.tight_layout()
+            
             save_figure(fig_corr, "receiver_sync_corr.pdf")
     
             fig_sync, grid_sync = create_figure(2,1, figsize=(16, 9))
@@ -514,7 +520,7 @@ class Receiver:
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
-        samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayQ)
+        samplerI = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayI)
         samplerQ = Sampler(fs=self.fs, Rb=self.Rb/2, t=t, delay=delayQ)
         i_signal_sampled = samplerI.sample(It_prime)
         q_signal_sampled = samplerQ.sample(Qt_prime)
@@ -590,7 +596,7 @@ class Receiver:
                 signals=[It_prime, Qt_prime],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$",
-                xlim=(80, 240),
+                xlim=(40, 320),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={
@@ -605,7 +611,7 @@ class Receiver:
                 signals=[np.array(Xnrz_prime), np.array(Yman_prime)],
                 labels=["Fase $I + jQ$"],
                 title="Fase $I + jQ$ - Decidido",
-                xlim=(80, 240),
+                xlim=(40, 320),
                 ylim=(-np.pi, np.pi),
                 colors=["darkred"],
                 style={

@@ -53,11 +53,11 @@
 - [X] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
 - [X] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
 - [X] Otimizar MatchedFilter para consumir formatter.
-- [] Otimizar plot do encoder. 
-- [] Alterar documentação da classe de encoder
 
 ---
 ### v1.0.5 - Optimization
+- [] Otimizar plot do encoder. 
+- [] Alterar documentação da classe de encoder
 - [ ] Otimizar classes de plots
     - [ ] Verificar plot de constelação, normalização do sinal recebido
 - [ ] Otimizar classes de tx/rx, instânciar direto no construtor.
