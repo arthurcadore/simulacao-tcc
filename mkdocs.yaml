@@ -48,21 +48,22 @@ nav:
       - Embaralhador: api/scrambler.md
       - Preâmbulo: api/preamble.md
       - Multiplexador: api/multiplexer.md
-      - Codificador NRZ e MAN: api/encoder.md
+      - Codificador de Canal: api/encoder.md
       - Formatador: api/formatter.md
       - Modulador: api/modulator.md
-      - Noise: api/noise.md
       - Detector: api/detector.md
       - Filtro Passa-Baixa: api/lpf.md
       - Filtro Casado: api/matchedfilter.md
       - Sincronizador: api/synchronizer.md
       - Decisor: api/sampler.md
-      - Viterbi: api/viterbi.md
+      - Decodificador Viterbi: api/viterbi.md
   - Transmissor: api/transmitter.md
+  - Canal: 
+      - Noise: api/noise.md
   - Receptor: api/receiver.md
-  - Plotter: api/plots.md
   - Extras: 
       - BER vs SNR: api/bersnr.md
+      - Plotter: api/plots.md
       - Data Import/Export: api/data.md
 
 plugins:

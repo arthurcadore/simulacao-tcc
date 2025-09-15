@@ -1,5 +1,3 @@
-# Transmissor
-
 ::: transmitter.Transmitter
     options:
         extra:

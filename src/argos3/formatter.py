@@ -83,7 +83,7 @@ class Formatter:
             - $t$: Vetor de tempo.
 
         Args: 
-            - shift: Deslocamento no tempo.
+            shift (float): Deslocamento no tempo.
 
         Returns:
            rc (np.ndarray): Pulso RRC normalizado.
@@ -202,17 +202,17 @@ class Formatter:
 
 if __name__ == "__main__":
 
-    bitN = np.random.randint(0, 2, 10)
-    bitM = np.ones(10)
+    bitN = np.random.randint(0, 2, 40)
+    bitM = np.random.randint(0, 2, 40)
 
     encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="Manchester")
+    encoder_man = Encoder(method="NRZ")
 
     Xnrz1 = encoder_nrz.encode(bitN)
     Yman1 = encoder_man.encode(bitM)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q", bits_per_symbol=1)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=200, span=6, type="RRC", channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
     
     dI1 = formatterI.apply_format(Xnrz1)
     dQ1 = formatterQ.apply_format(Yman1)
@@ -240,8 +240,15 @@ if __name__ == "__main__":
     fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
 
     ImpulseResponsePlot(
-        fig_format, grid_format, (0, slice(0, 2)),
+        fig_format, grid_format, (0,0),
         formatterI.t_rc, formatterI.g,
+        t_unit="ms",
+        colors="darkorange",
+    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+
+    ImpulseResponsePlot(
+        fig_format, grid_format, (0,1),
+        formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors="darkorange",
     ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
@@ -276,88 +283,3 @@ if __name__ == "__main__":
     
     fig_format.tight_layout()
     save_figure(fig_format, "example_formatter_time.pdf")
-
-
-    ##### TESTE V1.0.5
-    encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="NRZ2")
-
-    Xnrz2 = encoder_nrz.encode(bitN)
-    Yman2 = encoder_man.encode(bitM)
-
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
-
-    dI2 = formatterI.apply_format(Xnrz2)
-    dQ2 = formatterQ.apply_format(Yman2)
-
-    fig_impulse, grid_impulse = create_figure(2, 1, figsize=(16, 9))
-    ImpulseResponsePlot(
-        fig_impulse, grid_impulse, (0, 0),
-        formatterQ.t_rc, formatterQ.g,
-        t_unit="ms",
-        colors="darkorange",
-    ).plot(label=r"$g_{MAN}(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
-
-    ImpulseResponsePlot(
-        fig_impulse, grid_impulse, (1, 0),
-        formatterQ.t_rc, [formatterQ.g_left, formatterQ.g_right],
-        t_unit="ms",
-        colors=["darkorange", "steelblue"],
-    ).plot(
-        label=[r"$g_{L}(t)$", r"$g_{R}(t)$"],
-        xlabel=r"Tempo ($ms$)",
-        ylabel="Amplitude",
-        xlim=(-15, 15)
-    )
-
-    fig_impulse.tight_layout()
-    save_figure(fig_impulse, "example_formatter_impulse_man.pdf")   
-
-    # Plotando os sinais formatados
-    fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
-    
-    EncodedBitsPlot(
-        fig_format, grid_format, (0, 0),
-        bits=Yman1,
-        color='darkgreen',
-    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
-
-    EncodedBitsPlot(
-        fig_format, grid_format, (0, 1),
-        bits=Yman2,
-        color='darkgreen',
-    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
-
-
-    TimePlot(
-        fig_format, grid_format, (1,0),
-        t= np.arange(len(dQ1)) / formatterQ.fs,
-        signals=[dQ1],
-        labels=[r"$d_Q(t)$"],
-        title=r"Canal $Q$",
-        # xlim=(40, 140),
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
-    ).plot()
-
-
-    TimePlot(
-        fig_format, grid_format, (1,1),
-        t= np.arange(len(dQ2)) / formatterQ.fs,
-        signals=[dQ2],
-        labels=[r"$d_Q(t)$"],
-        title=r"Canal $Q$",
-        # xlim=(40, 140),
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
-    ).plot()
-    
-    fig_format.tight_layout()
-    save_figure(fig_format, "example_formatter_time_comparison.pdf")

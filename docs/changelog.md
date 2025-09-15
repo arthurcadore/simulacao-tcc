@@ -49,10 +49,12 @@
 
 ---
 ### v1.0.4 - Channel Encoding 
-- [ ] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
-- [ ] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
-- [ ] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
-- [ ] Otimizar MatchedFilter para consumir formatter.
+- [X] Alterar codificação de linha pra ficar apenas em NRZ (sem duplicidade)
+- [X] Alterar pulso formatador NRZ para ser soma de 2x RRC (um invertido)
+- [X] Aplicar pulso formatador RRC do NRZ e pulso formatador MAN do Manchester
+- [X] Otimizar MatchedFilter para consumir formatter.
+- [] Otimizar plot do encoder. 
+- [] Alterar documentação da classe de encoder
 
 ---
 ### v1.0.5 - Optimization
