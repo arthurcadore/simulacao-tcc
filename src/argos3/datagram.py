@@ -42,7 +42,7 @@ class Datagram:
         """
 
         # construtor TX
-        if pcdnum is not None and numblocks is not None:
+        if pcdnum is not None and numblocks is not None and streambits is None:
             if not (1 <= numblocks <= 8):
                 raise ValueError("O número de blocos deve estar entre 1 e 8.")
             if not (0 <= pcdnum <= 1048575):  # 2^20 - 1
@@ -66,7 +66,7 @@ class Datagram:
             self.blocks_json = self.parse_datagram()
 
         # construtor RX  
-        elif streambits is not None:
+        elif streambits is not None and pcdnum is None and numblocks is None:
             self.streambits = streambits
             self.blocks_json = self.parse_datagram()
         else:
@@ -249,42 +249,57 @@ class Datagram:
             ```
         """
 
-        msglength_bits = self.streambits[:4]
-        value_bits = msglength_bits[:3]
-        paridade_bit = msglength_bits[3]
+        # extrai o campo message length
+        msglength = self.streambits[:4]
+        value_bits = msglength[:3]
+        paridade_bit = msglength[3]
 
+        # Verifica a integridade do campo
         if paridade_bit != value_bits.sum() % 2:
             raise ValueError("Paridade inválida no campo Message Length.")
+        else:
+            self.msglength = msglength
 
-        numblocks = int("".join(map(str, value_bits)), 2) + 1
+        # extrai o campo PCD ID
         pcdid_bits = self.streambits[4:32]
-
         pcdnum_bits = pcdid_bits[:20]
         checksum_bits = pcdid_bits[20:28]
+
+        # verifica a integridade do campo
         checksum_val = pcdnum_bits.sum() % 256
         if checksum_val != int("".join(map(str, checksum_bits)), 2):
             raise ValueError("Checksum inválido no campo PCD ID.")
-        pcdnum = int("".join(map(str, pcdnum_bits)), 2)
+        else:
+            self.pcdid = pcdid_bits
+            self.pcdnum = int("".join(map(str, pcdnum_bits)), 2)            
+
         
-        data_bits = self.streambits[32:32 + 24 + (32 * (numblocks - 1))]
-        tail_bits = self.streambits[32 + 24 + (32 * (numblocks - 1)):]
-        tail_length = len(tail_bits)
+        # extrai o campo dados de aplicação
+        self.numblocks = int("".join(map(str, value_bits)), 2) + 1
+        self.blocks = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
+
+        # extrai o campo tail
+        self.tail = self.streambits[32 + 24 + (32 * (self.numblocks - 1)):]
+        tail_length = len(self.tail)
+
+        # cria o objeto JSON
         data = {
-            "msglength": numblocks,
-            "pcdid": pcdnum,
+            "msglength": self.numblocks,
+            "pcdid": self.pcdnum,
             "data": {},
             "tail": tail_length
         }
 
+        # monta o objeto JSON
         index = 0
-        for bloco in range(numblocks):
+        for bloco in range(self.numblocks):
             bloco_nome = f"bloco_{bloco+1}"
             data["data"][bloco_nome] = {}
             
             num_sensores = 3 if bloco == 0 else 4
             for sensor in range(num_sensores):
                 sensor_nome = f"sensor_{sensor+1}"
-                sensor_bits = data_bits[index:index+8]
+                sensor_bits = self.blocks[index:index+8]
                 sensor_valor = int("".join(map(str, sensor_bits)), 2)
                 data["data"][bloco_nome][sensor_nome] = sensor_valor
                 index += 8
@@ -292,6 +307,7 @@ class Datagram:
         return json.dumps(data, indent=2)
 
 if __name__ == "__main__":
+    
     print("\n\nTransmissor:")
     datagram_tx = Datagram(pcdnum=123456, numblocks=2, seed=10)
     print(datagram_tx.parse_datagram())

@@ -809,7 +809,7 @@ class Receiver:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
 
         Example:
-            - Tempo: ![pageplot](assets/transmitter_datagram_time.svg)
+            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
         """
         xI_prime, yQ_prime = self.demodulate(s, t)
         dI_prime, dQ_prime= self.lowpassfilter(600, xI_prime, yQ_prime, t)
@@ -849,12 +849,27 @@ if __name__ == "__main__":
         datagramRX = Datagram(streambits=bitsRX)
         print("\n",datagramRX.parse_datagram())
 
+        fig_datagram, grid = create_figure(1, 1, figsize=(16, 5))
+
+        BitsPlot(
+            fig_datagram, grid, (0, 0),
+            bits_list=[datagramRX.msglength, 
+                       datagramRX.pcdid, 
+                       datagramRX.blocks, 
+                       datagramRX.tail],
+            sections=[("Message Length", len(datagramRX.msglength)),
+                      ("PCD ID", len(datagramRX.pcdid)),
+                      ("Dados de App.", len(datagramRX.blocks)),
+                      ("Tail", len(datagramRX.tail))],
+            colors=["green", "orange", "red", "blue"]
+        ).plot(xlabel="Index de Bit")
+        fig_datagram.tight_layout()
+        save_figure(fig_datagram, "receiver_datagram_time.pdf")
+
     except Exception as e:
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))
         
-        # verifica quantos bits tem diferentes entre TX e RX
-        # Verifica quantos bits são diferentes entre TX e RX
         num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
         
         # Calcula a Taxa de Erro de Bit (BER)
