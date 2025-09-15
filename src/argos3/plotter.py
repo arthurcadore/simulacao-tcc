@@ -158,7 +158,7 @@ class TimePlot(BasePlot):
         signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais $s(t)$.
         time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
 
-    Exemplos:
+    Example:
         - Modulador: ![pageplot](assets/example_modulator_time.svg)
         - Demodulador: ![pageplot](assets/example_demodulator_time.svg)
         - Adição de AWGN ![pageplot](assets/example_noise_time.svg)
@@ -225,7 +225,7 @@ class FrequencyPlot(BasePlot):
         signal (np.ndarray): Sinal a ser plotado
         fc (float): Frequência central
 
-    Exemplos:
+    Example:
         - Modulador: ![pageplot](assets/example_modulator_freq.svg)
         - Demodulador: ![pageplot](assets/example_demodulator_freq.svg)
         - Adição de AWGN ![pageplot](assets/example_noise_freq.svg)
@@ -293,7 +293,7 @@ class ConstellationPlot(BasePlot):
         dQ (np.ndarray): Sinal Q
         amplitude (Optional[float]): Amplitude alvo para pontos ideais
 
-    Exemplos:
+    Example:
         - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
@@ -365,7 +365,7 @@ class BitsPlot(BasePlot):
         sections (Optional[List[Tuple[str, int]]]): Seções do plot
         colors (Optional[List[str]]): Cores do plot
 
-    Exemplos:
+    Example:
         - Datagrama: ![pageplot](assets/example_datagram_time.svg)
         - Codificador Convolucional: ![pageplot](assets/example_conv_time.svg)
         - Embaralhador: ![pageplot](assets/example_scrambler_time.svg)
@@ -492,7 +492,7 @@ class EncodedBitsPlot(BasePlot):
         symbols (np.ndarray): Vetor de simbolos $s$
         color (str): Cor do plot
 
-    Exemplos:
+    Example:
         - Codificação de Linha: ![pageplot](assets/example_encoder_time.svg)
     """
     def __init__(self,
@@ -579,7 +579,7 @@ class ImpulseResponsePlot(BasePlot):
         impulse_response (np.ndarray): Amostras da resposta ao impulso
         t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
 
-    Exemplos:
+    Example:
         - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
         - Resposta ao Impulso Filtro Passa baixa: ![pageplot](assets/example_lpf_impulse.svg)
         - Resposta ao Impulso RRC Invertido: ![pageplot](assets/example_mf_impulse.svg)
@@ -651,7 +651,7 @@ class TrellisPlot(BasePlot):
         num_steps (int): Número de passos no tempo
         initial_state (int): Estado inicial
 
-    Exemplos:
+    Example:
         - Treliça Decodificador Viterbi: ![pageplot](assets/example_conv_trellis.svg)
     """
     def __init__(self,
@@ -746,6 +746,9 @@ class SampledSignalPlot(BasePlot):
         t_samples (np.ndarray): Instantes de amostragem
         samples (np.ndarray): Amostras correspondentes
         time_unit (str): Unidade de tempo ("ms" por padrão, pode ser "s").
+
+    Example:
+        ![pageplot](assets/example_sampler_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -837,7 +840,7 @@ class PhasePlot(BasePlot):
         signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
         labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
 
-    Exemplos:
+    Example:
         - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
@@ -997,7 +1000,7 @@ class GaussianNoisePlot(BasePlot):
         variance (float): Variância do ruído
         num_points (int): Número de pontos para a curva da gaussiana
 
-    Exemplos:
+    Example:
         ![pageplot](assets/example_noise_gaussian_ebn0.svg)
     """
     def __init__(self,
@@ -1049,7 +1052,7 @@ class PoleZeroPlot(BasePlot):
         b (np.ndarray): Coeficientes do numerador da função de transferência
         a (np.ndarray): Coeficientes do denominador da função de transferência
 
-    Exemplos:
+    Example:
         ![pageplot](assets/example_lpf_pz.svg)
     """
     def __init__(self,
@@ -1115,7 +1118,7 @@ class FrequencyResponsePlot(BasePlot):
         f_cut (Optional[float]): Frequência de corte do filtro (Hz)
         xlim (Optional[Tuple[float, float]]): Limites do eixo X (Hz)
 
-    Exemplos:
+    Example:
         ![pageplot](assets/example_lpf_freq_response.svg)
     """
     def __init__(self,
@@ -1197,7 +1200,7 @@ class DetectionFrequencyPlot(BasePlot):
         signal (np.ndarray): Sinal a ser plotado
         fc (float): Frequência central
 
-    Exemplo: 
+    Example: 
         ![pageplot](assets/example_detector_freq.svg)
     """
     def __init__(self,
@@ -1306,7 +1309,7 @@ class BersnrPlot(BasePlot):
         linestyles (List[str], opcional): Lista com estilos de linha (e.g., ["-", "--", "-."])
         markers (List[str], opcional): Lista com formatos de marcadores (e.g., ["o", "s", "d"])
 
-    Exemplo: 
+    Example: 
         - ![pageplot](assets/ber_vs_ebn0.svg)
     """
     def __init__(self,
@@ -1374,7 +1377,7 @@ class SincronizationPlot(BasePlot):
         max_corr (float): Instante do pico de correlação
         time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
 
-    Exemplo: 
+    Example: 
         ![pageplot](assets/example_synchronizer_sync.svg)
     """
     def __init__(self,

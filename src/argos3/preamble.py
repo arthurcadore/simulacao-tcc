@@ -35,7 +35,7 @@ class Preamble:
             ValueError: Se a palavra de sincronismo $S$ tiver comprimento diferente de 8 caracteres. 
             ValueError: Se o hexadecimal não for válido ou não puder ser convertido.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_preamble.svg)
 
         <div class="referencia">

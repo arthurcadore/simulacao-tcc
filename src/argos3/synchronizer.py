@@ -25,7 +25,7 @@ class Synchronizer:
             Rb (int): Taxa de transmissão do sinal recebido.
             sync_word (str): Palavra de sincronismo.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_synchronizer_sync.svg)
         """
         self.fs = fs
@@ -57,7 +57,7 @@ class Synchronizer:
         Args:
             sync_word (str): Palavra de sincronismo.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_synchronizer_word.svg)
         """
 
@@ -103,7 +103,7 @@ class Synchronizer:
         Returns:
            delay (tuple): Tupla contendo o delay $\tau$, o delay $\tau_{min}$ e o delay $\tau_{max}$.
         
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_synchronizer_corr.svg)
         """
         if channel == "I":

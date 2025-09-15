@@ -25,7 +25,7 @@ class MatchedFilter:
         Raises:     
             ValueError: Se o tipo de filtro não for suportado.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/receiver_mf_time.svg) 
         """
         self.alpha = alpha
@@ -68,7 +68,7 @@ class MatchedFilter:
         Returns:
             pulse_inverted (np.ndarray): Pulso invertido.
 
-        Exemplo:
+        Example:
             - RRC: ![pageplot](assets/example_mf_impulse.svg)
             - Manchester: ![pageplot](assets/example_mf_impulse_man.svg)
 

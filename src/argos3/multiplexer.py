@@ -13,7 +13,7 @@ class Multiplexer:
         r"""
         Inicializa o multiplexador no padrão ARGOS-3.
         
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_mux.svg)
         """
         pass
@@ -48,7 +48,6 @@ class Multiplexer:
 
         return Xn, Yn
 
-# Exemplo de uso
 if __name__ == "__main__":
 
     mux = Multiplexer()

@@ -55,7 +55,7 @@ class Receiver:
             xI_prime (np.ndarray): Sinal $x'_{I}(t)$ demodulado.
             yQ_prime (np.ndarray): Sinal $y'_{Q}(t)$ demodulado.
         
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_demodulator_time.svg)
             - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
@@ -156,7 +156,7 @@ class Receiver:
             dI_prime (np.ndarray): Sinal $d'_{I}(t)$ filtrado.
             dQ_prime (np.ndarray): Sinal $d'_{Q}(t)$ filtrado.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_lpf_time.svg)
             - Frequência: ![pageplot](assets/receiver_lpf_freq.svg)
         """
@@ -285,7 +285,7 @@ class Receiver:
             It_prime (np.ndarray): Sinal $I'(t)$ filtrado.
             Qt_prime (np.ndarray): Sinal $Q'(t)$ filtrado.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_mf_time.svg)
             - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
         """
@@ -421,7 +421,7 @@ class Receiver:
             delayI (float): Delay do sinal $I'(t)$.
             delayQ (float): Delay do sinal $Q'(t)$.
 
-        Exemplo:
+        Example:
             Tempo: ![pageplot](assets/receiver_sync_time.svg)
             Módulo Correlação: ![pageplot](assets/receiver_sync_corr.svg)
         """
@@ -515,7 +515,7 @@ class Receiver:
             Xnrz_prime (np.ndarray): Sinal $X'_{NRZ}[n]$ amostrado e quantizado.
             Yman_prime (np.ndarray): Sinal $Y'_{MAN}[n]$ amostrado e quantizado.
         
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_sampler_time.svg)
             - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
             - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
@@ -637,7 +637,7 @@ class Receiver:
             Xn_prime (np.ndarray): Sinal $X'n$ decodificado.
             Yn_prime (np.ndarray): Sinal $Y'n$ decodificado.
         
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
         """
         decoderNRZ = Encoder("nrz")
@@ -699,7 +699,7 @@ class Receiver:
             vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
             vt1 (np.ndarray): Vetor de bits $v_{t}^{1'}$ desembaralhado.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_descrambler_time.svg)
         """
         descrambler = Scrambler()
@@ -757,7 +757,7 @@ class Receiver:
         Returns:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
         
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/receiver_conv_time.svg)
         """
         conv_decoder = DecoderViterbi()
@@ -808,7 +808,7 @@ class Receiver:
         Returns:
             ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/transmitter_datagram_time.svg)
         """
         xI_prime, yQ_prime = self.demodulate(s, t)

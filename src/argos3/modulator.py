@@ -23,7 +23,7 @@ class Modulator:
         Raises:
             ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
        
-        Exemplo: 
+        Example: 
             ![pageplot](assets/transmitter_modulator_time.svg)
 
         <div class="referencia">

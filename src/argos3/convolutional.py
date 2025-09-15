@@ -33,7 +33,7 @@ class EncoderConvolutional:
         Args:
             G (np.ndarray): Tupla de polinômios geradores $G$.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_conv_time.svg)
 
         <div class="referencia">
@@ -132,7 +132,7 @@ class DecoderViterbi:
         Args:
             G (np.ndarray): Tupla de polinômios geradores $G$.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_conv_trellis.svg)
 
         <div class="referencia">

@@ -51,7 +51,7 @@ class Transmitter:
         Returns:
             ut (np.ndarray): Vetor de bits do datagrama.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_datagram_time.svg)
         """
         ut = self.datagram.streambits
@@ -91,7 +91,7 @@ class Transmitter:
             vt0 (np.ndarray): Saída do canal I.
             vt1 (np.ndarray): Saída do canal Q.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_conv_time.svg)
         """
         encoder = EncoderConvolutional()
@@ -140,7 +140,7 @@ class Transmitter:
             Xn (np.ndarray): Vetor embaralhado do canal I.
             Yn (np.ndarray): Vetor embaralhado do canal Q.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_scrambler_time.svg)
         """
         scrambler = Scrambler()
@@ -193,7 +193,7 @@ class Transmitter:
             sI (np.ndarray): Vetor do preâmbulo do canal I.
             sQ (np.ndarray): Vetor do preâmbulo do canal Q.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_preamble_time.svg)
         """
         sI, sQ = Preamble().generate_preamble()
@@ -236,7 +236,7 @@ class Transmitter:
             Xn (np.ndarray): Vetor multiplexado do canal I.
             Yn (np.ndarray): Vetor multiplexado do canal Q.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_mux_time.svg)
         """
 
@@ -280,7 +280,7 @@ class Transmitter:
             Xnrz (np.ndarray): Vetor de sinal codificado do canal I $NRZ$. 
             Yman (np.ndarray): Vetor de sinal codificado do canal Q $Manchester$. 
 
-        Exemplo:
+        Example:
             ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
@@ -338,7 +338,7 @@ class Transmitter:
             dI (np.ndarray): Vetor formatado do canal I, $d_I$.
             dQ (np.ndarray): Vetor formatado do canal Q, $d_Q$.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/transmitter_formatter_time.svg)
             - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
@@ -459,7 +459,7 @@ class Transmitter:
             t (np.ndarray): Vetor de tempo, $t$.
             s (np.ndarray): Sinal modulado, $s(t)$.
 
-        Exemplo:
+        Example:
             - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
             - Frequência: ![pageplot](assets/transmitter_modulator_freq.svg)
             - Portadora: ![pageplot](assets/transmitter_modulator_portadora.svg)

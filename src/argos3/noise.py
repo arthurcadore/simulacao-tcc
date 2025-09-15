@@ -19,7 +19,7 @@ class Noise:
             snr (float): Relação sinal-ruído em decibéis (dB).
             seed (int): Seed do gerador de números aleatórios.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_noise_time.svg) 
         """
         self.snr = snr
@@ -55,7 +55,7 @@ class Noise:
         Returns:
             signal (np.ndarray): Sinal $r(t)$, com ruído AWGN adicionado.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/example_noise_gaussian_snr.svg)
         """
 
@@ -85,7 +85,7 @@ class NoiseEBN0:
             Rb (int): Taxa de bits em bits/s.
             seed (int): Seed do gerador de números aleatórios.
         
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_noise_time.svg)
         """
         self.ebn0_db = ebn0_db
@@ -140,7 +140,7 @@ class NoiseEBN0:
         Returns:
             signal (np.ndarray): Sinal recebido $r(t)$, com ruído AWGN adicionado.
 
-        Exemplo:
+        Example:
             ![pageplot](assets/example_noise_gaussian_ebn0.svg)
 
         <div class="referencia">

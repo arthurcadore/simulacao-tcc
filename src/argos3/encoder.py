@@ -22,7 +22,7 @@ class Encoder:
         Raises:
             ValueError: Se o método de codificação não for suportado.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_encoder_time.svg)
 
         <div class="referencia">

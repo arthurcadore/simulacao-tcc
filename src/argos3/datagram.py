@@ -32,7 +32,7 @@ class Datagram:
             ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
             ValueError: Se o payload não for fornecido ou se o comprimento do payload não for o mesmo que o número de blocos.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_datagram_time.svg)
 
         <div class="referencia">
@@ -224,7 +224,7 @@ class Datagram:
             ValueError: Caso haja falha no checksum do campo $PCD_{ID}$. 
             ValueError: Se a sequência de bits de aplicação não corresponder ao comprimento de $T_m$.
 
-        Exemplo:
+        Example:
             ```python
             >>> datagram = Datagram(streambits=bits)
             >>> print(datagram.parse_datagram())

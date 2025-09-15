@@ -28,7 +28,7 @@ class Formatter:
             ValueError: Se o tipo de pulso não for suportado.
             ValueError: Se o canal não for suportado.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_formatter_time.svg)
 
         <div class="referencia">
@@ -88,7 +88,7 @@ class Formatter:
         Returns:
            rc (np.ndarray): Pulso RRC normalizado.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_formatter_impulse.svg)
         """
         self.t_rc = np.array(self.t_rc, dtype=float)
@@ -128,7 +128,7 @@ class Formatter:
             - $T_b$: Período de bit.
             - $t$: Vetor de tempo.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_formatter_impulse_man.svg)
         """
         g_left = -self.rrc_pulse(shift=self.Tb/2)

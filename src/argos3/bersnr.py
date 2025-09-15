@@ -33,8 +33,8 @@ def interpolate(positions, ref_points, ref_values):
 
     Args: 
         positions (int): O número total de pontos a serem gerados.
-        ref_points (array-like): Pontos de referência (por exemplo, os valores de Eb/N0).
-        ref_values (array-like): Valores correspondentes aos pontos de referência (por exemplo, os valores de erro).
+        ref_points (array-like): Pontos de referência. 
+        ref_values (array-like): Valores correspondentes aos pontos de referência.
     
     Returns:
         interpolated_values (np.ndarray): Vetor de valores interpolados, arredondados para inteiros.
@@ -66,7 +66,7 @@ class BERSNR_ARGOS:
         Raises:
             ValueError: Se o número de erros não for o mesmo que o número de valores de Eb/N0.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/ber_vs_ebn0.svg)
         """
         if len(error_values) != len(EbN0_values):

@@ -16,7 +16,7 @@ class Scrambler:
         r"""
         Inicializa o embaralhador no padrão ARGOS-3.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_scrambler_time.svg)
 
         <div class="referencia">

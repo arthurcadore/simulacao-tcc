@@ -23,7 +23,7 @@ class LPF:
         Raises:
             ValueError: Se o tipo de filtro for inválido.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_lpf_signals.svg) 
         """
 
@@ -58,7 +58,7 @@ class LPF:
         Returns:
             tuple: Coeficientes $b$ e $a$ correspondentes à função de transferência do filtro Butterworth.
 
-        Exemplos:
+        Example:
             ![pageplot](assets/example_lpf_pz.svg)
         """
         b, a = butter(self.order, self.cut_off / (fNyquist * self.fs), btype='low')
@@ -83,7 +83,7 @@ class LPF:
         Returns:
             impulse_response (tuple[np.ndarray, np.ndarray]): Resposta ao impulso e vetor de tempo.
         
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_lpf_impulse.svg)
         """
         # Impulso unitário

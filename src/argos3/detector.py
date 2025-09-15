@@ -32,7 +32,7 @@ class CarrierDetector:
             ValueError: Se o comprimento de cada segmento for menor ou igual a zero.
             ValueError: Se o número de segmentos for menor que 1.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_detector_freq.svg)
 
         <div class="referencia">

@@ -19,7 +19,7 @@ class Sampler:
             Rb (int): Taxa de bits.
             t (numpy.ndarray): Vetor de tempo.
 
-        Exemplo: 
+        Example: 
             ![pageplot](assets/example_sampler_time.svg) 
         """
         self.fs = fs
