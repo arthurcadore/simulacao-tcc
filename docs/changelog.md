@@ -68,14 +68,14 @@
 - [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
 - [] Adicionar documentação interna as classes
     - [X] Alterar "exemplo" para "example" nos comentários. 
-    - [] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
+    - [X] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
     - [] Verificar equacionamento sklar e alterar nome das variáveis.
-    - [] Alterar documentação da classe de encoder
-    - [] adicionar prints de impulso casado na documentação
+    - [X] Alterar documentação da classe de encoder
+    - [X] adicionar prints de impulso casado na documentação
 - [] Otimizar plots
     - [] Verificar plot de constelação, normalização do sinal recebido
     - [] Otimizar plot do encoder. 
-    - [] Criar método para testar todas as classes no makefile. 
+    - [X] Criar método para testar todas as classes no makefile. 
     - [] Padronizar cor dos plots.
     - [] Alterar tamanho do plot pz fpb
     - [] Otimizar conversor de plots pra permitir darkTheme

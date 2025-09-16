@@ -50,22 +50,22 @@ class Encoder:
         \begin{aligned}
         X_{\text{NRZ}}[n] &= 
         \begin{cases}
-        +1, +1, & \text{se } X_n = 1 \\
-        -1, -1, & \text{se } X_n = 0 ,
+        +1, & \text{se } X_n = 1 \\
+        -1, & \text{se } X_n = 0 ,
         \end{cases}
         &\quad\quad
-        Y_{\text{MAN}}[n] &=
+        X_{\text{MAN}}[n] &=
         \begin{cases}
-        +1,-1, & \text{se } Y_n = 1 \\
-        -1, +1, & \text{se } Y_n = 0 .
+        +1,-1, & \text{se } X_n = 1 \\
+        -1, +1, & \text{se } X_n = 0 .
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
 
         Sendo:
-            - $X_n$ e $Y_n$: Vetor de bits de entrada.
-            - $X_{\text{NRZ}}[n]$ e $Y_{\text{MAN}}[n]$: Vetor de simbolos de saída.
+            - $X_n$: Vetor de bits de entrada.
+            - $X_{\text{NRZ}}[n]$ ou $X_{\text{MAN}}[n]$: Vetor de simbolos de saída.
 
         Args:
             bitstream (np.ndarray): Vetor de bits a ser codificado.
@@ -107,22 +107,22 @@ class Encoder:
         \begin{aligned}
         X_n &= 
         \begin{cases}
-        1, & \text{se } X_{\text{NRZ}}[n] = +1, +1 \\
-        0, & \text{se } X_{\text{NRZ}}[n] = -1, -1
+        1, & \text{se } X_{\text{NRZ}}[n] = +1 \\
+        0, & \text{se } X_{\text{NRZ}}[n] = -1
         \end{cases}
         &\quad\quad
-        Y_n &=
+        X_n &=
         \begin{cases}
-        1, & \text{se } Y_{\text{MAN}}[n] = +1, -1 \\
-        0, & \text{se } Y_{\text{MAN}}[n] = -1, +1
+        1, & \text{se } X_{\text{MAN}}[n] = +1, -1 \\
+        0, & \text{se } X_{\text{MAN}}[n] = -1, +1
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
         
         Sendo: 
-            - $X_{\text{NRZ}}[n]$ e $Y_{\text{MAN}}[n]$: Vetor de simbolos de entrada
-            - $X_n$ e $Y_n$: Vetor de bits de saída.
+            - $X_{\text{NRZ}}[n]$ ou $X_{\text{MAN}}[n]$: Vetor de simbolos de entrada
+            - $X_n$: Vetor de bits de saída.
 
         Args:
             encoded_stream (np.ndarray): Vetor codificado.
