@@ -191,7 +191,9 @@ if __name__ == "__main__":
         variance=add_noise.variance,
         colors="darkorange",
         legend=f"Ruído AWGN SNR - {snr_db} dB",
-    ).plot(xlim=(-0.5, 0.5))
+        xlim=(-1, 1),
+        span=200
+    ).plot()
     save_figure(fig_gauss, "example_noise_gaussian_snr.pdf")
 
     # ADIÇÃO DE RUIDO USANDO EBN0
@@ -206,7 +208,8 @@ if __name__ == "__main__":
         variance=add_noise.variance,
         colors="darkorange",
         legend=f"Ruído AWGN Eb/N0 - {eb_n0} dB",
-    ).plot(xlim=(-10, 10))
+        xlim=(-1, 1)
+    ).plot()
     save_figure(fig_gauss, "example_noise_gaussian_ebn0.pdf")
 
 

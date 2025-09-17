@@ -1057,6 +1057,11 @@ class GaussianNoisePlot(BasePlot):
         pos (int): Posição do plot no GridSpec
         variance (float): Variância do ruído
         num_points (int): Número de pontos para a curva da gaussiana
+        legend (str): Legenda do plot
+        xlabel (str): Label do eixo x
+        ylabel (str): Label do eixo y
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x
+        span (int): Span do plot
 
     Example:
         ![pageplot](assets/example_noise_gaussian_ebn0.svg)
@@ -1066,36 +1071,40 @@ class GaussianNoisePlot(BasePlot):
                  grid: gridspec.GridSpec,
                  pos,
                  variance: float,
-                 num_points: int = 1000,
+                 num_points: int = 5000,
                  legend: str = "Ruído AWGN",
+                 xlabel: str = "Amplitude",
+                 ylabel: str = "Densidade de Probabilidade",
+                 xlim: Optional[Tuple[float, float]] = None,
+                 span: int = 100,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.variance = variance
         self.num_points = num_points
         self.legend = legend
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.xlim = xlim
+        self.span = span
 
-    def plot(self,
-             xlabel: str = "Amplitude",
-             ylabel: str = "Densidade de Probabilidade",
-             xlim: Optional[Tuple[float, float]] = None) -> None:
+    def plot(self) -> None:
+        # Calculo da pdf
         sigma = np.sqrt(self.variance)
-
-        x = np.linspace(-50*sigma, 50*sigma, self.num_points)
+        x = np.linspace(-self.span*sigma, self.span*sigma, self.num_points)
         pdf = (1 / (np.sqrt(2*np.pi) * sigma)) * np.exp(-x**2 / (2*self.variance))
 
+        # Plotagem
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkgreen"
-
         self.ax.plot(x, pdf, label=self.legend, color=color, **line_kwargs)
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
-
-        # Aplica xlim customizado, se passado
-        if xlim is not None:
-            self.ax.set_xlim(xlim)
-
+       
+        # Ajuste dos eixos
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
 
