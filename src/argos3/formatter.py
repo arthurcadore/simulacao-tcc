@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
+from .plotter import ImpulseResponsePlot, TimePlot, SymbolsPlot, create_figure, save_figure
 from .encoder import Encoder
 
 class Formatter:
@@ -207,23 +207,23 @@ class Formatter:
 
 if __name__ == "__main__":
 
-    bitN = np.random.randint(0, 2, 40)
-    bitM = np.random.randint(0, 2, 40)
+    bitN = np.random.randint(0, 2, 20)
+    bitM = np.random.randint(0, 2, 20)
 
-    encoder_nrz = Encoder(method="NRZ")
-    encoder_man = Encoder(method="NRZ")
+    encoder_I = Encoder(method="NRZ")
+    encoded_Q = Encoder(method="NRZ")
 
-    Xnrz1 = encoder_nrz.encode(bitN)
-    Yman1 = encoder_man.encode(bitM)
+    symbols_I = encoder_I.encode(bitN)
+    symbols_Q = encoded_Q.encode(bitM)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=200, span=6, type="RRC", channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=200, span=6, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0)
     
-    dI1 = formatterI.apply_format(Xnrz1)
-    dQ1 = formatterQ.apply_format(Yman1)
+    dI1 = formatterI.apply_format(symbols_I)
+    dQ1 = formatterQ.apply_format(symbols_Q)
     
-    print("Xnrz:",  ' '.join(f"{x:+d}" for x in Xnrz1[:10]))
-    print("Yman:",  ' '.join(f"{y:+d}" for y in Yman1[:10]))
+    print("Xn:",  ' '.join(f"{x:+d}" for x in symbols_I[:10]))
+    print("Yn:",  ' '.join(f"{y:+d}" for y in symbols_Q[:10]))
     print("dI:", ''.join(str(b) for b in dI1[:5]))
     print("dQ:", ''.join(str(b) for b in dQ1[:5]))
 
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     save_figure(fig_impulse_man, "example_formatter_impulse_man.pdf")
 
     # Plotando os sinais formatados
-    fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
+    fig_format, grid_format = create_figure(3, 2, figsize=(16, 12))
 
     ImpulseResponsePlot(
         fig_format, grid_format, (0,0),
@@ -302,14 +302,31 @@ if __name__ == "__main__":
         xlim=(-15, 15), 
         amp_norm=True
     ).plot()
-    
-    TimePlot(
+
+    SymbolsPlot(
         fig_format, grid_format, (1,0),
+        symbols_list=[symbols_I],
+        sections=[("$X_n$", len(symbols_I))],
+        colors=["darkgreen"],
+        xlabel="Index de Bit", 
+        ylabel="$X_n$", 
+    ).plot()
+
+    SymbolsPlot(
+        fig_format, grid_format, (1,1),
+        symbols_list=[symbols_Q],
+        sections=[("$Y_n$", len(symbols_Q))],
+        colors=["darkblue"],
+        xlabel="Index de Bit", 
+        ylabel="$Y_n$", 
+    ).plot()
+        
+    TimePlot(
+        fig_format, grid_format, (2,0),
         t= np.arange(len(dI1)) / formatterI.fs,
         signals=[dI1],
         labels=[r"$d_I(t)$"],
         title=r"Canal $I$",
-        xlim=(40, 140),
         amp_norm=True,
         colors="darkgreen",
         style={
@@ -319,12 +336,11 @@ if __name__ == "__main__":
     ).plot()
     
     TimePlot(
-        fig_format, grid_format, (1,1),
+        fig_format, grid_format, (2,1),
         t= np.arange(len(dQ1)) / formatterQ.fs,
         signals=[dQ1],
         labels=[r"$d_Q(t)$"],
         title=r"Canal $Q$",
-        xlim=(40, 140),
         amp_norm=True,
         colors="darkblue",
         style={
