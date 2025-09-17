@@ -286,6 +286,7 @@ if __name__ == "__main__":
         labels=[r"$d_I(t)$"],
         title=r"Canal $I$",
         xlim=(40, 140),
+        amp_norm=True,
         colors="darkgreen",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -300,6 +301,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q(t)$"],
         title=r"Canal $Q$",
         xlim=(40, 140),
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},

@@ -219,6 +219,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Domínio do Tempo - Sem Ruído",
         xlim=(40, 200),
+        amp_norm=True,
         colors="darkblue",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -230,6 +231,7 @@ if __name__ == "__main__":
         labels=["$s(t) + AWGN$"],
         title="Domínio do Tempo - Com Ruído",
         xlim=(40, 200),
+        amp_norm=True,
         colors="darkred",
         style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()

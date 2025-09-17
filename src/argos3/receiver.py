@@ -103,6 +103,7 @@ class Receiver:
                 labels=[r"$s(t)$ + AWGN"],
                 title=r"Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
                 xlim=(40, 200),
+                amp_norm=True,
                 colors="darkred",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -117,6 +118,7 @@ class Receiver:
                 labels=[r"$xI'(t)$", r"$yQ'(t)$"],
                 title=r"Componentes $IQ$ - Demoduladas",
                 xlim=(40, 200),
+                amp_norm=True,
                 colors=["darkgreen", "navy"],
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -210,23 +212,25 @@ class Receiver:
 
             TimePlot(
                 fig_signal, grid_signal, (1, 0),
-                t, 
-                dI_prime,
-                labels=[r"$d_I'(t)$"],  
-                title=r"Sinal filtrado - Componente $I$",
+                t=t, 
+                signals=[dI_prime],
+                labels=["$d_I'(t)$"],  
+                title="Sinal filtrado - Componente $I$",
                 xlim=(40, 200),
-                ylim=(-1,1),
+                ylim=(-1, 1),
+                amp_norm=True,
                 colors="darkgreen"
             ).plot()
 
             TimePlot(
                 fig_signal, grid_signal, (1, 1),
-                t, 
-                dQ_prime,
-                labels=[r"$d_Q'(t)$"],
-                title=r"Sinal filtrado - Componente $Q$",
+                t=t, 
+                signals=[dQ_prime],
+                labels=["$d_Q'(t)$"],
+                title="Sinal filtrado - Componente $Q$",
                 xlim=(40, 200),
-                ylim=(-1,1),
+                ylim=(-1, 1),
+                amp_norm=True,
                 colors="navy"
             ).plot()
 
@@ -348,6 +352,7 @@ class Receiver:
                 labels=[r"$I'(t)$"],
                 title=r"Sinal filtrado - Componente $I$",
                 xlim=(40, 200),
+                amp_norm=True,
                 colors="darkgreen"
             ).plot()
 
@@ -358,6 +363,7 @@ class Receiver:
                 labels=[r"$Q'(t)$"],
                 title=r"Sinal filtrado - Componente $Q$",
                 xlim=(40, 200),
+                amp_norm=True,
                 colors="navy"
             ).plot()
 

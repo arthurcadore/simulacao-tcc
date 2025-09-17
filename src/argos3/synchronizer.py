@@ -140,6 +140,7 @@ if __name__ == "__main__":
         signals=[synchronizer.sincronized_word_I],
         labels=[r"$S_I(t)$"],
         title=r"Canal $I$",
+        amp_norm=True,
         colors="darkgreen",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -153,6 +154,7 @@ if __name__ == "__main__":
         signals=[synchronizer.sincronized_word_Q],
         labels=[r"$S_Q(t)$"],
         title=r"Canal $Q$",
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},

@@ -64,22 +64,20 @@
 - [X] Adicionar método update para alterar delay do sinal recebido
 - [X] Diminuir passo de frequência aleatória na classe detector. 
 - [X] Adicionar defaults na construção de classes (argumentos que forem possiveis).
-- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
-- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
-- [] Adicionar documentação interna as classes
+- [X] Adicionar documentação interna as classes
     - [X] Alterar "exemplo" para "example" nos comentários. 
     - [X] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
-    - [] Verificar equacionamento sklar e alterar nome das variáveis.
     - [X] Alterar documentação da classe de encoder
     - [X] adicionar prints de impulso casado na documentação
 - [] Otimizar plots
-    - [] Verificar plot de constelação, normalização do sinal recebido
+    - [X] Verificar plot de constelação, normalização do sinal recebido
     - [] Otimizar plot do encoder. 
     - [X] Criar método para testar todas as classes no makefile. 
     - [] Padronizar cor dos plots.
     - [] Alterar tamanho do plot pz fpb
-    - [] Otimizar conversor de plots pra permitir darkTheme
     - [] Alterar xlim para plots necessários. 
+- [] Otimizar conversor de plots pra permitir darkTheme
+- [] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
 - [] Verificar adição de diagrama de olho no sklar. 
@@ -87,6 +85,8 @@
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
+- [] Verificar equacionamento sklar e alterar nome das variáveis.
+
 
 ---
 ### v1.0.6 - Channel and Doppler
@@ -101,3 +101,8 @@
         - [] Máximo desvio de frequência inicial 50Hz
 - [] Montar classe PLL (Phased Locked Loop) para corrigir o desvio de frequência do sinal recebido
     - [] Testar aplicação do PLL ao sinal distorcido em frequência.
+
+--- 
+### v1.0.7 - Extensão de vetores
+- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
+- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.

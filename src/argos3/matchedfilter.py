@@ -208,6 +208,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q1(t)$"],
         title=r"Canal $Q1$",
         # xlim=(40, 140),
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -222,6 +223,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q2(t)$"],
         title=r"Canal $Q2$",
         # xlim=(40, 140),
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -236,6 +238,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q1(t)$"],
         title=r"Canal $Q1$",
         # xlim=(40, 140),
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -250,6 +253,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q2(t)$"],
         title=r"Canal $Q2$",
         # xlim=(40, 140),
+        amp_norm=True,
         colors="darkblue",
         style={
             "line": {"linewidth": 2, "alpha": 1},

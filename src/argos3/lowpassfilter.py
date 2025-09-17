@@ -163,7 +163,7 @@ if __name__ == "__main__":
         labels=[r"$x(t)$"],
         title="Sinal original",
         xlim=(0, 8),
-        ylim=(-4, 4),
+        amp_norm=True,
         colors="navy"
     ).plot()
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         labels=[r"$x'(t)$"],
         title="Sinal filtrado",
         xlim=(0, 8),
-        ylim=(-4, 4),
+        amp_norm=True,
         colors="darkred"
     ).plot()
 

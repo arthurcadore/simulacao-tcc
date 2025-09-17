@@ -164,6 +164,7 @@ class TimePlot(BasePlot):
         t (np.ndarray): Vetor de tempo
         signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais $s(t)$.
         time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+        amp_norm (bool): Normalização do sinal para amplitude máxima
 
     Example:
         - Modulador: ![pageplot](assets/example_modulator_time.svg)
@@ -177,24 +178,41 @@ class TimePlot(BasePlot):
                  t: np.ndarray,
                  signals: Union[np.ndarray, List[np.ndarray]],
                  time_unit: str = "ms",
+                 amp_norm: bool = False,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
+        self.amp_norm = amp_norm
+
+        # Copia os sinais de entrada para evitar modificações no sinal original
+        original_signals = signals if isinstance(signals, (list, tuple)) else [signals]
+        self.signals = [sig.copy() for sig in original_signals]
+
+        # Unidade de tempo
         self.time_unit = time_unit.lower()
         if self.time_unit == "ms":
             self.t = t * 1e3
         else:
             self.t = t
 
-        self.signals = signals if isinstance(signals, (list, tuple)) else [signals]
+        # Sinal ou lista de sinais
         if self.labels is None:
             self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
 
     def plot(self) -> None:
+
+        # Normalização
+        if self.amp_norm:
+            max_val = np.max(np.abs(np.concatenate(self.signals)))
+            if max_val > 0:
+                f = 1 / max_val
+                for i, sig in enumerate(self.signals):
+                    self.signals[i] *= f
+
+        # Plotagem
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
         for i, sig in enumerate(self.signals):
             color = self.apply_color(i)
             if color is not None:
@@ -202,6 +220,7 @@ class TimePlot(BasePlot):
             else:
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
+        # Labels
         xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")

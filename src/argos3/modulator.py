@@ -177,6 +177,7 @@ if __name__ == "__main__":
         labels=["$dI(t)$", "$dQ(t)$"],
         title="Sinal $IQ$ - Formatados RRC",
         xlim=(40, 140),
+        amp_norm=True,
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -191,6 +192,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(40, 140),
+        amp_norm=True,
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -316,6 +318,7 @@ if __name__ == "__main__":
         labels=["$xI'(t)$", "$yQ'(t)$"],
         title="Componentes $IQ$ - Demoduladas",
         xlim=(40, 140),
+        amp_norm=True,
         colors=["darkgreen", "navy"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -330,6 +333,7 @@ if __name__ == "__main__":
         labels=["$s(t)$"],
         title="Sinal Modulado $IQ$",
         xlim=(40, 140),
+        amp_norm=True,
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
