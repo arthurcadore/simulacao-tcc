@@ -137,37 +137,33 @@ if __name__ == "__main__":
     filtroQ2 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
-
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
         filtroQ1.t_rc, [filtroQ1.g, filtroQ1.g_inverted],
         t_unit="ms",
         colors=["darkorange", "steelblue"],
-    ).plot(
         label=[r"$g(t)$", r"$g(-t)$"],
         xlabel=r"Tempo ($ms$)",
         ylabel="Amplitude",
-        xlim=(-15, 15)
-    )
-
+        xlim=(-15, 15),
+        amp_norm=True
+    ).plot()
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse.pdf")
     
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
-
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
         filtroQ2.t_rc, [filtroQ2.g, filtroQ2.g_inverted],
         t_unit="ms",
         colors=["darkorange", "steelblue"],
-    ).plot(
         label=[r"$g(t)$", r"$g(-t)$"],
         xlabel=r"Tempo ($ms$)",
         ylabel="Amplitude",
-        xlim=(-15, 15)
-    )
-
+        xlim=(-15, 15),
+        amp_norm=True
+    ).plot()
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse_man.pdf")
 

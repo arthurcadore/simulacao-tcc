@@ -208,7 +208,12 @@ class Receiver:
                 t_impulse, impulse_response,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$h(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(0, 8))
+                label=r"$h(t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(0, 8),
+                amp_norm=True,
+            ).plot()
 
             TimePlot(
                 fig_signal, grid_signal, (1, 0),
@@ -336,14 +341,24 @@ class Receiver:
                 self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label=r"$g(-t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             ImpulseResponsePlot(
                 fig_matched, grid_matched, (0, 1),
                 self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label=r"$g(-t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             TimePlot(
                 fig_matched, grid_matched, (1, 0),
@@ -377,14 +392,24 @@ class Receiver:
                 self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label=r"$g(-t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             ImpulseResponsePlot(
                 fig_matched_freq, grid_matched_freq, (0, 1),
                 self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label=r"$g(-t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label=r"$g(-t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             FrequencyPlot(
                 fig_matched_freq, grid_matched_freq, (1, 0),

@@ -235,7 +235,12 @@ if __name__ == "__main__":
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        label=r"$g(t)$", 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+        amp_norm=True
+    ).plot()
 
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_formatter_impulse.pdf")
@@ -249,7 +254,12 @@ if __name__ == "__main__":
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        label=r"$g(t)$", 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+        amp_norm=True
+    ).plot()
 
     ImpulseResponsePlot(
         fig_impulse_man, grid_impulse_man, (1, 0),
@@ -257,7 +267,11 @@ if __name__ == "__main__":
         [formatterQ.g_left, formatterQ.g_right],
         t_unit="ms",
         colors=["darkorange", "navy"],
-    ).plot(label=[r"$g_{L}(t)$", r"$g_{R}(t)$"], xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        label=[r"$g_{L}(t)$", r"$g_{R}(t)$"], 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+    ).plot()
 
     fig_impulse_man.tight_layout()
     save_figure(fig_impulse_man, "example_formatter_impulse_man.pdf")
@@ -270,14 +284,24 @@ if __name__ == "__main__":
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        label=r"$g(t)$", 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+        amp_norm=True
+    ).plot()
 
     ImpulseResponsePlot(
         fig_format, grid_format, (0,1),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors="darkorange",
-    ).plot(label=r"$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+        label=r"$g(t)$", 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+        amp_norm=True
+    ).plot()
     
     TimePlot(
         fig_format, grid_format, (1,0),

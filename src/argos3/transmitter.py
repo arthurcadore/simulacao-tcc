@@ -435,14 +435,24 @@ class Transmitter:
                 self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label="$g(t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             ImpulseResponsePlot(
                 fig_format, grid_format, (0, 1),
                 self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label="$g(t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15),
+                amp_norm=True,
+            ).plot()
 
             TimePlot(
                 fig_format, grid_format, (1,0),
@@ -484,14 +494,24 @@ class Transmitter:
                 self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label="$g(t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15), 
+                amp_norm=True
+            ).plot()
 
             ImpulseResponsePlot(
                 fig_format_freq, grid_format_freq, (0, 1),
                 self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
                 colors="darkorange",
-            ).plot(label="$g(t)$", xlabel=r"Tempo ($ms$)", ylabel="Amplitude", xlim=(-15, 15))
+                label="$g(t)$", 
+                xlabel=r"Tempo ($ms$)", 
+                ylabel="Amplitude", 
+                xlim=(-15, 15), 
+                amp_norm=True
+            ).plot()
 
             FrequencyPlot(
                 fig_format_freq, grid_format_freq, (1, 0),

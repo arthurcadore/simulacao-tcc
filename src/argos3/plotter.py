@@ -711,6 +711,11 @@ class ImpulseResponsePlot(BasePlot):
         t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
         impulse_response (np.ndarray): Amostras da resposta ao impulso
         t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
+        label (Optional[Union[str, List[str]]]): Label do plot
+        xlabel (Optional[str]): Label do eixo x
+        ylabel (Optional[str]): Label do eixo y
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x
+        amp_norm (Optional[bool]): Normaliza a resposta ao impulso para ter amplitude unitária. 
 
     Example:
         - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
@@ -724,25 +729,32 @@ class ImpulseResponsePlot(BasePlot):
                  t_imp: np.ndarray,
                  impulse_response: Union[np.ndarray, List[np.ndarray]],
                  t_unit: str = "ms",
+                 label: Optional[Union[str, List[str]]] = None,
+                 xlabel: Optional[str] = None,
+                 ylabel: Optional[str] = None,
+                 xlim: Optional[Tuple[float, float]] = None,
+                 amp_norm: Optional[bool] = False,
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.t_imp = t_imp
+        self.label = label
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.xlim = xlim
+        self.amp_norm = amp_norm
+        self.t_unit = t_unit
 
+        # Cria lista de respostas ao impulso
         if isinstance(impulse_response, np.ndarray):
             self.impulse_response = [impulse_response]
         else:
             self.impulse_response = impulse_response
 
-        self.t_unit = t_unit
 
-    def plot(self,
-             label: Optional[Union[str, List[str]]] = None,
-             xlabel: Optional[str] = None,
-             ylabel: Optional[str] = None,
-             xlim: Optional[Tuple[float, float]] = None) -> None:
-
+    def plot(self) -> None:
+        # Unidade de tempo
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
             default_xlabel = r"Tempo ($ms$)"
@@ -750,25 +762,27 @@ class ImpulseResponsePlot(BasePlot):
             t_plot = self.t_imp
             default_xlabel = r"Tempo ($s$)"
 
+        # Label
+        if isinstance(self.label, str) or self.label is None:
+            labels = [self.label] * len(self.impulse_response)
+        else:
+            labels = self.label
+        self.ax.set_xlabel(self.xlabel if self.xlabel is not None else default_xlabel)
+        self.ax.set_ylabel(self.ylabel if self.ylabel is not None else "Amplitude")
+
+        # Plotagem
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
-        if isinstance(label, str) or label is None:
-            labels = [label] * len(self.impulse_response)
-        else:
-            labels = label
-
         for i, resp in enumerate(self.impulse_response):
             color = self.apply_color(i) or None
             lbl = labels[i] if labels and i < len(labels) else None
+            if self.amp_norm:
+                resp = resp / np.max(resp)
             self.ax.plot(t_plot, resp, color=color, label=lbl, **line_kwargs)
 
-        self.ax.set_xlabel(xlabel if xlabel is not None else default_xlabel)
-        self.ax.set_ylabel(ylabel if ylabel is not None else "Amplitude")
-
-        if xlim is not None:
-            self.ax.set_xlim(xlim)
-
+        # Limites
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
 
