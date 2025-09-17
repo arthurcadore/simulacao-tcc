@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import ImpulseResponsePlot, TimePlot, EncodedBitsPlot, create_figure, save_figure
+from .plotter import ImpulseResponsePlot, TimePlot, create_figure, save_figure
 from .encoder import Encoder
 
 class Formatter:
