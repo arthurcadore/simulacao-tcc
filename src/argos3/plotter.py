@@ -476,7 +476,6 @@ class BitsPlot(BasePlot):
         self.ax.set_yticks([0, 1])
 
         # Linhas auxiliares
-        self.ax.xaxis.set_major_locator(MultipleLocator(8))
         self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
         bit_edges = np.arange(0, len(bits_up) + 1, 2)
         for pos in bit_edges:
