@@ -1140,29 +1140,22 @@ class PoleZeroPlot(BasePlot):
         zeros = np.roots(self.b)
         poles = np.roots(self.a)
 
-        # Circunferência unitária
+        # Plot da circuferência, polos e zeros
         theta = np.linspace(0, 2*np.pi, 512)
         self.ax.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.6)
-
-        # Plota zeros (bolinhas) e polos (x)
-        self.ax.scatter(np.real(zeros), np.imag(zeros),
-                        marker='o', facecolors='none', edgecolors='blue',
-                        s=120, label='Zeros')
-        self.ax.scatter(np.real(poles), np.imag(poles),
-                        marker='x', color='red',
-                        s=120, label='Polos')
+        self.ax.scatter(np.real(zeros), np.imag(zeros),marker='o', facecolors='none', edgecolors='blue', s=120, label='Zeros')
+        self.ax.scatter(np.real(poles), np.imag(poles),marker='x', color='red',s=120, label='Polos')
 
         # Eixos
         self.ax.axhline(0, color='black', linewidth=0.8)
         self.ax.axvline(0, color='black', linewidth=0.8)
-
-        # Labels e limites
-        self.ax.set_xlabel("Parte Real")
-        self.ax.set_ylabel("Parte Imaginária")
         self.ax.set_aspect('equal', adjustable='box')
         self.ax.set_xlim([-1.2, 1.2])
         self.ax.set_ylim([-1.2, 1.2])
 
+        # Labels
+        self.ax.set_xlabel("Parte Real")
+        self.ax.set_ylabel("Parte Imaginária")
         self.apply_ax_style()
 
 

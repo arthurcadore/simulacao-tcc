@@ -190,11 +190,22 @@ if __name__ == "__main__":
     fig_signal.tight_layout()
     save_figure(fig_signal, "example_lpf_signals.pdf")
 
-    fig_pz, grid_pz = create_figure(1, 1, figsize=(16,9))
-    PoleZeroPlot(fig_pz, grid_pz, (0,0), filtro.b, filtro.a).plot()
+    fig_pz, grid_pz = create_figure(1, 1, figsize=(10,10))
+    PoleZeroPlot(
+            fig_pz, grid_pz, (0,0), 
+            filtro.b, filtro.a,
+            colors="darkblue",
+            title="Polos e Zeros",
+        ).plot()
     save_figure(fig_pz, "example_lpf_pz.pdf")
 
     freq_response, grid_freq_response = create_figure(1, 1, figsize=(16,6))
-    FrequencyResponsePlot(freq_response, grid_freq_response, (0,0), filtro.b, filtro.a, fs=filtro.fs, f_cut=filtro.cut_off, xlim=(0, 3*filtro.cut_off)).plot()
+    FrequencyResponsePlot(
+            freq_response, grid_freq_response, (0,0), 
+            filtro.b, filtro.a, 
+            fs=filtro.fs, 
+            f_cut=filtro.cut_off, 
+            xlim=(0, 3*filtro.cut_off)
+        ).plot()
     save_figure(freq_response, "example_lpf_freq_response.pdf")
     
