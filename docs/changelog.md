@@ -76,6 +76,7 @@
     - [] Padronizar cor dos plots.
     - [] Alterar tamanho do plot pz fpb
     - [] Alterar xlim para plots necessários. 
+    - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
 - [] Otimizar conversor de plots pra permitir darkTheme
 - [] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
@@ -106,3 +107,6 @@
 ### v1.0.7 - Extensão de vetores
 - [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
 - [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
+- [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
+    - [] Adicionar vetor de simbolos de preâmbulo 
+    - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.

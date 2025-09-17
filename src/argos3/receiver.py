@@ -17,7 +17,7 @@ from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
 from .synchronizer import Synchronizer
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, EncodedBitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot
+from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot, SymbolsPlot
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, lpf_cutoff=600, fc=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
@@ -680,11 +680,16 @@ class Receiver:
         if self.output_plot:
             fig_decoder, grid_decoder = create_figure(4, 1, figsize=(16, 9))
 
-            EncodedBitsPlot(
+            SymbolsPlot(
                 fig_decoder, grid_decoder, (0, 0),
-                bits=Xnrz_prime,
-                color='darkgreen',
-            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xnrz_prime)/2))
+                symbols_list=[Xnrz_prime],
+                samples_per_symbol=1,
+                colors=["darkgreen"],
+                xlabel="Index de Simbolo",
+                xlim=(0, 60),
+                ylabel="$X_{NRZ}[n]$", 
+                label="$X_{NRZ}[n]$"
+            ).plot()
 
             BitsPlot(
                 fig_decoder, grid_decoder, (1, 0),
@@ -696,11 +701,16 @@ class Receiver:
                 xlim=(0, 60)
             ).plot()
 
-            EncodedBitsPlot(
+            SymbolsPlot(
                 fig_decoder, grid_decoder, (2, 0),
-                bits=Yman_prime,
-                color="navy",
-            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yman_prime)/2))
+                symbols_list=[Yman_prime],
+                samples_per_symbol=1,
+                colors=["navy"],
+                xlabel="Index de Simbolo",
+                xlim=(0, 60),
+                ylabel="$Y_{MAN}[n]$", 
+                label="$Y_{MAN}[n]$"
+            ).plot()
 
             BitsPlot(
                 fig_decoder, grid_decoder, (3, 0),

@@ -550,91 +550,155 @@ class BitsPlot(BasePlot):
             self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
-class EncodedBitsPlot(BasePlot):
+class SymbolsPlot(BasePlot):
     r"""
-    Classe para plotar sinais codificados com codificação de linha, recebendo um vetor de simbolos $s$ e realizando o plot em função do tempo $t$.
+    Classe para plotar simbolos codificados com codificação de linha, recebendo um vetor de simbolos $s[i]$ e realizando o plot em função do index de simbolo $i$.
     
     Args:
         fig (plt.Figure): Figura do plot
         grid (gridspec.GridSpec): GridSpec do plot
         pos (int): Posição do plot
-        symbols (np.ndarray): Vetor de simbolos $s$
-        color (str): Cor do plot
+        symbols_list (List[np.ndarray]): Lista de símbolos
+        samples_per_symbol (int): Número de amostras por símbolo
+        sections (Optional[List[Tuple[str, int]]]): Seções do plot
+        colors (Optional[List[str]]): Cores do plot
+        show_symbol_values (bool): Se `True`, exibe os valores dos símbolos.
+        xlabel (Optional[str]): Label do eixo x.
+        ylabel (Optional[str]): Label do eixo y.
+        label (Optional[str]): Label do plot.
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x.
 
     Example:
-        - Codificação de Linha: ![pageplot](assets/example_encoder_time.svg)
+        - Codificação de Canal: ![pageplot](assets/example_encoder_time.svg)
     """
+
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
                  pos,
-                 bits: np.ndarray,
-                 color: str = "black",
+                 symbols_list: List[np.ndarray],
+                 samples_per_symbol: int = 1,
+                 sections: Optional[List[Tuple[str, int]]] = None,
+                 colors: Optional[List[str]] = None,
+                 show_symbol_values: bool = True,
+                 xlabel: Optional[str] = None,
+                 ylabel: Optional[str] = None,
+                 label: Optional[str] = None,
+                 xlim: Optional[Tuple[float, float]] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
-        self.bits = np.array(bits).astype(int)
-        self.color = color
+        self.symbols_list = symbols_list
+        self.samples_per_symbol = samples_per_symbol
+        self.sections = sections
+        self.colors = colors
+        self.show_symbol_values = show_symbol_values
+        self.xlim = xlim
+        self.symbol_value_offset = 0.15
+        self.symbol_value_size = 12
+        self.symbol_value_weight = 'bold'
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.label = label
 
-    def plot(self, 
-             show_pairs: bool = True,
-             pair_value_offset: float = 0.15,
-             pair_value_size: int = 12,
-             pair_value_weight: str = "bold",
-             xlabel: Optional[str] = None,
-             ylabel: Optional[str] = None,
-             label: Optional[str] = None,
-             xlim: Optional[Tuple[float, float]] = None) -> None:
+    def plot(self) -> None:
 
-        bits_up = np.repeat(self.bits, 2)
-        x = np.arange(len(bits_up))
+        # Concatena e superamostra os vetores de símbolos
+        all_symbols = np.concatenate(self.symbols_list)
+        symbols_up = np.repeat(all_symbols, self.samples_per_symbol)
+        x = np.arange(len(symbols_up))
 
-        if xlim is not None:
-            self.ax.set_xlim(xlim)
+        # Ajustes de eixo
+        y_upper = 1.8 if self.show_symbol_values else 1.5
+        if self.xlim is not None:
+            self.xlim = (self.xlim[0] * self.samples_per_symbol,
+                         self.xlim[1] * self.samples_per_symbol)
+            self.ax.set_xlim(self.xlim)
         else:
-            self.ax.set_xlim(0, len(bits_up))
-
-        self.ax.set_ylim(-1.2, 1.6 if show_pairs else 1.2)
+            self.ax.set_xlim(0, len(symbols_up))
+        self.ax.set_ylim(-1.5, y_upper)
+        self.ax.set_yticks([-1, 0, 1])
         self.ax.grid(False)
-        self.ax.set_yticks([-1, 1])
-        self.ax.set_yticklabels([r"$-1$", r"$+1$"])
 
-        self.ax.xaxis.set_major_locator(MultipleLocator(8))
-        self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
+        # Linhas verticais marcando início de cada símbolo
+        self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val / self.samples_per_symbol)))
+        symbol_edges = np.arange(0, len(symbols_up) + 1, self.samples_per_symbol)
+        for pos in symbol_edges:
+            self.ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
-        pair_edges = np.arange(0, len(bits_up) + 1, 2)
-        for pos in pair_edges:
-            self.ax.axvline(x=pos, color="gray", linestyle="--", linewidth=0.5)
+        # Para cada vetor de símbolos, desenha uma seção do plot
+        if self.sections:
+            start_symbol = 0
+            for i, (sec_name, sec_len) in enumerate(self.sections):
+                sym_start = start_symbol * self.samples_per_symbol
+                sym_end = (start_symbol + sec_len) * self.samples_per_symbol
+                color = self.colors[i] if self.colors and i < len(self.colors) else 'black'
+                if i > 0:
+                    sym_start -= 1
 
-        self.ax.step(x, bits_up, where="post",
-                     color=self.color, linewidth=2.0,
-                     label=label if label else None)
-
-        if show_pairs:
-            xmin, xmax = self.ax.get_xlim()
-            for i in range(0, len(self.bits), 2):
-                xpos = i * 2 + 2
-                if xpos < xmin or xpos > xmax:
-                    continue
-                pair = f"{self.bits[i]:+d}{self.bits[i+1]:+d}"
-                self.ax.text(
-                    xpos,
-                    1.0 + pair_value_offset,
-                    pair,
-                    ha="center",
-                    va="bottom",
-                    fontsize=pair_value_size,
-                    fontweight=pair_value_weight,
-                    color="black"
+                # Desenha a seção do plot.
+                self.ax.step(
+                    x[sym_start:sym_end],
+                    symbols_up[sym_start:sym_end],
+                    where='post',
+                    color=color,
+                    linewidth=2.0,
+                    label=sec_name if self.label is None else self.label
                 )
 
-        if xlabel:
-            self.ax.set_xlabel(xlabel)
-        if ylabel:
-            self.ax.set_ylabel(ylabel)
+                # Exibe os valores dos símbolos acima da linha do plot.
+                if self.show_symbol_values:
+                    xmin, xmax = self.ax.get_xlim()
+                    section_symbols = all_symbols[start_symbol:start_symbol + sec_len]
+                    for j, sym in enumerate(section_symbols):
+                        xpos = (start_symbol + j) * self.samples_per_symbol + 0.5 * self.samples_per_symbol
+                        if xpos < xmin or xpos > xmax:
+                            continue
+                        self.ax.text(
+                            xpos,
+                            1.0 + self.symbol_value_offset,
+                            str(int(sym)),
+                            ha='center',
+                            va='bottom',
+                            fontsize=self.symbol_value_size,
+                            fontweight=self.symbol_value_weight,
+                            color='black'
+                        )
+                start_symbol += sec_len
+        else:
 
-        plt.tight_layout()
+            # Desenha a seção do plot.
+            color = self.colors[0] if self.colors else 'black'
+            self.ax.step(
+                x, symbols_up, where='post',
+                color=color, linewidth=2.0,
+                label=self.label if self.label else None
+            )
+            # Exibe os valores dos símbolos acima da linha do plot.
+            if self.show_symbol_values:
+                xmin, xmax = self.ax.get_xlim()
+                for i, sym in enumerate(all_symbols):
+                    xpos = i * self.samples_per_symbol + 0.5 * self.samples_per_symbol
+                    if xpos < xmin or xpos > xmax:
+                        continue
+                    self.ax.text(
+                        xpos,
+                        1.0 + self.symbol_value_offset,
+                        str(int(sym)),
+                        ha='center',
+                        va='bottom',
+                        fontsize=self.symbol_value_size,
+                        fontweight=self.symbol_value_weight
+                    )
+
+        # Labels
+        if self.xlabel:
+            self.ax.set_xlabel(self.xlabel)
+        if self.ylabel:
+            self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
+
+
 
 class ImpulseResponsePlot(BasePlot):
     r"""

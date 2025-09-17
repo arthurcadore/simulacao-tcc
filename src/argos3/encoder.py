@@ -9,7 +9,7 @@
 # """
 
 import numpy as np
-from .plotter import BitsPlot, EncodedBitsPlot, create_figure, save_figure
+from .plotter import BitsPlot, SymbolsPlot, create_figure, save_figure
 
 class Encoder:
     def __init__(self, method="NRZ"):
@@ -185,11 +185,15 @@ if __name__ == "__main__":
         xlabel="Index de Bit", ylabel="$X_n$"
     ).plot()
 
-    EncodedBitsPlot(
+    SymbolsPlot(
         fig_encoder, grid, (1, 0),
-        bits=Xnrz,
-        color='darkgreen',
-    ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$")
+        symbols_list=[Xnrz],
+        samples_per_symbol=1,
+        colors=["darkgreen"],
+        xlabel="Index de Simbolo",
+        ylabel="$X_{NRZ}[n]$", 
+        label="$X_{NRZ}[n]$"
+    ).plot()
 
     BitsPlot(
         fig_encoder, grid, (2, 0),
@@ -199,11 +203,16 @@ if __name__ == "__main__":
         xlabel="Index de Bit", ylabel="$Y_n$"
     ).plot()
 
-    EncodedBitsPlot(
+    SymbolsPlot(
         fig_encoder, grid, (3, 0),
-        bits=Yman,
-        color="navy",
-    ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$")
+        symbols_list=[Yman],
+        samples_per_symbol=2,
+        colors=["navy"],
+        xlabel="Index de Simbolo",
+        ylabel="$Y_{MAN}[n]$", 
+        label="$Y_{MAN}[n]$"
+    ).plot()
+
 
     fig_encoder.tight_layout()
     save_figure(fig_encoder, "example_encoder_time.pdf")

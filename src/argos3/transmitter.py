@@ -15,7 +15,7 @@ from .scrambler import Scrambler
 from .multiplexer import Multiplexer
 from .encoder import Encoder
 from .data import ExportData
-from .plotter import create_figure, save_figure, BitsPlot, EncodedBitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot
+from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot
 
 class Transmitter:
     def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
@@ -366,11 +366,15 @@ class Transmitter:
                 xlim=(0, 60)
             ).plot()
 
-            EncodedBitsPlot(
+            SymbolsPlot(
                 fig_encoder, grid, (1, 0),
-                bits=Xi,
-                color='darkgreen',
-            ).plot(xlabel="Index de Simbolo", ylabel="$X_{NRZ}[n]$", label="$X_{NRZ}[n]$", xlim=(0, len(Xi)/2))
+                symbols_list=[Xi],
+                samples_per_symbol=1,
+                colors=["darkgreen"],
+                xlabel="Index de Simbolo",
+                xlim=(0, 60),
+                ylabel="$X_{NRZ}[n]$"
+            ).plot()
 
             BitsPlot(
                 fig_encoder, grid, (2, 0),
@@ -382,11 +386,15 @@ class Transmitter:
                 xlim=(0, 60),
             ).plot()
 
-            EncodedBitsPlot(
+            SymbolsPlot(
                 fig_encoder, grid, (3, 0),
-                bits=Yq,
-                color="navy",
-            ).plot(xlabel="Index de Simbolo", ylabel="$Y_{MAN}[n]$", label="$Y_{MAN}[n]$", xlim=(0, len(Yq)/2))
+                symbols_list=[Yq],
+                samples_per_symbol=1,
+                colors=["navy"],
+                xlabel="Index de Simbolo",
+                xlim=(0, 60),
+                ylabel="$Y_{MAN}[n]$"
+            ).plot()
 
             fig_encoder.tight_layout()
             save_figure(fig_encoder, "transmitter_encoder_time.pdf")
