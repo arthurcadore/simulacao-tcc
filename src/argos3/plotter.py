@@ -1107,7 +1107,6 @@ class GaussianNoisePlot(BasePlot):
             self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
-
 class PoleZeroPlot(BasePlot):
     r"""
     Classe para plotar o diagrama de polos e zeros de uma função de transferência discreta no plano-z.
@@ -1158,7 +1157,6 @@ class PoleZeroPlot(BasePlot):
         self.ax.set_ylabel("Parte Imaginária")
         self.apply_ax_style()
 
-
 class FrequencyResponsePlot(BasePlot):
     r"""
     Classe para plotar a resposta em frequência de um filtro a partir de seus coeficientes (b, a). 
@@ -1177,6 +1175,10 @@ class FrequencyResponsePlot(BasePlot):
         fs (float): Frequência de amostragem
         f_cut (Optional[float]): Frequência de corte do filtro (Hz)
         xlim (Optional[Tuple[float, float]]): Limites do eixo X (Hz)
+        worN (int): Número de pontos para a transformada de Fourier
+        show_phase (bool): Se `True`, plota a fase da resposta em frequência
+        xlabel (str): Label do eixo X
+        ylabel (str): Label do eixo Y
 
     Example:
         ![pageplot](assets/example_lpf_freq_response.svg)
@@ -1190,6 +1192,10 @@ class FrequencyResponsePlot(BasePlot):
                  fs: float,
                  f_cut: float = None,
                  xlim: tuple = None,
+                 worN: int = 1024,
+                 show_phase: bool = False,
+                 xlabel: str = r"Frequência ($Hz$)",
+                 ylabel: str = r"Magnitude ($dB$)",
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
@@ -1199,42 +1205,43 @@ class FrequencyResponsePlot(BasePlot):
         self.fs = fs
         self.f_cut = f_cut
         self.xlim = xlim
+        self.worN = worN
+        self.show_phase = show_phase
+        self.xlabel = xlabel
+        self.ylabel = ylabel    
 
-    def plot(self,
-             worN: int = 1024,
-             show_phase: bool = False,
-             xlabel: str = r"Frequência ($Hz$)",
-             ylabel: str = r"Magnitude ($dB$)") -> None:
+    def plot(self) -> None:
 
         # calcula resposta em frequência
-        w, h = freqz(self.b, self.a, worN=worN, fs=self.fs)
+        w, h = freqz(self.b, self.a, worN=self.worN, fs=self.fs)
         magnitude = mag2db(h)
 
-        # plota magnitude em dB
+        # Plotagem
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkorange"
         label = self.labels[0] if self.labels else "$H(f)$"
-
         self.ax.plot(w, magnitude, color=color, label=label, **line_kwargs)
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
-        self.ax.set_ylim(-80, 5)
 
-        # define limites de frequência se fornecido
-        if self.xlim is not None:
-            self.ax.set_xlim(self.xlim)
-
-        # adiciona a barra vertical na frequência de corte
-        if self.f_cut is not None:
-            self.ax.axvline(self.f_cut, color="red", linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
-
-        if show_phase:
+        # Plotagem da fase
+        if self.show_phase:
             ax2 = self.ax.twinx()
             phase = np.unwrap(np.angle(h))
             ax2.plot(w, phase, color="darkorange", linestyle="--", linewidth=1.5, label="Fase")
             ax2.set_ylabel("Fase (rad)")
 
+        # adiciona a barra vertical na frequência de corte
+        if self.f_cut is not None:
+            self.ax.axvline(self.f_cut, color="red", linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
+
+        # Eixos
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
+        self.ax.set_ylim(-80, 5)
+
+        # Labels
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
 class DetectionFrequencyPlot(BasePlot):
