@@ -601,12 +601,12 @@ class Transmitter:
                 fig_const, grid, (0, 1),
                 dI=dI[:40000:5],
                 dQ=dQ[:40000:5],
-                xlim=(-1.1, 1.1),
-                ylim=(-1.1, 1.1),
+                xlim=(-1.5, 1.5),
+                ylim=(-1.5, 1.5),
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
-            ).plot(show_ideal_points=False)
+            ).plot()
 
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 

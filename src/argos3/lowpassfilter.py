@@ -117,7 +117,7 @@ class LPF:
         signal_filtered = filtfilt(self.b, self.a, signal)
 
         # normalização
-        signal_filtered *= np.sqrt(2)
+        # signal_filtered *= np.sqrt(2)
 
         return signal_filtered
 

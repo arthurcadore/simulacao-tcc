@@ -171,7 +171,6 @@ class Formatter:
         upsampled[::sps] = symbols
         out_sys = np.convolve(upsampled, pulse, mode='same')
 
-        out_sys = out_sys / np.max(np.abs(out_sys))
         return out_sys
 
     def add_prefix(self, symbols):

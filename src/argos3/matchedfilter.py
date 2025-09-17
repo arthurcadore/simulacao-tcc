@@ -110,9 +110,9 @@ class MatchedFilter:
         signal_filtered = y_full[start:end]
 
         # normalização segura
-        maxv = np.max(np.abs(signal_filtered))
-        if maxv > 0:
-            signal_filtered = signal_filtered / maxv
+        pulse_energy = np.sum(self.g_inverted**2)
+        if pulse_energy > 0:
+            signal_filtered = signal_filtered / pulse_energy
 
         return signal_filtered
 

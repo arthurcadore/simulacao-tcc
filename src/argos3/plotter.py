@@ -323,7 +323,7 @@ class ConstellationPlot(BasePlot):
 
         # Define amplitude alvo para pontos ideais
         if self.amplitude is None:
-            amp = np.sqrt(3)/2
+            amp = 1
         else:
             amp = self.amplitude
             # Normaliza as amostras para a amplitude definida

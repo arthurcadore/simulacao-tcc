@@ -70,7 +70,7 @@ class Noise:
         signal = signal + noise
 
         # normalização
-        signal = signal / np.max(np.abs(signal))
+        # signal = signal / np.max(np.abs(signal))
         
         return signal 
 
@@ -160,7 +160,7 @@ class NoiseEBN0:
         signal = signal + noise
 
         # normalização
-        signal = signal / np.max(np.abs(signal))
+        # signal = signal / np.max(np.abs(signal))
 
         return signal 
 
