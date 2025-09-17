@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#plotter_1" class="md-skip">
+        <a href="#plotter" class="md-skip">
           Skip to content
         </a>
       
@@ -1132,8 +1132,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -1165,8 +1163,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1230,9 +1226,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#plotter.EncodedBitsPlot" class="md-nav__link">
+  <a href="#plotter.SymbolsPlot" class="md-nav__link">
     <span class="md-ellipsis">
-      EncodedBitsPlot
+      SymbolsPlot
     </span>
   </a>
   
@@ -1413,8 +1409,7 @@
   
 
 
-<h1 id="plotter_1">Plotter</h1>
-
+  <h1>Plotter</h1>
 
 <div class="doc doc-object doc-module">
 
@@ -1736,6 +1731,22 @@
                   <code>&#39;ms&#39;</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>amp_norm</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Normalização do sinal para amplitude máxima</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1983,6 +1994,25 @@ s(t) = d_I(t) + j d_Q(t)
 <li><span class="arithmatex">\(d_I(t)\)</span>: Sinal em fase.</li>
 <li><span class="arithmatex">\(d_Q(t)\)</span>: Sinal em quadratura.</li>
 </ul>
+</details>        <p>O plot de constelação pode ser normalizado por um fator de normalização dado por: </p>
+<div class="arithmatex">\[
+\varphi = \frac{\text{A}}{
+      \sqrt{
+        \displaystyle \frac{1}{N} 
+        \sum_{n=0}^{N-1} \Big( I(n)^2 + Q(n)^2 \Big)
+      }
+    }
+\]</div>
+
+
+<details class="sendo" open>
+  <summary>Sendo</summary>
+  <ul>
+<li><span class="arithmatex">\(\text{A}\)</span>: Amplitude desejada, definido como <code>1</code>. </li>
+<li><span class="arithmatex">\(\varphi\)</span>: Fator de normalização.</li>
+<li><span class="arithmatex">\(N\)</span>: Número de amostras.</li>
+<li><span class="arithmatex">\(I(n)\)</span> e <span class="arithmatex">\(Q(n)\)</span>: Sinais em fase e quadratura.</li>
+</ul>
 </details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2074,22 +2104,6 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
                 <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>amplitude</code>
-            </td>
-            <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Amplitude alvo para pontos ideais</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
             </td>
           </tr>
       </tbody>
@@ -2255,6 +2269,86 @@ s(t) = d_I(t) + j d_Q(t)
                   <code>None</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show_bit_values</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se <code>True</code>, exibe os valores dos bits.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlabel</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do eixo x.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ylabel</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do eixo y.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>label</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do plot.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlim</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Tuple">Tuple</span>[<span title="float">float</span>, <span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Limites do eixo x.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -2300,8 +2394,8 @@ s(t) = d_I(t) + j d_Q(t)
 
 
 
-<h2 id="plotter.EncodedBitsPlot" class="doc doc-heading">
-            <code>EncodedBitsPlot</code>
+<h2 id="plotter.SymbolsPlot" class="doc doc-heading">
+            <code>SymbolsPlot</code>
 
 
 </h2>
@@ -2312,7 +2406,7 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais codificados com codificação de linha, recebendo um vetor de simbolos <span class="arithmatex">\(s\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
+        <p>Classe para plotar simbolos codificados com codificação de linha, recebendo um vetor de simbolos <span class="arithmatex">\(s[i]\)</span> e realizando o plot em função do index de simbolo <span class="arithmatex">\(i\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2376,14 +2470,14 @@ s(t) = d_I(t) + j d_Q(t)
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>symbols</code>
+                <code>symbols_list</code>
             </td>
             <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
+                  <code><span title="typing.List">List</span>[<span title="numpy.ndarray">ndarray</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de simbolos <span class="arithmatex">\(s\)</span></p>
+                <p>Lista de símbolos</p>
               </div>
             </td>
             <td>
@@ -2392,18 +2486,130 @@ s(t) = d_I(t) + j d_Q(t)
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>color</code>
+                <code>samples_per_symbol</code>
             </td>
             <td>
-                  <code><span title="str">str</span></code>
+                  <code><span title="int">int</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Cor do plot</p>
+                <p>Número de amostras por símbolo</p>
               </div>
             </td>
             <td>
-                  <code>&#39;black&#39;</code>
+                  <code>1</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sections</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[<span title="typing.Tuple">Tuple</span>[<span title="str">str</span>, <span title="int">int</span>]]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Seções do plot</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>colors</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[<span title="str">str</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Cores do plot</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show_symbol_values</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se <code>True</code>, exibe os valores dos símbolos.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlabel</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do eixo x.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ylabel</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do eixo y.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>label</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label do plot.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlim</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Tuple">Tuple</span>[<span title="float">float</span>, <span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Limites do eixo x.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
             </td>
           </tr>
       </tbody>
@@ -2413,7 +2619,7 @@ s(t) = d_I(t) + j d_Q(t)
 <details class="example" open>
   <summary>Example</summary>
   <ul>
-<li>Codificação de Linha: <img alt="pageplot" src="../assets/example_encoder_time.svg" /></li>
+<li>Codificação de Canal: <img alt="pageplot" src="../assets/example_encoder_time.svg" /></li>
 </ul>
 </details>
 

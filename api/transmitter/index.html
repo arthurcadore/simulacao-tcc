@@ -1049,9 +1049,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transmitter.Transmitter.run" class="md-nav__link">
+  <a href="#transmitter.Transmitter.transmit" class="md-nav__link">
     <span class="md-ellipsis">
-      run
+      transmit
     </span>
   </a>
   
@@ -1358,7 +1358,7 @@
 
 
 <h2 id="transmitter.Transmitter.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">datagram</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">carrier_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preamble</span><span class="o">=</span><span class="s1">&#39;2BEEEEBF&#39;</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]),</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1446,6 +1446,54 @@
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>carrier_length</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Comprimento do prefixo em segundos, se <code>None</code>, gera um valor aleatório entre 82 e 122 ms.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>preamble</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>String de preâmbulo em hex.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;2BEEEEBF&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>G</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Matriz de geração para codificação convolucional.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="numpy.array">array</span>([[121, 91]])</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>output_print</code>
             </td>
             <td>
@@ -1492,7 +1540,7 @@ AS3-SP-516-274-CNES (seção 3.1 e 3.2)
 
 
 <h2 id="transmitter.Transmitter.prepare_datagram" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">prepare_datagram</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">prepare_datagram</span><span class="p">(</span><span class="n">datagram</span><span class="p">)</span></code>
 
 </h2>
 
@@ -2022,7 +2070,7 @@ AS3-SP-516-274-CNES (seção 3.1 e 3.2)
 
 
 <h2 id="transmitter.Transmitter.format_signals" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">format_signals</span><span class="p">(</span><span class="n">Xnrz</span><span class="p">,</span> <span class="n">Yman</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">format_signals</span><span class="p">(</span><span class="n">Xi</span><span class="p">,</span> <span class="n">Yq</span><span class="p">)</span></code>
 
 </h2>
 
@@ -2235,15 +2283,46 @@ AS3-SP-516-274-CNES (seção 3.1 e 3.2)
 <div class="doc doc-object doc-function">
 
 
-<h2 id="transmitter.Transmitter.run" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">run</span><span class="p">()</span></code>
+<h2 id="transmitter.Transmitter.transmit" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">transmit</span><span class="p">(</span><span class="n">datagram</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Executa o processo de transmissão, retornando o sinal modulado <span class="arithmatex">\(s(t)\)</span> e o vetor de tempo <span class="arithmatex">\(t\)</span>.</p>
+        <p>Executa toda a cadeia de transmissão para um datagrama, retornando o sinal modulado <span class="arithmatex">\(s(t)\)</span> e o vetor de tempo <span class="arithmatex">\(t\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>datagram</code>
+            </td>
+            <td>
+                  <code><span title="transmitter.datagram.Datagram">Datagram</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Instância do datagrama a ser transmitido.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
     <p><span class="doc-section-title">Returns:</span></p>

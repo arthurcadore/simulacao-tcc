@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#filtro-passa-baixa" class="md-skip">
+        <a href="#lowpassfilter.LPF" class="md-skip">
           Skip to content
         </a>
       
@@ -800,8 +800,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -833,8 +831,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1278,8 +1274,7 @@
   
 
 
-<h1 id="filtro-passa-baixa">Filtro Passa Baixa</h1>
-
+  <h1>Filtro Passa-Baixa</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1312,7 +1307,7 @@
 
 
 <h2 id="lowpassfilter.LPF.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">cut_off</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">cut_off</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;butter&#39;</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1346,7 +1341,7 @@
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>600</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1362,7 +1357,7 @@
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>6</code>
             </td>
           </tr>
           <tr class="doc-section-item">

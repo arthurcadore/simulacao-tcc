@@ -1200,9 +1200,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.run" class="md-nav__link">
+  <a href="#receiver.Receiver.datagram" class="md-nav__link">
     <span class="md-ellipsis">
-      run
+      datagram
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#receiver.Receiver.receive" class="md-nav__link">
+    <span class="md-ellipsis">
+      receive
     </span>
   </a>
   
@@ -1394,7 +1403,7 @@
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>128000</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1553,7 +1562,7 @@ AS3-SP-516-2097-CNES (Seção 3.3)
 
 
 <h2 id="receiver.Receiver.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">lpf_cutoff</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preamble</span><span class="o">=</span><span class="s1">&#39;2BEEEEBF&#39;</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]),</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1605,6 +1614,38 @@ AS3-SP-516-2097-CNES (Seção 3.3)
             </td>
             <td>
                   <code>400</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>lpf_cutoff</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de corte do filtro passa-baixa em Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>600</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fc</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequência de portadora em Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1761,7 +1802,7 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 
 
 <h2 id="receiver.Receiver.lowpassfilter" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">lowpassfilter</span><span class="p">(</span><span class="n">cut_off</span><span class="p">,</span> <span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">lowpassfilter</span><span class="p">(</span><span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1782,22 +1823,6 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
         </tr>
       </thead>
       <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>cut_off</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Frequência de corte do filtro.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
           <tr class="doc-section-item">
             <td>
                 <code>xI_prime</code>
@@ -2125,7 +2150,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 
 
 <h2 id="receiver.Receiver.sampler" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">delayI</span><span class="p">,</span> <span class="n">delayQ</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">sampler</span><span class="p">(</span><span class="n">It_prime</span><span class="p">,</span> <span class="n">Qt_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
@@ -2552,8 +2577,97 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.run" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.datagram" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">datagram</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Recebe um vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado e retorna um datagrama no padrão ARGOS-3, ou o vetor de bits <span class="arithmatex">\(u_{t}'\)</span> se houver erro.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ut</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>datagram</code></td>            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Datagrama gerado, ou o vetor de bits <span class="arithmatex">\(u_{t}'\)</span> se houver erro.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>success</code></td>            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Indica se a operação foi bem-sucedida.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <ul>
+<li>Tempo: <img alt="pageplot" src="../assets/receiver_datagram_time.svg" /></li>
+</ul>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="receiver.Receiver.receive" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">receive</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
 
 </h2>
 
@@ -2590,38 +2704,6 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
                 <em>required</em>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>t</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>fc</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Frequência de portadora.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -2636,25 +2718,18 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>ut</code></td>            <td>
+<td><code>datagramRX</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+                <p>Datagrama gerado, ou vetor ut se houver erro.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
 
-
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/transmitter_datagram_time.svg" /></li>
-</ul>
-</details>
 
     </div>
 

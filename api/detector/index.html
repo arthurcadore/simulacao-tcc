@@ -1316,7 +1316,7 @@
 
 
 <h2 id="detector.CarrierDetector.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">seg_ms</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">segments</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">freq_window</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">))</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">seg_ms</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">segments</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">freq_window</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">))</span></code>
 
 </h2>
 
@@ -1350,7 +1350,7 @@
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>128000</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1803,6 +1803,22 @@ x_n[m] = s(t_{n} + mT_s)
             <td>
               <div class="doc-md-description">
                 <p>saída de self.detect()</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>confirmed_freqs</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>lista de frequências confirmadas como portadora</p>
               </div>
             </td>
             <td>

@@ -606,6 +606,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#v106-channel-and-doppler" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.6 - Channel and Doppler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v107-extensao-de-vetores" class="md-nav__link">
+    <span class="md-ellipsis">
+      v1.0.7 - Extensão de vetores
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1353,29 +1371,73 @@
 <hr />
 <h3 id="v105-optimization">v1.0.5 - Optimization</h3>
 <ul>
-<li>[] Otimizar classes de tx/rx, instânciar direto no construtor.</li>
-<li>[] Otimizar parse do datagrama ARGOS-3</li>
-<li>[] Adicionar documentação interna as classes<ul>
-<li>[] Alterar "exemplo" para "example" nos comentários. </li>
-<li>[] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py</li>
-<li>[] Verificar equacionamento sklar e alterar nome das variáveis.</li>
-<li>[] Alterar documentação da classe de encoder</li>
-<li>[] adicionar prints de impulso casado na documentação</li>
+<li>[X] Otimizar parse do datagrama ARGOS-3</li>
+<li>[X] Remover vetor de tempo no rx, criar interno.</li>
+<li>[X] Otimizar classes de tx/rx, instânciar direto no construtor.</li>
+<li>[X] Alterar detector para checkfrequencies ser chamado dentro da classe</li>
+<li>[X] Adicionar método update para alterar delay do sinal recebido</li>
+<li>[X] Diminuir passo de frequência aleatória na classe detector. </li>
+<li>[X] Adicionar defaults na construção de classes (argumentos que forem possiveis).</li>
+<li>[X] Adicionar documentação interna as classes<ul>
+<li>[X] Alterar "exemplo" para "example" nos comentários. </li>
+<li>[X] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py</li>
+<li>[X] Alterar documentação da classe de encoder</li>
+<li>[X] adicionar prints de impulso casado na documentação</li>
 </ul>
 </li>
 <li>[] Otimizar plots<ul>
-<li>[] Verificar plot de constelação, normalização do sinal recebido</li>
+<li>[X] Verificar plot de constelação, normalização do sinal recebido</li>
 <li>[] Otimizar plot do encoder. </li>
-<li>[] Criar método para testar todas as classes no makefile. </li>
+<li>[X] Criar método para testar todas as classes no makefile. </li>
 <li>[] Padronizar cor dos plots.</li>
 <li>[] Alterar tamanho do plot pz fpb</li>
+<li>[] Alterar xlim para plots necessários. </li>
+<li>[] Adicionar plot de fase discreta no transmitter, deixar constelação separado. </li>
 </ul>
 </li>
+<li>[] Otimizar conversor de plots pra permitir darkTheme</li>
+<li>[] Alterar mkdocs para darkTheme</li>
 <li>[] Adicionar melhor documentação a aba inicio</li>
+<li>[] Adicionar exemplificação de uso como "Example" no site, como o datagrama.</li>
+<li>[] Verificar adição de diagrama de olho no sklar. </li>
 <li>[] Diagrama de blocos<ul>
 <li>[] Alterar diagrama do modulador</li>
 <li>[] Alterar nome das variáveis</li>
-<li>[] Alterar bloco do receptor pra ficar dentro de detector.</li>
+<li>[] Alterar bloco do receptor pra ficar dentro de detector.
+-[] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx</li>
+</ul>
+</li>
+<li>[] Verificar equacionamento sklar e alterar nome das variáveis.</li>
+</ul>
+<hr />
+<h3 id="v106-channel-and-doppler">v1.0.6 - Channel and Doppler</h3>
+<ul>
+<li>[] Montar classe de canal para instanciar ruido e aplicar ao sinal recebido</li>
+<li>[] Montar classe Doppler para testar distorção em frequência do sinal<ul>
+<li>[] Coletar dataset de passada de satélite e montar plot. </li>
+<li>[] calcular com base na velocidade de trajetória o desvio doppler. </li>
+<li>[] Aplicar distorção doppler no sinal recebido<ul>
+<li>[] Tempo de estabilização 80ms</li>
+<li>[] Desvio de fase &lt;= 20° no máximo. </li>
+<li>[] Fator de amortecimento e=1 </li>
+<li>[] Máximo desvio de frequência inicial 50Hz</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>[] Montar classe PLL (Phased Locked Loop) para corrigir o desvio de frequência do sinal recebido<ul>
+<li>[] Testar aplicação do PLL ao sinal distorcido em frequência.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="v107-extensao-de-vetores">v1.0.7 - Extensão de vetores</h3>
+<ul>
+<li>[] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. </li>
+<li>[] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.</li>
+<li>[] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.<ul>
+<li>[] Adicionar vetor de simbolos de preâmbulo </li>
+<li>[] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.</li>
 </ul>
 </li>
 </ul>
