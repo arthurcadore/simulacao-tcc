@@ -251,18 +251,6 @@ if __name__ == "__main__":
 
     ImpulseResponsePlot(
         fig_impulse_man, grid_impulse_man, (0, 0),
-        formatterQ.t_rc, formatterQ.g,
-        t_unit="ms",
-        colors="darkorange",
-        label=r"$g(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
-        xlim=(-15, 15), 
-        amp_norm=True
-    ).plot()
-
-    ImpulseResponsePlot(
-        fig_impulse_man, grid_impulse_man, (1, 0),
         formatterQ.t_rc, 
         [formatterQ.g_left, formatterQ.g_right],
         t_unit="ms",
@@ -271,6 +259,18 @@ if __name__ == "__main__":
         xlabel=r"Tempo ($ms$)", 
         ylabel="Amplitude", 
         xlim=(-15, 15), 
+    ).plot()
+
+    ImpulseResponsePlot(
+        fig_impulse_man, grid_impulse_man, (1, 0),
+        formatterQ.t_rc, formatterQ.g,
+        t_unit="ms",
+        colors="darkorange",
+        label=r"$g(t)$", 
+        xlabel=r"Tempo ($ms$)", 
+        ylabel="Amplitude", 
+        xlim=(-15, 15), 
+        amp_norm=True
     ).plot()
 
     fig_impulse_man.tight_layout()

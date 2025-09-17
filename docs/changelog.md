@@ -77,22 +77,46 @@
     - [X] Alterar tamanho do plot pz fpb
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
+- [] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
+- [X] Inverter a ordem do plot de impulso
+- [] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.
+- [] Verificar normalização em amplitude para impulso Man
+- [] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. 
+- [] Implementar uso da função Q(x) na documentação. 
+- [] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
+
+---
+### v1.0.6 - Estilização e Documentação
 - [] Otimizar conversor de plots pra permitir darkTheme
 - [] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
 - [] Verificar adição de diagrama de olho no sklar. 
+- [] Verificar equacionamento sklar e alterar nome das variáveis.
 - [] Diagrama de blocos
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
-- [] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
-- [] Verificar equacionamento sklar e alterar nome das variáveis.
-- [] Alterar plot de módulo de treliça para plot de estados. 
 
+--- 
+### v1.0.7 - Soft Decision
+- [] Implementar argumento "soft" no receiver
+    - [] Alterar receiver para apenas amostrar os valores após filtro casado.
+    - [] Alterar ordem do conv. decoder para receber valores após desembaralhamento.
+    - [] Alterar algorimo de viterbi para trabalhar com distâncias euclidianas (ref: https://dsplog.com/2009/01/14/soft-viterbi/)
+    - [] Verificar viabilidade de plot de módulo de treliça para plot de estados. 
+
+--- 
+### v1.0.8 - Extensão de vetores
+- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
+- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
+- [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
+    - [] Adicionar vetor de simbolos de preâmbulo 
+    - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
+- [] Aumentar a adição de ruido (comprimento do vetor) 
 
 ---
-### v1.0.6 - Channel and Doppler
+### v1.0.9 - Channel and Doppler
 - [] Montar classe de canal para instanciar ruido e aplicar ao sinal recebido
 - [] Montar classe Doppler para testar distorção em frequência do sinal
     - [] Coletar dataset de passada de satélite e montar plot. 
@@ -105,10 +129,6 @@
 - [] Montar classe PLL (Phased Locked Loop) para corrigir o desvio de frequência do sinal recebido
     - [] Testar aplicação do PLL ao sinal distorcido em frequência.
 
---- 
-### v1.0.7 - Extensão de vetores
-- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
-- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
-- [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
-    - [] Adicionar vetor de simbolos de preâmbulo 
-    - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
+
+---
+### v1.0.10 - AGC
