@@ -50,7 +50,6 @@ def mag2db(signal: np.ndarray) -> np.ndarray:
     mag = mag / peak
     return 20 * np.log10(mag + 1e-12)
 
-
 def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> Tuple[plt.Figure, gridspec.GridSpec]:
     r"""
     Cria uma figura com `GridSpec`, retornando o objeto `fig` e `grid` para desenhar os plots.
@@ -152,7 +151,6 @@ class BasePlot:
             return self.colors[idx % len(self.colors)]
         return None
 
-
 class TimePlot(BasePlot):
     r"""
     Classe para plotar sinais no domínio do tempo, recebendo um vetor de tempo $t$, e uma lista de sinais $s(t)$.
@@ -226,7 +224,6 @@ class TimePlot(BasePlot):
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
 
-
 class FrequencyPlot(BasePlot):
     r"""
     Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
@@ -299,7 +296,6 @@ class FrequencyPlot(BasePlot):
             self.ax.set_ylim(-80, 5)
 
         self.apply_ax_style()
-
 
 class ConstellationPlot(BasePlot):
     r"""
@@ -403,7 +399,6 @@ class ConstellationPlot(BasePlot):
         self.ax.set_xlabel("In Phase $I$")
         self.ax.set_ylabel("Quadrature $Q$")
         self.apply_ax_style()
-
 
 class BitsPlot(BasePlot):
     r"""
@@ -698,8 +693,6 @@ class SymbolsPlot(BasePlot):
             self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
-
-
 class ImpulseResponsePlot(BasePlot):
     r"""
     Classe para plotar a resposta ao impulso de um filtro, recebendo um vetor de tempo $t_{imp}$ e realizando o plot em função do tempo $t$.
@@ -784,7 +777,6 @@ class ImpulseResponsePlot(BasePlot):
         if self.xlim is not None:
             self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
-
 
 class TrellisPlot(BasePlot):
     r"""
@@ -892,7 +884,13 @@ class SampledSignalPlot(BasePlot):
         signal (np.ndarray): Sinal filtrado
         t_samples (np.ndarray): Instantes de amostragem
         samples (np.ndarray): Amostras correspondentes
-        time_unit (str): Unidade de tempo ("ms" por padrão, pode ser "s").
+        time_unit (str): Unidade de tempo. 
+        label_signal (str): Label do sinal filtrado.
+        label_samples (str): Label das amostras.
+        xlabel (str): Label do eixo x.
+        ylabel (str): Label do eixo y.
+        title (str): Título do plot.
+        xlim (tuple): Limites do eixo x.
 
     Example:
         ![pageplot](assets/example_sampler_time.svg)
@@ -906,13 +904,30 @@ class SampledSignalPlot(BasePlot):
                  t_samples: np.ndarray,
                  samples: np.ndarray,
                  time_unit: str = "ms",
+                 label_signal: Optional[str] = None,
+                 label_samples: Optional[str] = None,
+                 xlabel: Optional[str] = None,
+                 ylabel: Optional[str] = "Amplitude",
+                 title: Optional[str] = None,
+                 xlim: Optional[Tuple[float, float]] = None,
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
         self.time_unit = time_unit.lower()
+        self.label_signal = label_signal
+        self.label_samples = label_samples
+        if xlabel is None:
+            xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.title = title
+        self.xlim = xlim
+        self.signal = signal
+        self.samples = samples
 
+        # Ajusta unidade de tempo
         if self.time_unit == "ms":
             self.t_signal = t_signal * 1e3
             self.t_samples = t_samples * 1e3
@@ -920,46 +935,21 @@ class SampledSignalPlot(BasePlot):
             self.t_signal = t_signal
             self.t_samples = t_samples
 
-        self.signal = signal
-        self.samples = samples
-
-    def plot(self,
-             label_signal: Optional[str] = None,
-             label_samples: Optional[str] = None,
-             xlabel: Optional[str] = None,
-             ylabel: Optional[str] = "Amplitude",
-             title: Optional[str] = None,
-             xlim: Optional[Tuple[float, float]] = None) -> None:
-
-        # Sinal filtrado - usa a cor fornecida ou azul como padrão
+    def plot(self) -> None:
+        # Plotagem
         signal_color = self.colors if isinstance(self.colors, str) else "blue"
-        self.ax.plot(self.t_signal, self.signal,
-                     color=signal_color, label=label_signal, linewidth=2)
+        self.ax.plot(self.t_signal, self.signal,color=signal_color, label=self.label_signal, linewidth=2)
+        self.ax.stem(self.t_samples, self.samples,linefmt="k-", markerfmt="ko", basefmt=" ",label=self.label_samples)
 
-        # Amostras - usa preto como padrão para manter contraste
-        self.ax.stem(self.t_samples, self.samples,
-                     linefmt="k-", markerfmt="ko", basefmt=" ",
-                     label=label_samples)
-
-        if title:
-            self.title = title
-            self.ax.set_title(title)
-
-        # Define o eixo X de acordo com a unidade
-        if xlabel is None:
-            xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
-        self.ax.set_xlabel(xlabel)
-
-        if ylabel:
-            self.ax.set_ylabel(ylabel)
-        if xlim:
-            self.ax.set_xlim(xlim)
-
-        # Aplica os estilos da classe base, incluindo a legenda
+        # Ajuste dos eixos
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
+        self.ax.set_xlim(self.xlim)
+        self.ax.set_title(self.title)
         self.apply_ax_style()
         
-        # Garante que a legenda seja exibida
-        if label_signal or label_samples:
+        # Legenda
+        if self.label_signal or self.label_samples:
             leg = self.ax.legend(loc='upper right', frameon=True, fontsize=12)
             leg.get_frame().set_facecolor("white")
             leg.get_frame().set_edgecolor("black")

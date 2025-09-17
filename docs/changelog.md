@@ -71,10 +71,10 @@
     - [X] adicionar prints de impulso casado na documentação
 - [] Otimizar plots
     - [X] Verificar plot de constelação, normalização do sinal recebido
-    - [] Otimizar plot do encoder. 
+    - [X] Otimizar plot do encoder. 
     - [X] Criar método para testar todas as classes no makefile. 
     - [] Padronizar cor dos plots.
-    - [] Alterar tamanho do plot pz fpb
+    - [X] Alterar tamanho do plot pz fpb
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
 - [] Otimizar conversor de plots pra permitir darkTheme
@@ -86,7 +86,7 @@
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
--[] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
+- [] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
 - [] Verificar equacionamento sklar e alterar nome das variáveis.
 - [] Alterar plot de módulo de treliça para plot de estados. 
 

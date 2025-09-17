@@ -596,8 +596,12 @@ class Receiver:
                 It_prime,
                 t_sampledI,
                 s_sampledI,
-                colors='darkgreen'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $I$ amostrado")
+                colors='darkgreen',
+                label_signal="Sinal original", 
+                label_samples="Amostras", 
+                xlim=(80, 240), 
+                title="Componente $I$ amostrado"
+            ).plot()
 
             SampledSignalPlot(
                 fig_sampler, grid_sampler, (1, 0),
@@ -605,8 +609,12 @@ class Receiver:
                 Qt_prime,
                 t_sampledQ,
                 s_sampledQ,
-                colors='navy'
-            ).plot(label_signal="Sinal original", label_samples="Amostras", xlim=(80, 240), title="Componente $Q$ amostrado")
+                colors='navy',
+                label_signal="Sinal original", 
+                label_samples="Amostras", 
+                xlim=(80, 240), 
+                title="Componente $Q$ amostrado"
+            ).plot()
 
             fig_sampler.tight_layout()
             save_figure(fig_sampler, "receiver_sampler_time.pdf")            
