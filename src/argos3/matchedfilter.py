@@ -207,7 +207,6 @@ if __name__ == "__main__":
         signals=[dQ1],
         labels=[r"$d_Q1(t)$"],
         title=r"Canal $Q1$",
-        # xlim=(40, 140),
         amp_norm=True,
         colors="darkblue",
         style={

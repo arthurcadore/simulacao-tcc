@@ -416,6 +416,11 @@ class BitsPlot(BasePlot):
         bits_list (List[np.ndarray]): Lista de bits
         sections (Optional[List[Tuple[str, int]]]): Seções do plot
         colors (Optional[List[str]]): Cores do plot
+        show_bit_values (bool): Se `True`, exibe os valores dos bits.
+        xlabel (Optional[str]): Label do eixo x.
+        ylabel (Optional[str]): Label do eixo y.
+        label (Optional[str]): Label do plot.
+        xlim (Optional[Tuple[float, float]]): Limites do eixo x.
 
     Example:
         - Datagrama: ![pageplot](assets/example_datagram_time.svg)
@@ -431,44 +436,51 @@ class BitsPlot(BasePlot):
                  bits_list: List[np.ndarray],
                  sections: Optional[List[Tuple[str, int]]] = None,
                  colors: Optional[List[str]] = None,
+                 show_bit_values: bool = True,
+                 xlabel: Optional[str] = None,
+                 ylabel: Optional[str] = None,
+                 label: Optional[str] = None,
+                 xlim: Optional[Tuple[float, float]] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.bits_list = bits_list
         self.sections = sections
         self.colors = colors
+        self.show_bit_values = show_bit_values
+        self.xlim = xlim
+        self.bit_value_offset = 0.15
+        self.bit_value_size = 12
+        self.bit_value_weight = 'bold'
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.label = label
 
-    def plot(self,
-             show_bit_values: bool = True,
-             bit_value_offset: float = 0.15,
-             bit_value_size: int = 12,
-             bit_value_weight: str = 'bold',
-             xlabel: Optional[str] = None,
-             ylabel: Optional[str] = None,
-             label: Optional[str] = None,
-             xlim: Optional[Tuple[float, float]] = None) -> None:
+    def plot(self) -> None:
 
+        # Concatena e superamostra os vetores de bit.
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
         x = np.arange(len(bits_up))
 
         # Ajustes de eixo
-        y_upper = 1.4 if show_bit_values else 1.2
-        if xlim is not None:
-            self.ax.set_xlim(xlim)
+        y_upper = 1.4 if self.show_bit_values else 1.2
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
         else:
             self.ax.set_xlim(0, len(bits_up))
         self.ax.set_ylim(-0.2, y_upper)
         self.ax.grid(False)
         self.ax.set_yticks([0, 1])
 
+        # Linhas auxiliares
         self.ax.xaxis.set_major_locator(MultipleLocator(8))
         self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
-
         bit_edges = np.arange(0, len(bits_up) + 1, 2)
         for pos in bit_edges:
             self.ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
+        # Para cada vetor de bits, desenha uma seção do plot.
         if self.sections:
             start_bit = 0
             for i, (sec_name, sec_len) in enumerate(self.sections):
@@ -478,16 +490,18 @@ class BitsPlot(BasePlot):
                 if i > 0:
                     bit_start -= 1
 
+                # Desenha a seção do plot.
                 self.ax.step(
                     x[bit_start:bit_end],
                     bits_up[bit_start:bit_end],
                     where='post',
                     color=color,
                     linewidth=2.0,
-                    label=sec_name if label is None else label
+                    label=sec_name if self.label is None else self.label
                 )
                 
-                if show_bit_values:
+                # Exibe os valores dos bits acima da linha do plot.
+                if self.show_bit_values:
                     xmin, xmax = self.ax.get_xlim()
                     section_bits = all_bits[start_bit:start_bit + sec_len]
                     for j, bit in enumerate(section_bits):
@@ -496,20 +510,23 @@ class BitsPlot(BasePlot):
                             continue
                         self.ax.text(
                             xpos,
-                            1.0 + bit_value_offset,
+                            1.0 + self.bit_value_offset,
                             str(int(bit)),
                             ha='center',
                             va='bottom',
-                            fontsize=bit_value_size,
-                            fontweight=bit_value_weight,
+                            fontsize=self.bit_value_size,
+                            fontweight=self.bit_value_weight,
                             color='black'
                         )
                 start_bit += sec_len
         else:
+            # Desenha a seção do plot.
             self.ax.step(x, bits_up, where='post',
                          color='black', linewidth=2.0,
-                         label=label if label else None)
-            if show_bit_values:
+                         label=self.label if self.label else None)
+
+            # Exibe os valores dos bits acima da linha do plot.
+            if self.show_bit_values:
                 xmin, xmax = self.ax.get_xlim()
                 for i, bit in enumerate(all_bits):
                     xpos = i * 2 + 1
@@ -517,20 +534,19 @@ class BitsPlot(BasePlot):
                         continue
                     self.ax.text(
                         xpos,
-                        1.0 + bit_value_offset,
+                        1.0 + self.bit_value_offset,
                         str(int(bit)),
                         ha='center',
                         va='bottom',
-                        fontsize=bit_value_size,
-                        fontweight=bit_value_weight
+                        fontsize=self.bit_value_size,
+                        fontweight=self.bit_value_weight
                     )
 
-        if xlabel:
-            self.ax.set_xlabel(xlabel)
-        if ylabel:
-            self.ax.set_ylabel(ylabel)
-
-        plt.tight_layout()
+        # Labels
+        if self.xlabel:
+            self.ax.set_xlabel(self.xlabel)
+        if self.ylabel:
+            self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
 class EncodedBitsPlot(BasePlot):

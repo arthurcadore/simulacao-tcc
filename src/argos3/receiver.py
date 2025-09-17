@@ -690,8 +690,11 @@ class Receiver:
                 fig_decoder, grid_decoder, (1, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
-                colors=["darkgreen"]
-            ).plot(xlabel="Index de Bit", ylabel="$X_n$", xlim=(0, len(Xn_prime)/2))
+                colors=["darkgreen"],
+                xlabel="Index de Bit", 
+                ylabel="$X_n$", 
+                xlim=(0, len(Xn_prime)/2)
+            ).plot()
 
             EncodedBitsPlot(
                 fig_decoder, grid_decoder, (2, 0),
@@ -703,8 +706,11 @@ class Receiver:
                 fig_decoder, grid_decoder, (3, 0),
                 bits_list=[Yn_prime],
                 sections=[("$Y_n$", len(Yn_prime))],
-                colors=["navy"]
-            ).plot(xlabel="Index de Bit", ylabel="$Y_n$", xlim=(0, len(Yn_prime)/2))
+                colors=["navy"],
+                xlabel="Index de Bit", 
+                ylabel="$Y_n$", 
+                xlim=(0, len(Yn_prime)/2)
+            ).plot()
 
             fig_decoder.tight_layout()
             save_figure(fig_decoder, "receiver_decoder_time.pdf")
@@ -741,8 +747,9 @@ class Receiver:
                 fig_descrambler, grid_descrambler, (0, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
-                colors=["darkgreen"]
-            ).plot(ylabel="Embaralhado")
+                colors=["darkgreen"],
+                ylabel="Embaralhado"
+            ).plot()
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (0, 1),
@@ -755,15 +762,18 @@ class Receiver:
                 fig_descrambler, grid_descrambler, (1, 0),
                 bits_list=[vt0],
                 sections=[("$v_t^{0}$", len(vt0))],
-                colors=["darkgreen"]
-            ).plot(ylabel="Restaurado", xlabel="Index de Bit")
+                colors=["darkgreen"],
+                ylabel="Restaurado", 
+                xlabel="Index de Bit"
+            ).plot()
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (1, 1),
                 bits_list=[vt1],
                 sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"]
-            ).plot(xlabel="Index de Bit")
+                colors=["navy"],
+                xlabel="Index de Bit"
+            ).plot()
 
             fig_descrambler.tight_layout()
             save_figure(fig_descrambler, "receiver_descrambler_time.pdf")     
@@ -798,22 +808,26 @@ class Receiver:
                 fig_conv_decoder, grid_conv_decoder, (0, 0),
                 bits_list=[vt0],
                 sections=[("$v_t^{0}$", len(vt0))],
-                colors=["darkgreen"]
-            ).plot(ylabel="Canal $I$")
+                colors=["darkgreen"],
+                ylabel="Canal $I$"
+            ).plot()
 
             BitsPlot(
                 fig_conv_decoder, grid_conv_decoder, (1, 0),
                 bits_list=[vt1],
                 sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"]
-            ).plot(ylabel="Canal $Q$")
+                colors=["navy"],
+                ylabel="Canal $Q$"
+            ).plot()
 
             BitsPlot(
                 fig_conv_decoder, grid_conv_decoder, (2, 0),
                 bits_list=[ut],
                 sections=[("$u_t'$", len(ut))],
-                colors=["darkred"]
-            ).plot(ylabel="Decodificado", xlabel="Index de Bit")
+                colors=["darkred"],
+                ylabel="Decodificado", 
+                xlabel="Index de Bit"
+            ).plot()
 
             fig_conv_decoder.tight_layout()
             save_figure(fig_conv_decoder, "receiver_conv_time.pdf")     
@@ -854,8 +868,9 @@ class Receiver:
                               ("PCD ID", len(datagramRX.pcdid)),
                               ("Dados de App.", len(datagramRX.blocks)),
                               ("Tail", len(datagramRX.tail))],
-                    colors=["green", "orange", "red", "blue"]
-                ).plot(xlabel="Index de Bit")
+                    colors=["green", "orange", "red", "blue"],
+                    xlabel="Index de Bit"
+                ).plot()
                 fig_datagram.tight_layout()
                 save_figure(fig_datagram, "receiver_datagram_time.pdf")
             

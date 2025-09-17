@@ -181,8 +181,9 @@ if __name__ == "__main__":
         fig_encoder, grid, (0, 0),
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
-        colors=["darkgreen"]
-    ).plot(xlabel="Index de Bit", ylabel="$X_n$")
+        colors=["darkgreen"],
+        xlabel="Index de Bit", ylabel="$X_n$"
+    ).plot()
 
     EncodedBitsPlot(
         fig_encoder, grid, (1, 0),
@@ -194,8 +195,9 @@ if __name__ == "__main__":
         fig_encoder, grid, (2, 0),
         bits_list=[Yn],
         sections=[("$Y_n$", len(Yn))],
-        colors=["navy"]
-    ).plot(xlabel="Index de Bit", ylabel="$Y_n$")
+        colors=["navy"],
+        xlabel="Index de Bit", ylabel="$Y_n$"
+    ).plot()
 
     EncodedBitsPlot(
         fig_encoder, grid, (3, 0),

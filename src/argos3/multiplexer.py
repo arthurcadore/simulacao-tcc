@@ -68,8 +68,9 @@ if __name__ == "__main__":
         bits_list=[SI, X],
         sections=[("Preambulo $S_I$", len(SI)),
                   ("Canal I $(X_n)$", len(X))],
-        colors=["blue", "purple"]
-    ).plot(ylabel="Canal $I$")
+        colors=["blue", "purple"],
+        ylabel="Canal $I$"
+    ).plot()
     
     Xn, Yn = mux.concatenate(SI, SQ, X, Y)
 
@@ -78,8 +79,10 @@ if __name__ == "__main__":
         bits_list=[SQ, Y],
         sections=[("Preambulo $S_Q$", len(SQ)),
                   ("Canal Q $(Y_n)$", len(Y))],
-        colors=["blue", "purple"]
-    ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+        colors=["blue", "purple"],
+        xlabel="Index de Bit", 
+        ylabel="Canal $Q$"
+    ).plot()
 
     fig_mux.tight_layout()
     save_figure(fig_mux, "example_mux.pdf")

@@ -84,15 +84,18 @@ if __name__ == "__main__":
         fig_preamble, grid_preamble, (0,0),
         bits_list=[Si],
         sections=[("Preambulo $S_I$", len(Si))],
-        colors=["darkgreen"]
-    ).plot(ylabel="Canal $I$")
+        colors=["darkgreen"],
+        ylabel="Canal $I$"
+    ).plot()
     
     BitsPlot(
         fig_preamble, grid_preamble, (1,0),
         bits_list=[Sq],
         sections=[("Preambulo $S_Q$", len(Sq))],
-        colors=["navy"]
-    ).plot(xlabel="Index de Bit", ylabel="Canal $Q$")
+        colors=["navy"],
+        xlabel="Index de Bit", 
+        ylabel="Canal $Q$"
+    ).plot()
     
     fig_preamble.tight_layout()
     save_figure(fig_preamble, "example_preamble.pdf")

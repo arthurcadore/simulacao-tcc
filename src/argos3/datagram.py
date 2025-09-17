@@ -325,8 +325,9 @@ if __name__ == "__main__":
                   ("PCD ID", len(datagram_tx.pcdid)),
                   ("Dados de App.", len(datagram_tx.blocks)),
                   ("Tail", len(datagram_tx.tail))],
-        colors=["green", "orange", "red", "blue"]
-    ).plot(xlabel="Index de Bit")
+        colors=["green", "orange", "red", "blue"],
+        xlabel="Index de Bit"
+    ).plot()
 
     fig_datagram.tight_layout()
     save_figure(fig_datagram, "example_datagram_time.pdf")

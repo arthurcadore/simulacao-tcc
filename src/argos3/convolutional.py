@@ -235,22 +235,26 @@ if __name__ == "__main__":
         fig_conv, grid_conv, (0, 0),
         bits_list=[ut],
         sections=[("$u_t$", len(ut))],
-        colors=["darkred"]
-    ).plot(ylabel="$u_t$")
+        colors=["darkred"],
+        ylabel="$u_t$"
+    ).plot()
 
     BitsPlot(
         fig_conv, grid_conv, (1, 0),
         bits_list=[vt0],
         sections=[("$v_t^{(0)}$", len(vt0))],
-        colors=["darkgreen"]
-    ).plot(ylabel="$v_t^{(0)}$")
+        colors=["darkgreen"],
+        ylabel="$v_t^{(0)}$"
+    ).plot()
 
     BitsPlot(
         fig_conv, grid_conv, (2, 0),
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
-        colors=["navy"]
-    ).plot(xlabel="Index de Bit", ylabel="$v_t^{(1)}$")
+        colors=["navy"],
+        xlabel="Index de Bit", 
+        ylabel="$v_t^{(1)}$"
+    ).plot()
 
     fig_conv.tight_layout()
     save_figure(fig_conv, "example_conv_time.pdf")

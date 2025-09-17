@@ -207,8 +207,9 @@ if __name__ == "__main__":
         fig_scrambler, grid_scrambler, (0, 0),
         bits_list=[vt0],
         sections=[("$v_t^{0}$", len(vt0))],
-        colors=["darkgreen"]
-    ).plot(ylabel="Original")
+        colors=["darkgreen"],
+        ylabel="Original"
+    ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (0, 1),
@@ -221,8 +222,9 @@ if __name__ == "__main__":
         fig_scrambler, grid_scrambler, (1, 0),
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
-        colors=["darkgreen"]
-    ).plot(ylabel="Embaralhado")
+        colors=["darkgreen"],
+        ylabel="Embaralhado"
+    ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (1, 1),
@@ -235,15 +237,17 @@ if __name__ == "__main__":
         fig_scrambler, grid_scrambler, (2, 0),
         bits_list=[vt0_prime],
         sections=[("$v_t^{0}$", len(vt0_prime))],
-        colors=["darkgreen"]
-    ).plot(ylabel="Restaurado", xlabel="Index de Bit")
+        colors=["darkgreen"],
+        ylabel="Restaurado", xlabel="Index de Bit"
+    ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 1),
         bits_list=[vt1_prime],
         sections=[("$v_t^{1}$", len(vt1_prime))],
-        colors=["navy"]
-    ).plot(xlabel="Index de Bit")
+        colors=["navy"],
+        xlabel="Index de Bit"
+    ).plot()
 
     fig_scrambler.tight_layout()
     save_figure(fig_scrambler, "example_scrambler_time.pdf")
