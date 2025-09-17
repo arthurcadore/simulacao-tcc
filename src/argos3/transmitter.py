@@ -252,7 +252,7 @@ class Transmitter:
             print("sQ:", ''.join(map(str, sQ)))
 
         if self.output_plot:
-            fig_preamble, grid_preamble = create_figure(2, 1, figsize=(16, 9))
+            fig_preamble, grid_preamble = create_figure(2, 1, figsize=(16, 6))
 
             BitsPlot(
                 fig_preamble, grid_preamble, (0,0),
