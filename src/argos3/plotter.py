@@ -227,7 +227,6 @@ class TimePlot(BasePlot):
         self.apply_ax_style()
 
 
-
 class FrequencyPlot(BasePlot):
     r"""
     Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
@@ -271,19 +270,22 @@ class FrequencyPlot(BasePlot):
         self.signal = signal
 
     def plot(self) -> None:
+
+        # Transformada de Fourier
         freqs = np.fft.fftshift(np.fft.fftfreq(len(self.signal), d=1 / self.fs))
         fft_signal = np.fft.fftshift(np.fft.fft(self.signal))
         y = mag2db(fft_signal)
 
+        # Escala de frequência
         if self.fc > 1000:
             freqs = freqs / 1000
             self.ax.set_xlabel(r"Frequência ($kHz$)")
         else:
             self.ax.set_xlabel(r"Frequência ($Hz$)")
 
+        # Plotagem
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
         color = self.apply_color(0)
         label = self.labels[0] if self.labels else None
         if color is not None:
@@ -291,6 +293,7 @@ class FrequencyPlot(BasePlot):
         else:
             self.ax.plot(freqs, y, label=label, **line_kwargs)
 
+        # Labels
         self.ax.set_ylabel(r"Magnitude ($dB$)")
         if self.ylim is None:
             self.ax.set_ylim(-80, 5)
@@ -372,11 +375,10 @@ class ConstellationPlot(BasePlot):
         else:
             lim = 1.2 * np.max(np.abs(np.concatenate([dI_c, dQ_c])))
     
+        # Amostras IQ
         scatter_kwargs = {"s": 20, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
         color = self.apply_color(0) or "darkgreen"
-    
-        # Amostras IQ
         self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
     
         # Pontos ideais QPSK
@@ -393,16 +395,14 @@ class ConstellationPlot(BasePlot):
     
         # Linhas auxiliares
         self.ax.axhline(0, color="gray", linestyle="--", alpha=0.5)
-        self.ax.axvline(0, color="gray", linestyle="--", alpha=0.5)
-    
-        # Ajusta limites dinamicamente
+        self.ax.axvline(0, color="gray", linestyle="--", alpha=0.5)    
         self.ax.set_xlim(-lim, lim)
         self.ax.set_ylim(-lim, lim)
     
+        # Labels
         self.ax.set_xlabel("In Phase $I$")
         self.ax.set_ylabel("Quadrature $Q$")
         self.apply_ax_style()
-
 
 
 class BitsPlot(BasePlot):
