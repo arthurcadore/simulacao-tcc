@@ -966,83 +966,6 @@ class SampledSignalPlot(BasePlot):
             leg.get_frame().set_alpha(1.0)
 
 
-class PhasePlot(BasePlot):
-    r"""
-    Classe para plotar a fase dos sinais $d_I(t)$ e $d_Q(t)$ no domínio do tempo, conforme a expressão abaixo.
-
-    $$
-        s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
-    $$
-
-    Sendo: 
-        - $s(t)$: Vetor de fases por intervalo de tempo.
-        - $d_I(t)$: Componente sinal $d_I(t)$, em fase. 
-        - $d_Q(t)$: Componente sinal $d_Q(t)$, em quadratura.
-
-    Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        t (np.ndarray): Vetor de tempo
-        signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
-        labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
-
-    Example:
-        - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
-    """
-    def __init__(self,
-                 fig: plt.Figure,
-                 grid: gridspec.GridSpec,
-                 pos: int,
-                 t: np.ndarray,
-                 signals: Union[np.ndarray, List[np.ndarray]],
-                 **kwargs) -> None:
-        ax = fig.add_subplot(grid[pos])
-        super().__init__(ax, **kwargs)
-        self.t = t
-        
-        # Garantir que os sinais estão em uma lista
-        if isinstance(signals, (list, tuple)):
-            assert len(signals) == 2, "Os sinais devem conter exatamente dois componentes: I e Q."
-            self.I = signals[0]
-            self.Q = signals[1]
-        else:
-            raise ValueError("Os sinais devem ser passados como uma lista ou tupla com dois componentes (I, Q).")
-        
-        if self.labels is None:
-            self.labels = ["Fase IQ"]
-
-    def plot(self) -> None:
-        # Calcula a fase usando a função atan2
-        fase = np.angle(self.I + 1j * self.Q)
-
-        line_kwargs = {"linewidth": 2, "alpha": 1.0}
-        line_kwargs.update(self.style.get("line", {}))
-
-        # Plot da fase ao longo do tempo
-        color = self.apply_color(0)
-        if color is not None:
-            self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
-        else:
-            self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
-
-        # Ajuste dos eixos
-        self.ax.set_xlabel(r"Tempo ($s$")
-        self.ax.set_ylabel(r"Fase ($rad$")
-
-        # Limite de fase entre -π e π
-        self.ax.set_ylim([-np.pi, np.pi])
-
-        # Definir ticks em radianos e labels em frações de pi
-        ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4]
-        labels = [r"$0\pi$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$"]
-
-        self.ax.set_yticks(ticks)
-        self.ax.set_yticklabels(labels)
-
-        self.ax.legend()
-        self.apply_ax_style()
-
 
 class PhasePlot(BasePlot):
     r"""
@@ -1064,7 +987,6 @@ class PhasePlot(BasePlot):
         t (np.ndarray): Vetor de tempo
         signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
         time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
-        labels (List[str], opcional): Rótulos para os sinais. Se não fornecido, será gerado automaticamente.
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1077,52 +999,44 @@ class PhasePlot(BasePlot):
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
+        # Unidade de tempo
         self.time_unit = time_unit.lower()
+        self.t = t
         if self.time_unit == "ms":
-            self.t = t * 1e3
-        else:
-            self.t = t
+            self.t *= 1e3
 
-        # Garantir que os sinais estão em uma lista/tupla de tamanho 2
-        if isinstance(signals, (list, tuple)):
-            assert len(signals) == 2, "Os sinais devem conter exatamente dois componentes: I e Q."
-            self.I = signals[0]
-            self.Q = signals[1]
-        else:
-            raise ValueError("Os sinais devem ser passados como uma lista ou tupla com dois componentes (I, Q).")
-        
         if self.labels is None:
             self.labels = ["Fase IQ"]
 
+        # Garantir que os sinais estão em uma tupla
+        if isinstance(signals, (list, tuple)):
+            assert len(signals) == 2, "Os sinais devem ser passados como tupla com dois componentes (I, Q)."
+            self.I = signals[0]
+            self.Q = signals[1]
+        else:
+            raise ValueError("Os sinais devem ser passados como tupla com dois componentes (I, Q).")
+
     def plot(self) -> None:
+
         # Calcula a fase usando atan2
         fase = np.angle(self.I + 1j * self.Q)
 
+        # Plot da fase ao longo do tempo
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
-        # Plot da fase ao longo do tempo
         color = self.apply_color(0)
-        if color is not None:
-            self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
-        else:
-            self.ax.plot(self.t, fase, label=self.labels[0], **line_kwargs)
+        self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
 
-        # Ajuste dos eixos
-        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(r"Fase ($rad$)")
-
-        # Limite de fase entre -π e π
-        self.ax.set_ylim([-np.pi, np.pi])
-
-        # Definir ticks em radianos e labels em frações de pi
-        ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4]
-        labels = [r"$0\pi$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$"]
-
+        # Limite de fase entre pi e -pi
+        self.ax.set_ylim([-np.pi*1.1, np.pi*1.1])
+        ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4, -np.pi, np.pi]
+        labels = [r"$0$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$", r"$-\pi$", r"$\pi$"]
         self.ax.set_yticks(ticks)
         self.ax.set_yticklabels(labels)
 
+        # Ajuste dos eixos
+        self.ax.set_xlabel(r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)")
+        self.ax.set_ylabel(r"Fase ($rad$)")
         self.ax.legend()
         self.apply_ax_style()
 

@@ -88,6 +88,7 @@
     - [] Alterar bloco do receptor pra ficar dentro de detector.
 -[] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
 - [] Verificar equacionamento sklar e alterar nome das variáveis.
+- [] Alterar plot de módulo de treliça para plot de estados. 
 
 
 ---
