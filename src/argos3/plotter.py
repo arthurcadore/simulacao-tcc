@@ -291,6 +291,24 @@ class ConstellationPlot(BasePlot):
         - $s(t)$: Sinal complexo.
         - $d_I(t)$: Sinal em fase.
         - $d_Q(t)$: Sinal em quadratura.
+
+
+    O plot de constelação pode ser normalizado por um fator de normalização dado por: 
+
+    $$
+    \varphi = \frac{\text{A}}{
+          \sqrt{
+            \displaystyle \frac{1}{N} 
+            \sum_{n=0}^{N-1} \Big( I(n)^2 + Q(n)^2 \Big)
+          }
+        }
+    $$
+
+    Sendo:
+        - $\text{A}$: Amplitude desejada, definido como `1`. 
+        - $\varphi$: Fator de normalização.
+        - $N$: Número de amostras.
+        - $I(n)$ e $Q(n)$: Sinais em fase e quadratura.
     
     Args:
         fig (plt.Figure): Figura do plot
@@ -308,29 +326,34 @@ class ConstellationPlot(BasePlot):
                  pos,
                  dI: np.ndarray,
                  dQ: np.ndarray,
+                 show_ideal_points: bool = True, 
+                 rms_norm: bool = False,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.dI = dI
         self.dQ = dQ
         self.amp = 1
+        self.show_ideal_points = show_ideal_points
+        self.rms_norm = rms_norm
 
-    def plot(self, show_ideal_points: bool = True, rms_norm: bool = False) -> None:
+    def plot(self) -> None:
+
         # Centraliza os dados em torno do zero
         dI_c, dQ_c = self.dI.copy(), self.dQ.copy()
     
-        # Se amp_norm for True, normaliza os sinais para terem amplitude 1
-        if rms_norm:
+        # Se amp_norm for True, normaliza os sinais usando 1/RMS
+        if self.rms_norm:
             max_val = np.sqrt(np.mean(dI_c**2 + dQ_c**2))
             if max_val > 0:
-                scale = self.amp / max_val
-                dI_c *= scale
-                dQ_c *= scale
+                f = self.amp / max_val
+                dI_c *= f
+                dQ_c *= f
             lim = 1.2 * self.amp
         else:
             lim = 1.2 * np.max(np.abs(np.concatenate([dI_c, dQ_c])))
     
-        scatter_kwargs = {"s": 10, "alpha": 0.6}
+        scatter_kwargs = {"s": 20, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
         color = self.apply_color(0) or "darkgreen"
     
@@ -344,7 +367,7 @@ class ConstellationPlot(BasePlot):
             [-self.amp, self.amp],
             [-self.amp, -self.amp]
         ])
-        if show_ideal_points:
+        if self.show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
                             color="blue", s=160, marker="o",
                             label="Pontos Ideais", linewidth=2)
@@ -357,8 +380,8 @@ class ConstellationPlot(BasePlot):
         self.ax.set_xlim(-lim, lim)
         self.ax.set_ylim(-lim, lim)
     
-        self.ax.set_xlabel("Componente em Fase $I$")
-        self.ax.set_ylabel("Componente em Quadratura $Q$")
+        self.ax.set_xlabel("In Phase $I$")
+        self.ax.set_ylabel("Quadrature $Q$")
         self.apply_ax_style()
 
 

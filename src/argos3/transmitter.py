@@ -603,10 +603,12 @@ class Transmitter:
                 dQ=dQ[:40000:5],
                 xlim=(-1.4, 1.4),
                 ylim=(-1.4, 1.4),
+                rms_norm=True,
+                show_ideal_points=False,
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
-            ).plot(rms_norm=True, show_ideal_points=True)
+            ).plot()
 
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
