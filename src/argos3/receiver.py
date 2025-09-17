@@ -586,8 +586,8 @@ class Receiver:
                 fig_const, grid_const, (0, 0),
                 dI=It_prime[:40000:5],
                 dQ=Qt_prime[:40000:5],
-                xlim=(-1.5, 1.5),
-                ylim=(-1.5, 1.5),
+                xlim=(-1.4, 1.4),
+                ylim=(-1.4, 1.4),
                 title="Constelação $IQ$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
@@ -597,8 +597,8 @@ class Receiver:
                 fig_const, grid_const, (0, 1),
                 dI=s_sampledI,
                 dQ=s_sampledQ,
-                xlim=(-1.5, 1.5),
-                ylim=(-1.5, 1.5),
+                xlim=(-1.4, 1.4),
+                ylim=(-1.4, 1.4),
                 title="Constelação $IQ - Amostrado$",
                 colors=["darkred"],
                 style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}

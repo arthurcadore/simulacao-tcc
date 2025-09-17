@@ -135,6 +135,9 @@ class Formatter:
         g_right = +self.rrc_pulse(shift=-self.Tb/2)
         g = g_left + g_right
 
+        # Normaliza energia para 1
+        g = g / np.sqrt(np.sum(g**2))
+
         return g, g_left, g_right
 
     def apply_format(self, symbols, add_prefix=True):

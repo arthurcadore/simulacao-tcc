@@ -76,9 +76,6 @@ class Modulator:
         
         modulated_signal = (i_signal * carrier_cos - q_signal * carrier_sin)
 
-        # normalização
-        # modulated_signal = modulated_signal / np.max(np.abs(modulated_signal))
-
         return t, modulated_signal
     
     def demodulate(self, modulated_signal):

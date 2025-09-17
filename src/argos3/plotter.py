@@ -298,7 +298,6 @@ class ConstellationPlot(BasePlot):
         pos (int): Posição do plot
         dI (np.ndarray): Sinal I
         dQ (np.ndarray): Sinal Q
-        amplitude (Optional[float]): Amplitude alvo para pontos ideais
 
     Example:
         - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
@@ -309,55 +308,59 @@ class ConstellationPlot(BasePlot):
                  pos,
                  dI: np.ndarray,
                  dQ: np.ndarray,
-                 amplitude: Optional[float] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.dI = dI
         self.dQ = dQ
-        self.amplitude = amplitude
+        self.amp = 1
 
-    def plot(self, show_ideal_points: bool = True) -> None:
+    def plot(self, show_ideal_points: bool = True, rms_norm: bool = False) -> None:
         # Centraliza os dados em torno do zero
-        dI_c, dQ_c = self.dI, self.dQ
-
-        # Define amplitude alvo para pontos ideais
-        if self.amplitude is None:
-            amp = 1
-        else:
-            amp = self.amplitude
-            # Normaliza as amostras para a amplitude definida
-            max_val = np.max(np.sqrt(dI_c**2 + dQ_c**2))
+        dI_c, dQ_c = self.dI.copy(), self.dQ.copy()
+    
+        # Se amp_norm for True, normaliza os sinais para terem amplitude 1
+        if rms_norm:
+            max_val = np.sqrt(np.mean(dI_c**2 + dQ_c**2))
             if max_val > 0:
-                scale = amp / max_val
+                scale = self.amp / max_val
                 dI_c *= scale
                 dQ_c *= scale
-
+            lim = 1.2 * self.amp
+        else:
+            lim = 1.2 * np.max(np.abs(np.concatenate([dI_c, dQ_c])))
+    
         scatter_kwargs = {"s": 10, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
         color = self.apply_color(0) or "darkgreen"
-
+    
         # Amostras IQ
         self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
-
+    
         # Pontos ideais QPSK
-        qpsk_points = np.array([[amp, amp], [amp, -amp], [-amp, amp], [-amp, -amp]])
+        qpsk_points = np.array([
+            [self.amp, self.amp],
+            [self.amp, -self.amp],
+            [-self.amp, self.amp],
+            [-self.amp, -self.amp]
+        ])
         if show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
-                            color="blue", s=160, marker="o", label="Pontos Ideais", linewidth=2)
-
+                            color="blue", s=160, marker="o",
+                            label="Pontos Ideais", linewidth=2)
+    
         # Linhas auxiliares
         self.ax.axhline(0, color="gray", linestyle="--", alpha=0.5)
         self.ax.axvline(0, color="gray", linestyle="--", alpha=0.5)
-
-        # Ajusta limites para manter centro
-        lim = 1.2 * amp
+    
+        # Ajusta limites dinamicamente
         self.ax.set_xlim(-lim, lim)
         self.ax.set_ylim(-lim, lim)
-
+    
         self.ax.set_xlabel("Componente em Fase $I$")
         self.ax.set_ylabel("Componente em Quadratura $Q$")
         self.apply_ax_style()
+
 
 
 class BitsPlot(BasePlot):
