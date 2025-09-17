@@ -466,6 +466,8 @@ class BitsPlot(BasePlot):
         # Ajustes de eixo
         y_upper = 1.4 if self.show_bit_values else 1.2
         if self.xlim is not None:
+            # Ajusta o limite superior do xlim para xlim*2
+            self.xlim = (self.xlim[0], self.xlim[1]*2)
             self.ax.set_xlim(self.xlim)
         else:
             self.ax.set_xlim(0, len(bits_up))

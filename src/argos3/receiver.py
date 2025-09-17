@@ -693,7 +693,7 @@ class Receiver:
                 colors=["darkgreen"],
                 xlabel="Index de Bit", 
                 ylabel="$X_n$", 
-                xlim=(0, len(Xn_prime)/2)
+                xlim=(0, 60)
             ).plot()
 
             EncodedBitsPlot(
@@ -709,7 +709,7 @@ class Receiver:
                 colors=["navy"],
                 xlabel="Index de Bit", 
                 ylabel="$Y_n$", 
-                xlim=(0, len(Yn_prime)/2)
+                xlim=(0, 60)
             ).plot()
 
             fig_decoder.tight_layout()
@@ -741,21 +741,15 @@ class Receiver:
             print("vt1':", ''.join(map(str, vt1)))
         
         if self.output_plot:
-            fig_descrambler, grid_descrambler = create_figure(2, 2, figsize=(16, 9))
+            fig_descrambler, grid_descrambler = create_figure(4, 1, figsize=(16, 9))
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (0, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
                 colors=["darkgreen"],
-                ylabel="Embaralhado"
-            ).plot()
-
-            BitsPlot(
-                fig_descrambler, grid_descrambler, (0, 1),
-                bits_list=[Yn_prime],
-                sections=[("$Y_n$", len(Yn_prime))],
-                colors=["navy"]
+                ylabel="Embaralhado",
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
@@ -764,15 +758,26 @@ class Receiver:
                 sections=[("$v_t^{0}$", len(vt0))],
                 colors=["darkgreen"],
                 ylabel="Restaurado", 
-                xlabel="Index de Bit"
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
-                fig_descrambler, grid_descrambler, (1, 1),
+                fig_descrambler, grid_descrambler, (2, 0),
+                bits_list=[Yn_prime],
+                sections=[("$Y_n$", len(Yn_prime))],
+                colors=["navy"],
+                ylabel="Embaralhado",
+                xlim=(0, 60)
+            ).plot()
+
+            BitsPlot(
+                fig_descrambler, grid_descrambler, (3, 0),
                 bits_list=[vt1],
                 sections=[("$v_t^{1}$", len(vt1))],
                 colors=["navy"],
-                xlabel="Index de Bit"
+                ylabel="Restaurado", 
+                xlabel="Index de Bit",
+                xlim=(0, 60)
             ).plot()
 
             fig_descrambler.tight_layout()
@@ -809,7 +814,8 @@ class Receiver:
                 bits_list=[vt0],
                 sections=[("$v_t^{0}$", len(vt0))],
                 colors=["darkgreen"],
-                ylabel="Canal $I$"
+                ylabel="Canal $I$",
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
@@ -817,7 +823,8 @@ class Receiver:
                 bits_list=[vt1],
                 sections=[("$v_t^{1}$", len(vt1))],
                 colors=["navy"],
-                ylabel="Canal $Q$"
+                ylabel="Canal $Q$",
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
@@ -826,7 +833,8 @@ class Receiver:
                 sections=[("$u_t'$", len(ut))],
                 colors=["darkred"],
                 ylabel="Decodificado", 
-                xlabel="Index de Bit"
+                xlabel="Index de Bit",
+                xlim=(0, 60)
             ).plot()
 
             fig_conv_decoder.tight_layout()

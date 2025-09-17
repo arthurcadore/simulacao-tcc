@@ -137,7 +137,8 @@ class Transmitter:
                 bits_list=[ut],
                 sections=[("$u_t$", len(ut))],
                 colors=["darkred"],
-                ylabel="$u_t$"
+                ylabel="$u_t$",
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
@@ -145,7 +146,8 @@ class Transmitter:
                 bits_list=[vt0],
                 sections=[("$v_t^{(0)}$", len(vt0))],
                 colors=["darkgreen"],
-                ylabel="$v_t^{(0)}$"
+                ylabel="$v_t^{(0)}$",
+                xlim=(0, 60)
             ).plot()
 
             BitsPlot(
@@ -154,6 +156,7 @@ class Transmitter:
                 sections=[("$v_t^{(1)}$", len(vt1))],
                 colors=["navy"],
                 ylabel="$v_t^{(1)}$", 
+                xlim=(0, 60),
                 xlabel="Index de Bit"
             ).plot()
 
@@ -185,21 +188,15 @@ class Transmitter:
             print("Yn:", ''.join(map(str, Y)))
             
         if self.output_plot:
-            fig_scrambler, grid_scrambler = create_figure(2, 2, figsize=(16, 9))
+            fig_scrambler, grid_scrambler = create_figure(4, 1, figsize=(16, 9))
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (0, 0),
                 bits_list=[vt0],
                 sections=[("$v_t^{0}$", len(vt0))],
                 colors=["darkgreen"],
+                xlim=(0, 60),
                 ylabel="Original"
-            ).plot()
-
-            BitsPlot(
-                fig_scrambler, grid_scrambler, (0, 1),
-                bits_list=[vt1],
-                sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"]
             ).plot()
 
             BitsPlot(
@@ -208,15 +205,26 @@ class Transmitter:
                 sections=[("$X_n$", len(X))],
                 colors=["darkgreen"],
                 ylabel="Embaralhado", 
-                xlabel="Index de Bit"
+                xlim=(0, 60),
             ).plot()
 
             BitsPlot(
-                fig_scrambler, grid_scrambler, (1, 1),
+                fig_scrambler, grid_scrambler, (2, 0),
+                bits_list=[vt1],
+                sections=[("$v_t^{1}$", len(vt1))],
+                colors=["navy"],
+                xlim=(0, 60),
+                ylabel="Original"
+            ).plot()
+
+            BitsPlot(
+                fig_scrambler, grid_scrambler, (3, 0),
                 bits_list=[Y],
                 sections=[("$Y_n$", len(Y))],
                 colors=["navy"], 
-                xlabel="Index de Bit"
+                ylabel="Embaralhado", 
+                xlabel="Index de Bit",
+                xlim=(0, 60),
             ).plot()
 
             fig_scrambler.tight_layout()
@@ -249,7 +257,7 @@ class Transmitter:
             BitsPlot(
                 fig_preamble, grid_preamble, (0,0),
                 bits_list=[sI],
-                sections=[("Preambulo $S_I$", len(sI))],
+                sections=[("$S_I$", len(sI))],
                 colors=["darkgreen"],
                 ylabel="Canal $I$"
             ).plot()
@@ -257,7 +265,7 @@ class Transmitter:
             BitsPlot(
                 fig_preamble, grid_preamble, (1,0),
                 bits_list=[sQ],
-                sections=[("Preambulo $S_Q$", len(sQ))],
+                sections=[("$S_Q$", len(sQ))],
                 colors=["navy"], 
                 xlabel="Index de Bit", 
                 ylabel="Canal $Q$"
@@ -302,7 +310,8 @@ class Transmitter:
                 sections=[("Preambulo $S_I$", len(sI)),
                           ("Canal I $(X_n)$", len(X))],
                 colors=["darkred", "darkgreen"],
-                ylabel="Canal $I$"
+                ylabel="Canal $I$",
+                xlim=(0, 60),
             ).plot()
 
             BitsPlot(
@@ -312,7 +321,8 @@ class Transmitter:
                           ("Canal Q $(Y_n)$", len(Y))],
                 colors=["darkred", "navy"],
                 xlabel="Index de Bit", 
-                ylabel="Canal $Q$"
+                ylabel="Canal $Q$",
+                xlim=(0, 60),
             ).plot()
 
             fig_mux.tight_layout()
@@ -353,7 +363,7 @@ class Transmitter:
                 colors=["darkgreen"],
                 xlabel="Index de Bit", 
                 ylabel="$X_n$", 
-                xlim=(0, len(Xn)/2)
+                xlim=(0, 60)
             ).plot()
 
             EncodedBitsPlot(
@@ -369,7 +379,7 @@ class Transmitter:
                 colors=["navy"],
                 xlabel="Index de Bit", 
                 ylabel="$Y_n$", 
-                xlim=(0, len(Yn)/2)
+                xlim=(0, 60),
             ).plot()
 
             EncodedBitsPlot(
