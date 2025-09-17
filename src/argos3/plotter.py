@@ -965,8 +965,6 @@ class SampledSignalPlot(BasePlot):
             leg.get_frame().set_edgecolor("black")
             leg.get_frame().set_alpha(1.0)
 
-
-
 class PhasePlot(BasePlot):
     r"""
     Classe para plotar a fase dos sinais $d_I(t)$ e $d_Q(t)$ no domínio do tempo.
@@ -1039,7 +1037,6 @@ class PhasePlot(BasePlot):
         self.ax.set_ylabel(r"Fase ($rad$)")
         self.ax.legend()
         self.apply_ax_style()
-
 
 class GaussianNoisePlot(BasePlot):
     r"""

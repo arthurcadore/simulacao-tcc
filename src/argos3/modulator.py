@@ -253,7 +253,6 @@ if __name__ == "__main__":
         labels=["Fase $I + jQ$"],
         title="Fase $I + jQ$",
         xlim=(40, 140),
-        ylim=(-np.pi, np.pi),
         colors=["darkred"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
