@@ -606,7 +606,7 @@ class SymbolsPlot(BasePlot):
         self.show_symbol_values = show_symbol_values
         self.xlim = xlim
         self.symbol_value_offset = 0.15
-        self.symbol_value_size = 12
+        self.symbol_value_size = 13
         self.symbol_value_weight = 'bold'
         self.xlabel = xlabel
         self.ylabel = ylabel
