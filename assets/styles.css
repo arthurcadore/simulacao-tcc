@@ -1,22 +1,38 @@
+/* Estilos gerais (para o tema claro por padrão) */
 .image-container {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
 .responsive-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .referencia {
-  border-left: 4px solid #4287ff;
+  border-left: 4px solid #4287ff; /* Azul padrão para o tema claro */
   padding: 0.5em 1em;
   margin: 1em 0;
-  background: #ecf3ff;
+  background: #ecf3ff; /* Fundo claro */
   font-style: italic;
+  color: #333; /* Cor de texto escura no tema claro */
 }
+
 .referencia::before {
   font-weight: bold;
+  color: #333; /* Cor do texto antes da referência no tema claro */
+}
+
+/* Estilos específicos para o tema escuro */
+[data-md-color-scheme="slate"] .referencia {
+  border-left: 4px solid #448aff; /* Azul mais claro para contraste no tema escuro */
+  background: #2c2c2c; /* Fundo mais escuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+[data-md-color-scheme="slate"] .referencia::before {
+  font-weight: bold;
+  color: #e0e0e0; /* Cor do texto de antes em tema escuro */
 }
