@@ -73,7 +73,6 @@
     - [X] Verificar plot de constelação, normalização do sinal recebido
     - [X] Otimizar plot do encoder. 
     - [X] Criar método para testar todas as classes no makefile. 
-    - [] Padronizar cor dos plots.
     - [X] Alterar tamanho do plot pz fpb
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
@@ -88,6 +87,7 @@
 ---
 ### v1.0.6 - Estilização e Documentação
 - [] Otimizar conversor de plots pra permitir darkTheme
+    - [] Padronizar cor dos plots.
 - [] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.

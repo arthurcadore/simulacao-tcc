@@ -427,11 +427,11 @@
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1048.917 568.26419h63.723c1.6 0 2.4 0.79998 2.4 2.39991v16.7552c0 1.6-0.8 2.40006-2.4 2.40006h-63.723c-1.6 0-2.3999-0.80006-2.3999-2.40006v-16.7552c0-1.59993 0.7999-2.39991 2.3999-2.39991z" fill="#fff" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1048.917 568.26419h63.723c1.6 0 2.4 0.79998 2.4 2.39991v16.7552c0 1.6-0.8 2.40006-2.4 2.40006h-63.723c-1.6 0-2.3999-0.80006-2.3999-2.40006v-16.7552c0-1.59993 0.7999-2.39991 2.3999-2.39991z" fill="none" stroke-miterlimit="10" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1051.317 580.2529h24" fill="none" stroke="#006400" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" class="fill"><tspan x="1084.917" y="-576.0529" class="fill">S</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1084.917" y="-576.0529" >S</tspan></text>
  <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI8" font-size="7.970112" font-style="italic" xml:space="preserve" class="fill"><tspan x="1092.1163" y="-574.25967" class="fill">I</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" class="fill"><tspan x="1096.9081" y="-576.0529" class="fill">(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" class="fill"><tspan x="1101.4605" y="-576.0529" class="fill">t</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" class="fill"><tspan x="1105.6876" y="-576.0529" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1096.9081" y="-576.0529" >(</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1101.4605" y="-576.0529" >t</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1105.6876" y="-576.0529" >)</tspan></text>
  <g clip-path="url(#v)">
   <path transform="matrix(2,0,0,-2,0,1241.28)" d="m111.02152 47.148809v233.31052" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </g>
@@ -760,9 +760,9 @@
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1046.55 252.54993h66.09c1.6 0 2.4 0.79999 2.4 2.39999v17.10938c0 1.6-0.8 2.40003-2.4 2.40003h-66.09c-1.5999 0-2.4-0.80003-2.4-2.40003v-17.10938c0-1.6 0.8001-2.39999 2.4-2.39999z" fill="#fff" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1046.55 252.54993h66.09c1.6 0 2.4 0.79999 2.4 2.39999v17.10938c0 1.6-0.8 2.40003-2.4 2.40003h-66.09c-1.5999 0-2.4-0.80003-2.4-2.40003v-17.10938c0-1.6 0.8001-2.39999 2.4-2.39999z" fill="none" stroke-miterlimit="10" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1048.9501 264.89295h24" fill="none" stroke="#00008b" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" class="fill"><tspan x="1082.55" y="-260.69294" class="fill">S</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1082.55" y="-260.69294" >S</tspan></text>
  <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI8" font-size="7.970112" font-style="italic" xml:space="preserve" class="fill"><tspan x="1089.7494" y="-258.89967" class="fill">Q</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" class="fill"><tspan x="1096.9082" y="-260.69294" class="fill">(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" class="fill"><tspan x="1101.4606" y="-260.69294" class="fill">t</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" class="fill"><tspan x="1105.6878" y="-260.69294" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1096.9082" y="-260.69294" >(</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1101.4606" y="-260.69294" >t</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1105.6878" y="-260.69294" >)</tspan></text>
 </svg>
