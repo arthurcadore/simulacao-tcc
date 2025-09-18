@@ -793,7 +793,6 @@ class ImpulseResponsePlot(BasePlot):
             self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
-
 class SampledSignalPlot(BasePlot):
     r"""
     Classe para plotar um sinal $s(t)$ amostrado em $t_s$.
@@ -927,7 +926,6 @@ class PhasePlot(BasePlot):
             raise ValueError("Os sinais devem ser passados como tupla com dois componentes (I, Q).")
 
     def plot(self) -> None:
-
         # Calcula a fase usando atan2
         fase = np.angle(self.I + 1j * self.Q)
 
@@ -1123,7 +1121,6 @@ class FrequencyResponsePlot(BasePlot):
         self.ylabel = ylabel    
 
     def plot(self) -> None:
-
         # calcula resposta em frequência
         w, h = freqz(self.b, self.a, worN=self.worN, fs=self.fs)
         magnitude = mag2db(h)
@@ -1189,7 +1186,6 @@ class DetectionFrequencyPlot(BasePlot):
                  fs: float,
                  signal: np.ndarray,
                  threshold: float,
-                 threshold_unit: str = "db",
                  fc: float = 0.0,
                  title: str = "",
                  labels: Optional[List[str]] = None,
@@ -1213,65 +1209,59 @@ class DetectionFrequencyPlot(BasePlot):
         self.fc = fc
         self.signal = signal
         self.threshold = threshold
-        self.threshold_unit = threshold_unit.lower()
-        self.freqs_detected = freqs_detected  # Frequências detectadas
+        self.freqs_detected = freqs_detected
+        self.N = len(self.signal)
+        self.U = 1.0
+        self.xw = self.signal
 
     def plot(self) -> None:
-        N = len(self.signal)    
-        U = 1.0
-        xw = self.signal
-
-        X = np.fft.rfft(xw, n=N)
-        P_bin = (np.abs(X) ** 2) / (N * U + 1e-20)
+        # Transformada de Fourier
+        X = np.fft.rfft(self.xw, n=self.N)
+        P_bin = (np.abs(X) ** 2) / (self.N * self.U + 1e-20)
         P_db = 10.0 * np.log10(P_bin + 1e-20)
-        freqs = np.fft.rfftfreq(N, d=1 / self.fs)
+        freqs = np.fft.rfftfreq(self.N, d=1 / self.fs)
 
-        # Sempre em kHz
+        # Ajusta escala para KHz
         freqs_plot = freqs / 1000.0
-        self.ax.set_xlabel(r"Frequência ($kHz$)")
-        self.ax.set_ylabel(r"Magnitude ($dB$)")
 
+        # Plotagem
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
-
         color = self.apply_color(0) or "blue"
         label = self.labels[0] if self.labels else "Espectro (P_bin)"
         self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
 
         # Threshold
-        if self.threshold_unit == "db":
-            thr_line = self.threshold
-            thr_label = f"Threshold = {self.threshold:.2f} dB"
-        elif self.threshold_unit == "linear":
-            thr_line = 10.0 * np.log10(self.threshold + 1e-20)
-            thr_label = f"Threshold = {self.threshold:.3g} (→ {thr_line:.2f} dB)"
-        else:
-            raise ValueError("threshold_unit deve ser 'db' ou 'linear'.")
+        thr_line = self.threshold
+        thr_label = f"Threshold = {self.threshold:.2f} dB"
         self.ax.axhline(thr_line, color="blue", linestyle="--", linewidth=2, label=thr_label)
 
-        # Plotar frequências detectadas em kHz com ponto sobre S(f)
+        # Linhas verticais
         if self.freqs_detected is not None:
             for idx, f in enumerate(self.freqs_detected, start=1):
-                f_plot = f / 1000.0  # kHz
-                # índice do bin mais próximo
+                f_plot = f / 1000.0
+
+                # Calcula o índice do bin mais próximo
                 i = np.argmin(np.abs(freqs_plot - f_plot))
-                P_at_f = P_db[i]
+                P_bin = P_db[i]
 
-                # ponto sobre S(f)
-                self.ax.plot(f_plot, P_at_f, 'o', color='k', markersize=6,
+                # Ponto e linha vertical sobre P_bin
+                self.ax.plot(f_plot, P_bin, 'o', color='k', markersize=6,
                              label=f"$f_{{{idx}}} = {f_plot:.2f}$ kHz")
-
-                # linha vertical
                 self.ax.axvline(f_plot, color="k", linestyle=":", linewidth=2)
 
+        # Limites
         if self.ylim is None:
             self.ax.set_ylim(np.max(P_db) - 50, np.max(P_db) + 5)
 
-        # Evitar repetição de legendas
+        # Legenda
         handles, labels = self.ax.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         self.ax.legend(by_label.values(), by_label.keys())
 
+        # Labels
+        self.ax.set_xlabel(r"Frequência ($kHz$)")
+        self.ax.set_ylabel(r"Magnitude ($dB$)")
         self.apply_ax_style()
 
 class BersnrPlot(BasePlot):
