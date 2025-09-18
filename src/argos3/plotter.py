@@ -1275,8 +1275,11 @@ class BersnrPlot(BasePlot):
         EbN0 (np.ndarray): Vetor de valores Eb/N0 (dB)
         ber_curves (List[np.ndarray]): Lista de curvas BER correspondentes
         labels (List[str]): Rótulos de cada curva
-        linestyles (List[str], opcional): Lista com estilos de linha (e.g., ["-", "--", "-."])
-        markers (List[str], opcional): Lista com formatos de marcadores (e.g., ["o", "s", "d"])
+        linestyles (List[str], opcional): Lista com estilos de linha. 
+        markers (List[str], opcional): Lista com formatos de marcadores. 
+        xlabel (str, opcional): Rótulo do eixo x
+        ylabel (str, opcional): Rótulo do eixo y
+        logy (bool, opcional): Se deve usar escala logarítmica no eixo y
 
     Example: 
         - ![pageplot](assets/ber_vs_ebn0.svg)
@@ -1289,24 +1292,30 @@ class BersnrPlot(BasePlot):
                  ber_curves: List[np.ndarray],
                  linestyles: List[str] = None,
                  markers: List[str] = None,
+                 xlabel: str = r"$E_b/N_0$ (dB)",
+                 ylabel: str = r"Taxa de Erro de Bit (BER)",
+                 logy: bool = True,
                  **kwargs) -> None:
+
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
+
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.logy = logy
         self.EbN0 = EbN0
+
+        # Cria as curvas BER
         self.ber_curves = ber_curves if isinstance(ber_curves, (list, tuple)) else [ber_curves]
 
+        # Cria os rótulos
         if self.labels is None:
             self.labels = [f"Curva {i+1}" for i in range(len(self.ber_curves))]
-
-        # Estilos personalizados
         self.linestyles = linestyles if linestyles is not None else ["-"] * len(self.ber_curves)
         self.markers = markers if markers is not None else ["o"] * len(self.ber_curves)
 
-    def plot(self,
-             xlabel: str = r"$E_b/N_0$ (dB)",
-             ylabel: str = "Taxa de Erro de Bit (BER)",
-             logy: bool = True) -> None:
-
+    def plot(self) -> None:
+        # Plotagem
         for i, curve in enumerate(self.ber_curves):
             color = self.apply_color(i)
             label = self.labels[i]
@@ -1317,18 +1326,16 @@ class BersnrPlot(BasePlot):
                            "linestyle": linestyle,
                            "marker": marker}
 
-            if color is not None:
-                self.ax.plot(self.EbN0, curve, label=label, color=color, **plot_kwargs)
-            else:
-                self.ax.plot(self.EbN0, curve, label=label, **plot_kwargs)
+            self.ax.plot(self.EbN0, curve, label=label, color=color, **plot_kwargs)
 
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
-
-        if logy:
+        # Usa escala logarítmica por padrão
+        if self.logy:
             self.ax.set_yscale("log")
             self.ax.grid(True, which="both", axis="y", linestyle="--", color="gray", alpha=0.6)
 
+        # Labels
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
 class SincronizationPlot(BasePlot):

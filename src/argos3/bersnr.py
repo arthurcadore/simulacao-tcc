@@ -90,7 +90,7 @@ class BERSNR_ARGOS:
         self.bitsSent = len(self.bitsTX)
 
         # Gerando sinal fixo s(t)
-        self.t, self.s = Transmitter(fc=self.fc, datagram=self.datagramTX, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb).transmit() 
+        self.t, self.s = Transmitter(fc=self.fc, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb).transmit(datagram=self.datagramTX) 
 
         # Cadeia de RX
         self.receiver = Receiver(fc=self.fc, output_print=False, output_plot=False, fs=self.fs, Rb=self.Rb) 
