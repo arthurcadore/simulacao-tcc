@@ -1370,6 +1370,7 @@ class SincronizationPlot(BasePlot):
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
+        # Ajuste de unidade de tempo
         self.time_unit = time_unit.lower()
         if self.time_unit == "ms":
             self.t = t * 1e3
@@ -1382,16 +1383,14 @@ class SincronizationPlot(BasePlot):
             self.sync_end = sync_end
             self.max_corr = max_corr
 
-        # Sempre armazenar o sinal como lista para seguir padrão do TimePlot
         self.signals = [signal]
         if self.labels is None:
             self.labels = ["Signal"]
 
     def plot(self) -> None:
+        # Plotagem
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
-        # Plot do sinal
         for i, sig in enumerate(self.signals):
             color = self.apply_color(i)
             if color is not None:
@@ -1399,21 +1398,19 @@ class SincronizationPlot(BasePlot):
             else:
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
-        # Área de fundo entre início e fim de sincronismo
+        # Periodo de recepção do preambulo
         self.ax.axvspan(self.sync_start, self.sync_end,
-                        color="yellow", alpha=0.2, label=r"$\Delta \tau$")
+                        color="gray", alpha=0.2, label=r"$\Delta \tau$")
 
         # Linhas verticais de sincronismo
-        self.ax.axvline(self.max_corr, color="k", linestyle="--", linewidth=2, label=r"$\tau$")
+        self.ax.axvline(self.max_corr, color="darkorange", linestyle="--", linewidth=2, label=r"$\tau$")
         self.ax.axvline(self.sync_start, color="red", linestyle="--", linewidth=2, label=r"$\tau +/- (\Delta \tau)/2$")
         self.ax.axvline(self.sync_end, color="red", linestyle="--", linewidth=2)
     
-        # Labels de eixo
+        # Labels
         xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")
-
-        # Aplica estilo, limites e legenda
         self.apply_ax_style()
 
 
@@ -1423,49 +1420,43 @@ class CorrelationPlot(BasePlot):
                  grid: gridspec.GridSpec,
                  pos,
                  corr_vec: np.ndarray,
-                 fs: float,  # Frequência de amostragem em Hz
-                 xlim_ms: Tuple[float, float],  # Limites em milissegundos
+                 fs: float,
+                 xlim_ms: Tuple[float, float],
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         
-        self.corr_vec = corr_vec
-        self.sample_indices = np.arange(len(corr_vec))  # Índices das amostras
-        self.fs = fs
-
-        # Calcular os índices de amostra para os limites em milissegundos
-        self.index_40ms = int(xlim_ms[0] * 1e-3 * fs)  # Convertendo para índice
-        self.index_140ms = int(xlim_ms[1] * 1e-3 * fs)  # Convertendo para índice
-
         # Encontrar o índice de maior correlação
+        self.corr_vec = corr_vec
+        self.sample_indices = np.arange(len(corr_vec))
+        self.fs = fs
         self.max_corr_index = np.argmax(corr_vec)
         self.max_corr_value = corr_vec[self.max_corr_index]
+
+        # Limites em índices de amostra
+        self.index_low = int(xlim_ms[0] * 1e-3 * fs)
+        self.index_high = int(xlim_ms[1] * 1e-3 * fs)
 
         # Definir o título e a legenda
         if self.labels is None:
             self.labels = [r"$c[k]$"]
 
     def plot(self) -> None:
+        # Plotagem
+        color = self.apply_color(0)
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-
-        # Plot do vetor de correlação em função do índice k
-        color = self.apply_color(0)
         self.ax.plot(self.sample_indices, self.corr_vec, label=self.labels[0], color=color, **line_kwargs)
 
-        # Adicionar marcação para o valor de maior correlação
+        # Máxima correlação
         self.ax.axvline(self.max_corr_index, color='red', linestyle='--', label=f"$k_{{max}}$ = {self.max_corr_index}")
         self.ax.scatter(self.max_corr_index, self.max_corr_value, color='red', zorder=5)
 
-        # Ajustes dos eixos
+        # limites
+        self.ax.set_xlim(self.index_low, self.index_high)
+
+        # Labels
         self.ax.set_xlabel(r"Índice de Amostra $k$")
         self.ax.set_ylabel(r"Fator de Correlação Normalizado $c[k]$")
-        
-        # Definir os limites de x com base nos índices calculados
-        self.ax.set_xlim(self.index_40ms, self.index_140ms)
-        
-        # Legenda
         self.ax.legend()
-
-        # Aplica os estilos da classe base
         self.apply_ax_style()
