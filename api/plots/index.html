@@ -1258,15 +1258,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#plotter.TrellisPlot" class="md-nav__link">
-    <span class="md-ellipsis">
-      TrellisPlot
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#plotter.SampledSignalPlot" class="md-nav__link">
     <span class="md-ellipsis">
       SampledSignalPlot
@@ -2912,169 +2903,6 @@ s(t) = d_I(t) + j d_Q(t)
 
 
 
-<h2 id="plotter.TrellisPlot" class="doc doc-heading">
-            <code>TrellisPlot</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
-
-
-        <p>Classe para plotar o diagrama de treliça de um decodificador viterbi, recebendo um dicionário de treliça e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>fig</code>
-            </td>
-            <td>
-                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Figura do plot</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>grid</code>
-            </td>
-            <td>
-                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>GridSpec do plot</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>pos</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Posição do plot no GridSpec</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>trellis</code>
-            </td>
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Dicionário do treliça.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_steps</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de passos no tempo</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>initial_state</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Estado inicial</p>
-              </div>
-            </td>
-            <td>
-                  <code>0</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Treliça Decodificador Viterbi: <img alt="pageplot" src="../assets/example_conv_trellis.svg" /></li>
-</ul>
-</details>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
 <h2 id="plotter.SampledSignalPlot" class="doc doc-heading">
             <code>SampledSignalPlot</code>
 
@@ -4481,7 +4309,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista com estilos de linha (e.g., ["-", "--", "-."])</p>
+                <p>Lista com estilos de linha. </p>
               </div>
             </td>
             <td>
@@ -4497,11 +4325,59 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista com formatos de marcadores (e.g., ["o", "s", "d"])</p>
+                <p>Lista com formatos de marcadores. </p>
               </div>
             </td>
             <td>
                   <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlabel</code>
+            </td>
+            <td>
+                  <code>(<span title="str">str</span>, <span title="opcional">opcional</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Rótulo do eixo x</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;$E_b/N_0$ (dB)&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ylabel</code>
+            </td>
+            <td>
+                  <code>(<span title="str">str</span>, <span title="opcional">opcional</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Rótulo do eixo y</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;Taxa de Erro de Bit (BER)&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>logy</code>
+            </td>
+            <td>
+                  <code>(<span title="bool">bool</span>, <span title="opcional">opcional</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Se deve usar escala logarítmica no eixo y</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
             </td>
           </tr>
       </tbody>
