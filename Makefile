@@ -26,11 +26,15 @@ clean:
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
-doc-images:
+doc-images: remove-images
 	@echo "Gerando imagens para a documentação..."
 	.venv/bin/python docs/pdf2svg_plots.py
 	.venv/bin/python docs/pdf2svg_assets.py
 	@echo "Imagens geradas!"
+
+remove-images:
+	@echo "Removendo imagens..."
+	@find docs/api/assets/ -type f -exec rm -f {} \; || true
 
 doc: 
 	@echo "Gerando documentação..."
@@ -78,3 +82,5 @@ test: $(LOG_DIR)
 			} | tee -a $(LOG_FILE); \
 		fi; \
 	done
+	@echo "Rodando doc-images após os testes..."
+	@$(MAKE) doc-images
