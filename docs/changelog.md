@@ -105,6 +105,7 @@
     - [] Alterar ordem do conv. decoder para receber valores após desembaralhamento.
     - [] Alterar algorimo de viterbi para trabalhar com distâncias euclidianas (ref: https://dsplog.com/2009/01/14/soft-viterbi/)
     - [] Verificar viabilidade de plot de módulo de treliça para plot de estados. 
+    - [] Verificar viabilidade de plot com x=tempo e y=estados.
 
 --- 
 ### v1.0.8 - Extensão de vetores

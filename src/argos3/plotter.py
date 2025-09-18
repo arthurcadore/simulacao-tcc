@@ -6,6 +6,7 @@
 # """
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import scienceplots 
@@ -16,7 +17,21 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
 
+# forçar textos como <text>, não paths
+mpl.rcParams["pdf.fonttype"] = 42
+mpl.rcParams["ps.fonttype"] = 42
+mpl.rcParams["svg.fonttype"] = "none"
+
+mpl.rcParams["savefig.transparent"] = True
+
 plt.style.use("science")
+
+# sobrescreve cores do estilo science
+mpl.rcParams["text.color"] = "black"
+mpl.rcParams["axes.labelcolor"] = "black"
+mpl.rcParams["xtick.color"] = "black"
+mpl.rcParams["ytick.color"] = "black"
+
 plt.rcParams["figure.figsize"] = (16, 9)
 plt.rc("font", size=16)
 plt.rc("axes", titlesize=22, labelsize=22)
@@ -83,7 +98,7 @@ def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../../out") -> N
     os.makedirs(out_dir, exist_ok=True)
     save_path = os.path.join(out_dir, filename)
     fig.tight_layout()
-    fig.savefig(save_path, bbox_inches="tight")
+    fig.savefig(save_path, bbox_inches="tight", transparent=True)
     plt.close(fig)
 
 class BasePlot:
@@ -134,13 +149,14 @@ class BasePlot:
             loc="upper right",
             frameon=True,
             edgecolor="black",
-            facecolor="white",
             fancybox=True,
             fontsize=self.style.get("legend_fontsize", 12),
         )
-        leg.get_frame().set_facecolor("white")
-        leg.get_frame().set_edgecolor("black")
-        leg.get_frame().set_alpha(1.0)
+        frame = leg.get_frame()
+        frame.set_facecolor("white")
+        frame.set_edgecolor("black")
+        frame.set_alpha(1)
+
 
     def apply_color(self, idx: int) -> Optional[str]:
         if self.colors is None:
