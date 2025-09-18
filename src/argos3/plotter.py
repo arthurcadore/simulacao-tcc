@@ -17,22 +17,23 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
 
-# forçar textos como <text>, não paths
+# Parâmetros gerais de plotagem
 mpl.rcParams["pdf.fonttype"] = 42
 mpl.rcParams["ps.fonttype"] = 42
 mpl.rcParams["svg.fonttype"] = "none"
-
 mpl.rcParams["savefig.transparent"] = True
 
+# Estilização science para os plots
 plt.style.use("science")
 
-# sobrescreve cores do estilo science
+# Cores e estilos
 mpl.rcParams["text.color"] = "black"
 mpl.rcParams["axes.labelcolor"] = "black"
 mpl.rcParams["xtick.color"] = "black"
 mpl.rcParams["ytick.color"] = "black"
-
 plt.rcParams["figure.figsize"] = (16, 9)
+
+# Fontes e legendas
 plt.rc("font", size=16)
 plt.rc("axes", titlesize=22, labelsize=22)
 plt.rc("xtick", labelsize=16)
@@ -130,6 +131,7 @@ class BasePlot:
         self.colors = colors
         self.style = style or {}
 
+    # Aplica estilos gerais ao eixo
     def apply_ax_style(self) -> None:
         grid_kwargs = self.style.get("grid", {"alpha": 0.6, "linestyle": "--", "linewidth": 0.5})
         self.ax.grid(True, **grid_kwargs)
@@ -141,6 +143,7 @@ class BasePlot:
             self.ax.set_title(self.title)
         self.apply_legend()
 
+    # Aplica legendas
     def apply_legend(self) -> None:
         handles, labels = self.ax.get_legend_handles_labels()
         if not handles:
@@ -157,7 +160,7 @@ class BasePlot:
         frame.set_edgecolor("black")
         frame.set_alpha(1)
 
-
+    # Aplica cores
     def apply_color(self, idx: int) -> Optional[str]:
         if self.colors is None:
             return None
@@ -215,7 +218,6 @@ class TimePlot(BasePlot):
             self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
 
     def plot(self) -> None:
-
         # Normalização
         if self.amp_norm:
             max_val = np.max(np.abs(np.concatenate(self.signals)))
@@ -283,7 +285,6 @@ class FrequencyPlot(BasePlot):
         self.signal = signal
 
     def plot(self) -> None:
-
         # Transformada de Fourier
         freqs = np.fft.fftshift(np.fft.fftfreq(len(self.signal), d=1 / self.fs))
         fft_signal = np.fft.fftshift(np.fft.fft(self.signal))
@@ -309,7 +310,7 @@ class FrequencyPlot(BasePlot):
         # Labels
         self.ax.set_ylabel(r"Magnitude ($dB$)")
         if self.ylim is None:
-            self.ax.set_ylim(-80, 5)
+            self.ax.set_ylim(-60, 5)
 
         self.apply_ax_style()
 
@@ -372,7 +373,6 @@ class ConstellationPlot(BasePlot):
         self.rms_norm = rms_norm
 
     def plot(self) -> None:
-
         # Centraliza os dados em torno do zero
         dI_c, dQ_c = self.dI.copy(), self.dQ.copy()
     
@@ -468,7 +468,6 @@ class BitsPlot(BasePlot):
         self.label = label
 
     def plot(self) -> None:
-
         # Concatena e superamostra os vetores de bit.
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
@@ -794,99 +793,6 @@ class ImpulseResponsePlot(BasePlot):
             self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
-class TrellisPlot(BasePlot):
-    r"""
-    Classe para plotar o diagrama de treliça de um decodificador viterbi, recebendo um dicionário de treliça e realizando o plot em função do tempo $t$.
-
-    Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot no GridSpec
-        trellis (dict): Dicionário do treliça.
-        num_steps (int): Número de passos no tempo
-        initial_state (int): Estado inicial
-
-    Example:
-        - Treliça Decodificador Viterbi: ![pageplot](assets/example_conv_trellis.svg)
-    """
-    def __init__(self,
-                 fig: plt.Figure,
-                 grid: gridspec.GridSpec,
-                 pos,
-                 trellis: dict,
-                 num_steps: int = 5,
-                 initial_state: int = 0,
-                 **kwargs) -> None:
-
-        ax = fig.add_subplot(grid[pos])
-        super().__init__(ax, **kwargs)
-        self.trellis = trellis
-        self.num_steps = num_steps
-        self.initial_state = initial_state
-
-    def plot(self,
-             xlabel: Optional[str] = None,
-             ylabel: Optional[str] = None,
-             show_legend: bool = True) -> None:
-        states_per_time = defaultdict(set)
-        states_per_time[0].add(self.initial_state)
-        branches = []
-
-        for t in range(self.num_steps):
-            for state in states_per_time[t]:
-                for bit in [0, 1]:
-                    next_state, out = self.trellis[state][bit]
-                    module = sum(np.abs(out))
-                    branches.append((t, state, bit, next_state, module, out))
-                    states_per_time[t+1].add(next_state)
-
-        all_states = sorted(set(s for states in states_per_time.values() for s in states))
-        state_to_x = {s: i for i, s in enumerate(all_states)}
-        num_states = len(all_states)
-
-        # Ajusta tamanho da figura dinamicamente
-        self.ax.set_xlim(-0.5, num_states - 0.5)
-        self.ax.set_ylim(-0.5, self.num_steps + 0.5)
-        self.ax.set_xticks(range(num_states))
-        self.ax.set_xticklabels([f"{hex(s)[2:].upper():0>2}" for s in all_states])
-        self.ax.set_yticks(range(self.num_steps + 1))
-
-        if xlabel:
-            self.ax.set_xlabel(xlabel)
-        else:
-            self.ax.set_xlabel("Estado")
-
-        if ylabel:
-            self.ax.set_ylabel(ylabel)
-        else:
-            self.ax.set_ylabel("Intervalo de tempo")
-
-        self.ax.grid(True, axis='x', linestyle='--', alpha=0.3)
-        self.ax.grid(True, axis='y', linestyle=':', alpha=0.2)
-        self.ax.invert_yaxis()
-
-        # Desenha os ramos (transições)
-        for t, state, bit, next_state, module, out in branches:
-            x = [state_to_x[state], state_to_x[next_state]]
-            y = [t, t+1]
-            color = 'C0' if bit == 0 else 'C1'
-            self.ax.plot(x, y, color=color, lw=2, alpha=0.8)
-
-        # Desenha os nós (estados)
-        for t in range(self.num_steps+1):
-            for state in states_per_time[t]:
-                self.ax.plot(state_to_x[state], t, 'o', color='k', markersize=8)
-
-        # Legenda
-        if show_legend:
-            legend_elements = [
-                Line2D([0], [0], color='C0', lw=2, label='Bit de entrada 0'),
-                Line2D([0], [0], color='C1', lw=2, label='Bit de entrada 1')
-            ]
-            self.ax.legend(handles=legend_elements,
-                           loc='upper right', frameon=True, fontsize=12)
-        
-        self.apply_ax_style()
 
 class SampledSignalPlot(BasePlot):
     r"""

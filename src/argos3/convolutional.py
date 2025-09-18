@@ -10,7 +10,7 @@
 
 import numpy as np
 import komm 
-from .plotter import create_figure, save_figure, BitsPlot, TrellisPlot
+from .plotter import create_figure, save_figure, BitsPlot
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
@@ -131,9 +131,6 @@ class DecoderViterbi:
 
         Args:
             G (np.ndarray): Tupla de polinômios geradores $G$.
-
-        Example: 
-            ![pageplot](assets/example_conv_trellis.svg)
 
         <div class="referencia">
           <b>Referência:</b>
@@ -261,19 +258,6 @@ if __name__ == "__main__":
 
     decoder = DecoderViterbi()
     ut_prime = decoder.decode(vt0, vt1)
-
-    fig_trellis, grid_trellis = create_figure(1, 1, figsize=(16, 9))
-
-    TrellisPlot(
-        fig_trellis, grid_trellis, (0, 0),
-        decoder.trellis,
-        num_steps=10,
-        initial_state=0,
-        colors=["darkred", "darkgreen", "navy"]
-    ).plot()
-
-    fig_trellis.tight_layout()
-    save_figure(fig_trellis, "example_conv_trellis.pdf")
 
     print("ut': ", ''.join(str(b) for b in ut_prime))
     print("ut = ut': ", np.array_equal(ut, ut_prime))
