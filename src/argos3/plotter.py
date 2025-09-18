@@ -461,7 +461,7 @@ class BitsPlot(BasePlot):
         self.show_bit_values = show_bit_values
         self.xlim = xlim
         self.bit_value_offset = 0.15
-        self.bit_value_size = 12
+        self.bit_value_size = 13
         self.bit_value_weight = 'bold'
         self.xlabel = xlabel
         self.ylabel = ylabel
