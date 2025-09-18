@@ -16,12 +16,30 @@ MAX_SVG_SIZE = 4 * 1024 * 1024  # 4 MB
 N_CORES = 12
 
 
+def remove_fill_class(svg_path):
+    """Remove a classe 'fill' das tags <text> no SVG"""
+    try:
+        with open(svg_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+
+        modified_lines = []
+        for line in lines:
+            if 'font-size="11.955168"' in line and 'class="fill"' in line:
+                line = line.replace('class="fill"', '')
+            modified_lines.append(line)
+
+        with open(svg_path, 'w', encoding='utf-8') as file:
+            file.writelines(modified_lines)
+    except Exception as e:
+        print(f"Erro ao remover a classe fill de {svg_path}: {e}")
+
+
 def remove_white_background(svg_path):
     try:
         tree = ET.parse(svg_path)
         root = tree.getroot()
 
-        # 1. Remove fundos brancos (rectangles com fill branco)
+        # Remove fundos brancos (rectangles com fill branco)
         for elem in list(root):
             if elem.tag.endswith("rect"):
                 fill = elem.attrib.get("fill", "").lower()
@@ -34,16 +52,14 @@ def remove_white_background(svg_path):
                 ):
                     root.remove(elem)
 
-        # 2. Remove fills brancos de textos e tspan e força classe 'fill'
+        # Remove fills brancos de textos e tspan e força classe 'fill'
         for elem in root.iter():
             if elem.tag.endswith("text") or elem.tag.endswith("tspan"):
-                # remove fill inline se for branco
                 fill = elem.attrib.get("fill", "").lower()
                 style = elem.attrib.get("style", "").lower()
                 if fill in ("white", "#ffffff"):
                     del elem.attrib["fill"]
                 if "fill:white" in style or "fill:#ffffff" in style:
-                    # limpa do style inline
                     new_style = ";".join(
                         part for part in style.split(";") if "fill:white" not in part and "fill:#ffffff" not in part
                     )
@@ -51,7 +67,6 @@ def remove_white_background(svg_path):
                         elem.attrib["style"] = new_style
                     else:
                         elem.attrib.pop("style", None)
-                # aplica classe para CSS controlar cor
                 prev_class = elem.attrib.get("class", "")
                 elem.attrib["class"] = f"{prev_class} fill".strip()
 
@@ -62,7 +77,6 @@ def remove_white_background(svg_path):
 
 
 def patch_svg(svg_path):
-    """Adiciona suporte a tema escuro (inverte textos/linhas pretas para branco), preservando legendas."""
     try:
         ET.register_namespace("", "http://www.w3.org/2000/svg")
         tree = ET.parse(svg_path)
@@ -89,27 +103,22 @@ def patch_svg(svg_path):
 
         for elem in root.iter():
             classes = []
-
-            # Determina se o texto é legenda (fonte CMR12)
             is_legend = False
             if elem.tag.endswith("text"):
                 font_family = elem.attrib.get("font-family", "").upper()
                 if "CMR12" in font_family:
                     is_legend = True
 
-            # fill direto
             fill = elem.attrib.get("fill")
             if fill and is_black_rgb(fill) and not is_legend:
                 del elem.attrib["fill"]
                 classes.append("fill")
 
-            # stroke direto
             stroke = elem.attrib.get("stroke")
             if stroke and is_black_rgb(stroke):
                 del elem.attrib["stroke"]
                 classes.append("stroke")
 
-            # estilo inline: style="fill:#000000;stroke:none"
             style = elem.attrib.get("style", "").lower()
             new_style_parts = []
             for part in style.split(";"):
@@ -120,7 +129,7 @@ def patch_svg(svg_path):
                 if part.startswith("stroke:") and ("#000" in part or "black" in part):
                     classes.append("stroke")
                     continue
-                if part:  # mantém outros estilos
+                if part:
                     new_style_parts.append(part)
 
             if new_style_parts:
@@ -128,7 +137,6 @@ def patch_svg(svg_path):
             elif "style" in elem.attrib:
                 del elem.attrib["style"]
 
-            # aplica classes acumuladas
             if classes:
                 prev_class = elem.attrib.get("class", "")
                 elem.attrib["class"] = f"{prev_class} {' '.join(classes)}".strip()
@@ -137,7 +145,6 @@ def patch_svg(svg_path):
 
     except Exception as e:
         print(f"Erro ao aplicar patch no {svg_path}: {e}")
-
 
 
 def optimize_svg(svg_code, digits=8):
@@ -156,21 +163,18 @@ def process_file(filename):
         base_name = os.path.splitext(filename)[0]
         svg_path = output_dir / f"{base_name}.svg"
         
-        # Abre o PDF e obtém a primeira página
         doc = fitz.open(pdf_path)
         page = doc[0]
         
-        # Cria uma matriz de transformação para garantir toda a página
         zoom = 2
         mat = fitz.Matrix(zoom, zoom)
         
-        # Exporta como SVG
         svg_code = page.get_svg_image(matrix=mat, text_as_path=False)
         optimized_svg = optimize_svg(svg_code, digits=8)
         svg_size = len(optimized_svg.encode("utf-8"))
         
         if svg_size > MAX_SVG_SIZE:
-            zoom = 1  # reduz zoom se passar do limite
+            zoom = 1
             mat = fitz.Matrix(zoom, zoom)
             svg_code = page.get_svg_image(matrix=mat, text_as_path=False)
             optimized_svg = optimize_svg(svg_code, digits=8)
@@ -179,13 +183,13 @@ def process_file(filename):
         else:
             msg = f"Convertido normalmente: {filename} ({svg_size/1024/1024:.2f} MB, digits=8)"
 
-        # Salva SVG otimizado
         with open(svg_path, "w", encoding="utf-8") as f:
             f.write(optimized_svg)
 
-        # Remove fundo branco e aplica patch de cores dinâmicas
+        # Aplica as modificações: Remove fundo branco, patch de cores e remove a classe fill
         remove_white_background(svg_path)
         patch_svg(svg_path)
+        remove_fill_class(svg_path)
 
         return msg
 
