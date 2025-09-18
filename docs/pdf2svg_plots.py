@@ -24,14 +24,16 @@ def remove_fill_class(svg_path):
 
         modified_lines = []
         for line in lines:
-            if 'font-size="11.955168"' in line and 'class="fill"' in line:
-                line = line.replace('class="fill"', '')
+            # Verifica se o line contém qualquer um dos tamanhos de fonte e a classe 'fill'
+            if ('font-size="11.955168"' in line or 'font-size="7.970112"' in line) and 'class="fill"' in line:
+                line = line.replace('class="fill"', '')  # Remove a classe 'fill'
             modified_lines.append(line)
 
         with open(svg_path, 'w', encoding='utf-8') as file:
             file.writelines(modified_lines)
     except Exception as e:
         print(f"Erro ao remover a classe fill de {svg_path}: {e}")
+
 
 
 def remove_white_background(svg_path):
