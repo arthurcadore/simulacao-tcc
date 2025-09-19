@@ -74,17 +74,15 @@
 - [X] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.
 - [X] Verificar normalização em amplitude para impulso Man
 - [X] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. 
-- [] Implementar uso da função Q(x) na documentação. 
+- [X] Implementar uso da função Q(x) na documentação. 
 - [X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
 
 ---
 ### v1.0.6 - Estilização e Documentação
-- [] Otimizar conversor de plots pra permitir darkTheme
-    - [] Padronizar cor dos plots.
-- [] Alterar mkdocs para darkTheme
+- [X] Otimizar conversor de plots pra permitir darkTheme
+- [X] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
-- [] Verificar adição de diagrama de olho no sklar. 
 - [] Verificar equacionamento sklar e alterar nome das variáveis.
 - [] Diagrama de blocos
     - [] Alterar diagrama do modulador
@@ -97,6 +95,9 @@
     - [X] Alterar tamanho do plot pz fpb
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
+    - [] Padronizar cor dos plots.
+- [] Criar diretório para armazenar diagramas e notebooks.
+
 
 --- 
 ### v1.0.7 - Soft Decision

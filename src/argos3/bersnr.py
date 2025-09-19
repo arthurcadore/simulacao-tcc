@@ -327,11 +327,11 @@ if __name__ == "__main__":
     # Simulação
     # ###############################################
 
-    # results = bersnr_argos.run()
-    # ExportData(results, "bersnr_argos").save()
+    results = bersnr_argos.run()
+    ExportData(results, "bersnr_argos").save()
 
-    # results_qpsk = bersnr_qpsk.run()
-    # ExportData(results_qpsk, "bersnr_qpsk").save()
+    results_qpsk = bersnr_qpsk.run()
+    ExportData(results_qpsk, "bersnr_qpsk").save()
     
     # PLOT
     # ###############################################
