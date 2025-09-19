@@ -15,27 +15,6 @@ output_dir.mkdir(parents=True, exist_ok=True)
 MAX_SVG_SIZE = 4 * 1024 * 1024  # 4 MB
 N_CORES = 12
 
-
-def remove_fill_class(svg_path):
-    """Remove a classe 'fill' das tags <text> no SVG"""
-    try:
-        with open(svg_path, 'r', encoding='utf-8') as file:
-            lines = file.readlines()
-
-        modified_lines = []
-        for line in lines:
-            # Verifica se o line contém qualquer um dos tamanhos de fonte e a classe 'fill'
-            if ('font-size="11.955168"' in line or 'font-size="7.970112"' in line) and 'class="fill"' in line:
-                line = line.replace('class="fill"', '')  # Remove a classe 'fill'
-            modified_lines.append(line)
-
-        with open(svg_path, 'w', encoding='utf-8') as file:
-            file.writelines(modified_lines)
-    except Exception as e:
-        print(f"Erro ao remover a classe fill de {svg_path}: {e}")
-
-
-
 def remove_white_background(svg_path):
     try:
         tree = ET.parse(svg_path)
@@ -188,10 +167,8 @@ def process_file(filename):
         with open(svg_path, "w", encoding="utf-8") as f:
             f.write(optimized_svg)
 
-        # Aplica as modificações: Remove fundo branco, patch de cores e remove a classe fill
         remove_white_background(svg_path)
         patch_svg(svg_path)
-        remove_fill_class(svg_path)
 
         return msg
 

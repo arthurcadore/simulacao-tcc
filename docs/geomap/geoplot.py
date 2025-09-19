@@ -157,7 +157,7 @@ def plot_uf(ax, uf):
     uf.plot(
         ax=ax,
         color=uf['cor'],
-        edgecolor="black",
+        edgecolor="#1e2129",
         linewidth=0.8,
         zorder=1
     )
@@ -216,20 +216,18 @@ def add_legend(ax, collors):
     ax.legend(
         handles=legend_elements,
         title='Quantidade de PCDs por Estado',
-        title_fontsize=12,
+        title_fontsize=20,
         loc='upper right',
         frameon=True,
         edgecolor='black',
         facecolor='white',
-        fontsize=12,
-        framealpha=0.9,
+        fontsize=16,
         fancybox=True
     )
 
     frame = ax.get_legend().get_frame()
-    frame.set_facecolor("white")
     frame.set_edgecolor('black')
-    frame.set_alpha(1)
+    frame.set_alpha(0)
 
 def gerar_mapa():
     r"""
