@@ -75,7 +75,7 @@
 - [X] Verificar normalização em amplitude para impulso Man
 - [X] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. 
 - [] Implementar uso da função Q(x) na documentação. 
-- [] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
+- [X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
 
 ---
 ### v1.0.6 - Estilização e Documentação

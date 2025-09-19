@@ -41,36 +41,62 @@ class Datagram:
         </div>
         """
 
-        # construtor TX
+        # Atributos comuns
+        self.streambits = None
+        self.blocks_json = None
+        
+        # O construtor será chamado dependendo de como o datagrama é criado (TX ou RX)
         if pcdnum is not None and numblocks is not None and streambits is None:
-            if not (1 <= numblocks <= 8):
-                raise ValueError("O número de blocos deve estar entre 1 e 8.")
-            if not (0 <= pcdnum <= 1048575):  # 2^20 - 1
-                raise ValueError("O número PCD deve estar entre 0 e 1048575.")
-            if (payload is not None) and (len(payload) != (numblocks -1) * 32 + 24):
-                raise ValueError("O payload deve ter o mesmo comprimento que o número de blocos.")
-
-            self.pcdnum = pcdnum
-            self.numblocks = numblocks
-            self.rng = np.random.default_rng(seed)
-
-            if payload is not None:
-                self.blocks = payload
-            else:
-                self.blocks = self.generate_blocks()
-
-            self.pcdid = self.generate_pcdid()
-            self.tail = self.generate_tail()
-            self.msglength = self.generate_msglength()
-            self.streambits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
-            self.blocks_json = self.parse_datagram()
-
-        # construtor RX  
+            # Construtor TX
+            self._init_tx(pcdnum, numblocks, seed, payload)
         elif streambits is not None and pcdnum is None and numblocks is None:
-            self.streambits = streambits
-            self.blocks_json = self.parse_datagram()
+            # Construtor RX
+            self._init_rx(streambits)
         else:
             raise ValueError("Você deve fornecer ou (pcdnum e numblocks) ou streambits")
+    
+    def _init_tx(self, pcdnum, numblocks, seed, payload):
+        r"""
+        Construtor TX
+        """
+
+        if not (1 <= numblocks <= 8):
+            raise ValueError("O número de blocos deve estar entre 1 e 8.")
+        if not (0 <= pcdnum <= 1048575):  # 2^20 - 1
+            raise ValueError("O número PCD deve estar entre 0 e 1048575.")
+        if (payload is not None) and (len(payload) != (numblocks -1) * 32 + 24):
+            raise ValueError("O payload deve ter o mesmo comprimento que o número de blocos.")
+        
+        self.pcdnum = pcdnum
+        self.numblocks = numblocks
+        self.rng = np.random.default_rng(seed)
+
+        # Se não for passado payload, gera os blocos automaticamente
+        if payload is not None:
+            self.blocks = payload
+            # TODO: Relcalcular o tamanho do numblocks.
+            # verificar se o numblos está dentro de 1 e 8 
+        else:
+            self.blocks = self.generate_blocks()
+
+        # Gera os componentes do datagrama
+        self.pcdid = self.generate_pcdid()
+        self.tail = self.generate_tail()
+        self.msglength = self.generate_msglength()
+
+        # A sequência de bits do datagrama
+        self.streambits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
+
+        # Cria a representação JSON do datagrama
+        self.blocks_json = self.parse_datagram()
+
+    def _init_rx(self, streambits):
+        r"""
+        Construtor RX
+        """
+
+        self.streambits = streambits
+        self.blocks_json = self.parse_datagram()
 
     def generate_blocks(self):
         r"""
