@@ -221,9 +221,14 @@ if __name__ == "__main__":
     
     formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=800, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+    matched_filter_I = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+    matched_filter_Q = MatchedFilter(alpha=0.8, fs=128_000, Rb=800, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)
+    
+    dI = matched_filter_I.apply_filter(dI)
+    dQ = matched_filter_Q.apply_filter(dQ)
     
     # Faz a sincronização apenas no canal Q, pois o canal I é apenas uns.
     delayQ_min, delayQ_max, delayQ, corr_vec = synchronizer.correlation(dQ, "Q")
