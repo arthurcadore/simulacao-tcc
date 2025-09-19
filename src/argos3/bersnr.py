@@ -278,13 +278,7 @@ class BERSNR_QPSK:
         Calcula a curva teórica de $BER$ vs $Eb/N_0$ para QPSK, segundo a expressão abaixo.
 
         $$
-        P_b(x) = Q \left(x\right) \mapsto P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\frac{x}{\sqrt{2}}\right), \text{ onde } x = \sqrt{2 \cdot \frac{E_b}{N_0}}
-        $$
-
-        Podendo simplificar como: 
-
-        $$
-        P_b(x) = \frac{1}{2} \operatorname{erfc} \left(\sqrt{\frac{E_b}{N_0}}\right)
+        P_b(x) = Q \left(x\right) \mapsto P_b(x) = Q\left(\sqrt{2 \cdot \frac{E_b}{N_0}}\right)
         $$
 
         Sendo:
@@ -293,7 +287,6 @@ class BERSNR_QPSK:
             - $x$: Argumento da função $Q(x)$.
             - $E_b$: Energia por bit.
             - $N_0$: Potência do ruído. 
-            - $erfc$: Função de erro complementar.
 
         Returns:
             ber_teorico (np.ndarray): Vetor de valores de BER teórica para cada Eb/N0 da classe.
@@ -303,9 +296,10 @@ class BERSNR_QPSK:
         
         # argumento da função Q(x)
         x = np.sqrt(2 * ebn0_lin)
-        ber_teorico = 0.5 * erfc(x / np.sqrt(2))
 
-        return ber_teorico
+        # calculo da função Q(x)
+        Qx = 0.5 * erfc(x / np.sqrt(2))
+        return Qx
 
 
 
@@ -333,11 +327,11 @@ if __name__ == "__main__":
     # Simulação
     # ###############################################
 
-    results = bersnr_argos.run()
-    ExportData(results, "bersnr_argos").save()
+    # results = bersnr_argos.run()
+    # ExportData(results, "bersnr_argos").save()
 
-    results_qpsk = bersnr_qpsk.run()
-    ExportData(results_qpsk, "bersnr_qpsk").save()
+    # results_qpsk = bersnr_qpsk.run()
+    # ExportData(results_qpsk, "bersnr_qpsk").save()
     
     # PLOT
     # ###############################################
