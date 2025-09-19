@@ -1,74 +1,66 @@
-<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" width="1194.24" height="536.16" version="1.1" viewBox="0 0 1194.24 536.16">
- <ns0:defs>
-  <ns0:clipPath id="b">
-   <ns0:path transform="scale(.48)" d="M0 0H2487.0118V1116.0156H0Z" clip-rule="evenodd" />
-  </ns0:clipPath>
-  <ns0:clipPath id="a">
-   <ns0:path transform="scale(.48)" d="M78.125 34.375H2409.375V1081.25H78.125Z" clip-rule="evenodd" />
-  </ns0:clipPath>
- </ns0:defs>
- <ns0:g clip-path="url(#b)">
-  <ns0:path transform="scale(1.5)" d="M0 0H796V357H0Z" fill="#fff" />
- </ns0:g>
- <ns0:g clip-path="url(#a)">
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m-60-490h810v310h-810z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m-60-490h810v310h-810z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="22" xml:space="preserve"><ns0:tspan x="296.75 312.634 322.402 328.518 338.286 349.286 356.612 366.38 383.496" y="-463">Datagrama</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m190-440h420v250h-420z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m190-440h420v250h-420z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="330.03126 343.02726 351.01927 360.01927 369.01927 376.02128 380.52128 389.52128 397.51329 402.01329 410.00529 419.00529 424.00929 429.01329 437.00529 444.99729 452.9893 460.9813" y="-417">Dados de aplica&#231;&#227;o</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m-60-156 810-4" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m-60.02-160 0.04 8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m750.02-156-0.04-8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="298.75 307.75 316.75 321.25 329.242 333.742 342.742 351.742 360.742 369.742 374.746 379.75" y="-129">63 a 289bits</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="386.752" y="-129"> </ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m200-400h80v120h-80z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m200-400h80v120h-80z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="207.75 219.756 224.76 233.76 241.752 250.752 255.252 264.252" y="-345">Bloco de</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="212.25 221.25 229.242 238.242 247.242 254.244 258.74403" y="-323">dados 0</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="218.48438 227.48438 236.48438 245.48438 250.48838 255.49237" y="-219">24bits</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="M199.5-250H280" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m199.5-254v8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m280-246v-8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m290-400h80v120h-80z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m290-400h80v120h-80z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="297.75 309.756 314.76 323.76 331.752 340.752 345.252 354.252" y="-345">Bloco de</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="302.25 311.25 319.242 328.242 337.242 344.24403 348.74403" y="-323">dados 1</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m381-400h80v120h-80z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m381-400h80v120h-80z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="388.75 400.756 405.76 414.76 422.752 431.752 436.252 445.252" y="-345">Bloco de</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="393.25 402.25 410.242 419.242 428.242 435.24403 439.74403" y="-323">dados 2</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m475-340.73h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m519.5-400h80v120h-80z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m519.5-400h80v120h-80z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="527.75 539.756 544.76 553.76 561.752 570.752 575.252 584.252" y="-345">Bloco de</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="532.25 541.25 549.242 558.242 567.242 574.244 578.744" y="-323">dados n</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m290-250h310" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m290-254v8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m600-246v-8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="359.5 368.5 373 380.992 385.492 394.492 403.492 412.492 421.492 426.496 431.5 438.502 443.002 448.996 457.996 463.99 472.99 477.49 486.49 491.494 500.494 508.486 517.48599 524.488" y="-219">0 a 224bits (0-7 blocos)</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m620-440h120v180h-120z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m620-440h120v180h-120z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="629.25 641.256 646.26 651.26406 658.26608 662.76608 671.76608 679.75808 684.25808 690.2521 695.2561 709.26016 713.76016 722.76016" y="-355">Bits de fim de</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="641.5 655.504 663.49606 672.49606 679.49807 687.49008 696.49008 704.48208" y="-333">mensagem</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="649.5 658.5 663 670.992 675.492 684.492 693.492 698.49606 703.50009" y="-224">7 a 9bits</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m620-250h120" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m620-254v8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m740-246v-8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m90-440h90v180h-90z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m90-440h90v180h-90z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="105.734378 115.74238 127.74838 140.74439 145.24439 151.23839" y="-344">PCD ID</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="113.484378 122.484378 131.48438 140.48438 145.48838 150.49237" y="-219">28bits</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m89-245.31h91" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m89-249.31v8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m180-241.31v-8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="M-50-440H80.5V-260H-50Z" fill="#fff" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="M-50-440H80.5V-260H-50Z" fill="none" stroke="#000" />
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-28.609375 -18.871094 -10.879093 3.1249076 11.116908 20.116909 29.116909 38.11691 42.61691 51.61691" y="-355">Tamanho da</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-23 -8.995999 -1.0039988 7.9960014 14.998001 22.990002 31.990002 39.982004" y="-333">mensagem</ns0:tspan></ns0:text>
-  <ns0:text transform="matrix(1.345388 0 0 1.345388 131.17108 677.91287)" font-family="Tinos" font-size="18" xml:space="preserve"><ns0:tspan x="-9.515625 -.515625 8.484375 13.488376 18.492377" y="-221">4bits</ns0:tspan></ns0:text>
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="M-50-244.43H80" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m-50-248.43v8" fill="none" stroke="#000" stroke-miterlimit="10" />
-  <ns0:path transform="matrix(1.345388,0,0,1.345388,131.84378,678.5856)" d="m80-240.43v-8" fill="none" stroke="#000" stroke-miterlimit="10" />
- </ns0:g>
-</ns0:svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1194.24" height="536.16" version="1.1" viewBox="0 0 1194.24 536.16">
+ <style>
+          .fill { fill: black; }
+          .stroke { stroke: black; }
+          @media (prefers-color-scheme: dark) {
+            .fill { fill: white; }
+            .stroke { stroke: white; }
+          }
+        </style><defs>
+  <clipPath id="a">
+   <path transform="scale(.48)" d="M78.125 34.375H2409.375V1081.25H78.125Z" clip-rule="evenodd" />
+  </clipPath>
+ </defs>
+ <g clip-path="url(#a)">
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3910-1109h810v310h-810z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="22" xml:space="preserve" class="fill"><tspan x="-3553.25 -3537.366 -3527.598 -3521.482 -3511.7139 -3500.7139 -3493.388 -3483.6199 -3466.504" y="-1082" class="fill">Datagrama</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3660-1059h420v250h-420z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3519.9688 -3506.9727 -3498.9808 -3489.9808 -3480.9808 -3473.9788 -3469.4788 -3460.4788 -3452.4869 -3447.9869 -3439.9949 -3430.9949 -3425.991 -3420.987 -3412.995 -3405.0032 -3397.0113 -3389.0194" y="-1036" class="fill">Dados de aplica&#231;&#227;o</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3910-775 810-4" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3910.02-779 0.04 8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3099.98-775-0.04-8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3551.25 -3542.25 -3533.25 -3528.75 -3520.758 -3516.258 -3507.258 -3498.258 -3489.258 -3480.258 -3475.2542 -3470.2503" y="-748" class="fill">63 a 289bits</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3463.2484" y="-748" class="fill"> </tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3650-1019h80v120h-80z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3642.25 -3630.244 -3625.24 -3616.24 -3608.248 -3599.248 -3594.748 -3585.748" y="-964" class="fill">Bloco de</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3637.75 -3628.75 -3620.758 -3611.758 -3602.758 -3595.756 -3591.256" y="-942" class="fill">dados 0</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3631.5157 -3622.5157 -3613.5157 -3604.5157 -3599.5118 -3594.5079" y="-838" class="fill">24bits</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3650.5-869h80.5" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3650.5-873v8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3570-865v-8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3560-1019h80v120h-80z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3552.25 -3540.244 -3535.24 -3526.24 -3518.248 -3509.248 -3504.748 -3495.748" y="-964" class="fill">Bloco de</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3547.75 -3538.75 -3530.758 -3521.758 -3512.758 -3505.756 -3501.256" y="-942" class="fill">dados 1</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3469-1019h80v120h-80z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3461.25 -3449.244 -3444.24 -3435.24 -3427.248 -3418.248 -3413.748 -3404.748" y="-964" class="fill">Bloco de</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3456.75 -3447.75 -3439.758 -3430.758 -3421.758 -3414.756 -3410.256" y="-942" class="fill">dados 2</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3375-959.73h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1m4-1h1v1h-1" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3330.5-1019h80v120h-80z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3322.25 -3310.244 -3305.24 -3296.24 -3288.248 -3279.248 -3274.748 -3265.748" y="-964" class="fill">Bloco de</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3317.75 -3308.75 -3300.758 -3291.758 -3282.758 -3275.756 -3271.256" y="-942" class="fill">dados n</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3560-869h310" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3560-873v8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3250-865v-8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3490.5 -3481.5 -3477 -3469.008 -3464.508 -3455.508 -3446.508 -3437.508 -3428.508 -3423.5042 -3418.5003 -3411.4984 -3406.9984 -3401.0045 -3392.0045 -3386.0106 -3377.0106 -3372.5106 -3363.5106 -3358.5067 -3349.5067 -3341.5147 -3332.5147 -3325.5128" y="-838" class="fill">0 a 224bits (0-7 blocos)</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3230-1059h120v180h-120z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3220.75 -3208.744 -3203.74 -3198.736 -3191.7342 -3187.2342 -3178.2342 -3170.2423 -3165.7423 -3159.7484 -3154.7445 -3140.7406 -3136.2406 -3127.2406" y="-974" class="fill">Bits de fim de</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3208.5 -3194.496 -3186.5042 -3177.5042 -3170.5023 -3162.5103 -3153.5103 -3145.5184" y="-952" class="fill">mensagem</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3200.5 -3191.5 -3187 -3179.008 -3174.508 -3165.508 -3156.508 -3151.5042 -3146.5003" y="-843" class="fill">7 a 9bits</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3230-869h120" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3230-873v8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3110-865v-8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3760-1059h90v180h-90z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3744.2657 -3734.2576 -3722.2515 -3709.2554 -3704.7554 -3698.7615" y="-963" class="fill">PCD ID</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3736.5157 -3727.5157 -3718.5157 -3709.5157 -3704.5118 -3699.5079" y="-838" class="fill">28bits</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3761-864.31h91" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3761-868.31v8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3670-860.31v-8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3900-1059h130.5v180h-130.5z" fill="none" class="stroke" />
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3878.6094 -3868.871 -3860.8792 -3846.8753 -3838.8834 -3829.8834 -3820.8834 -3811.8834 -3807.3834 -3798.3834" y="-974" class="fill">Tamanho da</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3873 -3858.996 -3851.0042 -3842.0042 -3835.0023 -3827.0103 -3818.0103 -3810.0184" y="-952" class="fill">mensagem</tspan></text>
+  <text transform="matrix(1.345388 0 0 1.345388 5310.915 1510.7081)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="-3859.5157 -3850.5157 -3841.5157 -3836.5118 -3831.5079" y="-840" class="fill">4bits</tspan></text>
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3900-863.43h130" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3900-867.43v8" fill="none" stroke-miterlimit="10" class="stroke" />
+  <path transform="matrix(1.345388,0,0,1.345388,5311.588,1511.3807)" d="m-3770-859.43v-8" fill="none" stroke-miterlimit="10" class="stroke" />
+ </g>
+</svg>
