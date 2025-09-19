@@ -133,8 +133,8 @@ if __name__ == "__main__":
     dQ1 = formatterQ1.apply_format(Yman1, add_prefix=False)
     dQ2 = formatterQ2.apply_format(Yman2, add_prefix=False)
 
-    filtroQ1 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
-    filtroQ2 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+    filtroQ1 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
+    filtroQ2 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
     ImpulseResponsePlot(

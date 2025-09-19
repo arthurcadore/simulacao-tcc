@@ -259,9 +259,9 @@ if __name__ == "__main__":
     fs = 128_000
     Rb = 400
     
-    fc1 = np.random.randint(10, 50)*100
-    fc2 = fc1 + 1000
-    fc3 = fc2 + 1000
+    fc1 = np.random.randint(10, 30)*100
+    fc2 = fc1 + 2000
+    fc3 = fc2 + 2000
     
     print("Frequência Portadora 1: ", fc1)
     print("Frequência Portadora 2: ", fc2)
@@ -288,7 +288,7 @@ if __name__ == "__main__":
     # st = 0.01*np.random.normal(0, np.sqrt(add_noise.variance), len(s))
     
     # Detecção de portadora
-    threshold = -15
+    threshold = -12
     detector = CarrierDetector(fs=transmitter1.fs, seg_ms=20, segments=2, threshold=threshold) 
     results, confirmed_freqs = detector.detect(st.copy())
 

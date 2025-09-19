@@ -60,7 +60,7 @@ class Receiver:
 
         # Parâmetros fixos
         self.alpha = 0.8
-        self.span = 12
+        self.span = 24
         self.lpf_order = 6
         self.delayI = 0
         self.delayQ = 0
@@ -81,12 +81,12 @@ class Receiver:
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
-        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        self.cI_Rb = self.Rb
         self.cI_matched = cI_params["matched"]
         cQ_params = encoding_params[self.cQ_type]
         self.cQ_format = cQ_params["format"]
         self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
-        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
+        self.cQ_Rb = self.Rb
         self.cQ_matched = cQ_params["matched"]
 
 
@@ -94,7 +94,7 @@ class Receiver:
         self.demodulator = Modulator(fc=self.fc, fs=self.fs)
         self.lpf = LPF(cut_off=self.lpf_cutoff, order=self.lpf_order, fs=self.fs, type="butter")
         self.matched_filterI = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        self.matched_filterQ = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb*2, span=self.span, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+        self.matched_filterQ = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
         self.synchronizerI = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
         self.synchronizerQ = Synchronizer(fs=self.fs, Rb=self.Rb, sync_word=self.preamble)
         self.samplerI = Sampler(fs=self.fs, Rb=self.Rb, delay=self.delayI)

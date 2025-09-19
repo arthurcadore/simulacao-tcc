@@ -155,8 +155,8 @@ if __name__ == "__main__":
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
-    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb/2, span=span, channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, span=span, channel="Q", bits_per_symbol=2)
+    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="RRC", span=span, channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="Manchester", span=span, channel="Q", bits_per_symbol=2)
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)

@@ -61,12 +61,12 @@ class Synchronizer:
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
-        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        self.cI_Rb = self.Rb
         self.cI_matched = cI_params["matched"]
         cQ_params = encoding_params[self.cQ_type]
         self.cQ_format = cQ_params["format"]
         self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
-        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
+        self.cQ_Rb = self.Rb
         self.cQ_matched = cQ_params["matched"]
 
 
@@ -219,10 +219,10 @@ if __name__ == "__main__":
     Xnrz = encoder_nrz.encode(Xn)
     Yman = encoder_man.encode(Yn)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=800, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
-    matched_filter_I = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-    matched_filter_Q = MatchedFilter(alpha=0.8, fs=128_000, Rb=800, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=12, type="RRC", channel="I", bits_per_symbol=1)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=12, type="Manchester", channel="Q", bits_per_symbol=2)
+    matched_filter_I = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+    matched_filter_Q = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)

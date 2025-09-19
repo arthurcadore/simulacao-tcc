@@ -74,11 +74,11 @@ class Transmitter:
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
-        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        self.cI_Rb = self.Rb
         cQ_params = encoding_params[self.cQ_type]
         self.cQ_format = cQ_params["format"]
         self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
-        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
+        self.cQ_Rb = self.Rb
 
         # Submodulos
         self.encoder = EncoderConvolutional(G=G)

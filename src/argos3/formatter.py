@@ -43,12 +43,12 @@ class Formatter:
         self.channel = channel
         self.prefix_duration = prefix_duration  
         self.alpha = alpha
-        self.fs = fs
-        self.Rb = Rb
-        self.Tb = 1 / Rb
-        self.sps = int(fs / Rb)
-        self.span = span
         self.bits_per_symbol = bits_per_symbol
+        self.fs = fs
+        self.Rb = Rb * bits_per_symbol
+        self.Tb = 1 / self.Rb
+        self.sps = int(fs / self.Rb)
+        self.span = span
         self.t_rc = np.linspace(-span * self.Tb, span * self.Tb, span * self.sps * 2)
 
         type_map = {
@@ -216,8 +216,8 @@ if __name__ == "__main__":
     symbols_I = encoder_I.encode(bitN)
     symbols_Q = encoded_Q.encode(bitM)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=200, span=6, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=400, span=12, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=400, span=12, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0)
     
     dI1 = formatterI.apply_format(symbols_I)
     dQ1 = formatterQ.apply_format(symbols_Q)
