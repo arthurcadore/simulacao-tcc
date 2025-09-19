@@ -106,6 +106,12 @@
     - [] Alterar algorimo de viterbi para trabalhar com distâncias euclidianas (ref: https://dsplog.com/2009/01/14/soft-viterbi/)
     - [] Verificar viabilidade de plot de módulo de treliça para plot de estados. 
     - [] Verificar viabilidade de plot com x=tempo e y=estados.
+- [] Aplicar novos gráficos de BERvs EBN0
+    - [] QPSK usando modulator
+    - [] QPSK usando modulator + formatter
+    - [] QPSK usando modulator + formatter + hard decision
+    - [] QPSK usando modulador + formatter + soft decision 
+    - [] QPSK usando modulador + formatter + soft decision + scrambler
 
 --- 
 ### v1.0.8 - Extensão de vetores

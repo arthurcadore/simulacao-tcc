@@ -37,7 +37,7 @@ class Encoder:
 
         method = method.lower()
         if method not in method_map:
-            raise ValueError("Método de codificação inválido. Use 'NRZ', 'Manchester' ou 'NRZ2'.")
+            raise ValueError("Método de codificação inválido. Use 'NRZ', 'Manchester'.")
                 
         self.method = method_map[method]
 

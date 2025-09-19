@@ -18,19 +18,19 @@ from .data import ExportData
 from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot
 
 class Transmitter:
-    def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
+    def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.
 
         ![pageplot](../assets/blocos_modulador.svg)
     
         Args:
-            datagram (Datagram): Instância do datagrama a ser transmitido.
             fc (float): Frequência da portadora em Hz. 
             fs (float): Frequência de amostragem em Hz. 
             Rb (float): Taxa de bits em bps.
-            carrier_length (float): Comprimento do prefixo em segundos, se `None`, gera um valor aleatório entre 82 e 122 ms.
+            carrier_length (float): Comprimento do prefixo em segundos.
             preamble (str): String de preâmbulo em hex.
+            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
             G (np.ndarray): Matriz de geração para codificação convolucional.
             output_print (bool): Se `True`, imprime os vetores intermediários no console.
             output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
@@ -41,30 +41,62 @@ class Transmitter:
         </div>
         """
 
+        # Validar os valores de channel_encode
+        valid_encodings = ["nrz", "man"]
+        if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
+            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
+
         # Parâmetros
         self.fc = fc
         self.fs = fs
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
+        self.prefix_duration = carrier_length
+
+        # Parâmetros fixos
         self.alpha = 0.8
         self.span = 6
 
-        if carrier_length:
-            self.prefix_duration = carrier_length
-        else:
-            # Gera um valor aleatório entre 82 e 122 ms
-            self.prefix_duration = np.random.uniform(0.082, 0.122)
+        # Codificação I e Q
+        self.cI_type = channel_encode[0]
+        self.cQ_type = channel_encode[1]
+
+        # Codificação de canal, sempre NRZ
+        self.cI_encoder = "nrz"
+        self.cQ_encoder = "nrz"
+
+        # formatação canal I
+        if self.cI_type == "nrz":
+            self.cI_format = "RRC"
+            self.cI_bits_per_symbol = 1
+            self.cI_Rb = self.Rb
+        elif self.cI_type == "man":
+            self.cI_format = "Manchester"
+            self.cI_bits_per_symbol = 2
+            self.cI_Rb = self.Rb*2
+        
+        # formatação canal Q
+        if self.cQ_type == "nrz":
+            self.cQ_format = "RRC"
+            self.cQ_bits_per_symbol = 1
+            self.cQ_Rb = self.Rb
+
+        elif self.cQ_type == "man":
+            self.cQ_format = "Manchester"
+            self.cQ_bits_per_symbol = 2
+            self.cQ_Rb = self.Rb*2
+
 
         # Submodulos
         self.encoder = EncoderConvolutional(G=G)
         self.scrambler = Scrambler()
         self.preamble = Preamble(preamble_hex=preamble)
         self.multiplexer = Multiplexer()
-        self.c_encoderI = Encoder("nrz")
-        self.c_encoderQ = Encoder("nrz")
-        self.formatterI = Formatter(fs=self.fs, Rb=self.Rb/2, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
-        self.formatterQ = Formatter(fs=self.fs, Rb=self.Rb, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
+        self.c_encoderI = Encoder(self.cI_encoder)
+        self.c_encoderQ = Encoder(self.cQ_encoder)
+        self.formatterI = Formatter(fs=self.fs, Rb=self.cI_Rb, type=self.cI_format, channel="I", bits_per_symbol=self.cI_bits_per_symbol, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
+        self.formatterQ = Formatter(fs=self.fs, Rb=self.cQ_Rb, type=self.cQ_format, channel="Q", bits_per_symbol=self.cQ_bits_per_symbol, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
         self.modulator = Modulator(fc=self.fc, fs=self.fs)
 
     def prepare_datagram(self, datagram: Datagram):
