@@ -40,10 +40,10 @@ theme:
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  - assets/hide_sidebar.js
+  - site/hide_sidebar.js
   
 extra_css:
-  - assets/styles.css
+  - site/styles.css
 
 nav:
   - Início: index.md
