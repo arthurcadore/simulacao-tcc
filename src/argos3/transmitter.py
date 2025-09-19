@@ -57,36 +57,28 @@ class Transmitter:
         # Parâmetros fixos
         self.alpha = 0.8
         self.span = 6
+        self.cI_encoder = "nrz"
+        self.cQ_encoder = "nrz"
 
         # Codificação I e Q
         self.cI_type = channel_encode[0]
         self.cQ_type = channel_encode[1]
 
-        # Codificação de canal, sempre NRZ
-        self.cI_encoder = "nrz"
-        self.cQ_encoder = "nrz"
+        # Mapeamento das configurações de codificação
+        encoding_params = {
+            "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1},
+            "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2}
+        }
 
-        # formatação canal I
-        if self.cI_type == "nrz":
-            self.cI_format = "RRC"
-            self.cI_bits_per_symbol = 1
-            self.cI_Rb = self.Rb
-        elif self.cI_type == "man":
-            self.cI_format = "Manchester"
-            self.cI_bits_per_symbol = 2
-            self.cI_Rb = self.Rb*2
-        
-        # formatação canal Q
-        if self.cQ_type == "nrz":
-            self.cQ_format = "RRC"
-            self.cQ_bits_per_symbol = 1
-            self.cQ_Rb = self.Rb
-
-        elif self.cQ_type == "man":
-            self.cQ_format = "Manchester"
-            self.cQ_bits_per_symbol = 2
-            self.cQ_Rb = self.Rb*2
-
+        # Parâmetros para o canal I e Q
+        cI_params = encoding_params[self.cI_type]
+        self.cI_format = cI_params["format"]
+        self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
+        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        cQ_params = encoding_params[self.cQ_type]
+        self.cQ_format = cQ_params["format"]
+        self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
+        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
 
         # Submodulos
         self.encoder = EncoderConvolutional(G=G)

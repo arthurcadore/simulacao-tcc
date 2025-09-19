@@ -16,7 +16,7 @@ from .multiplexer import Multiplexer
 from .matchedfilter import MatchedFilter
 
 class Synchronizer:
-    def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF"):
+    def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF", channel_encode=("nrz", "man")):
         r"""
          Inicializa o sincronizador de simbolos para identificar o momento de maior correlação entre o sinal recebido e o sinal de sincronismo.
 
@@ -24,20 +24,58 @@ class Synchronizer:
             fs (int): Frequência de amostragem do sinal recebido.
             Rb (int): Taxa de transmissão do sinal recebido.
             sync_word (str): Palavra de sincronismo.
+            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
 
         Example: 
             ![pageplot](assets/example_synchronizer_sync.svg)
         """
+
+        # Validar os valores de channel_encode
+        valid_encodings = ["nrz", "man"]
+        if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
+            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
+        
+        # Parâmetros
         self.fs = fs
         self.Rb = Rb
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
-        self.encoder_I = Encoder(method="nrz")
-        self.encoder_Q = Encoder(method="nrz")
-        self.formatterI = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC", channel="I", bits_per_symbol=1)
-        self.formatterQ = Formatter(alpha=0.8, fs=self.fs, Rb=self.Rb*2, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
-        self.matched_filter_I = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
-        self.matched_filter_Q = MatchedFilter(alpha=0.8, fs=self.fs, Rb=self.Rb*2, span=6, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+
+        # Parâmetros fixos
+        self.alpha = 0.8
+        self.span = 6
+        self.cI_encoder = "nrz"
+        self.cQ_encoder = "nrz"
+
+        # Codificação I e Q
+        self.cI_type = channel_encode[0]
+        self.cQ_type = channel_encode[1]
+
+        # Mapeamento das configurações de codificação
+        encoding_params = {
+            "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1, "matched": "RRC-Inverted"},
+            "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2, "matched": "Manchester-Inverted"}
+        }
+
+        # Parâmetros para o canal I e Q
+        cI_params = encoding_params[self.cI_type]
+        self.cI_format = cI_params["format"]
+        self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
+        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        self.cI_matched = cI_params["matched"]
+        cQ_params = encoding_params[self.cQ_type]
+        self.cQ_format = cQ_params["format"]
+        self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
+        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
+        self.cQ_matched = cQ_params["matched"]
+
+
+        self.encoder_I = Encoder(method=self.cI_encoder)
+        self.encoder_Q = Encoder(method=self.cQ_encoder)
+        self.formatterI = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.cI_Rb, span=self.span, type=self.cI_format, channel="I", bits_per_symbol=self.cI_bits_per_symbol)
+        self.formatterQ = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.cQ_Rb, span=self.span, type=self.cQ_format, channel="Q", bits_per_symbol=self.cQ_bits_per_symbol)
+        self.matched_filter_I = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.cI_Rb, span=self.span, type=self.cI_matched, channel="I", bits_per_symbol=self.cI_bits_per_symbol)
+        self.matched_filter_Q = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.cQ_Rb, span=self.span, type=self.cQ_matched, channel="Q", bits_per_symbol=self.cQ_bits_per_symbol)
         self.create_sincronized_word(sync_word)
 
     def create_sincronized_word(self, sync_word):
