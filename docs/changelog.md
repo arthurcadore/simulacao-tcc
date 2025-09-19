@@ -69,18 +69,11 @@
     - [X] Alterar API.md para retirar titulo principal e comentar header dos arquivos .py
     - [X] Alterar documentação da classe de encoder
     - [X] adicionar prints de impulso casado na documentação
-- [] Otimizar plots
-    - [X] Verificar plot de constelação, normalização do sinal recebido
-    - [X] Otimizar plot do encoder. 
-    - [X] Criar método para testar todas as classes no makefile. 
-    - [X] Alterar tamanho do plot pz fpb
-    - [] Alterar xlim para plots necessários. 
-    - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
-- [] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
+- [X] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx
 - [X] Inverter a ordem do plot de impulso
-- [] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.
-- [] Verificar normalização em amplitude para impulso Man
-- [] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. 
+- [X] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.
+- [X] Verificar normalização em amplitude para impulso Man
+- [X] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. 
 - [] Implementar uso da função Q(x) na documentação. 
 - [] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
 
@@ -97,6 +90,13 @@
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
+- [] Otimizar plots
+    - [X] Verificar plot de constelação, normalização do sinal recebido
+    - [X] Otimizar plot do encoder. 
+    - [X] Criar método para testar todas as classes no makefile. 
+    - [X] Alterar tamanho do plot pz fpb
+    - [] Alterar xlim para plots necessários. 
+    - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
 
 --- 
 ### v1.0.7 - Soft Decision

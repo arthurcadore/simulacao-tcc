@@ -1146,7 +1146,7 @@ class FrequencyResponsePlot(BasePlot):
         # Eixos
         if self.xlim is not None:
             self.ax.set_xlim(self.xlim)
-        self.ax.set_ylim(-80, 5)
+        self.ax.set_ylim(-60, 5)
 
         # Labels
         self.ax.set_xlabel(self.xlabel)
