@@ -1426,34 +1426,21 @@
 <li>[X] adicionar prints de impulso casado na documentação</li>
 </ul>
 </li>
-<li>[] Otimizar plots<ul>
-<li>[X] Verificar plot de constelação, normalização do sinal recebido</li>
-<li>[X] Otimizar plot do encoder. </li>
-<li>[X] Criar método para testar todas as classes no makefile. </li>
-<li>[X] Alterar tamanho do plot pz fpb</li>
-<li>[] Alterar xlim para plots necessários. </li>
-<li>[] Adicionar plot de fase discreta no transmitter, deixar constelação separado. </li>
-</ul>
-</li>
-<li>[] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx</li>
+<li>[X] Adicionar argumentos extras de tipo de codificação / canal no construtor tx/rx</li>
 <li>[X] Inverter a ordem do plot de impulso</li>
-<li>[] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.</li>
-<li>[] Verificar normalização em amplitude para impulso Man</li>
-<li>[] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. </li>
-<li>[] Implementar uso da função Q(x) na documentação. </li>
-<li>[] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)</li>
+<li>[X] Manter o valor de 80ms de portadora, transferir responsabilidade de variação para o canal.</li>
+<li>[X] Verificar normalização em amplitude para impulso Man</li>
+<li>[X] Alterar ylim nos plots de freq para -60dB no lpf por exemplo. </li>
+<li>[X] Implementar uso da função Q(x) na documentação. </li>
+<li>[X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)</li>
 </ul>
 <hr />
 <h3 id="v106-estilizacao-e-documentacao">v1.0.6 - Estilização e Documentação</h3>
 <ul>
-<li>[] Otimizar conversor de plots pra permitir darkTheme<ul>
-<li>[] Padronizar cor dos plots.</li>
-</ul>
-</li>
-<li>[] Alterar mkdocs para darkTheme</li>
+<li>[X] Otimizar conversor de plots pra permitir darkTheme</li>
+<li>[X] Alterar mkdocs para darkTheme</li>
 <li>[] Adicionar melhor documentação a aba inicio</li>
 <li>[] Adicionar exemplificação de uso como "Example" no site, como o datagrama.</li>
-<li>[] Verificar adição de diagrama de olho no sklar. </li>
 <li>[] Verificar equacionamento sklar e alterar nome das variáveis.</li>
 <li>[] Diagrama de blocos<ul>
 <li>[] Alterar diagrama do modulador</li>
@@ -1461,6 +1448,17 @@
 <li>[] Alterar bloco do receptor pra ficar dentro de detector.</li>
 </ul>
 </li>
+<li>[] Otimizar plots<ul>
+<li>[X] Verificar plot de constelação, normalização do sinal recebido</li>
+<li>[X] Otimizar plot do encoder. </li>
+<li>[X] Criar método para testar todas as classes no makefile. </li>
+<li>[X] Alterar tamanho do plot pz fpb</li>
+<li>[] Alterar xlim para plots necessários. </li>
+<li>[] Adicionar plot de fase discreta no transmitter, deixar constelação separado. </li>
+<li>[] Padronizar cor dos plots.</li>
+</ul>
+</li>
+<li>[] Criar diretório para armazenar diagramas e notebooks.</li>
 </ul>
 <hr />
 <h3 id="v107-soft-decision">v1.0.7 - Soft Decision</h3>
@@ -1471,6 +1469,14 @@
 <li>[] Alterar algorimo de viterbi para trabalhar com distâncias euclidianas (ref: https://dsplog.com/2009/01/14/soft-viterbi/)</li>
 <li>[] Verificar viabilidade de plot de módulo de treliça para plot de estados. </li>
 <li>[] Verificar viabilidade de plot com x=tempo e y=estados.</li>
+</ul>
+</li>
+<li>[] Aplicar novos gráficos de BERvs EBN0<ul>
+<li>[] QPSK usando modulator</li>
+<li>[] QPSK usando modulator + formatter</li>
+<li>[] QPSK usando modulator + formatter + hard decision</li>
+<li>[] QPSK usando modulador + formatter + soft decision </li>
+<li>[] QPSK usando modulador + formatter + soft decision + scrambler</li>
 </ul>
 </li>
 </ul>

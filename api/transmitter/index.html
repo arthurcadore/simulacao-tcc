@@ -1372,7 +1372,7 @@
 
 
 <h2 id="transmitter.Transmitter.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">carrier_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preamble</span><span class="o">=</span><span class="s1">&#39;2BEEEEBF&#39;</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]),</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">Rb</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">carrier_length</span><span class="o">=</span><span class="mf">0.082</span><span class="p">,</span> <span class="n">preamble</span><span class="o">=</span><span class="s1">&#39;2BEEEEBF&#39;</span><span class="p">,</span> <span class="n">channel_encode</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;nrz&#39;</span><span class="p">,</span> <span class="s1">&#39;man&#39;</span><span class="p">),</span> <span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]),</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1394,22 +1394,6 @@
         </tr>
       </thead>
       <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>datagram</code>
-            </td>
-            <td>
-                  <code><span title="transmitter.datagram.Datagram">Datagram</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Instância do datagrama a ser transmitido.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
           <tr class="doc-section-item">
             <td>
                 <code>fc</code>
@@ -1467,11 +1451,11 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Comprimento do prefixo em segundos, se <code>None</code>, gera um valor aleatório entre 82 e 122 ms.</p>
+                <p>Comprimento do prefixo em segundos.</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                  <code>0.082</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1488,6 +1472,22 @@
             </td>
             <td>
                   <code>&#39;2BEEEEBF&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>channel_encode</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Tupla com o tipo de codificação dos canais I e Q respectivamente.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(&#39;nrz&#39;, &#39;man&#39;)</code>
             </td>
           </tr>
           <tr class="doc-section-item">
