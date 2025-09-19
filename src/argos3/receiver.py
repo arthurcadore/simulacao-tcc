@@ -20,7 +20,7 @@ from .synchronizer import Synchronizer
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot, SymbolsPlot
 
 class Receiver:
-    def __init__(self, fs=128_000, Rb=400, lpf_cutoff=600, fc=None, preamble="2BEEEEBF", G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
+    def __init__(self, fs=128_000, Rb=400, fc=None, lpf_cutoff=600, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
         Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.
 
@@ -29,8 +29,11 @@ class Receiver:
         Args:
             fs (int): Frequência de amostragem em Hz.
             Rb (int): Taxa de bits em bps.
-            lpf_cutoff (int): Frequência de corte do filtro passa-baixa em Hz.
             fc (int): Frequência de portadora em Hz.
+            lpf_cutoff (int): Frequência de corte do filtro passa-baixa em Hz.
+            preamble (str): String de preâmbulo em hex.
+            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
+            G (np.ndarray): Matriz de geração para codificação convolucional.
             output_print (bool): Se `True`, imprime os vetores intermediários no console. 
             output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
 
@@ -39,6 +42,11 @@ class Receiver:
         AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
         </div>
         """
+
+        # Validar os valores de channel_encode
+        valid_encodings = ["nrz", "man"]
+        if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
+            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
 
         # Parâmetros
         self.fs = fs
@@ -49,11 +57,38 @@ class Receiver:
         self.output_plot = output_plot
         self.preamble = preamble
         self.G = G
+
+        # Parâmetros fixos
         self.alpha = 0.8
         self.span = 12
         self.lpf_order = 6
         self.delayI = 0
         self.delayQ = 0
+        self.cI_encoder = "nrz"
+        self.cQ_encoder = "nrz"
+
+        # Codificação I e Q
+        self.cI_type = channel_encode[0]
+        self.cQ_type = channel_encode[1]
+
+        # Mapeamento das configurações de codificação
+        encoding_params = {
+            "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1, "matched": "RRC-Inverted"},
+            "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2, "matched": "Manchester-Inverted"}
+        }
+
+        # Parâmetros para o canal I e Q
+        cI_params = encoding_params[self.cI_type]
+        self.cI_format = cI_params["format"]
+        self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
+        self.cI_Rb = self.Rb * cI_params["Rb_multiplier"]
+        self.cI_matched = cI_params["matched"]
+        cQ_params = encoding_params[self.cQ_type]
+        self.cQ_format = cQ_params["format"]
+        self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
+        self.cQ_Rb = self.Rb * cQ_params["Rb_multiplier"]
+        self.cQ_matched = cQ_params["matched"]
+
 
         # Submodulos
         self.demodulator = Modulator(fc=self.fc, fs=self.fs)
