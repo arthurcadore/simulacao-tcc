@@ -56,7 +56,7 @@ class Transmitter:
 
         # Parâmetros fixos
         self.alpha = 0.8
-        self.span = 6
+        self.span = 12
         self.cI_encoder = "nrz"
         self.cQ_encoder = "nrz"
 

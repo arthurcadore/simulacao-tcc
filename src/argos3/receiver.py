@@ -50,7 +50,7 @@ class Receiver:
         self.preamble = preamble
         self.G = G
         self.alpha = 0.8
-        self.span = 6
+        self.span = 12
         self.lpf_order = 6
         self.delayI = 0
         self.delayQ = 0
@@ -70,7 +70,7 @@ class Receiver:
         self.conv_viterbi = DecoderViterbi(G=self.G)
 
     def demodulate(self, s, t):
-        r"""
+        r"""normalmente
         Demodula o sinal $s'(t)$ com ruído recebido, recuperando os sinais $x'_{I}(t)$ e $y'_{Q}(t)$.
 
         Args:
