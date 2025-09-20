@@ -1,12 +1,9 @@
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import contextily as ctx
-import numpy as np
 import scienceplots
 
 from matplotlib.patches import Patch
-from matplotlib.patches import Rectangle
 from shapely.geometry import Point
 
 # Configurações globais de visualização
@@ -112,19 +109,6 @@ def steps(step):
     else:
         return "50+"
 
-def apply_steps(uf):
-    r"""
-    Aplica categorias aos estados
-    
-    Args:
-        uf (gpd.GeoDataFrame): GeoDataFrame com os dados de estados
-    
-    Returns:
-        gpd.GeoDataFrame: GeoDataFrame com as categorias aplicadas
-    """
-    uf['categoria'] = uf['pcd_count'].apply(steps)
-    return uf
-
 def collor_mapping(uf):
     r"""
     Mapeia as cores de acordo com a categoria
@@ -223,7 +207,7 @@ def gerar_mapa():
     gdf_pcds = create_geodf(df)
     data = process_uf()
     data = process_pcd(gdf_pcds, data)
-    data = apply_steps(data)
+    data['categoria'] = data['pcd_count'].apply(steps)
     data, collors = collor_mapping(data)
     
     # Cria o gráfico
