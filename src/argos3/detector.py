@@ -64,9 +64,25 @@ class CarrierDetector:
         self.decision_matrix = None
         
     def segment_signal(self, signal: np.ndarray) -> list[np.ndarray]:
-        """
-        Divide o sinal inteiro em segmentos de N amostras.
-        O último segmento pode ser menor que N.
+        r"""
+        Divide o sinal recebido em segmentos de tempo $x_n[m]$, cada segmento com `seg_ms` de duração, conforme a expressão abaixo. 
+
+        $$
+        x_n[m] = s(t_{n} + mT_s)
+        $$
+
+        Sendo: 
+            - $x_n[m]$ : Segmento de tempo $n$.
+            - $s(t)$ : Sinal recebido.
+            - $T_s$ : Período de amostragem.
+            - $m$ : Número do segmento.
+            - $t_n$ : Instante de início do segmento $n$.
+
+        Args:
+            signal (np.ndarray): sinal recebido
+
+        Returns:
+            list[np.ndarray]: lista de segmentos de tempo
         """
         segments = []
         total_samples = len(signal)
@@ -79,9 +95,43 @@ class CarrierDetector:
 
 
     def analyze_signal(self, signal: np.ndarray):
+        r"""
+        Calcula a FFT de cada segmento $x_n[m]$, usando a expressão abaixo. 
+        
+        $$
+            X_n[k] = \sum_{m=0}^{N-1} x_n[m]\, e^{-j2\pi km/N} 
+        $$
+
+        Sendo: 
+            - $X_n[k]$ : Transformada de Fourier do segmento $n$.
+            - $x_n[m]$ : Segmento de tempo $n$.
+            - $N$ : Número de amostras do segmento.
+            - $k$ : Número da transformada de Fourier.
+            - $m$ : Número da amostra.
+            - $T_s$ : Período de amostragem.
+            - $e^{-j2\pi km/N}$ : Exponencial complexa.
+
+        Em seguida, calcula a potência espectral $P_n[k]$ em $dB$, e divide pelo número de amostras $N$ contidas no segmento para normalização.
+
+        $$
+            P_n[k] = \frac{|X_n[k]|^2}{N}
+        $$
+
+        Sendo: 
+            - $P_n[k]$ : Potência espectral do segmento $n$, normalizada em $dB$.
+            - $X_n[k]$ : Transformada de Fourier do segmento $n$.
+            - $N$ : Número de amostras do segmento.
+
+        Args:
+            segment (np.ndarray): segmento de tempo
+
+        Returns:
+            freqs (tuple[np.ndarray,np.ndarray]): tupla com as frequências e a potência espectral em $dB$
+
+        Example: 
+            ![pageplot](assets/example_detector_power_matrix.svg)
         """
-        Segmenta e calcula a matriz de potência FFT do sinal inteiro.
-        """
+
         segments = self.segment_signal(signal)
         n_segments = len(segments)
         n_freqs = self.N // 2 + 1
@@ -96,12 +146,34 @@ class CarrierDetector:
 
 
     def detect(self, s: np.ndarray):
-        """
-        Detecta possíveis portadoras no sinal.
-        Cria self.detected_matrix com os valores:
-            0 = sem frequência detectada
-            1 = frequência detectada
-            2 = frequência confirmada (detectada também no segmento anterior)
+        r"""
+        Detecta possíveis portadoras no sinal, comparando $P_n[k]$ com o limiar $P_t$, para cada índice $k$ da FFT.
+
+        $$
+            f_n[k] =
+            \begin{cases}
+            \dfrac{k}{N} \cdot f_s, & \text{se } P_n[k] > P_t\\
+            \text{não detectada}, & \text{se } P_n[k] \leq P_t
+            \end{cases}
+        $$
+
+        Sendo: 
+            - $f_n[k]$ : frequência detectada no segmento $n$.
+            - $P_n[k]$ : potência espectral do segmento $n$.
+            - $P_t$ : limiar de potência.
+            - $N$ : número de amostras do segmento.
+            - $f_s$ : frequência de amostragem.
+            - $k$ : índice da FFT.
+            - `não detectada`: Frequência ignorada no processo de detecção.  
+
+        Args:
+            s (np.ndarray): sinal recebido
+
+        Returns:
+            results (list[tuple[np.ndarray, list[float]]]): lista de tuplas com os segmentos e as frequências detectadas
+
+        Example: 
+            ![pageplot](assets/example_detector_detection_matrix.svg)
         """
         # Calcula matriz de potência FFT
         self.analyze_signal(s)
@@ -136,8 +208,28 @@ class CarrierDetector:
         self.decision()
 
     def decision(self):
-        if self.detected_matrix is None:
-            raise ValueError("É necessário rodar detect() antes de decision().")
+        """
+        Retorna apenas frequências que foram detectadas em dois segmentos consecutivos. A tolerância é dada pela resolução espectral da FFT, $\Delta f$, conforme a expressão abaixo. 
+
+        $$
+            \Delta f = \dfrac{f_s}{N}
+        $$
+
+        Sendo: 
+            - $\Delta f$ : resolução espectral da FFT.
+            - $f_s$ : frequência de amostragem.
+            - $N$ : número de amostras do segmento.
+
+        Args:
+            results (list[tuple[np.ndarray, list[float]]]): saída de self.detect()
+            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
+
+        Returns:
+            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
+
+        Example: 
+            ![pageplot](assets/example_detector_decision_matrix.svg)
+        """
 
         self.decision_matrix = np.copy(self.detected_matrix)
         n_segments, n_freqs = self.detected_matrix.shape
