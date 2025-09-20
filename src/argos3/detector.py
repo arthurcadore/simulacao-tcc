@@ -266,7 +266,7 @@ if __name__ == "__main__":
 
     # plota o espectro do sinal no segmento desejado
     seg_index = 5
-    fig, grid = create_figure(1, 1)
+    fig, grid = create_figure(2, 1)
     DetectionFrequencyPlot(fig, grid, 0, 
               fs=transmitter1.fs, 
               signal=detector.power_matrix[seg_index, :], 
@@ -276,5 +276,15 @@ if __name__ == "__main__":
               labels=["$S(f)$"],
               colors="darkred",
               freqs_detected=detector.detected_matrix[seg_index, :]
+    ).plot()
+    DetectionFrequencyPlot(fig, grid, 1, 
+              fs=transmitter1.fs, 
+              signal=detector.power_matrix[seg_index+1, :], 
+              threshold=detector.threshold, 
+              xlim=(1, 9),
+              title="Detecção de portadora de $s(t)$ - Segmento %d" % (seg_index+1),
+              labels=["$S(f)$"],
+              colors="darkred",
+              freqs_detected=detector.detected_matrix[seg_index+1, :]
     ).plot()
     save_figure(fig, "example_detector_freq.pdf")
