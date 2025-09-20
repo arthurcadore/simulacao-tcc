@@ -1257,8 +1257,6 @@ class DetectionFrequencyPlot(BasePlot):
         self.ax.set_ylabel(r"Magnitude ($dB$)")
         self.apply_ax_style()
 
-
-
 class BersnrPlot(BasePlot):
     r"""
     Classe para plotar curvas de BER em função de Eb/N0.
@@ -1408,7 +1406,6 @@ class SincronizationPlot(BasePlot):
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
 
-
 class CorrelationPlot(BasePlot):
     def __init__(self,
                  fig: plt.Figure,
@@ -1468,31 +1465,41 @@ class PowerMatrixPlot(BasePlot):
                  power_matrix: np.ndarray,
                  fs: float,
                  N: int,
-                 title: str = "Matriz de Potência (dB)",
+                 ylim: Tuple[float, float] = (0, 9),
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
-        super().__init__(ax, title=title, **kwargs)
+        super().__init__(ax, **kwargs)
         self.power_matrix = power_matrix
         self.fs = fs
         self.N = N
+        self.ylim = ylim
 
     def plot(self) -> None:
         n_segments, n_freqs = self.power_matrix.shape
         x = np.arange(n_segments + 1)
-        freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
-        y = np.linspace(freqs[0], freqs[-1], n_freqs + 1)
 
+        # Converte para KHz
+        freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
+        freqs_khz = freqs / 1000.0
+        y = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
+
+        # Plotagem
         im = self.ax.pcolormesh(
             x, y, self.power_matrix.T,
             cmap="inferno", shading="auto"
         )
-        cbar = self.ax.figure.colorbar(im, ax=self.ax)
-        cbar.set_label("Potência (dB)")
 
-        self.ax.set_xlabel("Segmento")
-        self.ax.set_ylabel("Frequência (Hz)")
-        self.ax.grid(False)  
-        self.ax.set_ylim(0, 9000)   # <<< corte até 9 kHz
+        # Barra de cores    
+        cbar = self.ax.figure.colorbar(im, ax=self.ax)
+        cbar.set_label("Magnitude ($dB$)")
+
+        # Limites
+        self.ax.set_ylim(self.ylim[0] / 1000.0, self.ylim[1] / 1000.0)
+
+        # Labels
+        self.ax.set_xlabel("Index de Segmento")
+        self.ax.set_ylabel("Frequência ($kHz$)")
+        self.ax.grid(False)
         self.apply_ax_style()
 
 
@@ -1510,21 +1517,22 @@ class MatrixSquarePlot(BasePlot):
                  matrix: np.ndarray,
                  fs: float,
                  N: int,
-                 title: str = "Matriz de Decisão",
+                 ylim: Tuple[float, float] = (0, 9),
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
-        super().__init__(ax, title=title, **kwargs)
+        super().__init__(ax, **kwargs)
         self.matrix = matrix
         self.fs = fs
         self.N = N
+        self.ylim = ylim
 
-        # Cores fixas
+        # mapeamento de cor
         self.cmap = mpl.colors.ListedColormap([
-            "white",    # 0
-            "yellow",   # 1
-            "red",   # 2
-            "lightblue",# 3
-            "orange"       # 4
+            "white",    
+            "yellow",   
+            "red",   
+            "lightblue",
+            "orange"       
         ])
         self.bounds = [0,1,2,3,4,5]
         self.norm = mpl.colors.BoundaryNorm(self.bounds, self.cmap.N)
@@ -1532,8 +1540,10 @@ class MatrixSquarePlot(BasePlot):
     def plot(self) -> None:
         n_segments, n_freqs = self.matrix.shape
         x = np.arange(n_segments + 1)
+
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
-        y = np.linspace(freqs[0], freqs[-1], n_freqs + 1)
+        freqs_khz = freqs / 1000.0
+        y = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
 
         im = self.ax.pcolormesh(
             x, y, self.matrix.T,
@@ -1544,16 +1554,19 @@ class MatrixSquarePlot(BasePlot):
 
         # Legenda manual
         legend_elements = [
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="white", markersize=12, label="0 = sem detecção"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="yellow", markersize=12, label="1 = detectada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = confirmada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = span"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="4 = demodulação"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="white", markersize=12, label="0 = Não detectada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="yellow", markersize=12, label="1 = Detectada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = Confirmada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = Span"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="4 = Demodulação"),
         ]
-        self.ax.legend(handles=legend_elements, loc="upper right")
+        leg = self.ax.legend(handles=legend_elements, loc="upper right")
+        frame = leg.get_frame()
+        frame.set_edgecolor("black")
+        frame.set_alpha(1)
 
-        self.ax.set_xlabel("Segmento")
-        self.ax.set_ylabel("Frequência (Hz)")
+        self.ax.set_xlabel("Index de Segmento")
+        self.ax.set_ylabel("Frequência ($kHz$)")
         self.ax.grid(False)  
-        self.ax.set_ylim(0, 9000)   # <<< corte até 9 kHz
+        self.ax.set_ylim(self.ylim[0] / 1000.0, self.ylim[1] / 1000.0)
         self.apply_ax_style()

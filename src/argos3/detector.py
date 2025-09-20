@@ -213,56 +213,60 @@ if __name__ == "__main__":
     fs = 128_000
     Rb = 400
     
-    fc1 = 3000
+    fc1 = 2000
+    fc2 = 4500
+    fc3 = 7000
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
     transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+    transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+    transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+
     t1, s1 = transmitter1.transmit(datagram)
-    st = s1
+    t2, s2 = transmitter2.transmit(datagram)
+    t3, s3 = transmitter3.transmit(datagram)
+
+    ebn0 = 20
+    noise1 = NoiseEBN0(ebn0_db=ebn0, seed=11,length_multiplier=2, position_factor=0.2)
+    sn1 = noise1.add_noise(s1)
+    noise2 = NoiseEBN0(ebn0_db=ebn0, seed=12,length_multiplier=2, position_factor=0.5)
+    sn2 = noise2.add_noise(s2)
+    noise3 = NoiseEBN0(ebn0_db=ebn0, seed=13,length_multiplier=2, position_factor=0.7)
+    sn3 = noise3.add_noise(s3)
     
-    ebn0 = 15
-    add_noise = NoiseEBN0(ebn0_db=ebn0, seed=11,length_multiplier=2, position_factor=0.5)
-    st = add_noise.add_noise(st)
-    
+    st = sn1 + sn2 + sn3
+
     # Detecção de portadora
     threshold = -12
     detector = CarrierDetector(fs=transmitter1.fs, seg_ms=20, threshold=threshold) 
 
     detector.detect(st.copy())
 
-    fig, grid = create_figure(1, 1)
+    fig, grid = create_figure(1, 1, figsize=(16, 9))
 
     # Heatmap da potência
     PowerMatrixPlot(fig, grid, 0,
                 detector.power_matrix,
-                fs=detector.fs, N=detector.N,
-                title="Matriz de Potência").plot()
-    
+                fs=detector.fs, N=detector.N).plot()
     save_figure(fig, "example_detector_power_matrix.pdf")
 
-    fig, grid = create_figure(1, 1)
     # Heatmap da detecção
+    fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.detected_matrix,
-                 fs=detector.fs, N=detector.N,
-                 title="Matriz de Detecção").plot()
+                 fs=detector.fs, N=detector.N).plot()
 
     save_figure(fig, "example_detector_detection_matrix.pdf")
 
-
-    fig, grid = create_figure(1, 1)
-
     # Heatmap da decisão
+    fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.decision_matrix,
-                 fs=detector.fs, N=detector.N,
-                 title="Matriz de Decisão").plot()
-    
+                 fs=detector.fs, N=detector.N).plot()
     save_figure(fig, "example_detector_decision_matrix.pdf")
 
-
-    # plota o espectro do sinal no segmento 5
-    seg_index = 7
+    # plota o espectro do sinal no segmento desejado
+    seg_index = 5
     fig, grid = create_figure(1, 1)
     DetectionFrequencyPlot(fig, grid, 0, 
               fs=transmitter1.fs, 
@@ -274,5 +278,4 @@ if __name__ == "__main__":
               colors="darkred",
               freqs_detected=detector.detected_matrix[seg_index, :]
     ).plot()
-    
     save_figure(fig, "example_detector_freq.pdf")
