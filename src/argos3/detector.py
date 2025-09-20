@@ -31,7 +31,9 @@ class CarrierDetector:
             ValueError: Se o comprimento de cada segmento for menor ou igual a zero.
 
         Example: 
-            ![pageplot](assets/example_detector_freq.svg)
+            - Segmentos de tempo: ![pageplot](assets/example_detector_freq.svg)
+            - Waterfall: ![pageplot](assets/example_detector_decision_matrix.svg)
+
 
         <div class="referencia">
         <b>Referência:</b><br>

@@ -1554,7 +1554,6 @@ class MatrixSquarePlot(BasePlot):
 
         # Legenda manual
         legend_elements = [
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="white", markersize=12, label="0 = Não detectada"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="yellow", markersize=12, label="1 = Detectada"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = Confirmada"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = Span"),
