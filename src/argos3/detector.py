@@ -16,7 +16,7 @@ from .receiver import Receiver
 class CarrierDetector:
     def __init__(self, fs: float = 128_000, seg_ms: float = 10.0,
                  threshold: float = -10,
-                 freq_window: tuple[float, float] = (1000, 9000), bandwidth: float = 1500):
+                 freq_window: tuple[float, float] = (1000, 9000), bandwidth: float = 1600):
         """
         Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.
 
@@ -358,19 +358,19 @@ if __name__ == "__main__":
     t2, s2 = transmitter2.transmit(datagram)
     t3, s3 = transmitter3.transmit(datagram)
 
-    snr = 15
-    noise1 = Noise(snr=snr, seed=11,length_multiplier=2, position_factor=np.random.uniform(0, 1))
+    ebn0_db = 20
+    noise1 = NoiseEBN0(ebn0_db=ebn0_db, seed=11,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn1 = noise1.add_noise(s1)
-    noise2 = Noise(snr=snr, seed=12,length_multiplier=2, position_factor=np.random.uniform(0, 1))
+    noise2 = NoiseEBN0(ebn0_db=ebn0_db, seed=12,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn2 = noise2.add_noise(s2)
-    noise3 = Noise(snr=snr, seed=13,length_multiplier=2, position_factor=np.random.uniform(0, 1))
+    noise3 = NoiseEBN0(ebn0_db=ebn0_db, seed=13,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn3 = noise3.add_noise(s3)
     
     st = sn1 + sn2 + sn3
 
     # Detecção de portadora
     threshold = -12
-    detector = CarrierDetector(fs=transmitter1.fs, seg_ms=20, threshold=threshold) 
+    detector = CarrierDetector(fs=transmitter1.fs, seg_ms=10, threshold=threshold) 
 
     detector.detect(st.copy())
 
@@ -397,7 +397,7 @@ if __name__ == "__main__":
     save_figure(fig, "example_detector_decision_matrix.pdf")
 
     # plota o espectro do sinal no segmento desejado
-    seg_index = 5
+    seg_index = 10
     fig, grid = create_figure(2, 1)
     DetectionFrequencyPlot(fig, grid, 0, 
               fs=transmitter1.fs, 
@@ -430,7 +430,7 @@ if __name__ == "__main__":
         print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq:.1f} Hz ==== \n")
     
         # Seleciona apenas os segmentos necessários e concatena
-        selected_signal = np.concatenate(segments[start_seg:end_seg + 1])
+        selected_signal = np.concatenate(segments[start_seg-1:end_seg + 1])
     
         # Instancia o receptor
         receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)

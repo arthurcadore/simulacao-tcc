@@ -1529,7 +1529,7 @@ class MatrixSquarePlot(BasePlot):
         # mapeamento de cor
         self.cmap = mpl.colors.ListedColormap([
             (1, 1, 1, 0),    
-            "yellow",   
+            "blue",   
             "red",   
             "lightblue",
             "orange"       
@@ -1554,7 +1554,7 @@ class MatrixSquarePlot(BasePlot):
 
         # Legenda manual
         legend_elements = [
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="yellow", markersize=12, label="1 = Detectada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="blue", markersize=12, label="1 = Detectada"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = Confirmada"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = Span"),
             Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="4 = Demodulação"),
