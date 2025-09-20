@@ -3,7 +3,8 @@
 
 logs/
 
-*.bkp
+**/.$diagrams.drawio.bkp
+
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
