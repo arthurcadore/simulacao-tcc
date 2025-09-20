@@ -1528,7 +1528,7 @@ class MatrixSquarePlot(BasePlot):
 
         # mapeamento de cor
         self.cmap = mpl.colors.ListedColormap([
-            "white",    
+            (1, 1, 1, 0),    
             "yellow",   
             "red",   
             "lightblue",

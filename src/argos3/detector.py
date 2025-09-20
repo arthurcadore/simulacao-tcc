@@ -242,9 +242,8 @@ if __name__ == "__main__":
 
     detector.detect(st.copy())
 
-    fig, grid = create_figure(1, 1, figsize=(16, 9))
-
     # Heatmap da potência
+    fig, grid = create_figure(1, 1, figsize=(16, 9))
     PowerMatrixPlot(fig, grid, 0,
                 detector.power_matrix,
                 fs=detector.fs, N=detector.N).plot()
