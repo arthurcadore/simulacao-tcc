@@ -78,7 +78,7 @@
 - [X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
 
 ---
-### v1.0.6 - Estilização e Documentação
+### v1.0.6 - Documentation and Styling
 - [X] Otimizar conversor de plots pra permitir darkTheme
 - [X] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
@@ -98,9 +98,30 @@
     - [] Padronizar cor dos plots.
 - [] Criar diretório para armazenar diagramas e notebooks.
 
+--- 
+### v1.0.7 - Multiple Carrier detection
+- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
+- [] Adicionar método no noise para adicionar mais ruido
+    - [] Adicionar multiplicador de comprimento do sinal TX
+    - [] Criar vetor de ruido com comprimento maior 
+    - [] Somar o sinal com ruido, colocar argumento de deslocamento (amostra onde começa a soma). 
+- [] Alterar classe detector para permitir detecção fora de fase 
+    - [] Criar vetor de frequências no construtor usando deltaF
+    - [] Segmentar o sinal recebido inteiro em blocos de tamanho segment_size
+    - [] Aplicar FFT em cada bloco, e verificar a potência em cada frequência
+    - [] Identificar as frequências e demodular o sinal recebido
+    - [] Quando iniciar a demodulação, penalizar as frequências em +-800Hz (parametrizavel). 
+- [] Montar diagrama de waterfall
+    - [] criar matriz (frequencia x segmento)
+    - [] Plotar uma cor para cada frequência em cada segmento de tempo
+        - [] não detectada
+        - [] detectada
+        - [] penalizada 
+        - [] iniciando demodulação
+    
 
 --- 
-### v1.0.7 - Soft Decision
+### v1.0.8 - Soft Decision and Performance
 - [] Implementar argumento "soft" no receiver
     - [] Alterar receiver para apenas amostrar os valores após filtro casado.
     - [] Alterar ordem do conv. decoder para receber valores após desembaralhamento.
@@ -113,15 +134,6 @@
     - [] QPSK usando modulator + formatter + hard decision
     - [] QPSK usando modulador + formatter + soft decision 
     - [] QPSK usando modulador + formatter + soft decision + scrambler
-
---- 
-### v1.0.8 - Extensão de vetores
-- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
-- [] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.
-- [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
-    - [] Adicionar vetor de simbolos de preâmbulo 
-    - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
-- [] Aumentar a adição de ruido (comprimento do vetor) 
 
 ---
 ### v1.0.9 - Channel and Doppler
@@ -139,4 +151,7 @@
 
 
 ---
-### v1.0.10 - AGC
+### v1.0.10 - AGC and Preamble
+- [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
+    - [] Adicionar vetor de simbolos de preâmbulo 
+    - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
