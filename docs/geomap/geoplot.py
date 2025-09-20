@@ -179,24 +179,6 @@ def plot_pcd(ax, gdf_pcds):
         zorder=2
     )
 
-def add_labels(ax, uf):
-    r"""
-    Adiciona siglas aos estados
-    
-    Args:
-        ax (matplotlib.axes.Axes): Eixo do gráfico
-        uf (gpd.GeoDataFrame): GeoDataFrame com os dados de estados
-    """
-    for _, row in uf.iterrows():
-        centroid = row.geometry.centroid
-        nome_estado = str(row["name"])
-        sigla = UFS.get(nome_estado, nome_estado)
-        ax.text(centroid.x, centroid.y, sigla, fontsize=7, ha='center',
-                color='darkblue', weight='bold',
-                bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8,
-                          edgecolor='gray', linewidth=0.5),
-                zorder=3)
-
 def add_legend(ax, collors):
     r"""
     Adiciona a legenda ao gráfico
@@ -259,7 +241,6 @@ def gerar_mapa():
     ax.set_ylim(y_min - y_range * margin, y_max + y_range * margin)
 
     # Adiciona labels e legenda
-    add_labels(ax, data)
     add_legend(ax, collors)
     ax.axis("off")
     plt.tight_layout()
