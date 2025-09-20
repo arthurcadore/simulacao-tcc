@@ -621,27 +621,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#v106-estilizacao-e-documentacao" class="md-nav__link">
+  <a href="#v106-documentation-and-styling" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.0.6 - Estilização e Documentação
+      v1.0.6 - Documentation and Styling
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#v107-soft-decision" class="md-nav__link">
+  <a href="#v107-multiple-carrier-detection" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.0.7 - Soft Decision
+      v1.0.7 - Multiple Carrier detection
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#v108-extensao-de-vetores" class="md-nav__link">
+  <a href="#v108-soft-decision-and-performance" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.0.8 - Extensão de vetores
+      v1.0.8 - Soft Decision and Performance
     </span>
   </a>
   
@@ -657,9 +657,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#v1010-agc" class="md-nav__link">
+  <a href="#v1010-agc-and-preamble" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.0.10 - AGC
+      v1.0.10 - AGC and Preamble
     </span>
   </a>
   
@@ -1435,7 +1435,7 @@
 <li>[X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)</li>
 </ul>
 <hr />
-<h3 id="v106-estilizacao-e-documentacao">v1.0.6 - Estilização e Documentação</h3>
+<h3 id="v106-documentation-and-styling">v1.0.6 - Documentation and Styling</h3>
 <ul>
 <li>[X] Otimizar conversor de plots pra permitir darkTheme</li>
 <li>[X] Alterar mkdocs para darkTheme</li>
@@ -1461,7 +1461,37 @@
 <li>[] Criar diretório para armazenar diagramas e notebooks.</li>
 </ul>
 <hr />
-<h3 id="v107-soft-decision">v1.0.7 - Soft Decision</h3>
+<h3 id="v107-multiple-carrier-detection">v1.0.7 - Multiple Carrier detection</h3>
+<ul>
+<li>[] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. </li>
+<li>[] Adicionar método no noise para adicionar mais ruido<ul>
+<li>[] Adicionar multiplicador de comprimento do sinal TX</li>
+<li>[] Criar vetor de ruido com comprimento maior </li>
+<li>[] Somar o sinal com ruido, colocar argumento de deslocamento (amostra onde começa a soma). </li>
+</ul>
+</li>
+<li>[] Alterar classe detector para permitir detecção fora de fase <ul>
+<li>[] Criar vetor de frequências no construtor usando deltaF</li>
+<li>[] Segmentar o sinal recebido inteiro em blocos de tamanho segment_size</li>
+<li>[] Aplicar FFT em cada bloco, e verificar a potência em cada frequência</li>
+<li>[] Identificar as frequências e demodular o sinal recebido</li>
+<li>[] Quando iniciar a demodulação, penalizar as frequências em +-800Hz (parametrizavel). </li>
+</ul>
+</li>
+<li>[] Montar diagrama de waterfall<ul>
+<li>[] criar matriz (frequencia x segmento)</li>
+<li>[] Plotar uma cor para cada frequência em cada segmento de tempo<ul>
+<li>[] não detectada</li>
+<li>[] detectada</li>
+<li>[] penalizada </li>
+<li>[] iniciando demodulação</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="v108-soft-decision-and-performance">v1.0.8 - Soft Decision and Performance</h3>
 <ul>
 <li>[] Implementar argumento "soft" no receiver<ul>
 <li>[] Alterar receiver para apenas amostrar os valores após filtro casado.</li>
@@ -1479,18 +1509,6 @@
 <li>[] QPSK usando modulador + formatter + soft decision + scrambler</li>
 </ul>
 </li>
-</ul>
-<hr />
-<h3 id="v108-extensao-de-vetores">v1.0.8 - Extensão de vetores</h3>
-<ul>
-<li>[] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. </li>
-<li>[] Adicionar método no transmissor para mandar mais sinal após a cauda para testar a truncagem.</li>
-<li>[] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.<ul>
-<li>[] Adicionar vetor de simbolos de preâmbulo </li>
-<li>[] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.</li>
-</ul>
-</li>
-<li>[] Aumentar a adição de ruido (comprimento do vetor) </li>
 </ul>
 <hr />
 <h3 id="v109-channel-and-doppler">v1.0.9 - Channel and Doppler</h3>
@@ -1514,7 +1532,14 @@
 </li>
 </ul>
 <hr />
-<h3 id="v1010-agc">v1.0.10 - AGC</h3>
+<h3 id="v1010-agc-and-preamble">v1.0.10 - AGC and Preamble</h3>
+<ul>
+<li>[] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.<ul>
+<li>[] Adicionar vetor de simbolos de preâmbulo </li>
+<li>[] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.</li>
+</ul>
+</li>
+</ul>
 
 
 

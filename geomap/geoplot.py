@@ -1,12 +1,9 @@
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import contextily as ctx
-import numpy as np
 import scienceplots
 
 from matplotlib.patches import Patch
-from matplotlib.patches import Rectangle
 from shapely.geometry import Point
 
 # Configurações globais de visualização
@@ -23,15 +20,6 @@ plt.rc('figure', titlesize=22)
 INPUT_DATA = "data/geoencoded.csv"
 OUTPUT_DATA = "../out/geoplot.pdf"
 GEOJSON_URL = "https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson"
-
-UFS = {
-    "Acre": "AC", "Alagoas": "AL", "Amapá": "AP", "Amazonas": "AM", "Bahia": "BA", "Ceará": "CE",
-    "Distrito Federal": "DF", "Espírito Santo": "ES", "Goiás": "GO", "Maranhão": "MA", "Mato Grosso": "MT",
-    "Mato Grosso do Sul": "MS", "Minas Gerais": "MG", "Pará": "PA", "Paraíba": "PB", "Paraná": "PR",
-    "Pernambuco": "PE", "Piauí": "PI", "Rio de Janeiro": "RJ", "Rio Grande do Norte": "RN",
-    "Rio Grande do Sul": "RS", "Rondônia": "RO", "Roraima": "RR", "Santa Catarina": "SC",
-    "São Paulo": "SP", "Sergipe": "SE", "Tocantins": "TO"
-}
 
 def import_df(input_data):
     r"""
@@ -112,19 +100,6 @@ def steps(step):
     else:
         return "50+"
 
-def apply_steps(uf):
-    r"""
-    Aplica categorias aos estados
-    
-    Args:
-        uf (gpd.GeoDataFrame): GeoDataFrame com os dados de estados
-    
-    Returns:
-        gpd.GeoDataFrame: GeoDataFrame com as categorias aplicadas
-    """
-    uf['categoria'] = uf['pcd_count'].apply(steps)
-    return uf
-
 def collor_mapping(uf):
     r"""
     Mapeia as cores de acordo com a categoria
@@ -179,24 +154,6 @@ def plot_pcd(ax, gdf_pcds):
         zorder=2
     )
 
-def add_labels(ax, uf):
-    r"""
-    Adiciona siglas aos estados
-    
-    Args:
-        ax (matplotlib.axes.Axes): Eixo do gráfico
-        uf (gpd.GeoDataFrame): GeoDataFrame com os dados de estados
-    """
-    for _, row in uf.iterrows():
-        centroid = row.geometry.centroid
-        nome_estado = str(row["name"])
-        sigla = UFS.get(nome_estado, nome_estado)
-        ax.text(centroid.x, centroid.y, sigla, fontsize=7, ha='center',
-                color='darkblue', weight='bold',
-                bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8,
-                          edgecolor='gray', linewidth=0.5),
-                zorder=3)
-
 def add_legend(ax, collors):
     r"""
     Adiciona a legenda ao gráfico
@@ -241,7 +198,7 @@ def gerar_mapa():
     gdf_pcds = create_geodf(df)
     data = process_uf()
     data = process_pcd(gdf_pcds, data)
-    data = apply_steps(data)
+    data['categoria'] = data['pcd_count'].apply(steps)
     data, collors = collor_mapping(data)
     
     # Cria o gráfico
@@ -259,7 +216,6 @@ def gerar_mapa():
     ax.set_ylim(y_min - y_range * margin, y_max + y_range * margin)
 
     # Adiciona labels e legenda
-    add_labels(ax, data)
     add_legend(ax, collors)
     ax.axis("off")
     plt.tight_layout()

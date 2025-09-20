@@ -858,9 +858,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#detector.CarrierDetector.analyze_segment" class="md-nav__link">
+  <a href="#detector.CarrierDetector.analyze_signal" class="md-nav__link">
     <span class="md-ellipsis">
-      analyze_segment
+      analyze_signal
     </span>
   </a>
   
@@ -876,9 +876,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#detector.CarrierDetector.check_frequencies" class="md-nav__link">
+  <a href="#detector.CarrierDetector.decision" class="md-nav__link">
     <span class="md-ellipsis">
-      check_frequencies
+      decision
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detector.CarrierDetector.return_channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      return_channels
     </span>
   </a>
   
@@ -1330,7 +1339,7 @@
 
 
 <h2 id="detector.CarrierDetector.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">seg_ms</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">segments</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">freq_window</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">))</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">seg_ms</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">freq_window</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1600</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1381,22 +1390,6 @@
             </td>
             <td>
                   <code>10.0</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>segments</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Número de segmentos a analisar</p>
-              </div>
-            </td>
-            <td>
-                  <code>2</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1464,23 +1457,16 @@
               </div>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="ValueError">ValueError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Se o número de segmentos for menor que 1.</p>
-              </div>
-            </td>
-          </tr>
       </tbody>
     </table>
 
 
 <details class="example" open>
   <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_detector_freq.svg" /></p>
+  <ul>
+<li>Segmentos de tempo: <img alt="pageplot" src="../assets/example_detector_freq.svg" /></li>
+<li>Waterfall: <img alt="pageplot" src="../assets/example_detector_decision_matrix.svg" /></li>
+</ul>
 </details>        <div class="referencia">
 <b>Referência:</b><br>
 AS3-SP-516-2097-CNES (Seção 3.3)
@@ -1580,8 +1566,8 @@ x_n[m] = s(t_{n} + mT_s)
 <div class="doc doc-object doc-function">
 
 
-<h2 id="detector.CarrierDetector.analyze_segment" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">analyze_segment</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span></code>
+<h2 id="detector.CarrierDetector.analyze_signal" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">analyze_signal</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1673,6 +1659,11 @@ x_n[m] = s(t_{n} + mT_s)
       </tbody>
     </table>
 
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p><img alt="pageplot" src="../assets/example_detector_power_matrix.svg" /></p>
+</details>
 
     </div>
 
@@ -1766,6 +1757,11 @@ x_n[m] = s(t_{n} + mT_s)
     </table>
 
 
+<details class="example" open>
+  <summary>Example</summary>
+  <p><img alt="pageplot" src="../assets/example_detector_detection_matrix.svg" /></p>
+</details>
+
     </div>
 
 </div>
@@ -1773,8 +1769,8 @@ x_n[m] = s(t_{n} + mT_s)
 <div class="doc doc-object doc-function">
 
 
-<h2 id="detector.CarrierDetector.check_frequencies" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">check_frequencies</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></code>
+<h2 id="detector.CarrierDetector.decision" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">decision</span><span class="p">()</span></code>
 
 </h2>
 
@@ -1859,6 +1855,53 @@ x_n[m] = s(t_{n} + mT_s)
             <td>
               <div class="doc-md-description">
                 <p>lista de frequências confirmadas como portadora</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p><img alt="pageplot" src="../assets/example_detector_decision_matrix.svg" /></p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="detector.CarrierDetector.return_channels" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">return_channels</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Varre a decision_matrix e retorna as frequências confirmadas.
+com o início e fim do segmento onde a portadora foi demodulada.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>channels</code></td>            <td>
+                  <code><span title="list">list</span>[<span title="tuple">tuple</span>[<span title="float">float</span>, <span title="int">int</span>, <span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Lista de tuplas (freq_Hz, start_segment, end_segment)</p>
               </div>
             </td>
           </tr>
