@@ -660,7 +660,7 @@ class Transmitter:
                 fc=self.fc,
                 labels=["$S(f)$"],
                 title="Sinal Modulado $IQ$",
-                xlim=(-10, 10),
+                xlim=(0, 8),
                 colors="darkred",
                 style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
             ).plot()
