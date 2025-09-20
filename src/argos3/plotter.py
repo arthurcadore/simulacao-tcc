@@ -1193,7 +1193,7 @@ class DetectionFrequencyPlot(BasePlot):
                  ylim: Optional[Tuple[float, float]] = None,
                  colors: Optional[Union[str, List[str]]] = None,
                  style: Optional[Dict[str, Any]] = None,
-                 freqs_detected: Optional[List[float]] = None
+                 freqs_detected: Optional[Union[List[float], np.ndarray]] = None
                  ) -> None:
 
         ax = fig.add_subplot(grid[pos])
@@ -1207,62 +1207,57 @@ class DetectionFrequencyPlot(BasePlot):
 
         self.fs = fs
         self.fc = fc
-        self.signal = signal
+        self.signal = np.asarray(signal)
         self.threshold = threshold
         self.freqs_detected = freqs_detected
-        self.N = len(self.signal)
         self.U = 1.0
-        self.xw = self.signal
+        self.style = self.style or {}
 
     def plot(self) -> None:
-        # Transformada de Fourier
-        X = np.fft.rfft(self.xw, n=self.N)
-        P_bin = (np.abs(X) ** 2) / (self.N * self.U + 1e-20)
-        P_db = 10.0 * np.log10(P_bin + 1e-20)
-        freqs = np.fft.rfftfreq(self.N, d=1 / self.fs)
+        P_db = self.signal
+        if P_db.ndim != 1:
+            raise ValueError("DetectionFrequencyPlot espera um vetor de power_matrix.")
 
-        # Ajusta escala para KHz
+        n_bins = len(P_db)
+        n_fft = 2 * (n_bins - 1)
+        freqs = np.fft.rfftfreq(n_fft, d=1.0 / self.fs)
+
+        # Plotagem em KHz
         freqs_plot = freqs / 1000.0
-
-        # Plotagem
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "blue"
-        label = self.labels[0] if self.labels else "Espectro (P_bin)"
+        label = self.labels[0] if self.labels else "Espectro (dB)"
         self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
 
         # Threshold
         thr_line = self.threshold
-        thr_label = f"Threshold = {self.threshold:.2f} dB"
+        thr_label = f"Threshold = {thr_line:.2f} dB"
         self.ax.axhline(thr_line, color="blue", linestyle="--", linewidth=2, label=thr_label)
 
-        # Linhas verticais
-        if self.freqs_detected is not None:
-            for idx, f in enumerate(self.freqs_detected, start=1):
-                f_plot = f / 1000.0
+        # Plota as linhas verticais
+        detected_bins = np.where(np.asarray(self.freqs_detected) > 0)[0]
+        for idx, k in enumerate(detected_bins, start=1):
+            f_plot = freqs[k] / 1000.0
+            Pk = P_db[k]
+            self.ax.plot(f_plot, Pk, 'o', color='k', markersize=6, label=f"$f_{{{idx}}} = {f_plot:.2f}$ kHz")
+            self.ax.axvline(f_plot, color='k', linestyle=':', linewidth=2)
 
-                # Calcula o índice do bin mais próximo
-                i = np.argmin(np.abs(freqs_plot - f_plot))
-                P_bin = P_db[i]
+        # Limites dos eixos
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
+        if self.ylim is not None:
+            self.ax.set_ylim(self.ylim)
 
-                # Ponto e linha vertical sobre P_bin
-                self.ax.plot(f_plot, P_bin, 'o', color='k', markersize=6,
-                             label=f"$f_{{{idx}}} = {f_plot:.2f}$ kHz")
-                self.ax.axvline(f_plot, color="k", linestyle=":", linewidth=2)
-
-        # Limites
-        if self.ylim is None:
-            self.ax.set_ylim(np.max(P_db) - 50, np.max(P_db) + 5)
-
-        # Legenda
+        # Labels
         handles, labels = self.ax.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         self.ax.legend(by_label.values(), by_label.keys())
-
-        # Labels
         self.ax.set_xlabel(r"Frequência ($kHz$)")
         self.ax.set_ylabel(r"Magnitude ($dB$)")
         self.apply_ax_style()
+
+
 
 class BersnrPlot(BasePlot):
     r"""
@@ -1459,4 +1454,106 @@ class CorrelationPlot(BasePlot):
         self.ax.set_xlabel(r"Índice de Amostra $k$")
         self.ax.set_ylabel(r"Fator de Correlação Normalizado $c[k]$")
         self.ax.legend()
+        self.apply_ax_style()
+
+class PowerMatrixPlot(BasePlot):
+    r"""
+    Plota a matriz de potência em dB como heatmap quadriculado.
+    Eixo x = segmentos, eixo y = frequência em Hz.
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 power_matrix: np.ndarray,
+                 fs: float,
+                 N: int,
+                 title: str = "Matriz de Potência (dB)",
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, title=title, **kwargs)
+        self.power_matrix = power_matrix
+        self.fs = fs
+        self.N = N
+
+    def plot(self) -> None:
+        n_segments, n_freqs = self.power_matrix.shape
+        x = np.arange(n_segments + 1)
+        freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
+        y = np.linspace(freqs[0], freqs[-1], n_freqs + 1)
+
+        im = self.ax.pcolormesh(
+            x, y, self.power_matrix.T,
+            cmap="inferno", shading="auto"
+        )
+        cbar = self.ax.figure.colorbar(im, ax=self.ax)
+        cbar.set_label("Potência (dB)")
+
+        self.ax.set_xlabel("Segmento")
+        self.ax.set_ylabel("Frequência (Hz)")
+        self.ax.grid(False)  
+        self.ax.set_ylim(0, 9000)   # <<< corte até 9 kHz
+        self.apply_ax_style()
+
+
+
+class MatrixSquarePlot(BasePlot):
+    r"""
+    Plota matrizes categóricas (detecção/decisão) em formato quadriculado.
+    Cada valor é um quadrado colorido.
+    Eixo x = segmentos, eixo y = frequência em Hz.
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 matrix: np.ndarray,
+                 fs: float,
+                 N: int,
+                 title: str = "Matriz de Decisão",
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, title=title, **kwargs)
+        self.matrix = matrix
+        self.fs = fs
+        self.N = N
+
+        # Cores fixas
+        self.cmap = mpl.colors.ListedColormap([
+            "white",    # 0
+            "yellow",   # 1
+            "red",   # 2
+            "lightblue",# 3
+            "orange"       # 4
+        ])
+        self.bounds = [0,1,2,3,4,5]
+        self.norm = mpl.colors.BoundaryNorm(self.bounds, self.cmap.N)
+
+    def plot(self) -> None:
+        n_segments, n_freqs = self.matrix.shape
+        x = np.arange(n_segments + 1)
+        freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
+        y = np.linspace(freqs[0], freqs[-1], n_freqs + 1)
+
+        im = self.ax.pcolormesh(
+            x, y, self.matrix.T,
+            cmap=self.cmap,
+            norm=self.norm,
+            shading="auto"
+        )
+
+        # Legenda manual
+        legend_elements = [
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="white", markersize=12, label="0 = sem detecção"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="yellow", markersize=12, label="1 = detectada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = confirmada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = span"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="4 = demodulação"),
+        ]
+        self.ax.legend(handles=legend_elements, loc="upper right")
+
+        self.ax.set_xlabel("Segmento")
+        self.ax.set_ylabel("Frequência (Hz)")
+        self.ax.grid(False)  
+        self.ax.set_ylim(0, 9000)   # <<< corte até 9 kHz
         self.apply_ax_style()
