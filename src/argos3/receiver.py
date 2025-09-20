@@ -961,6 +961,7 @@ class Receiver:
             return datagramRX, True
 
         except Exception as e:
+            print("Erro ao gerar datagrama:", e)
             return ut, False
     
     def receive(self, s):

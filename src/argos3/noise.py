@@ -11,19 +11,24 @@ from .transmitter import Transmitter
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
 
 class Noise:
-    def __init__(self, snr=15, seed=None):
+    def __init__(self, snr=15, seed=None, length_multiplier=1.5, position_factor=0.5):
         r"""
         Implementação de canal para aplicação de ruido $AWGN$, com base em $SNR$.
 
         Args:
             snr (float): Relação sinal-ruído em decibéis (dB).
             seed (int): Seed do gerador de números aleatórios.
+            length_multiplier (float): Multiplicador de comprimento do sinal.
+            position_factor (float): Fator de posição do ruído.
 
         Example: 
             ![pageplot](assets/example_noise_time.svg) 
         """
         self.snr = snr
         self.rng = np.random.default_rng(seed)
+        self.length_multiplier = length_multiplier
+        self.position_factor = np.clip(position_factor, 0, 1)
+
     
     def add_noise(self, signal):
         r"""
@@ -62,20 +67,25 @@ class Noise:
         self.signal_power = np.mean(np.abs(signal) ** 2)
         self.snr_linear = 10 ** (self.snr / 10)
         self.variance = self.signal_power / self.snr_linear
-        
-        # gera ruído com base na seed
-        noise = self.rng.normal(0, np.sqrt(self.variance), len(signal))
-        
-        # adiciona ruído
-        signal = signal + noise
 
-        # normalização
-        # signal = signal / np.max(np.abs(signal))
-        
-        return signal 
+        sig_len = len(signal)
+        noise_len = int(sig_len * self.length_multiplier)
+
+        # gera vetor de ruído maior
+        noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
+
+        # calcula posição de inserção do sinal
+        start_idx = int((noise_len - sig_len) * self.position_factor)
+        end_idx = start_idx + sig_len
+
+        # insere o sinal no ruído
+        noisy_signal = noise.copy()
+        noisy_signal[start_idx:end_idx] += signal
+
+        return noisy_signal
 
 class NoiseEBN0:
-    def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None):
+    def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None, length_multiplier=1.5, position_factor=0.5):
         r"""
         Implementação de canal para aplicação de ruido $AWGN$, com base em $Eb/N_{0}$.
 
@@ -84,6 +94,8 @@ class NoiseEBN0:
             fs (int): Taxa de amostragem do sinal em $Hz$.
             Rb (int): Taxa de bits em bits/s.
             seed (int): Seed do gerador de números aleatórios.
+            length_multiplier (float): Multiplicador de comprimento do sinal.
+            position_factor (float): Fator de posição do ruído.
         
         Example: 
             ![pageplot](assets/example_noise_time.svg)
@@ -92,9 +104,9 @@ class NoiseEBN0:
         self.ebn0_lin = 10 ** (ebn0_db / 10)
         self.fs = fs
         self.Rb = Rb
-
-        # gera ruído com base na seed
         self.rng = np.random.default_rng(seed)
+        self.length_multiplier = length_multiplier
+        self.position_factor = np.clip(position_factor, 0, 1)
 
     def add_noise(self, signal):
         r"""
@@ -152,17 +164,26 @@ class NoiseEBN0:
 
         self.signal_power = np.mean(np.abs(signal)**2)
         self.bit_energy = self.signal_power / self.Rb
+
+        # densidade espectral de ruído
         self.noise_density = self.bit_energy / self.ebn0_lin
         self.variance = (self.noise_density * self.fs) / 2.0
-        noise = self.rng.normal(0, np.sqrt(self.variance), len(signal))
 
-        # adiciona ruído
-        signal = signal + noise
+        sig_len = len(signal)
+        noise_len = int(sig_len * self.length_multiplier)
 
-        # normalização
-        # signal = signal / np.max(np.abs(signal))
+        # vetor de ruído maior
+        noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
 
-        return signal 
+        # posição de inserção
+        start_idx = int((noise_len - sig_len) * self.position_factor)
+        end_idx = start_idx + sig_len
+
+        # insere o sinal
+        noisy_signal = noise.copy()
+        noisy_signal[start_idx:end_idx] += signal
+
+        return noisy_signal
 
 def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
     n_est = s_noisy - s

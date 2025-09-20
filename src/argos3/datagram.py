@@ -304,10 +304,20 @@ class Datagram:
         self.numblocks = int("".join(map(str, value_bits)), 2) + 1
         self.blocks = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
 
-        # extrai o campo tail
-        self.tail = self.streambits[32 + 24 + (32 * (self.numblocks - 1)):]
-        tail_length = len(self.tail)
+        # Pega os ultimos bits após dados de app.
+        finalbits = self.streambits[32 + 24 + (32 * (self.numblocks - 1)):]
 
+        # verifica a cauda esperada de acordo com numblocks, e extrai ela.
+        tail_pad = [7, 8, 9]
+        tail_length = tail_pad[(self.numblocks - 1) % 3]
+        tail_bits = finalbits[:tail_length]
+
+        # verifica a integridade da cauda, todos os bits tem que ser 0.
+        if any(int(b) != 0 for b in tail_bits):
+            raise ValueError("Cauda inválida.")
+        else:
+            self.tail = tail_bits
+    
         # cria o objeto JSON
         data = {
             "msglength": self.numblocks,
