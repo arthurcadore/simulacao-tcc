@@ -300,7 +300,45 @@ class CarrierDetector:
 
                 runs.append((start_s, s - 1, center_k))
 
+    def return_channels(self):
+        """
+        Varre a decision_matrix e retorna as frequências confirmadas.
+        com o início e fim do segmento onde a portadora foi demodulada.
 
+        Returns:
+            channels (list[tuple[float, int, int]]): Lista de tuplas (freq_Hz, start_segment, end_segment)
+        """
+        if not hasattr(self, 'decision_matrix'):
+            raise ValueError("A decision_matrix ainda não foi criada. Execute self.decision() antes.")
+
+        n_segments, n_freqs = self.decision_matrix.shape
+        visited = np.zeros_like(self.decision_matrix, dtype=bool)
+        channels = []
+
+        # Frequências reais dos bins da FFT
+        freqs = np.fft.rfftfreq(self.N, d=self.ts)
+
+        for i in range(n_segments):
+            for k in range(n_freqs):
+                # só processa centros não visitados
+                if self.decision_matrix[i, k] != 4 or visited[i, k]:
+                    continue
+
+                start_segment = i
+                s = i
+                # percorre os segmentos enquanto houver 4 no centro
+                while s < n_segments and self.decision_matrix[s, k] == 4:
+                    visited[s, k] = True
+                    s += 1
+                end_segment = s - 1
+
+                channels.append((freqs[k], start_segment, end_segment))
+
+        print("Frequências confirmadas (Hz) com início e fim de segmentos:")
+        for f, start, end in channels:
+            print(f"Frequência {f:.1f} Hz: segmento {start} -> {end}")
+
+        return channels
 
 if __name__ == "__main__":
 
@@ -320,12 +358,12 @@ if __name__ == "__main__":
     t2, s2 = transmitter2.transmit(datagram)
     t3, s3 = transmitter3.transmit(datagram)
 
-    ebn0 = 20
-    noise1 = NoiseEBN0(ebn0_db=ebn0, seed=11,length_multiplier=2, position_factor=0.2)
+    snr = 15
+    noise1 = Noise(snr=snr, seed=11,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn1 = noise1.add_noise(s1)
-    noise2 = NoiseEBN0(ebn0_db=ebn0, seed=12,length_multiplier=2, position_factor=0.5)
+    noise2 = Noise(snr=snr, seed=12,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn2 = noise2.add_noise(s2)
-    noise3 = NoiseEBN0(ebn0_db=ebn0, seed=13,length_multiplier=2, position_factor=0.7)
+    noise3 = Noise(snr=snr, seed=13,length_multiplier=2, position_factor=np.random.uniform(0, 1))
     sn3 = noise3.add_noise(s3)
     
     st = sn1 + sn2 + sn3
@@ -382,3 +420,31 @@ if __name__ == "__main__":
               freqs_detected=detector.detected_matrix[seg_index+1, :]
     ).plot()
     save_figure(fig, "example_detector_freq.pdf")
+
+    # Recepção: 
+    channels = detector.return_channels()
+    segments = detector.segment_signal(st)  # lista de segmentos do sinal original
+    
+    for idx, (freq, start_seg, end_seg) in enumerate(channels, start=1):
+        print(f"\n ==============================================")
+        print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq:.1f} Hz ==== \n")
+    
+        # Seleciona apenas os segmentos necessários e concatena
+        selected_signal = np.concatenate(segments[start_seg:end_seg + 1])
+    
+        # Instancia o receptor
+        receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)
+        datagramRX, success = receiver.receive(selected_signal)
+    
+        if not success:
+            bitsTX = datagram.streambits 
+            bitsRX = datagramRX
+            print("Bits TX: ", ''.join(str(b) for b in bitsTX))
+            print("Bits RX: ", ''.join(str(b) for b in bitsRX))
+    
+            # Calcula a Taxa de Erro de Bit (BER)
+            num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
+            ber = num_errors / len(bitsTX)
+    
+            print(f"Número de erros: {num_errors}")
+            print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
