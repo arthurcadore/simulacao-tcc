@@ -347,9 +347,9 @@ if __name__ == "__main__":
     fs = 128_000
     Rb = 400
     
-    fc1 = 2000
-    fc2 = 4500
-    fc3 = 7000
+    fc1 = np.random.randint(10, 30)*100
+    fc2 = fc1 + 2500
+    fc3 = fc2 + 2500
     
     datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
     transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
@@ -360,15 +360,11 @@ if __name__ == "__main__":
     t2, s2 = transmitter2.transmit(datagram)
     t3, s3 = transmitter3.transmit(datagram)
 
+    st = s1 + s2 + s3
+
     ebn0_db = 20
-    noise1 = NoiseEBN0(ebn0_db=ebn0_db, seed=11,length_multiplier=1)
-    sn1 = noise1.add_noise(s1)
-    noise2 = NoiseEBN0(ebn0_db=ebn0_db, seed=12,length_multiplier=1)
-    sn2 = noise2.add_noise(s2)
-    noise3 = NoiseEBN0(ebn0_db=ebn0_db, seed=13,length_multiplier=1)
-    sn3 = noise3.add_noise(s3)
-    
-    st = sn1 + sn2 + sn3
+    noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11,length_multiplier=1)
+    st = noise.add_noise(st)
 
     # Detecção de portadora
     threshold = -12
