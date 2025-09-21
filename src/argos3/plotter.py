@@ -1575,9 +1575,9 @@ class PowerMatrix3DPlot(BasePlot):
                 color="blue", alpha=0.5, rstride=1, cstride=1, linewidth=0
             )
 
-        self.ax.set_xlabel("Segmento", labelpad=15)
-        self.ax.set_ylabel("Frequência (kHz)", labelpad=15)
-        self.ax.set_zlabel("Potência (dB)", labelpad=15)
+        self.ax.set_xlabel("Segmento $n$", labelpad=15)
+        self.ax.set_ylabel("Frequência ($kHz$)", labelpad=15)
+        self.ax.set_zlabel("Magnitude ($dB$)", labelpad=15)
 
         # diminui da legenda do eixo do segmento para ficar mais legivel
         self.ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(3))
