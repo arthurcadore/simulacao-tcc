@@ -393,9 +393,7 @@ if __name__ == "__main__":
                       elev=2, azim=-10
     ).plot()
     
-    fig.show()
-
-    #save_figure(fig, "example_detector_power_matrix_3d.pdf")
+    save_figure(fig, "example_detector_power_matrix_3d.pdf")
 
     # Heatmap da detecção
     fig, grid = create_figure(1, 1)
