@@ -20,8 +20,8 @@ class EncoderConvolutional:
         $$
         \begin{equation}
             \begin{split}
-                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
-                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 1, 0, 0, 1] \\
+                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 0, 1, 1, 0, 1, 1]
             \end{split}
         \end{equation}
         $$
@@ -123,8 +123,8 @@ class DecoderViterbi:
         $$
         \begin{equation}
             \begin{split}
-                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 0, 0, 1, 1] \\
-                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 1, 0, 1, 1, 0, 1]
+                G_0 &= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 1, 0, 0, 1] \\
+                G_1 &= 91_{10} \quad \mapsto \quad G_1 = [1, 0, 1, 1, 0, 1, 1]
             \end{split}
         \end{equation}
         $$
