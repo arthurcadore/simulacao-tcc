@@ -390,10 +390,12 @@ if __name__ == "__main__":
                       N=detector.N,
                       freq_window=detector.freq_window,
                       threshold=detector.threshold,
-                      sigma=1.2,
-                      elev=5, azim=-45
+                      elev=2, azim=-10
     ).plot()
-    save_figure(fig, "example_detector_power_matrix_3d.pdf")
+    
+    fig.show()
+
+    #save_figure(fig, "example_detector_power_matrix_3d.pdf")
 
     # Heatmap da detecção
     fig, grid = create_figure(1, 1)

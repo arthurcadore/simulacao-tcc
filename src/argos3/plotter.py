@@ -1579,6 +1579,9 @@ class PowerMatrix3DPlot(BasePlot):
         self.ax.set_ylabel("Frequência (kHz)", labelpad=15)
         self.ax.set_zlabel("Potência (dB)", labelpad=15)
 
+        # diminui da legenda do eixo do segmento para ficar mais legivel
+        self.ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(3))
+
         if self.freq_window is not None:
             self.ax.set_ylim(self.freq_window[0]/1000, self.freq_window[1]/1000)
 
