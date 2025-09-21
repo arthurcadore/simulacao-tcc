@@ -15,9 +15,7 @@ import matplotlib.pyplot as plt
 
 
 class CarrierDetector:
-    def __init__(self, fs: float = 128_000, seg_ms: float = 10.0,
-                 threshold: float = -10,
-                 freq_window: tuple[float, float] = (1000, 9000), bandwidth: float = 1600):
+    def __init__(self, fs: float = 128_000, seg_ms: float = 10.0, threshold: float = -10, freq_window: tuple[float, float] = (1000, 9000), bandwidth: float = 1600, history: int = 4):
         """
         Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.
 
@@ -33,7 +31,9 @@ class CarrierDetector:
 
         Example: 
             - Segmentos de tempo: ![pageplot](assets/example_detector_freq.svg)
-            - Waterfall: ![pageplot](assets/example_detector_decision_matrix.svg)
+            - Matriz de potência: ![pageplot](assets/example_detector_power_matrix.svg)
+            - Matriz de detecção: ![pageplot](assets/example_detector_detection_matrix.svg)
+            - Matriz de Decisão: ![pageplot](assets/example_detector_decision_matrix.svg)
 
 
         <div class="referencia">
@@ -53,6 +53,7 @@ class CarrierDetector:
         self.threshold = threshold
         self.freq_window = freq_window
         self.bandwidth = bandwidth
+        self.history = history
 
         # Valores fixos de espectro
         self.delta_f = self.fs / self.N
@@ -202,11 +203,18 @@ class CarrierDetector:
             detected_bins = np.where(mask)[0]
 
             for k in detected_bins:
-                if i > 0 and self.detected_matrix[i-1, k] in (1, 2):
-                    # Confirmada (foi detectada no segmento anterior como 1 ou 2)
-                    self.detected_matrix[i, k] = 2
+                if i >= self.history:
+                    # confirma somente se todos os últimos 'history' forem exatamente 1
+                    past_values = self.detected_matrix[i-self.history:i, k]
+                    if np.all(past_values == 1):
+
+                        # frequência confirmada, vai pra demodulação
+                        self.detected_matrix[i, k] = 2
+                    else:
+                        # frequência detectada, mas não confirmada
+                        self.detected_matrix[i, k] = 1
                 else:
-                    # Detectada mas não confirmada
+                    # apenas detectado, sem histórico
                     self.detected_matrix[i, k] = 1
 
         self.decision()
@@ -351,7 +359,7 @@ if __name__ == "__main__":
     fc2 = fc1 + 2500
     fc3 = fc2 + 2500
     
-    datagram = Datagram(pcdnum=1234, numblocks=1, seed=11)
+    datagram = Datagram(pcdnum=1234, numblocks=8, seed=11)
     transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
@@ -367,7 +375,7 @@ if __name__ == "__main__":
     st = noise.add_noise(st)
 
     # Detecção de portadora
-    threshold = -12
+    threshold = -15
     detector = CarrierDetector(fs=fs, seg_ms=10, threshold=threshold) 
 
     detector.detect(st.copy())
@@ -395,7 +403,9 @@ if __name__ == "__main__":
     fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.detected_matrix,
-                 fs=detector.fs, N=detector.N).plot()
+                 fs=detector.fs, 
+                 legend_list=["Detectada", "Confirmada"],
+                 N=detector.N).plot()
 
     save_figure(fig, "example_detector_detection_matrix.pdf")
 
@@ -403,7 +413,9 @@ if __name__ == "__main__":
     fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.decision_matrix,
-                 fs=detector.fs, N=detector.N).plot()
+                 fs=detector.fs, 
+                 legend_list=["Detectada", "Confirmada", "Span", "Demodulação"],
+                 N=detector.N).plot()
     save_figure(fig, "example_detector_decision_matrix.pdf")
 
     # plota o espectro do sinal no segmento desejado

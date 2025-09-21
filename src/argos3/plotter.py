@@ -1588,7 +1588,6 @@ class PowerMatrix3DPlot(BasePlot):
         # aplica ângulo da câmera
         self.ax.view_init(elev=self.elev, azim=self.azim)
 
-
 class MatrixSquarePlot(BasePlot):
     r"""
     Plota matrizes categóricas (detecção/decisão) em formato quadriculado.
@@ -1603,6 +1602,7 @@ class MatrixSquarePlot(BasePlot):
                  fs: float,
                  N: int,
                  ylim: Tuple[float, float] = (0, 9),
+                 legend_list: List[str] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
@@ -1610,8 +1610,8 @@ class MatrixSquarePlot(BasePlot):
         self.fs = fs
         self.N = N
         self.ylim = ylim
+        self.legend_list = legend_list or ["Detectada", "Confirmada", "Span", "Demodulação"]
 
-        # mapeamento de cor
         self.cmap = mpl.colors.ListedColormap([
             (1, 1, 1, 0),    
             "blue",   
@@ -1637,20 +1637,33 @@ class MatrixSquarePlot(BasePlot):
             shading="auto"
         )
 
-        # Legenda manual
+        legend_map = {
+            "Detectada": "blue",
+            "Confirmada": "red",
+            "Span": "lightblue",
+            "Demodulação": "orange",
+        }
+
         legend_elements = [
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="blue", markersize=12, label="Detectada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="Confirmada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="Span"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="Demodulação"),
+            Line2D([0], [0],
+                   marker='s',
+                   color='w',
+                   markerfacecolor=color,
+                   markersize=12,
+                   label=label)
+            for label, color in legend_map.items()
+            if label in self.legend_list
         ]
-        leg = self.ax.legend(handles=legend_elements, loc="upper right")
-        frame = leg.get_frame()
-        frame.set_edgecolor("black")
-        frame.set_alpha(1)
+
+        if legend_elements:
+            leg = self.ax.legend(handles=legend_elements, loc="upper right")
+            frame = leg.get_frame()
+            frame.set_edgecolor("black")
+            frame.set_alpha(1)
 
         self.ax.set_xlabel("Index de Segmento")
         self.ax.set_ylabel("Frequência ($kHz$)")
         self.ax.grid(False)  
         self.ax.set_ylim(self.ylim[0] / 1000.0, self.ylim[1] / 1000.0)
         self.apply_ax_style()
+
