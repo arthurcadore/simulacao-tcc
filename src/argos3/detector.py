@@ -397,7 +397,7 @@ if __name__ == "__main__":
     save_figure(fig, "example_detector_decision_matrix.pdf")
 
     # plota o espectro do sinal no segmento desejado
-    seg_index = 10
+    seg_index = 1
     fig, grid = create_figure(2, 1)
     DetectionFrequencyPlot(fig, grid, 0, 
               fs=fs, 
