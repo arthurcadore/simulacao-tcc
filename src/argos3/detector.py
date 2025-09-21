@@ -6,11 +6,12 @@
 # """
 
 import numpy as np
-from .plotter import create_figure, save_figure, PowerMatrixPlot, MatrixSquarePlot, DetectionFrequencyPlot
+from .plotter import create_figure, save_figure, PowerMatrixPlot, MatrixSquarePlot, DetectionFrequencyPlot, PowerMatrix3DPlot
 from .datagram import Datagram
 from .transmitter import Transmitter
 from .noise import NoiseEBN0, Noise
 from .receiver import Receiver
+import matplotlib.pyplot as plt
 
 
 class CarrierDetector:
@@ -131,7 +132,8 @@ class CarrierDetector:
             freqs (tuple[np.ndarray,np.ndarray]): tupla com as frequências e a potência espectral em $dB$
 
         Example: 
-            ![pageplot](assets/example_detector_power_matrix.svg)
+            Matriz de Potência 2D: ![pageplot](assets/example_detector_power_matrix.svg)
+            Matriz de Potência 3D: ![pageplot](assets/example_detector_power_matrix_3d.svg)
         """
 
         segments = self.segment_signal(signal)
@@ -380,6 +382,18 @@ if __name__ == "__main__":
                 detector.power_matrix,
                 fs=detector.fs, N=detector.N).plot()
     save_figure(fig, "example_detector_power_matrix.pdf")
+
+    fig, grid = create_figure(1, 1, figsize=(12, 12))
+    PowerMatrix3DPlot(fig, grid, 0,
+                      detector.power_matrix,
+                      fs=detector.fs,
+                      N=detector.N,
+                      freq_window=detector.freq_window,
+                      threshold=detector.threshold,
+                      sigma=1.2,
+                      elev=5, azim=-45
+    ).plot()
+    save_figure(fig, "example_detector_power_matrix_3d.pdf")
 
     # Heatmap da detecção
     fig, grid = create_figure(1, 1)

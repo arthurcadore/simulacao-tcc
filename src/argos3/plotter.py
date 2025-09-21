@@ -14,6 +14,8 @@ import os
 from typing import Optional, List, Union, Tuple, Dict, Any
 from collections import defaultdict
 from matplotlib.lines import Line2D
+from mpl_toolkits.mplot3d import Axes3D 
+from scipy.ndimage import gaussian_filter
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
 
@@ -1502,6 +1504,86 @@ class PowerMatrixPlot(BasePlot):
         self.ax.grid(False)
         self.apply_ax_style()
 
+
+
+class PowerMatrix3DPlot(BasePlot):
+    r"""
+    Plota a matriz de potência em dB em 3D, limitando a frequência
+    ao range definido em kHz e adicionando plano de threshold.
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos,
+                 power_matrix: np.ndarray,
+                 fs: float,
+                 N: int,
+                 freq_window: tuple[float, float] = None,
+                 threshold: float = None,
+                 smooth: bool = True,
+                 sigma: float = 1.0,
+                 elev: float = 5.0,
+                 azim: float = -60.0,
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos], projection="3d")
+        super().__init__(ax, **kwargs)
+        self.power_matrix = power_matrix
+        self.fs = fs
+        self.N = N
+        self.freq_window = freq_window
+        self.threshold = threshold
+        self.smooth = smooth
+        self.sigma = sigma
+        self.elev = elev
+        self.azim = azim
+
+    def plot(self) -> None:
+        n_segments, n_freqs = self.power_matrix.shape
+        freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
+
+        # aplica janela de frequências
+        if self.freq_window is not None:
+            fmin, fmax = self.freq_window
+            mask = (freqs >= fmin) & (freqs <= fmax)
+            freqs = freqs[mask]
+            Z = self.power_matrix[:, mask]
+        else:
+            Z = self.power_matrix
+
+        # aplica suavização (apenas para ficar mais legivel)
+        if self.smooth:
+            Z = gaussian_filter(Z, sigma=self.sigma)
+
+        X = np.arange(Z.shape[0])
+        Y = freqs / 1000.0
+        X, Y = np.meshgrid(X, Y, indexing="ij")
+
+        # superfície da matriz de potência
+        surf = self.ax.plot_surface(
+            X, Y, Z,
+            cmap="inferno",
+            linewidth=0,
+            antialiased=True,
+            alpha=0.95
+        )
+
+        # plano do threshold
+        if self.threshold is not None:
+            Z_thr = np.full_like(Z, self.threshold)
+            self.ax.plot_surface(
+                X, Y, Z_thr,
+                color="blue", alpha=0.5, rstride=1, cstride=1, linewidth=0
+            )
+
+        self.ax.set_xlabel("Segmento", labelpad=15)
+        self.ax.set_ylabel("Frequência (kHz)", labelpad=15)
+        self.ax.set_zlabel("Potência (dB)", labelpad=15)
+
+        if self.freq_window is not None:
+            self.ax.set_ylim(self.freq_window[0]/1000, self.freq_window[1]/1000)
+
+        # aplica ângulo da câmera
+        self.ax.view_init(elev=self.elev, azim=self.azim)
 
 
 class MatrixSquarePlot(BasePlot):
