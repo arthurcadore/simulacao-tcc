@@ -538,7 +538,7 @@ class Receiver:
                 fig_corr, grid_corr, (0, 0),
                 corr_vec=corr_vec_Q,  
                 fs=self.fs,
-                xlim_ms=(40, 200),
+                xlim_ms=(0, 300),
                 colors="darkblue",
                 style={
                     "line": {"linewidth": 2, "alpha": 1},
@@ -997,20 +997,22 @@ class Receiver:
 
 if __name__ == "__main__":
 
+    fc = 7000
+
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
-    transmitter = Transmitter(fc=4000, output_print=True, output_plot=True)
+    transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
 
     # Adicionando ruído ao sinal
     ebn0_db = 20
-    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11)
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11, length_multiplier=1)
     s = add_noise.add_noise(s)
     
     print("\n ==== CANAL ==== \n")
     print("s(t):", ''.join(map(str, s[:5])), "...")
     print("t:   ", ''.join(map(str, t[:5])), "...")
 
-    receiver = Receiver(fc=4000, output_print=True)
+    receiver = Receiver(fc=fc, output_print=True)
     datagramRX, success = receiver.receive(s)
         
     if not success:

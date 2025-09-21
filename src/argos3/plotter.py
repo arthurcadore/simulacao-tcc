@@ -1554,10 +1554,10 @@ class MatrixSquarePlot(BasePlot):
 
         # Legenda manual
         legend_elements = [
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="blue", markersize=12, label="1 = Detectada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="2 = Confirmada"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="3 = Span"),
-            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="4 = Demodulação"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="blue", markersize=12, label="Detectada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="red", markersize=12, label="Confirmada"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="lightblue", markersize=12, label="Span"),
+            Line2D([0],[0], marker='s', color='w', markerfacecolor="orange", markersize=12, label="Demodulação"),
         ]
         leg = self.ax.legend(handles=legend_elements, loc="upper right")
         frame = leg.get_frame()
