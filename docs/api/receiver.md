@@ -1,5 +1,7 @@
 # Receptor
 
+![pageplot](../assets/blocos_demodulador.svg)
+
 ## Detector de Portadora
 
 ::: detector.CarrierDetector.__init__

@@ -24,8 +24,6 @@ class Receiver:
         r"""
         Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.
 
-        ![pageplot](../assets/blocos_demodulador.svg)
-
         Args:
             fs (int): Frequência de amostragem em Hz.
             Rb (int): Taxa de bits em bps.
