@@ -9,6 +9,7 @@ import numpy as np
 from .formatter import Formatter
 from .encoder import Encoder
 from .plotter import PhasePlot, create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
+from scipy.signal import hilbert
 
 class Modulator:
     def __init__(self, fc=None, fs=128_000):
@@ -78,62 +79,63 @@ class Modulator:
 
         return t, modulated_signal
     
-    def demodulate(self, modulated_signal):
+    def demodulate(self, modulated_signal, carrier_length=0.06, carrier_delay=0.06):
         r"""
-        Demodula o sinal modulado em QPSK. Para o processo de demodulação, utiliza-se duas componentes auxiliares $x_I(t)$ e $y_Q(t)$ definidas pelas expressões abaixo.
-
-        $$
-        \begin{aligned}
-        x_I(t) &= 2 \cos(2\pi f_c t), &\quad
-        y_Q(t) &= 2 \sin(2\pi f_c t)
-        \end{aligned}
-        $$
-
-        Sendo: 
-            - $x_I(t)$ e $y_Q(t)$: Componentes auxiliares utilizadas para a demodulação.
-            - $f_c$: Frequência da portadora.
-            - $t$: Vetor de tempo.
-
-        A partir das componentes criadas é realizado o processo de demodulação (translação em frequência), que resulta em duas componentes, uma em banda base e outra em $2f_c$, conforme as expressões abaixo.
-
-        $$
-        x_I'(t) = s(t) \cdot x_I(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
-        $$
-
-        $$
-        y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
-        $$
-
-        Sendo: 
-            - $x_I'(t)$ e $y_Q'(t)$: Componentes resultantes da demodulação.
-            - $x_I(t)$ e $y_Q(t)$: Componentes auxiliares utilizadas para a demodulação.
-            - $s(t)$: Sinal modulado.
-            - $d_I(t)$ e $d_Q(t)$: Sinais formatados correspondentes aos canais $I$ e $Q$.
-            - $f_c$: Frequência da portadora.
-            - $t$: Vetor de tempo.
+        Demodula o sinal modulado em QPSK, com sincronização de fase usando os primeiros `carrier_length` segundos de portadora.
 
         Args:
             modulated_signal (np.ndarray): Sinal modulado $s(t)$ a ser demodulado.
+            carrier_length (float): O comprimento da portadora para sincronização da fase (em segundos).
+            carrier_delay (float): O delay da portadora para sincronização da fase (em segundos).
 
         Returns:
             i_signal (np.ndarray): Sinal $x_I'(t)$ recuperado.
             q_signal (np.ndarray): Sinal $y_Q'(t)$ recuperado.
-        
-        Raises:
-            ValueError: Se o sinal modulado estiver vazio.
+            phase_estimate (float): Fase estimada para a correção.
+            original_phase (np.ndarray): Fase do sinal modulado antes da correção.
+            corrected_signal (np.ndarray): Sinal modulado após correção de fase.
+            phase_error (np.ndarray): Erro de fase entre o sinal original e o sinal corrigido.
         """
+        # Verifica se o sinal não está vazio
         n = len(modulated_signal)
         if n == 0:
             raise ValueError("O sinal modulado não pode estar vazio.")
-        
+
+        # Vetor de tempo
         t = np.arange(n) / self.fs
+
+        # Pega um subvetor do sinal modulado para estimar a fase
+        carrier_signal = modulated_signal[int(carrier_delay * self.fs):(int(carrier_delay * self.fs) + int(carrier_length * self.fs))]
+
+        # Aplicando a Transformada de Hilbert para obter a fase instantânea
+        analytic_signal = hilbert(carrier_signal)
+        original_phase = np.angle(analytic_signal)
+
+        # Estima a fase e corrige o sinal
+        phase_estimate = np.mean(original_phase)
+        modulated_signal_corrected = modulated_signal * np.exp(-1j * phase_estimate)
+
+        # Calcula os componentes de demodulação
         carrier_cos = 2 * np.cos(2 * np.pi * self.fc * t)
         carrier_sin = 2 * np.sin(2 * np.pi * self.fc * t)
-        
-        i_signal = modulated_signal * carrier_cos
-        q_signal = -modulated_signal * carrier_sin
-        
-        return i_signal, q_signal
+
+        # Demodula o sinal
+        i_signal = modulated_signal_corrected * carrier_cos
+        q_signal = -modulated_signal_corrected * carrier_sin
+
+        # Correção de polaridade
+        if np.mean(i_signal) < 0:
+            i_signal = -i_signal
+            q_signal = -q_signal
+
+        # Calcula a fase original do sinal modulado
+        original_phase_full = np.tile(original_phase, int(np.ceil(n / len(original_phase))))[:n]
+
+        # Calcula o erro de fase entre o sinal original e o sinal corrigido
+        phase_error = np.angle(modulated_signal_corrected) - original_phase_full
+
+        return np.real(i_signal), np.real(q_signal), phase_estimate, original_phase_full, modulated_signal_corrected, phase_error
+
 
 if __name__ == "__main__":
 

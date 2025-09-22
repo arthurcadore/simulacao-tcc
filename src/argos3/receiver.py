@@ -119,7 +119,7 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
 
-        xI_prime, yQ_prime = self.demodulator.demodulate(s)
+        xI_prime, yQ_prime, phase_estimate, original_phase, modulated_signal_corrected, phase_error = self.demodulator.demodulate(s)
 
         if self.output_print:
             print("\n ==== DEMODULADOR ==== \n")
@@ -996,16 +996,28 @@ class Receiver:
 
 if __name__ == "__main__":
 
-    fc = 7000
+    fc = 3300
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
 
+    print("\n\n ==== CANAL ==== \n")
+
+
+    signal_length = len(s) / transmitter.fs
+    print("Comprimento do sinal modulado:", signal_length)
+
     # Adicionando ruído ao sinal
     ebn0_db = 20
-    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11, length_multiplier=1)
+    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11, length_multiplier=1.2, position_factor=1)
     s = add_noise.add_noise(s)
+
+    signalnoise_length = len(s) / transmitter.fs
+    print("Comprimento do sinal recebido:", signalnoise_length)
+
+    noise_first = (signalnoise_length - signal_length)
+    print("Comprimento ruido antes do sinal:", noise_first)
     
     print("\n ==== CANAL ==== \n")
     print("s(t):", ''.join(map(str, s[:5])), "...")
