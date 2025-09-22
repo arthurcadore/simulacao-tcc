@@ -91,10 +91,6 @@ class Modulator:
         Returns:
             i_signal (np.ndarray): Sinal $x_I'(t)$ recuperado.
             q_signal (np.ndarray): Sinal $y_Q'(t)$ recuperado.
-            phase_estimate (float): Fase estimada para a correção.
-            original_phase (np.ndarray): Fase do sinal modulado antes da correção.
-            corrected_signal (np.ndarray): Sinal modulado após correção de fase.
-            phase_error (np.ndarray): Erro de fase entre o sinal original e o sinal corrigido.
         """
         # Verifica se o sinal não está vazio
         n = len(modulated_signal)
@@ -128,13 +124,7 @@ class Modulator:
             i_signal = -i_signal
             q_signal = -q_signal
 
-        # Calcula a fase original do sinal modulado
-        original_phase_full = np.tile(original_phase, int(np.ceil(n / len(original_phase))))[:n]
-
-        # Calcula o erro de fase entre o sinal original e o sinal corrigido
-        phase_error = np.angle(modulated_signal_corrected) - original_phase_full
-
-        return np.real(i_signal), np.real(q_signal), phase_estimate, original_phase_full, modulated_signal_corrected, phase_error
+        return np.real(i_signal), np.real(q_signal), phase_estimate, original_phase
 
 
 if __name__ == "__main__":

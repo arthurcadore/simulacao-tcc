@@ -119,12 +119,14 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
 
-        xI_prime, yQ_prime, phase_estimate, original_phase, modulated_signal_corrected, phase_error = self.demodulator.demodulate(s)
+        xI_prime, yQ_prime, phase_estimate, original_phase = self.demodulator.demodulate(s)
 
         if self.output_print:
             print("\n ==== DEMODULADOR ==== \n")
             print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
             print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
+            print("\n")
+            print("Erro médio estimado:", np.mean(np.angle(np.exp(1j*(phase_estimate - original_phase)))))
 
         if self.output_plot:
             fig_time, grid = create_figure(2, 1, figsize=(16, 9))
@@ -996,7 +998,9 @@ class Receiver:
 
 if __name__ == "__main__":
 
-    fc = 3300
+    fc = np.random.randint(10, 90)*100
+
+    print("SIMULANDO TRANSMISSÃO COM FC =", fc)
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
