@@ -75,25 +75,23 @@ if __name__ == "__main__":
     t, s = tx.transmit(datagram)
     
     # Cria o canal
-    canal = Channel(fs=tx.fs, duration=1, noise_mode="snr", noise_db=20, seed=10)
+    canal1 = Channel(fs=tx.fs, duration=1, noise_mode="snr", noise_db=20, seed=10)
+    canal2 = Channel(fs=tx.fs, duration=1, noise_mode="snr", noise_db=20, seed=10)
+    canal3 = Channel(fs=tx.fs, duration=1, noise_mode="snr", noise_db=20, seed=10)
     
     # coloca o sinal no meio do canal
-    canal.add_signal(s, position_factor=0.1)
-    canal.add_signal(s, position_factor=0.5)
-    canal.add_signal(s, position_factor=0.9)
-    
-    print(len(canal.channel))
+    canal1.add_signal(s, position_factor=0.1)
+    canal2.add_signal(s, position_factor=0.5)
+    canal3.add_signal(s, position_factor=0.9)
 
-    canal.add_noise()
-
-    fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+    fig_time, grid = create_figure(4, 1, figsize=(16, 9))
 
     TimePlot(
         fig_time, grid, (0, 0),
         t=np.arange(0, len(s)/tx.fs, 1/tx.fs),
         signals=[s],
         labels=["$s(t)$"],
-        title="Sinal Modulado $IQ$",
+        title="Sinal Modulado $s(t)$",
         colors=["darkred"],
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -103,10 +101,36 @@ if __name__ == "__main__":
     
     TimePlot(
         fig_time, grid, (1, 0),
-        t=canal.t,
-        signals=[canal.channel],
+        t=canal1.t,
+        signals=[canal1.channel],
         labels=["$s(t)$"], 
-        title="Sinal Modulado $IQ$",
+        title="Sinal Modulado - Canal 1",
+        colors="darkred",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_time, grid, (2, 0),
+        t=canal2.t,
+        signals=[canal2.channel],
+        labels=["$s(t)$"], 
+        title="Sinal Modulado - Canal 2",
+        colors="darkred",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_time, grid, (3, 0),
+        t=canal3.t,
+        signals=[canal3.channel],
+        labels=["$s(t)$"], 
+        title="Sinal Modulado - Canal 3",
         colors="darkred",
         style={
             "line": {"linewidth": 2, "alpha": 1},
@@ -115,5 +139,42 @@ if __name__ == "__main__":
     ).plot()
 
     fig_time.tight_layout()
-    save_figure(fig_time, "example_channel_time.pdf")
+    save_figure(fig_time, "example_channel_time_subchannels.pdf")
+    
+    canalT = canal1.channel + canal2.channel + canal3.channel
+
+    canalT_NoiseEBN0 = NoiseEBN0(ebn0_db=20, seed=10).add_noise(canalT)
+
+    fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+    
+    TimePlot(
+        fig_time, grid, (0, 0),
+        t=np.arange(0, len(canalT)/tx.fs, 1/tx.fs),
+        signals=[canalT],
+        labels=["$s(t)$"], 
+        title="Sinal Modulado - Canal Total",
+        colors="darkred",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+
+    TimePlot(
+        fig_time, grid, (1, 0),
+        t=np.arange(0, len(canalT_NoiseEBN0)/tx.fs, 1/tx.fs),
+        signals=[canalT_NoiseEBN0],
+        labels=["$s(t)$"], 
+        title="Sinal Modulado - Canal Total + Ruido",
+        colors="darkred",
+        style={
+            "line": {"linewidth": 2, "alpha": 1},
+            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
+        }
+    ).plot()
+    
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_channel_time_channel.pdf")
+    
+        
     
