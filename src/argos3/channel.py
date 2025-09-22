@@ -15,6 +15,22 @@ from .noise import Noise, NoiseEBN0
 
 class Channel:
     def __init__(self, fs=128_000, duration=1, noise_mode="snr", noise_db=20, seed=10):
+        r"""
+        Implementação de um canal para agregação de multiplos sinais.
+        
+        Args:
+            fs (int): taxa de amostragem do sinal.
+            duration (int): duração do canal em segundos.
+            noise_mode (str): modo de ruído ('snr' ou 'ebn0').
+            noise_db (int): nível de ruído em dB.
+            seed (int): semente para geração de números aleatórios. 
+    
+        Returns:
+            Channel: objeto do canal.
+    
+        Raises:
+            ValueError: se o modo de ruído for inválido.
+        """
         self.fs = fs
         self.channel = np.zeros(int(fs * duration))
         self.t = np.arange(0, duration, 1/fs)
@@ -32,23 +48,19 @@ class Channel:
         self.noise_db = noise_db
         self.seed = seed
 
-    def add_noise(self):
-        if self.noise_mode == 0:
-            noise = NoiseEBN0(ebn0_db=self.noise_db, seed=self.seed)
-        elif self.noise_mode == 1:
-            noise = Noise(snr=self.noise_db, seed=self.seed)
-        
-        self.channel = noise.add_noise(self.channel)
-    
-
     def add_signal(self, signal, position_factor=0.5):
-        """
+        r"""
         Adiciona um sinal ao canal em uma posição relativa.
 
         Args:
             signal (np.ndarray): vetor de amostras do sinal a inserir.
-            position_factor (float): fator de posição entre [0, 1],
-                                     0 = início do canal, 1 = final.
+            position_factor (float): fator de posição entre [0, 1] (0 = início do canal, 1 = final).
+
+        Raises:
+            ValueError: se position_factor não estiver entre [0, 1].
+        
+        Example: 
+            ![pageplot](assets/example_channel_time_subchannels.svg)
         """
         if not 0 <= position_factor <= 1:
             raise ValueError("position_factor deve estar entre 0 e 1.")
@@ -66,6 +78,21 @@ class Channel:
 
         # Insere (soma) o sinal no canal
         self.channel[start_idx:start_idx + sig_len] += signal
+
+    def add_noise(self):
+        r"""
+        Adiciona ruído ao canal.
+
+        Example: 
+            ![pageplot](assets/example_channel_time_channel.svg)
+        """
+        if self.noise_mode == 0:
+            noise = NoiseEBN0(ebn0_db=self.noise_db, seed=self.seed)
+        elif self.noise_mode == 1:
+            noise = Noise(snr=self.noise_db, seed=self.seed)
+        
+        self.channel = noise.add_noise(self.channel)
+    
 
 if __name__ == "__main__":
 

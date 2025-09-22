@@ -66,8 +66,9 @@ nav:
       - Decodificador Viterbi: api/viterbi.md
   - Transmissor: api/transmitter.md
   - Canal: 
-      - Ruido SNR: api/noiseSNR.md
-      - Ruido EBN0: api/noiseEBN0.md
+      - Canal: api/channel.md
+      - Adição Ruído SNR: api/noiseSNR.md
+      - Adição Ruído EBN0: api/noiseEBN0.md
   - Receptor: api/receiver.md
   - Extras: 
       - BER vs SNR: api/bersnr.md
