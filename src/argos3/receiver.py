@@ -951,7 +951,8 @@ class Receiver:
                               ("Dados de App.", len(datagramRX.blocks)),
                               ("Tail", len(datagramRX.tail))],
                     colors=["green", "orange", "red", "blue"],
-                    xlabel="Index de Bit"
+                    xlabel="Index de Bit",
+                    xlim=(0, 60),
                 ).plot()
                 fig_datagram.tight_layout()
                 save_figure(fig_datagram, "receiver_datagram_time.pdf")
