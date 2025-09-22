@@ -1380,6 +1380,8 @@
 
 
 <h1 id="receptor">Receptor</h1>
+<p>O processo de recepção é dividido em duas etapas, a detecção de portadora, responsável por verificar o sinal recebido e identificar para cada segmento de tempo as portadoras presentes, e a cadeia de recepção, responsavel por receber um segmento de sinal e realizar o processo de recepção a fim de recuperar o vetor de dados <span class="arithmatex">\(u_t^{(0)}\)</span>, conforme o diagrama de blocos abaixo.</p>
+<p><img alt="pageplot" src="../../assets/blocos_demodulador.svg" /></p>
 <h2 id="detector-de-portadora">Detector de Portadora</h2>
 
 
@@ -1509,7 +1511,9 @@
   <summary>Example</summary>
   <ul>
 <li>Segmentos de tempo: <img alt="pageplot" src="../assets/example_detector_freq.svg" /></li>
-<li>Waterfall: <img alt="pageplot" src="../assets/example_detector_decision_matrix.svg" /></li>
+<li>Matriz de potência: <img alt="pageplot" src="../assets/example_detector_power_matrix.svg" /></li>
+<li>Matriz de detecção: <img alt="pageplot" src="../assets/example_detector_detection_matrix.svg" /></li>
+<li>Matriz de Decisão: <img alt="pageplot" src="../assets/example_detector_decision_matrix.svg" /></li>
 </ul>
 </details>        <div class="referencia">
 <b>Referência:</b><br>
@@ -1561,7 +1565,6 @@ AS3-SP-516-2097-CNES (Seção 3.3)
     <div class="doc doc-contents ">
 
         <p>Classe que encapsula todo o processo de recepção no padrão ARGOS-3. A estrutura do receptor é representada pelo diagrama de blocos abaixo.</p>
-<p><img alt="pageplot" src="../../assets/blocos_demodulador.svg" /></p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>

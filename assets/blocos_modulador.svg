@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2247.8399" height="466.08" version="1.1" viewBox="0 0 2247.8399 466.08">
+<svg xmlns="http://www.w3.org/2000/svg" width="2931.8399" height="620.16" version="1.1" viewBox="0 0 2931.8399 620.16">
  <style>
           .fill { fill: black; }
           .stroke { stroke: black; }
@@ -8,120 +8,105 @@
           }
         </style><defs>
   <clipPath id="a">
-   <path transform="scale(.48)" d="M78.125 15.625H4606.25V956.25H78.125Z" clip-rule="evenodd" />
+   <path transform="scale(.48)" d="M78.125 12.5H6031.25V1278.125H78.125Z" clip-rule="evenodd" />
   </clipPath>
  </defs>
  <g clip-path="url(#a)">
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m190-3705v53.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m190-3646.12-3.5-7 3.5 1.75 3.5-1.75-3.5 7z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m190-3646.12-3.5-7 3.5 1.75 3.5-1.75-3.5 7z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m100-3765h180v60h-180z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="137.17188 152.16588 166.16988 179.16588 188.8252 201.8212 215.8252 227.83119" y="-3740" class="fill">MONTAGEM</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="132.34375 145.33975 157.00586 166.66504 179.66104 193.66504 206.66104 219.65705 234.65105" y="-3718" class="fill">DATAGRAMA</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m280-3630h63.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m348.88-3630-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m348.88-3630-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m280-3600h63.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m348.88-3600-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m348.88-3600-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m100-3645h180v60h-180z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="126.5 139.496 153.5 166.496 171.5 182.498 187.502 200.498 213.494 226.49 240.494" y="-3620" class="fill">CODIFICADOR</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="110.5 123.496 137.5 150.496 162.502 176.506 187.504 200.5 213.496 218.5 232.504 245.5 258.496" y="-3598" class="fill">CONVOLUCIONAL</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m350-3645h160v60h-160z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="352 364.006 379 391.996 404.992 417.988 430.984 441.982 454.978 467.974 480.97 494.974" y="-3609" class="fill">EMBARALHADOR</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m350-3825h160v60h-160z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="372 384.006 397.002 409.00804 422.00404 436.99803 449.99403 462.99003 473.988" y="-3789" class="fill">PRE&#194;MBULO</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m660-3625h40v10h33.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m738.88-3615-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m738.88-3615-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m660-3785h40v-10h33.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m738.88-3795-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m738.88-3795-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(0,1.3905522,-1.3905522,0,-4096.472,-629.2635)" d="m460-3665 40-80h240l40 80h-320z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <text transform="matrix(0 1.3905522 -1.3905522 0 -4097.167 -629.9588)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="543.15628 558.15029 571.14627 580.8086 591.8066 596.8106 608.8166 619.8146 631.82058 643.82656 656.8225 669.8185 683.8225" y="-3699" class="fill">MULTIPLEXADOR</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m880-3615h34.4v-75h27.97" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m947.62-3690-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m947.62-3690-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m740-3645h140v60h-140z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="751.9844 764.98037 778.9844 791.98037 803.9863 815.9923 828.9883 840.99429 854.9983" y="-3620" class="fill">CONVERSOR</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="746.4844 761.4784 774.47439 787.47036 800.4663 813.4623 825.46829 837.47427 848.4722 860.4782" y="-3598" class="fill">MANCHESTER</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m880-3795h34.4v75h27.97" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m947.62-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m947.62-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m740-3825h140v60h-140z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="751.9844 764.98037 778.9844 791.98037 803.9863 815.9923 828.9883 840.99429 854.9983" y="-3800" class="fill">CONVERSOR</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="791.5 804.496 817.49197" y="-3778" class="fill">NRZ</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1107.48-3720h73.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1186.36-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1186.36-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1107.48-3690h73.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1186.36-3690-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1186.36-3690-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m948.74-3735h158.74v60h-158.74z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="964.84378 975.84176 989.84579 1002.84176 1017.83578 1029.4961 1039.1553 1052.1513 1065.1472 1079.1513" y="-3699" class="fill">FORMATADOR</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m30-3675h35v-45h28.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m98.88-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m98.88-3720-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m-110-3705h140v60h-140z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="-94.515628 -81.51962 -68.52362 -55.52762 -41.523618 -29.517617 -24.513615 -11.517613 2.4863873" y="-3680" class="fill">DADOS DOS</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="-90.015628 -78.00963 -66.00363 -53.00763 -41.00163 -26.997628 -14.001626 -1.9956255" y="-3658" class="fill">SENSORES</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m30-3795h35v45h28.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m98.88-3750-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m98.88-3750-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m-110-3825h140v60h-140z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="-97.5 -84.504 -71.507999 -58.511995 -46.505994 -33.50999 -20.513989 -9.515988 3.480013" y="-3789" class="fill">CABE&#199;ALHO</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="699.40628" y="-3816" class="fill">X</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="711.4219" y="-3811.4063" class="fill">n</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="699.40628" y="-3581" class="fill">Y</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="711.4219" y="-3576.4063" class="fill">n</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m510-3810 63.63 0.04" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m578.88-3809.96-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m578.88-3809.96-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m510-3780h62.63" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m577.88-3780-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m577.88-3780-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m510-3630h35l27.99 0.42" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m578.24-3629.5-7.05 3.4 1.8-3.48-1.69-3.52 6.94 3.6z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m578.24-3629.5-7.05 3.4 1.8-3.48-1.69-3.52 6.94 3.6z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m510-3600 62.43-0.04" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m577.68-3600.04-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m577.68-3600.04-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="296.8125" y="-3638" class="fill">v</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="306.82814" y="-3633.4063" class="fill">t</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="311.82814 316.82313 325.16313" y="-3645" class="fill">(0)</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="533.6719" y="-3640" class="fill">X</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="12.5" font-weight="bold" xml:space="preserve" class="fill"><tspan x="545.6875" y="-3636" class="fill">n</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="533.4375" y="-3760" class="fill">S</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="10.41" font-weight="bold" xml:space="preserve" class="fill"><tspan x="545.4531" y="-3756.5" class="fill">Q</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="888.5625" y="-3815" class="fill">X</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="12.5" font-weight="bold" xml:space="preserve" class="fill"><tspan x="900.5781 909.60317 918.6282" y="-3811" class="fill">NRZ</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="926.28128 931.27627 940.4412" y="-3815" class="fill">[n]</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1337.48-3705h59.13" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1401.86-3705-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1401.86-3705-7 3.5 1.75-3.5-1.75-3.5 7 3.5z" fill="none" stroke-miterlimit="10" class="stroke" />
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1187.48-3735h150v60h-150z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1200 1214.994 1228.998 1241.994 1254.99 1265.988 1278.984 1291.98 1305.984" y="-3710" class="fill">MODULADOR</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1318.98" y="-3710" class="fill"> </tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1252.4844 1257.4884" y="-3688" class="fill">IQ</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="298.8125" y="-3578" class="fill">v</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="308.82814" y="-3573.4063" class="fill">t</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="313.82814 318.82313 327.16313" y="-3585" class="fill">(1)</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="533.6719" y="-3580" class="fill">Y</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="12.5" font-weight="bold" xml:space="preserve" class="fill"><tspan x="545.6875" y="-3576" class="fill">n</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="536.28128" y="-3819" class="fill">S</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="8.68" font-weight="bold" xml:space="preserve" class="fill"><tspan x="548.2969" y="-3815.9219" class="fill">I</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="889.2031" y="-3580" class="fill">Y</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="12.5" font-weight="bold" xml:space="preserve" class="fill"><tspan x="901.21878" y="-3576" class="fill">M</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="911.6406 916.6356 925.8006" y="-3580" class="fill">[n]</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1130.4219" y="-3746" class="fill">d</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1141.4219" y="-3741.4063" class="fill">I</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1145.5938 1151.5878 1157.5818" y="-3746" class="fill">(t)</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1126.6719" y="-3656" class="fill">d</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1137.6719" y="-3651.4063" class="fill">Q</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1149.3438 1155.3378 1161.3318" y="-3656" class="fill">(t)</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="1400.5 1410.508 1416.5021 1422.4961" y="-3729" class="fill">s(t)</tspan></text>
-  <path transform="matrix(1.3905522,0,0,1.3905522,193.38188,5384.875)" d="m1425.1151-3705c0 0.7267-0.0709 1.4462-0.2126 2.159-0.1417 0.7125-0.3517 1.4046-0.6298 2.0758s-0.6189 1.3086-1.0226 1.9126c-0.4037 0.6042-0.8623 1.1631-1.3761 1.6766-0.5138 0.514-1.0727 0.9726-1.6768 1.3761-0.604 0.4039-1.2416 0.7447-1.9129 1.0229-0.6713 0.278-1.3633 0.4876-2.0758 0.6292-0.7125 0.1418-1.432 0.2124-2.1585 0.2128-0.7265-4e-4 -1.4461-0.071-2.1588-0.2128-0.7126-0.1416-1.4045-0.3512-2.0756-0.6292-0.6713-0.278-1.3089-0.6188-1.913-1.0226-0.6041-0.4036-1.1631-0.8623-1.6769-1.3763-0.5138-0.5134-0.9724-1.0721-1.3761-1.6761-0.4036-0.6044-0.7444-1.242-1.0226-1.9132-0.2779-0.6712-0.4878-1.3633-0.6295-2.0758-0.1416-0.7128-0.2124-1.4323-0.2124-2.159 0-0.7264 0.0708-1.4459 0.2124-2.1585 0.1419-0.7125 0.3518-1.4045 0.6298-2.0757 0.2779-0.6711 0.6187-1.3088 1.0223-1.9131 0.4037-0.604 0.8623-1.1627 1.3761-1.6767 0.5138-0.5137 1.0728-0.9722 1.6769-1.3758 0.6041-0.4035 1.2417-0.7442 1.913-1.0224 0.6711-0.2781 1.363-0.4881 2.0756-0.6297 0.7127-0.1418 1.4323-0.2129 2.1588-0.2131 0.7265 2e-4 1.446 0.071 2.1585 0.2126 0.7125 0.1419 1.4045 0.3521 2.0758 0.6302 0.6713 0.2782 1.3089 0.6186 1.913 1.0222 0.6041 0.4035 1.1632 0.8623 1.677 1.376 0.5138 0.514 0.9724 1.0727 1.3761 1.6767 0.4035 0.6043 0.7444 1.242 1.0223 1.9131 0.2781 0.6712 0.4881 1.3632 0.6298 2.0757 0.1417 0.7126 0.2126 1.4321 0.2126 2.1585z" fill="none" class="stroke" />
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="18" font-weight="bold" xml:space="preserve" class="fill"><tspan x="200.5" y="-3676" class="fill">u</tspan></text>
-  <text transform="matrix(1.3905522 0 0 1.3905522 192.6866 5384.18)" font-family="Arimo" font-size="15" font-weight="bold" xml:space="preserve" class="fill"><tspan x="211.5" y="-3671.4063" class="fill">t</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6840.63-2389.64 0.07 56.54-0.06 44.16" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6840.63-2279.94-4.49-9.01 9 0.01-4.51 9z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6840.63-2279.94-4.49-9.01 9 0.01-4.51 9z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="6822.4689" y="-2417.7813" class="fill">u</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="6835.4689" y="-2412.6719" class="fill">t</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="6840.4846 6846.494 6855.5178" y="-2426.2188" class="fill">(0)</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6961.25-2246.59h106.89" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7077.14-2246.59-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7077.14-2246.59-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6961.25-2186.59h106.89" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7077.14-2186.59-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7077.14-2186.59-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6720-2276.59h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="6751.6408 6768.9826 6787.7546 6806.5266 6815.1848 6829.6408 6838.299 6855.6408 6874.4128 6893.1848 6911.9567" y="-2224" class="fill">CODIFICADOR</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="6727.828 6745.17 6763.942 6782.714 6801.486 6820.258 6836.144 6854.916 6872.258 6880.916 6899.688 6918.46 6937.232" y="-2192" class="fill">CONVOLUCIONAL</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7321.74-2246.59 59.86-0.01 47.3-0.08" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2246.7-9 4.52-0.01-9 9.01 4.48z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2246.7-9 4.52-0.01-9 9.01 4.48z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7321.74-2186.59 59.86-0.01 47.3-0.08" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2186.7-9 4.52-0.01-9 9.01 4.48z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2186.7-9 4.52-0.01-9 9.01 4.48z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7080.49-2276.59h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7090.703 7106.5895 7129.703 7147.045 7165.817 7183.1589 7201.9309 7217.817 7236.589 7255.361 7274.133 7292.905" y="-2208" class="fill">EMBARALHADOR</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7001.4689" y="-2264.7813" class="fill">v</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="7014.4689" y="-2259.6719" class="fill">t</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="7019.4846 7025.494 7034.5178" y="-2273.2188" class="fill">(0)</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7001.4689" y="-2154.7813" class="fill">v</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="7014.4689" y="-2149.6719" class="fill">t</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="7019.4846 7025.494 7034.5178" y="-2163.2188" class="fill">(1)</tspan></text>
+  <path transform="matrix(0,1.4017857,-1.4017857,0,-2190.283,-10173.319)" d="m7281.75-2314.09 37-80h326l37 80h-400z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <text transform="matrix(0 1.4017857 -1.4017857 0 -2190.984 -10174.02)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7372.6877 7395.8015 7414.573 7428.077 7443.9636 7452.6218 7467.0778 7482.964 7498.85 7517.622 7536.394 7555.166 7573.938" y="-2345" class="fill">MULTIPLEXADOR</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7321.75-2529.59 59.85-0.01 47.3 0.01" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2529.59-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2529.59-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7321.75-2469.59 59.85-0.01 47.3 0.1" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2469.49-9.01 4.49 0.02-9 8.99 4.51z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7437.9-2469.49-9.01 4.49 0.02-9 8.99 4.51z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7080.5-2559.59h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7121.3127 7135.7687 7153.1105 7168.9968 7187.7687 7210.8825 7228.224 7246.996 7262.8825" y="-2491" class="fill">PREAMBULO</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7641.25-2414.09h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7652.078 7669.42 7688.192 7706.964 7715.622 7730.078 7738.7365 7756.078 7774.85 7792.192 7810.964 7829.736 7836.236 7855.008" y="-2361" class="fill">CODIFICA&#199;&#195;O DE</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7716.7189 7734.0607 7752.8327 7771.6047 7790.3767" y="-2329" class="fill">CANAL</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7882.5-2324.09 59.5-0.01v70l46.9 0.01" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7997.9-2254.09-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7997.9-2254.09-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8242.5-2453.59 60.3-0.01v70.6l47.85-0.03" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8359.65-2383.04-9 4.51-0.01-9 9.01 4.49z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8359.65-2383.04-9 4.51-0.01-9 9.01 4.49z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8001.25-2513.59h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8016.4064 8039.52 8058.292 8077.064 8095.836 8111.722 8130.494 8149.266 8168.038 8185.38 8191.88 8210.652" y="-2461" class="fill">MODULADOR DE</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8080.3127 8094.7687 8113.5407 8129.427 8143.883" y="-2429" class="fill">PULSO</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7882.5-2384.09 59.5-0.01v-69.5l46.9 0.01" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7997.9-2453.59-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7997.9-2453.59-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8242.5-2254.09 60.3-0.01v-68.9l47.85-0.03" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8359.65-2323.04-9 4.51-0.01-9 9.01 4.49z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8359.65-2323.04-9 4.51-0.01-9 9.01 4.49z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8001.25-2314.09h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8016.4064 8039.52 8058.292 8077.064 8095.836 8111.722 8130.494 8149.266 8168.038 8185.38 8191.88 8210.652" y="-2261" class="fill">MODULADOR DE</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8080.3127 8094.7687 8113.5407 8129.427 8143.883" y="-2229" class="fill">PULSO</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8603-2353.04 56.6 0.04 44.18 0.32" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8712.78-2352.61-9.04 4.43 0.07-9 8.97 4.57z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8712.78-2352.61-9.04 4.43 0.07-9 8.97 4.57z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8363-2413.04h240v120h-240z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8377.906 8401.0209 8419.793 8438.565 8457.338 8473.224 8491.996 8510.769 8529.541 8546.883 8553.383 8572.155" y="-2360" class="fill">MODULADOR DE</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8369.6879 8387.029 8405.802 8424.574 8443.347 8460.7 8467.2 8479.273 8498.046 8512.502 8526.958 8545.73 8564.503 8580.389" y="-2328" class="fill">BANDA PASSANTE</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8709.406" y="-2374" class="fill">s</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18.05" xml:space="preserve" class="fill"><tspan x="8719.531 8725.541 8730.555" y="-2374" class="fill">(t)</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m8729.885-2352.59c0 0.4513-0.044 0.8985-0.132 1.3411-0.089 0.4432-0.219 0.8731-0.392 1.2901-0.173 0.4172-0.385 0.8132-0.636 1.1885s-0.536 0.7224-0.855 1.0415c-0.319 0.3193-0.666 0.6045-1.041 0.8552-0.376 0.2507-0.771 0.4626-1.188 0.6356-0.417 0.1725-0.848 0.303-1.29 0.391-0.443 0.088-0.89 0.132-1.341 0.132-0.452 0-0.9-0.044-1.342-0.1322-0.442-0.0878-0.873-0.2183-1.29-0.3908-0.417-0.173-0.814-0.3846-1.189-0.6354-0.376-0.2509-0.722-0.5361-1.042-0.8554-0.319-0.3191-0.604-0.6662-0.855-1.0415s-0.462-0.7713-0.635-1.1885c-0.173-0.417-0.303-0.8469-0.391-1.2898-0.087-0.4429-0.131-0.8901-0.131-1.3414 0-0.4516 0.044-0.8986 0.132-1.3412 0.087-0.4428 0.217-0.8728 0.39-1.2898s0.385-0.8133 0.636-1.1887c0.251-0.3753 0.535-0.7227 0.854-1.0418 0.32-0.3191 0.666-0.604 1.041-0.8547 0.376-0.251 0.772-0.4628 1.189-0.6355 0.417-0.1726 0.847-0.303 1.29-0.3911 0.443-0.0882 0.891-0.1322 1.343-0.1322 0.451 0 0.898 0.044 1.341 0.1322 0.442 0.0881 0.873 0.2185 1.29 0.3911 0.417 0.1727 0.812 0.3845 1.188 0.6355 0.375 0.2507 0.722 0.5356 1.041 0.8547s0.604 0.6665 0.855 1.0418c0.251 0.3754 0.4629 0.7717 0.635 1.1887 0.173 0.417 0.304 0.847 0.393 1.2898 0.088 0.4426 0.132 0.8896 0.132 1.3412z" fill="none" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7358.9689" y="-2266" class="fill">X</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7377.75 7384.962 7395.79" y="-2259.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7358.9689" y="-2156" class="fill">Y</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7377.75 7384.962 7395.79" y="-2149.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7357.5158 7371.9719" y="-2549" class="fill">Si</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7379.203 7386.415 7397.243" y="-2542.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7354.625 7369.081" y="-2439" class="fill">Sq</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7382.0939 7389.3059 7400.134" y="-2432.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7558.9689" y="-2403" class="fill">X</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7577.75 7584.962 7595.79" y="-2396.8126" class="fill">[n]</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7628.9-2384.09-47.3-0.01-61.13 0.41" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7637.9-2384.09-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7637.9-2384.09-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7628.9-2324.09-47.3-0.01-59.61 0.41" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7637.9-2324.09-9 4.5v-9l9 4.5z" />
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m7637.9-2324.09-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7558.9689" y="-2296" class="fill">Y</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7577.75 7584.962 7595.79" y="-2289.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7951.6564" y="-2466" class="fill">I</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="18" xml:space="preserve" class="fill"><tspan x="7960.328 7966.3225 7975.3225" y="-2466" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="7944.4689" y="-2219.8126" class="fill">Q</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="7963.25 7970.462 7981.29" y="-2219.8126" class="fill">[n]</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8256.375 8269.375" y="-2222" class="fill">dQ</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="8288.156 8295.368 8301.385" y="-2215.8126" class="fill">(t)</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8261.4379 8274.4379" y="-2468" class="fill">dI</tspan></text>
+  <text transform="matrix(1.4017857 0 0 1.4017857 -9378.864 3613.72)" font-family="Tinos" font-size="21.66" xml:space="preserve" class="fill"><tspan x="8283.109 8290.321 8296.338" y="-2461.8126" class="fill">(t)</tspan></text>
+  <path transform="matrix(1.4017857,0,0,1.4017857,-9378.163,3614.421)" d="m6847.505-2396.52c-4e-4 0.4513-0.0444 0.8986-0.133 1.3415-0.0881 0.4426-0.2185 0.8725-0.3913 1.2895-0.1729 0.4172-0.3848 0.8135-0.6357 1.1887-0.251 0.3753-0.5352 0.7227-0.8541 1.0418-0.3199 0.3195-0.667 0.6045-1.0429 0.8552-0.3751 0.2507-0.771 0.4627-1.1876 0.6353-0.4169 0.1726-0.8474 0.303-1.2904 0.391-0.442 0.0877-0.889 0.1317-1.34 0.132-0.452-3e-4 -0.899-0.0443-1.342-0.132-0.443-0.0883-0.8723-0.2187-1.29-0.3913-0.417-0.1726-0.8132-0.3843-1.189-0.635-0.375-0.2507-0.722-0.5357-1.041-0.8552-0.3191-0.3191-0.6042-0.6665-0.8552-1.0418-0.2508-0.3752-0.4628-0.7712-0.6348-1.1884-0.1733-0.417-0.304-0.847-0.3921-1.2898-0.0874-0.4429-0.1313-0.8902-0.1309-1.3415-4e-4 -0.4515 0.0435-0.8985 0.1309-1.341 0.0881-0.4428 0.2188-0.8727 0.3916-1.2897 0.1724-0.417 0.3843-0.8132 0.6353-1.1883 0.251-0.3757 0.5361-0.723 0.8552-1.042 0.319-0.3193 0.666-0.6044 1.0418-0.8554 0.3752-0.2506 0.7712-0.4626 1.1889-0.6353 0.417-0.1726 0.8472-0.3029 1.2901-0.3911 0.4422-0.0881 0.8892-0.1322 1.3412-0.1322 0.451 0 0.898 0.0441 1.34 0.1322 0.443 0.0882 0.873 0.2185 1.29 0.3914 0.417 0.1726 0.8129 0.3845 1.1879 0.6354 0.3751 0.2506 0.7231 0.5357 1.043 0.855 0.3189 0.319 0.6031 0.6663 0.8541 1.042 0.2509 0.3751 0.4628 0.7713 0.636 1.188 0.1725 0.417 0.3029 0.847 0.391 1.2896 0.0886 0.4426 0.1326 0.8899 0.133 1.3414z" fill="none" stroke-width="3" class="stroke" />
  </g>
 </svg>
