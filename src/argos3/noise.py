@@ -11,7 +11,7 @@ from .transmitter import Transmitter
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
 
 class Noise:
-    def __init__(self, snr=15, seed=None, length_multiplier=1.5, position_factor=0.5):
+    def __init__(self, snr=15, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
         Implementação de canal para aplicação de ruido $AWGN$, com base em $SNR$.
 
@@ -85,7 +85,7 @@ class Noise:
         return noisy_signal
 
 class NoiseEBN0:
-    def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None, length_multiplier=1.5, position_factor=0.5):
+    def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
         Implementação de canal para aplicação de ruido $AWGN$, com base em $Eb/N_{0}$.
 

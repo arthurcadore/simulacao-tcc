@@ -24,6 +24,7 @@ from .scrambler import *
 from .synchronizer import *
 
 # Channel
+from .channel import *
 from .noise import *
 
 # Transmitter
