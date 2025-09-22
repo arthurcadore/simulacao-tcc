@@ -79,7 +79,7 @@ class Modulator:
 
         return t, modulated_signal
     
-    def demodulate(self, modulated_signal, carrier_length=0.06, carrier_delay=0.06):
+    def demodulate(self, modulated_signal, carrier_length=0.06, carrier_delay=0.725):
         r"""
         Demodula o sinal modulado em QPSK, com sincronização de fase usando os primeiros `carrier_length` segundos de portadora.
 

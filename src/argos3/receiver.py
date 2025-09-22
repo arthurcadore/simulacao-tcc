@@ -17,6 +17,7 @@ from .matchedfilter import MatchedFilter
 from .sampler import Sampler
 from .convolutional import DecoderViterbi
 from .synchronizer import Synchronizer
+from .channel import Channel
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot, SymbolsPlot
 
 class Receiver:
@@ -1006,29 +1007,25 @@ if __name__ == "__main__":
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
 
-    print("\n\n ==== CANAL ==== \n")
+    print("\n\n ==== CANAL ==== \n")    
+    channel = Channel(fs=transmitter.fs, duration=1, noise_mode="ebn0", noise_db=20, seed=11)
 
+    channel.add_signal(s, position_factor=1)
 
     signal_length = len(s) / transmitter.fs
     print("Comprimento do sinal modulado:", signal_length)
 
-    # Adicionando ruído ao sinal
-    ebn0_db = 20
-    add_noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11, length_multiplier=1.2, position_factor=1)
-    s = add_noise.add_noise(s)
+    channel.add_noise()
 
-    signalnoise_length = len(s) / transmitter.fs
+    signalnoise_length = len(channel.channel) / transmitter.fs
     print("Comprimento do sinal recebido:", signalnoise_length)
 
     noise_first = (signalnoise_length - signal_length)
     print("Comprimento ruido antes do sinal:", noise_first)
     
-    print("\n ==== CANAL ==== \n")
-    print("s(t):", ''.join(map(str, s[:5])), "...")
-    print("t:   ", ''.join(map(str, t[:5])), "...")
 
     receiver = Receiver(fc=fc, output_print=True)
-    datagramRX, success = receiver.receive(s)
+    datagramRX, success = receiver.receive(channel.channel)
         
     if not success:
         bitsTX = datagramTX.streambits 
