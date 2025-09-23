@@ -1000,22 +1000,21 @@ class Receiver:
 if __name__ == "__main__":
 
     fc = np.random.randint(10, 90)*100
-
-    print("SIMULANDO TRANSMISSÃO COM FC =", fc)
+    print("SIMULANDO TRANSMISSÃO/RECEPÇÃO COM FC =", fc)
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
 
     print("\n\n ==== CANAL ==== \n")    
-    channel = Channel(fs=transmitter.fs, duration=1, noise_mode="ebn0", noise_db=20, seed=11)
 
+    channel = Channel(fs=transmitter.fs, duration=0.4, noise_mode="ebn0", noise_db=20, seed=11)
     channel.add_signal(s, position_factor=1)
+    channel.add_noise()
 
+    # Comprimentos (para verificação do canal)
     signal_length = len(s) / transmitter.fs
     print("Comprimento do sinal modulado:", signal_length)
-
-    channel.add_noise()
 
     signalnoise_length = len(channel.channel) / transmitter.fs
     print("Comprimento do sinal recebido:", signalnoise_length)
@@ -1023,7 +1022,6 @@ if __name__ == "__main__":
     noise_first = (signalnoise_length - signal_length)
     print("Comprimento ruido antes do sinal:", noise_first)
     
-
     receiver = Receiver(fc=fc, output_print=True)
     datagramRX, success = receiver.receive(channel.channel)
         

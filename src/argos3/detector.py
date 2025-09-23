@@ -9,9 +9,8 @@ import numpy as np
 from .plotter import create_figure, save_figure, PowerMatrixPlot, MatrixSquarePlot, DetectionFrequencyPlot, PowerMatrix3DPlot
 from .datagram import Datagram
 from .transmitter import Transmitter
-from .noise import NoiseEBN0, Noise
 from .receiver import Receiver
-import matplotlib.pyplot as plt
+from .channel import Channel
 
 
 class CarrierDetector:
@@ -344,10 +343,6 @@ class CarrierDetector:
 
                 channels.append((freqs[k], start_segment, end_segment))
 
-        print("Frequências confirmadas (Hz) com início e fim de segmentos:")
-        for f, start, end in channels:
-            print(f"Frequência {f:.1f} Hz: segmento {start} -> {end}")
-
         return channels
 
 if __name__ == "__main__":
@@ -359,25 +354,43 @@ if __name__ == "__main__":
     fc2 = fc1 + 2500
     fc3 = fc2 + 2500
     
-    datagram = Datagram(pcdnum=1234, numblocks=8, seed=11)
+    datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=11)
+    datagram2 = Datagram(pcdnum=1234, numblocks=4, seed=11)
+    datagram3 = Datagram(pcdnum=1234, numblocks=8, seed=11)
     transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
+    transmitter4 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
 
-    t1, s1 = transmitter1.transmit(datagram)
-    t2, s2 = transmitter2.transmit(datagram)
-    t3, s3 = transmitter3.transmit(datagram)
+    print("Gerando vetores de transmissão")
+    t1, s1 = transmitter1.transmit(datagram1)
+    t2, s2 = transmitter2.transmit(datagram2)
+    t3, s3 = transmitter3.transmit(datagram3)
+    t4, s4 = transmitter4.transmit(datagram1)
 
-    st = s1 + s2 + s3
+    # Canal
+    channel = Channel(fs=fs, duration=1, noise_mode="ebn0", noise_db=20, seed=11)
 
-    ebn0_db = 20
-    noise = NoiseEBN0(ebn0_db=ebn0_db, seed=11,length_multiplier=1)
-    st = noise.add_noise(st)
+    # gera distâncias aleatórias. 
+    p1 = np.random.uniform(0, 0.2)
+    p2 = np.random.uniform(0, 1)
+    p3 = np.random.uniform(0, 1)
+    p4 = p1 + 0.6
+
+    print("Adicionando sinais ao canal")
+    s1 = channel.add_signal(s1, position_factor=p1)
+    s2 = channel.add_signal(s2, position_factor=p2)
+    s3 = channel.add_signal(s3, position_factor=p3)
+    s4 = channel.add_signal(s4, position_factor=p4)
+
+    # Adiciona ruído
+    channel.add_noise()
+    st = channel.channel
+
 
     # Detecção de portadora
     threshold = -15
     detector = CarrierDetector(fs=fs, seg_ms=10, threshold=threshold) 
-
     detector.detect(st.copy())
 
     # Heatmap da potência
@@ -445,13 +458,17 @@ if __name__ == "__main__":
 
     # Recepção: 
     channels = detector.return_channels()
+
+    print("Frequências confirmadas (Hz) com início e fim de segmentos:")
+    for f, start, end in channels:
+        print(f"Frequência {f:.1f} Hz: segmento {start} -> {end}")
     
     for idx, (freq, start_seg, end_seg) in enumerate(channels, start=1):
         print(f"\n ==============================================")
         print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq:.1f} Hz ==== \n")
     
         # Seleciona apenas os segmentos necessários e concatena
-        first_segment = int(start_seg * detector.fs * detector.seg_s)
+        first_segment = int((start_seg - 5) * detector.fs * detector.seg_s)
         last_segment = int(end_seg * detector.fs * detector.seg_s)
         selected_signal = st[first_segment:last_segment]
     
@@ -460,14 +477,6 @@ if __name__ == "__main__":
         datagramRX, success = receiver.receive(selected_signal)
     
         if not success:
-            bitsTX = datagram.streambits 
             bitsRX = datagramRX
-            print("Bits TX: ", ''.join(str(b) for b in bitsTX))
+            print("Decodificação incorreta: ")
             print("Bits RX: ", ''.join(str(b) for b in bitsRX))
-    
-            # Calcula a Taxa de Erro de Bit (BER)
-            num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
-            ber = num_errors / len(bitsTX)
-    
-            print(f"Número de erros: {num_errors}")
-            print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
