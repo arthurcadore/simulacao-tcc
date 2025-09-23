@@ -357,6 +357,11 @@ if __name__ == "__main__":
     datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=11)
     datagram2 = Datagram(pcdnum=1234, numblocks=4, seed=11)
     datagram3 = Datagram(pcdnum=1234, numblocks=8, seed=11)
+
+    print("ut1: ", ''.join(str(b) for b in datagram1.streambits))
+    print("ut2: ", ''.join(str(b) for b in datagram2.streambits))
+    print("ut3: ", ''.join(str(b) for b in datagram3.streambits))
+
     transmitter1 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter2 = Transmitter(fc=fc2, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
@@ -372,9 +377,9 @@ if __name__ == "__main__":
     channel = Channel(fs=fs, duration=1, noise_mode="ebn0", noise_db=20, seed=11)
 
     # gera distâncias aleatórias. 
-    p1 = np.random.uniform(0, 0.2)
-    p2 = np.random.uniform(0, 1)
-    p3 = np.random.uniform(0, 1)
+    p1 = np.random.choice(np.arange(0, 0.21, 0.1))
+    p2 = np.random.choice(np.arange(0, 1.01, 0.1))  
+    p3 = np.random.choice(np.arange(0, 1.01, 0.1))  
     p4 = p1 + 0.6
 
     print("Adicionando sinais ao canal")

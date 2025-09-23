@@ -16,7 +16,7 @@ from .multiplexer import Multiplexer
 from .matchedfilter import MatchedFilter
 
 class Synchronizer:
-    def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF", channel_encode=("nrz", "man")):
+    def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF", channel_encode=("nrz", "man"), sync_window=None):
         r"""
          Inicializa o sincronizador de simbolos para identificar o momento de maior correlação entre o sinal recebido e o sinal de sincronismo.
 
@@ -46,6 +46,7 @@ class Synchronizer:
         self.span = 6
         self.cI_encoder = "nrz"
         self.cQ_encoder = "nrz"
+        self.sync_window = sync_window
 
         # Codificação I e Q
         self.cI_type = channel_encode[0]
@@ -146,13 +147,25 @@ class Synchronizer:
         """
         if channel == "I":
             correlation_vec = np.correlate(signal, self.sincronized_word_I, mode="same")
-            max_correlation_index = correlation_vec.argmax()
         elif channel == "Q":
             correlation_vec = np.correlate(signal, self.sincronized_word_Q, mode="same")
-            max_correlation_index = correlation_vec.argmax()
         else:
             raise ValueError("Canal inválido. Use 'I' ou 'Q'.")
-        
+
+
+        # converte janela de segundos para índices
+        if self.sync_window is not None:
+            t_start, t_end = self.sync_window
+            start_idx = int(t_start * self.fs)
+            end_idx = int(t_end * self.fs)
+            start_idx = max(0, start_idx)
+            end_idx = min(len(correlation_vec), end_idx)
+        else:
+            start_idx, end_idx = 0, len(correlation_vec)        
+
+        local_argmax = correlation_vec[start_idx:end_idx].argmax()
+        max_correlation_index = start_idx + local_argmax
+
         # normaliza o vetor
         correlation_vec = (correlation_vec - correlation_vec.min()) / (correlation_vec.max() - correlation_vec.min())
         
@@ -164,6 +177,7 @@ class Synchronizer:
         low_delay = low_index / self.fs
         high_delay = high_index / self.fs
         delay = max_correlation_index / self.fs
+    
         return low_delay, high_delay, delay, correlation_vec
 
 if __name__ == "__main__":
