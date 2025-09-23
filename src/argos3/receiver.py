@@ -1008,7 +1008,7 @@ if __name__ == "__main__":
 
     print("\n\n ==== CANAL ==== \n")    
 
-    channel = Channel(fs=transmitter.fs, duration=0.4, noise_mode="ebn0", noise_db=20, seed=11)
+    channel = Channel(fs=transmitter.fs, duration=0.335, noise_mode="ebn0", noise_db=20, seed=11)
     channel.add_signal(s, position_factor=1)
     channel.add_noise()
 
