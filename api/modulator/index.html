@@ -306,7 +306,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../noiseSNR/" class="md-tabs__link">
+        <a href="../channel/" class="md-tabs__link">
           
   
   
@@ -1071,12 +1071,35 @@
   
   
     <li class="md-nav__item">
+      <a href="../channel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Canal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../noiseSNR/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Ruido SNR
+    Adição Ruído SNR
     
   </span>
   
@@ -1099,7 +1122,7 @@
   
   
   <span class="md-ellipsis">
-    Ruido EBN0
+    Adição Ruído EBN0
     
   </span>
   
@@ -1544,49 +1567,15 @@ AS3-SP-516-274-CNES (seção 3.2.5.3)
 
 
 <h2 id="modulator.Modulator.demodulate" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">modulated_signal</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">modulated_signal</span><span class="p">,</span> <span class="n">carrier_length</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span> <span class="n">carrier_delay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Demodula o sinal modulado em QPSK. Para o processo de demodulação, utiliza-se duas componentes auxiliares <span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span> definidas pelas expressões abaixo.</p>
-<div class="arithmatex">\[
-\begin{aligned}
-x_I(t) &amp;= 2 \cos(2\pi f_c t), &amp;\quad
-y_Q(t) &amp;= 2 \sin(2\pi f_c t)
-\end{aligned}
-\]</div>
+        <p>Demodula o sinal modulado em QPSK, com sincronização de fase usando os primeiros <code>carrier_length</code> segundos de portadora.</p>
 
-
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span>: Componentes auxiliares utilizadas para a demodulação.</li>
-<li><span class="arithmatex">\(f_c\)</span>: Frequência da portadora.</li>
-<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
-</ul>
-</details>        <p>A partir das componentes criadas é realizado o processo de demodulação (translação em frequência), que resulta em duas componentes, uma em banda base e outra em <span class="arithmatex">\(2f_c\)</span>, conforme as expressões abaixo.</p>
-<div class="arithmatex">\[
-x_I'(t) = s(t) \cdot x_I(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\cos(2\pi f_c t )
-\]</div>
-<div class="arithmatex">\[
-y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi f_c t )\right] \cdot 2\sin(2\pi f_c t )
-\]</div>
-
-
-<details class="sendo" open>
-  <summary>Sendo</summary>
-  <ul>
-<li><span class="arithmatex">\(x_I'(t)\)</span> e <span class="arithmatex">\(y_Q'(t)\)</span>: Componentes resultantes da demodulação.</li>
-<li><span class="arithmatex">\(x_I(t)\)</span> e <span class="arithmatex">\(y_Q(t)\)</span>: Componentes auxiliares utilizadas para a demodulação.</li>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal modulado.</li>
-<li><span class="arithmatex">\(d_I(t)\)</span> e <span class="arithmatex">\(d_Q(t)\)</span>: Sinais formatados correspondentes aos canais <span class="arithmatex">\(I\)</span> e <span class="arithmatex">\(Q\)</span>.</li>
-<li><span class="arithmatex">\(f_c\)</span>: Frequência da portadora.</li>
-<li><span class="arithmatex">\(t\)</span>: Vetor de tempo.</li>
-</ul>
-</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
@@ -1613,6 +1602,38 @@ y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi
             </td>
             <td>
                 <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>carrier_length</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>O comprimento da portadora para sincronização da fase (em segundos).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.07</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>carrier_delay</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>O delay da portadora para sincronização da fase (em segundos).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0</code>
             </td>
           </tr>
       </tbody>
@@ -1645,29 +1666,6 @@ y_Q'(t) = -s(t) \cdot y_Q(t) = \left[d_I(t) \cos(2\pi f_c t ) - d_Q(t) \sin(2\pi
             <td>
               <div class="doc-md-description">
                 <p>Sinal <span class="arithmatex">\(y_Q'(t)\)</span> recuperado.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="ValueError">ValueError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Se o sinal modulado estiver vazio.</p>
               </div>
             </td>
           </tr>

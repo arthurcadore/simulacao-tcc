@@ -8,26 +8,28 @@
       
       
       
-        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/">
+        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/channel/">
       
       
+        <link rel="prev" href="../transmitter/">
       
-        <link rel="next" href="api/api/">
+      
+        <link rel="next" href="../noiseSNR/">
       
       
-      <link rel="icon" href="assets/icon.svg">
+      <link rel="icon" href="../../assets/icon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
-        <title>Simulador ARGOS-3</title>
+        <title>Canal - Simulador ARGOS-3</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,11 +48,11 @@
       
     
     
-      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="site/styles.css">
+      <link rel="stylesheet" href="../../site/styles.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#simulador-argos-3" class="md-skip">
+        <a href="#channel.Channel" class="md-skip">
           Skip to content
         </a>
       
@@ -90,9 +92,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Simulador ARGOS-3" class="md-header__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+    <a href="../.." title="Simulador ARGOS-3" class="md-header__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
       
-  <img src="assets/icon.svg" alt="logo">
+  <img src="../../assets/icon.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -109,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Início
+              Canal
             
           </span>
         </div>
@@ -220,11 +222,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -245,7 +245,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="api/api/" class="md-tabs__link">
+        <a href="../api/" class="md-tabs__link">
           
   
   
@@ -265,7 +265,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="api/datagram/" class="md-tabs__link">
+        <a href="../datagram/" class="md-tabs__link">
           
   
   
@@ -283,7 +283,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="api/transmitter/" class="md-tabs__link">
+      <a href="../transmitter/" class="md-tabs__link">
         
   
   
@@ -300,11 +300,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="api/channel/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -322,7 +324,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="api/receiver/" class="md-tabs__link">
+      <a href="../receiver/" class="md-tabs__link">
         
   
   
@@ -343,7 +345,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="api/bersnr/" class="md-tabs__link">
+        <a href="../bersnr/" class="md-tabs__link">
           
   
   
@@ -379,9 +381,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Simulador ARGOS-3" class="md-nav__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+    <a href="../.." title="Simulador ARGOS-3" class="md-nav__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
       
-  <img src="assets/icon.svg" alt="logo">
+  <img src="../../assets/icon.svg" alt="logo">
 
     </a>
     Simulador ARGOS-3
@@ -405,19 +407,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -428,7 +421,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -485,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/api/" class="md-nav__link">
+      <a href="../api/" class="md-nav__link">
         
   
   
@@ -508,7 +500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/guia/" class="md-nav__link">
+      <a href="../guia/" class="md-nav__link">
         
   
   
@@ -531,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   
@@ -606,7 +598,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/datagram/" class="md-nav__link">
+      <a href="../datagram/" class="md-nav__link">
         
   
   
@@ -629,7 +621,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/convolutional/" class="md-nav__link">
+      <a href="../convolutional/" class="md-nav__link">
         
   
   
@@ -652,7 +644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/scrambler/" class="md-nav__link">
+      <a href="../scrambler/" class="md-nav__link">
         
   
   
@@ -675,7 +667,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/preamble/" class="md-nav__link">
+      <a href="../preamble/" class="md-nav__link">
         
   
   
@@ -698,7 +690,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/multiplexer/" class="md-nav__link">
+      <a href="../multiplexer/" class="md-nav__link">
         
   
   
@@ -721,7 +713,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/encoder/" class="md-nav__link">
+      <a href="../encoder/" class="md-nav__link">
         
   
   
@@ -744,7 +736,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/formatter/" class="md-nav__link">
+      <a href="../formatter/" class="md-nav__link">
         
   
   
@@ -767,7 +759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/modulator/" class="md-nav__link">
+      <a href="../modulator/" class="md-nav__link">
         
   
   
@@ -790,7 +782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/detector/" class="md-nav__link">
+      <a href="../detector/" class="md-nav__link">
         
   
   
@@ -813,7 +805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/lpf/" class="md-nav__link">
+      <a href="../lpf/" class="md-nav__link">
         
   
   
@@ -836,7 +828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/matchedfilter/" class="md-nav__link">
+      <a href="../matchedfilter/" class="md-nav__link">
         
   
   
@@ -859,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/synchronizer/" class="md-nav__link">
+      <a href="../synchronizer/" class="md-nav__link">
         
   
   
@@ -882,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/sampler/" class="md-nav__link">
+      <a href="../sampler/" class="md-nav__link">
         
   
   
@@ -905,7 +897,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/viterbi/" class="md-nav__link">
+      <a href="../viterbi/" class="md-nav__link">
         
   
   
@@ -935,7 +927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/transmitter/" class="md-nav__link">
+      <a href="../transmitter/" class="md-nav__link">
         
   
   
@@ -954,28 +946,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -988,7 +983,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Canal
@@ -999,10 +994,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="api/channel/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Canal
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1013,6 +1028,60 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#channel.Channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Channel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channel.Channel.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channel.Channel.add_signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_signal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channel.Channel.add_noise" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_noise
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1025,7 +1094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/noiseSNR/" class="md-nav__link">
+      <a href="../noiseSNR/" class="md-nav__link">
         
   
   
@@ -1048,7 +1117,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/noiseEBN0/" class="md-nav__link">
+      <a href="../noiseEBN0/" class="md-nav__link">
         
   
   
@@ -1078,7 +1147,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/receiver/" class="md-nav__link">
+      <a href="../receiver/" class="md-nav__link">
         
   
   
@@ -1145,7 +1214,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/bersnr/" class="md-nav__link">
+      <a href="../bersnr/" class="md-nav__link">
         
   
   
@@ -1168,7 +1237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/plots/" class="md-nav__link">
+      <a href="../plots/" class="md-nav__link">
         
   
   
@@ -1191,7 +1260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/data/" class="md-nav__link">
+      <a href="../data/" class="md-nav__link">
         
   
   
@@ -1233,21 +1302,316 @@
   
 
 
-<h1 id="simulador-argos-3">Simulador ARGOS-3</h1>
-<p>O <strong>Simulador ARGOS-3</strong> é uma ferramenta computacional desenvolvida em Python com o objetivo de <strong>estudar, analisar e validar a comunicação via satélite</strong> no padrão <strong>ARGOS-3</strong>.  </p>
-<hr />
-<p>O padrão ARGOS-3 é empregado pelo <strong>Sistema Brasileiro de Coleta de Dados Ambientais (SBCDA)</strong>, sob responsabilidade do <strong>Instituto Nacional de Pesquisas Espaciais (INPE)</strong>, para o recebimento de informações provenientes de milhares de <strong>Plataformas de Coleta de Dados (PCDs)</strong> distribuídas em todo o território nacional. As transmissões realizadas pelas PCDs são retransmitidas por satélites como o <strong>SCD-1</strong>, <strong>SCD-2</strong> e pela série <strong>CBERS</strong>, que orbitam a aproximadamente <strong>750 km de altitude</strong>.  </p>
-<p align="center" class="image-container">
-  <img src="./assets/geoplot.svg" alt="Mapa do Brasil com PCDs" class="responsive-image">
-</p>
+  <h1>Canal</h1>
 
-<p>O simulador foi projetado para reproduzir os principais aspectos e desafios da comunicação com satélites, incorporando conceitos fundamentais, tais como:</p>
-<ul>
-<li>Técnicas de modulação, codificação e sincronização de sinais  </li>
-<li>Modelagem de efeitos de canal, incluindo ruído, interferências e atenuação</li>
-</ul>
-<hr />
-<p>Este repositório consolida a <strong>documentação, os testes e os resultados de simulação</strong> do ARGOS-3, constituindo uma base de referência para <strong>pesquisas acadêmicas, iniciativas de desenvolvimento tecnológico e aplicações em monitoramento ambiental no Brasil</strong>.</p>
+<div class="doc doc-object doc-class">
+
+
+
+<a id="channel.Channel"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="channel.Channel.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise_mode</span><span class="o">=</span><span class="s1">&#39;snr&#39;</span><span class="p">,</span> <span class="n">noise_db</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Implementação de um canal para agregação de multiplos sinais.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>taxa de amostragem do sinal.</p>
+              </div>
+            </td>
+            <td>
+                  <code>128000</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>duration</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>duração do canal em segundos.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>noise_mode</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>modo de ruído ('snr' ou 'ebn0').</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;snr&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>noise_db</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>nível de ruído em dB.</p>
+              </div>
+            </td>
+            <td>
+                  <code>20</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>seed</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>semente para geração de números aleatórios. </p>
+              </div>
+            </td>
+            <td>
+                  <code>10</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>Channel</code></td>            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>objeto do canal.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>se o modo de ruído for inválido.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="channel.Channel.add_signal" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_signal</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">position_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adiciona um sinal ao canal em uma posição relativa.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>signal</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>vetor de amostras do sinal a inserir.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>position_factor</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>fator de posição entre [0, 1] (0 = início do canal, 1 = final).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.5</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>se position_factor não estiver entre [0, 1].</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p><img alt="pageplot" src="../assets/example_channel_time_subchannels.svg" /></p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="channel.Channel.add_noise" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_noise</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adiciona ruído ao canal.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p><img alt="pageplot" src="../assets/example_channel_time_channel.svg" /></p>
+</details>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 
 
@@ -1302,14 +1666,14 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.tabs", "header.autohide", "search.suggest", "search.highlight", "toc.integrate", "content.code.copy", "content.code.highlight", "content.tooltips", "navigation.expand", "navigation.top", "repository.icon"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.tabs", "header.autohide", "search.suggest", "search.highlight", "toc.integrate", "content.code.copy", "content.code.highlight", "content.tooltips", "navigation.expand", "navigation.top", "repository.icon"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.50899def.min.js"></script>
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
-        <script src="site/hide_sidebar.js"></script>
+        <script src="../../site/hide_sidebar.js"></script>
       
     
   </body>
