@@ -1,14 +1,11 @@
 [project]
 name = "argos3"
-version = "1.0.5"
+version = "1.0.6"
 description = "An open-source tool for analysis and simulation of ARGOS-3 standard"
 readme = { file = "README.md", content-type = "text/markdown" }
-authors = [
-    { name = "Arthur Cadore", email = "arthurbarcella.ifsc@gmail.com" }
-]
+authors = [{ name = "Arthur Cadore", email = "arthurbarcella.ifsc@gmail.com" }]
 license = "MIT"
 license-files = ["LICENSE"]
-
 dependencies = [
     "numpy>=1.21.0",
     "matplotlib>=3.4.0",
@@ -30,3 +27,7 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.metadata]
+name = "argos3"
+version = "1.0.6"

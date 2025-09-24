@@ -1,12 +1,6 @@
-try:
-    from importlib import metadata as _metadata
-except ImportError:
-    import importlib_metadata as _metadata 
+from importlib import metadata as _metadata
 
-try:
-    __version__ = _metadata.version("argos3")
-except _metadata.PackageNotFoundError:
-    __version__ = "0.0.0"
+__version__ = _metadata.version("argos3")
 
 # Main Components
 from .convolutional import *

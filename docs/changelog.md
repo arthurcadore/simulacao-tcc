@@ -77,8 +77,31 @@
 - [X] Implementar uso da função Q(x) na documentação. 
 - [X] Calcular o tamanho do numblocks com base no classmethod (mais de um construtor)
 
+--- 
+### v1.0.6 - Multiple Carrier detection
+- [X] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
+- [X] Alterar classe detector para permitir detecção fora de fase 
+    - [X] Criar matriz de frequências vs segmentos no construtor usando deltaF
+    - [X] Segmentar o sinal recebido inteiro e alimentar a matriz. 
+    - [X] Aplicar FFT em cada bloco, e verificar a potência em cada frequência, gerar a matriz de potência
+    - [X] Identificar as frequências confirmadas usando histórico de segmento 
+    - [X] Decidir quais frequências serão usadas para demodulação, e criar span para proteção do sinal
+    - [X] Demodular o sinal recebido para a sequência de segmentos detectada
+- [X] Adicionar método de canal para adicionar ruido dinamicamente
+    - [X] Adicionar multiplicador de comprimento do sinal TX
+    - [X] Criar vetor de ruido com comprimento maior 
+    - [X] Somar o sinal com ruido, colocar argumento de deslocamento (amostra onde começa a soma). 
+- [X] Montar diagrama de waterfall
+    - [X] criar matriz (frequencia x segmento) 2D
+    - [X] criar matriz (frequencia x segmento x potência) 3D
+    - [X] Plotar uma cor para cada frequência em cada segmento de tempo para decidido
+        - [X] não detectada
+        - [X] detectada
+        - [X] penalizada 
+        - [X] iniciando demodulação
+
 ---
-### v1.0.6 - Documentation and Styling
+### v1.0.7 - Documentation and Styling
 - [X] Otimizar conversor de plots pra permitir darkTheme
 - [X] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
@@ -98,31 +121,7 @@
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
     - [] Padronizar cor dos plots.
-- [] Criar diretório para armazenar diagramas e notebooks.
-
---- 
-### v1.0.7 - Multiple Carrier detection
-- [] Adicionar truncador no tail do parse do datagrama, pra pegar apenas a cauda e verificar. 
-- [] Adicionar método no noise para adicionar mais ruido
-    - [] Adicionar multiplicador de comprimento do sinal TX
-    - [] Criar vetor de ruido com comprimento maior 
-    - [] Somar o sinal com ruido, colocar argumento de deslocamento (amostra onde começa a soma). 
-- [] Alterar classe detector para permitir detecção fora de fase 
-    - [] Criar vetor de frequências no construtor usando deltaF
-    - [] Segmentar o sinal recebido inteiro em blocos de tamanho segment_size
-    - [] Aplicar FFT em cada bloco, e verificar a potência em cada frequência
-    - [] Identificar as frequências e demodular o sinal recebido
-    - [] Quando iniciar a demodulação, penalizar as frequências em +-800Hz (parametrizavel).
-- [] Adicionar implementação de canal 
-    - [] adicionar multiplos 
-- [] Montar diagrama de waterfall
-    - [] criar matriz (frequencia x segmento)
-    - [] Plotar uma cor para cada frequência em cada segmento de tempo
-        - [] não detectada
-        - [] detectada
-        - [] penalizada 
-        - [] iniciando demodulação
-    
+- [] Criar diretório para armazenar diagramas e notebooks.    
 
 --- 
 ### v1.0.8 - Soft Decision and Performance
