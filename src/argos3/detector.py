@@ -30,9 +30,9 @@ class CarrierDetector:
 
         Example: 
             - Segmentos de tempo: ![pageplot](assets/example_detector_freq.svg)
-            - Matriz de potência: ![pageplot](assets/example_detector_power_matrix.svg)
-            - Matriz de detecção: ![pageplot](assets/example_detector_detection_matrix.svg)
-            - Matriz de Decisão: ![pageplot](assets/example_detector_decision_matrix.svg)
+            - Diagrama Waterfall: ![pageplot](assets/example_detector_waterfall.svg)
+            - Diagrama Waterfall de detecção: ![pageplot](assets/example_detector_waterfall_detection.svg)
+            - Diagrama Waterfall de decisão: ![pageplot](assets/example_detector_waterfall_decision.svg)
 
 
         <div class="referencia">
@@ -132,8 +132,8 @@ class CarrierDetector:
             freqs (tuple[np.ndarray,np.ndarray]): tupla com as frequências e a potência espectral em $dB$
 
         Example: 
-            Matriz de Potência 2D: ![pageplot](assets/example_detector_power_matrix.svg)
-            Matriz de Potência 3D: ![pageplot](assets/example_detector_power_matrix_3d.svg)
+            Matriz de Potência 2D: ![pageplot](assets/example_detector_waterfall.svg)
+            Matriz de Potência 3D: ![pageplot](assets/example_detector_waterfall_3d.svg)
         """
 
         segments = self.segment_signal(signal)
@@ -177,7 +177,7 @@ class CarrierDetector:
             results (list[tuple[np.ndarray, list[float]]]): lista de tuplas com os segmentos e as frequências detectadas
 
         Example: 
-            ![pageplot](assets/example_detector_detection_matrix.svg)
+            ![pageplot](assets/example_detector_waterfall_detection.svg)
         """
         # Calcula matriz de potência FFT
         self.analyze_signal(s)
@@ -239,7 +239,7 @@ class CarrierDetector:
             confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
 
         Example: 
-            ![pageplot](assets/example_detector_decision_matrix.svg)
+            ![pageplot](assets/example_detector_waterfall_decision.svg)
         """
 
         self.decision_matrix = np.copy(self.detected_matrix)
@@ -403,7 +403,7 @@ if __name__ == "__main__":
     PowerMatrixPlot(fig, grid, 0,
                 detector.power_matrix,
                 fs=detector.fs, N=detector.N).plot()
-    save_figure(fig, "example_detector_power_matrix.pdf")
+    save_figure(fig, "example_detector_waterfall.pdf")
 
     fig, grid = create_figure(1, 1, figsize=(12, 12))
     PowerMatrix3DPlot(fig, grid, 0,
@@ -415,7 +415,7 @@ if __name__ == "__main__":
                       elev=2, azim=-10
     ).plot()
     
-    save_figure(fig, "example_detector_power_matrix_3d.pdf")
+    save_figure(fig, "example_detector_waterfall_3d.pdf")
 
     # Heatmap da detecção
     fig, grid = create_figure(1, 1)
@@ -425,7 +425,7 @@ if __name__ == "__main__":
                  legend_list=["Detectada", "Confirmada"],
                  N=detector.N).plot()
 
-    save_figure(fig, "example_detector_detection_matrix.pdf")
+    save_figure(fig, "example_detector_waterfall_detection.pdf")
 
     # Heatmap da decisão
     fig, grid = create_figure(1, 1)
@@ -434,7 +434,7 @@ if __name__ == "__main__":
                  fs=detector.fs, 
                  legend_list=["Detectada", "Confirmada", "Span", "Demodulação"],
                  N=detector.N).plot()
-    save_figure(fig, "example_detector_decision_matrix.pdf")
+    save_figure(fig, "example_detector_waterfall_decision.pdf")
 
     # plota o espectro do sinal no segmento desejado
     seg_index = 1
