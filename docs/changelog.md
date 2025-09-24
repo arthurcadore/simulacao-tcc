@@ -88,6 +88,8 @@
     - [] Alterar diagrama do modulador
     - [] Alterar nome das variáveis
     - [] Alterar bloco do receptor pra ficar dentro de detector.
+    - [] Alterar indices no diagrama para ficar no mesmo tamanho. 
+    - [] waterfall, transpor 
 - [] Otimizar plots
     - [X] Verificar plot de constelação, normalização do sinal recebido
     - [X] Otimizar plot do encoder. 
@@ -110,7 +112,9 @@
     - [] Segmentar o sinal recebido inteiro em blocos de tamanho segment_size
     - [] Aplicar FFT em cada bloco, e verificar a potência em cada frequência
     - [] Identificar as frequências e demodular o sinal recebido
-    - [] Quando iniciar a demodulação, penalizar as frequências em +-800Hz (parametrizavel). 
+    - [] Quando iniciar a demodulação, penalizar as frequências em +-800Hz (parametrizavel).
+- [] Adicionar implementação de canal 
+    - [] adicionar multiplos 
 - [] Montar diagrama de waterfall
     - [] criar matriz (frequencia x segmento)
     - [] Plotar uma cor para cada frequência em cada segmento de tempo
@@ -155,3 +159,6 @@
 - [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
     - [] Adicionar vetor de simbolos de preâmbulo 
     - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
+
+
+

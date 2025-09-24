@@ -14,7 +14,7 @@ from .channel import Channel
 
 
 class CarrierDetector:
-    def __init__(self, fs: float = 128_000, seg_ms: float = 10.0, threshold: float = -10, freq_window: tuple[float, float] = (1000, 9000), bandwidth: float = 1600, history: int = 4):
+    def __init__(self, fs: float = 128_000, seg_ms: float = 10.0, threshold: float = -10, freq_window: tuple[float, float] = (0000, 10000), bandwidth: float = 1600, history: int = 4):
         """
         Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.
 
@@ -443,7 +443,7 @@ if __name__ == "__main__":
               fs=fs, 
               signal=detector.power_matrix[seg_index, :], 
               threshold=detector.threshold, 
-              xlim=(1, 9),
+              xlim=(0, 10),
               title="Detecção de portadora de $s(t)$ - Segmento %d" % seg_index,
               labels=["$S(f)$"],
               colors="darkred",
@@ -453,7 +453,7 @@ if __name__ == "__main__":
               fs=fs, 
               signal=detector.power_matrix[seg_index+1, :], 
               threshold=detector.threshold, 
-              xlim=(1, 9),
+              xlim=(0, 10),
               title="Detecção de portadora de $s(t)$ - Segmento %d" % (seg_index+1),
               labels=["$S(f)$"],
               colors="darkred",

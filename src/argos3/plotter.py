@@ -1467,40 +1467,43 @@ class PowerMatrixPlot(BasePlot):
                  power_matrix: np.ndarray,
                  fs: float,
                  N: int,
-                 ylim: Tuple[float, float] = (0, 9),
+                 xlim: Tuple[float, float] = (0, 10),
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.power_matrix = power_matrix
         self.fs = fs
         self.N = N
-        self.ylim = ylim
+        self.xlim = xlim
 
     def plot(self) -> None:
         n_segments, n_freqs = self.power_matrix.shape
-        x = np.arange(n_segments + 1)
 
-        # Converte para KHz
+        # Frequências em kHz
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
         freqs_khz = freqs / 1000.0
-        y = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
+        x = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
+
+        # Segmentos no eixo Y
+        y = np.arange(n_segments + 1)
 
         # Plotagem
         im = self.ax.pcolormesh(
-            x, y, self.power_matrix.T,
+            x, y, self.power_matrix,
             cmap="inferno", shading="auto"
         )
+        self.ax.invert_yaxis()
 
         # Barra de cores    
         cbar = self.ax.figure.colorbar(im, ax=self.ax)
         cbar.set_label("Magnitude ($dB$)")
 
-        # Limites
-        self.ax.set_ylim(self.ylim[0] / 1000.0, self.ylim[1] / 1000.0)
+        # Limites de frequência no eixo X
+        self.ax.set_xlim(self.xlim[0], self.xlim[1])
 
         # Labels
-        self.ax.set_xlabel("Index de Segmento")
-        self.ax.set_ylabel("Frequência ($kHz$)")
+        self.ax.set_xlabel("Frequência ($kHz$)")
+        self.ax.set_ylabel("Índice de Segmento (tempo)")
         self.ax.grid(False)
         self.apply_ax_style()
 
@@ -1518,7 +1521,7 @@ class PowerMatrix3DPlot(BasePlot):
                  power_matrix: np.ndarray,
                  fs: float,
                  N: int,
-                 freq_window: tuple[float, float] = None,
+                 freq_window: tuple[float, float] = (0, 10),
                  threshold: float = None,
                  smooth: bool = True,
                  sigma: float = 1.0,
@@ -1591,8 +1594,7 @@ class PowerMatrix3DPlot(BasePlot):
 class MatrixSquarePlot(BasePlot):
     r"""
     Plota matrizes categóricas (detecção/decisão) em formato quadriculado.
-    Cada valor é um quadrado colorido.
-    Eixo x = segmentos, eixo y = frequência em Hz.
+    Eixo x = frequência (kHz), eixo y = segmentos (tempo).
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1601,7 +1603,7 @@ class MatrixSquarePlot(BasePlot):
                  matrix: np.ndarray,
                  fs: float,
                  N: int,
-                 ylim: Tuple[float, float] = (0, 9),
+                 xlim: Tuple[float, float] = (0, 10),
                  legend_list: List[str] = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
@@ -1609,34 +1611,39 @@ class MatrixSquarePlot(BasePlot):
         self.matrix = matrix
         self.fs = fs
         self.N = N
-        self.ylim = ylim
+        self.xlim = xlim
         self.legend_list = legend_list or ["Detectada", "Confirmada", "Span", "Demodulação"]
 
         self.cmap = mpl.colors.ListedColormap([
-            (1, 1, 1, 0),    
-            "blue",   
-            "red",   
+            (1, 1, 1, 0),
+            "blue",
+            "red",
             "lightblue",
-            "orange"       
+            "orange"
         ])
-        self.bounds = [0,1,2,3,4,5]
+        self.bounds = [0, 1, 2, 3, 4, 5]
         self.norm = mpl.colors.BoundaryNorm(self.bounds, self.cmap.N)
 
     def plot(self) -> None:
         n_segments, n_freqs = self.matrix.shape
-        x = np.arange(n_segments + 1)
 
+        # Eixo X = frequências (kHz) -> deve ter comprimento n_freqs + 1
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
         freqs_khz = freqs / 1000.0
-        y = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
+        x = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
 
+        # Eixo Y = segmentos -> deve ter comprimento n_segments + 1
+        y = np.arange(n_segments + 1)
+
+        # Agora matrix tem shape (n_segments, n_freqs) -> compatível com (len(y)-1, len(x)-1)
         im = self.ax.pcolormesh(
-            x, y, self.matrix.T,
+            x, y, self.matrix,
             cmap=self.cmap,
             norm=self.norm,
             shading="auto"
         )
 
+        # Legenda (categorias)
         legend_map = {
             "Detectada": "blue",
             "Confirmada": "red",
@@ -1661,9 +1668,18 @@ class MatrixSquarePlot(BasePlot):
             frame.set_edgecolor("black")
             frame.set_alpha(1)
 
-        self.ax.set_xlabel("Index de Segmento")
-        self.ax.set_ylabel("Frequência ($kHz$)")
-        self.ax.grid(False)  
-        self.ax.set_ylim(self.ylim[0] / 1000.0, self.ylim[1] / 1000.0)
+        # Labels e limites
+        self.ax.set_xlabel("Frequência ($kHz$)")
+        self.ax.set_ylabel("Índice de Segmento (tempo)")
+        self.ax.grid(False)
+
+        # Limita frequência no eixo X (já em kHz)
+        self.ax.set_xlim(self.xlim[0], self.xlim[1])
+
+        # Inverte o eixo Y (segmento 0 no topo)
+        self.ax.invert_yaxis()
+
         self.apply_ax_style()
+
+
 
