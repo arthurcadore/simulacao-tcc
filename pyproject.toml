@@ -27,7 +27,3 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.metadata]
-name = "argos3"
-version = "1.0.6"
