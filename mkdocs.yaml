@@ -1,4 +1,4 @@
-site_name: Simulador ARGOS-3
+site_name: ARGOS-3 Simulator
 site_url: "https://github.com/arthurcadore/simulacao-tcc"
 
 repo_name: simulacao-tcc
@@ -44,32 +44,32 @@ extra_css:
   - site/styles.css
 
 nav:
-  - Início: index.md
-  - Instalação: 
-      - Instalação pip: api/api.md
-      - Instalação manual: api/guia.md
+  - Home: index.md
+  - Installation: 
+      - Installation pip: api/api.md
+      - Installation manual: api/guia.md
       - Changelog: changelog.md
-  - Componentes:
+  - Components:
       - Datagram: api/datagram.md
-      - Codificador Convolutional: api/convolutional.md
-      - Embaralhador: api/scrambler.md
-      - Preâmbulo: api/preamble.md
-      - Multiplexador: api/multiplexer.md
-      - Codificador de Canal: api/encoder.md
-      - Formatador: api/formatter.md
-      - Modulador: api/modulator.md
+      - Convolutional Encoder: api/convolutional.md
+      - Scrambler: api/scrambler.md
+      - Preamble: api/preamble.md
+      - Multiplexer: api/multiplexer.md
+      - Channel Encoder: api/encoder.md
+      - Pulse Modulate: api/formatter.md
+      - Bandpass Modulate: api/modulator.md
       - Detector: api/detector.md
-      - Filtro Passa-Baixa: api/lpf.md
-      - Filtro Casado: api/matchedfilter.md
-      - Sincronizador: api/synchronizer.md
+      - Low Pass Filter: api/lpf.md
+      - Matched Filter: api/matchedfilter.md
+      - Synchronizer: api/synchronizer.md
       - Decisor: api/sampler.md
-      - Decodificador Viterbi: api/viterbi.md
-  - Transmissor: api/transmitter.md
-  - Canal: 
-      - Canal: api/channel.md
-      - Adição Ruído SNR: api/noiseSNR.md
-      - Adição Ruído EBN0: api/noiseEBN0.md
-  - Receptor: api/receiver.md
+      - Viterbi Decoder: api/viterbi.md
+  - Transmitter: api/transmitter.md
+  - Channel: 
+      - Channel: api/channel.md
+      - SNR Noise: api/noiseSNR.md
+      - EB/N0 Noise: api/noiseEBN0.md
+  - Receiver: api/receiver.md
   - Extras: 
       - BER vs SNR: api/bersnr.md
       - Plotter: api/plots.md
