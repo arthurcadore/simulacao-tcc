@@ -18,6 +18,8 @@ class CarrierDetector:
         """
         Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.
 
+        ![pageplot](../assets/detector.svg)
+
         Args:
             fs (float): Frequência de amostragem [Hz]
             seg_ms (float): Duração de cada segmento [ms]

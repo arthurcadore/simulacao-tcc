@@ -20,6 +20,8 @@ class Synchronizer:
         r"""
          Inicializa o sincronizador de simbolos para identificar o momento de maior correlação entre o sinal recebido e o sinal de sincronismo.
 
+        ![pageplot](../assets/sync.svg)
+
         Args:
             fs (int): Frequência de amostragem do sinal recebido.
             Rb (int): Taxa de transmissão do sinal recebido.

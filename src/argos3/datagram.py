@@ -17,7 +17,7 @@ class Datagram:
         r"""
         Gera um datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
 
-        ![pageplot](../assets/datagrama.svg)
+        ![pageplot](../assets/datagram.svg)
 
         Args:
             pcdnum (int): Número identificador da PCD. Necessário para o modo TX.

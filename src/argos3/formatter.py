@@ -14,6 +14,8 @@ class Formatter:
         r"""
         Inicializa um formatador, utilizado preparar os símbolos para modulação.
 
+        ![pageplot](../assets/pulse_modulate.svg)
+
         Args:
             alpha (float): Fator de roll-off do pulso RRC.
             fs (int): Frequência de amostragem.

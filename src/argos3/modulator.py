@@ -16,7 +16,7 @@ class Modulator:
         r"""
         Inicializa um modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
 
-        ![pageplot](../assets/modulador.svg)
+        ![pageplot](../assets/modulator.svg)
 
         Args:
             fc (float): Frequência da portadora.

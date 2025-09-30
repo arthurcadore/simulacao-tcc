@@ -50,7 +50,7 @@ class Scrambler:
 
         O processo de embaralhamento é ilustrado pelo diagrama de blocos abaixo. 
 
-        ![pageplot](../assets/embaralhador.svg)
+        ![pageplot](../assets/scrambler.svg)
         
         Args:
             vt0 (np.ndarray): Vetor de entrada $v_t^{(0)}$.
@@ -119,7 +119,7 @@ class Scrambler:
 
         O processo de desembaralhamento é ilustrado pelo diagrama de blocos abaixo.
 
-        ![pageplot](../assets/desembaralhador.svg)
+        ![pageplot](../assets/unscrewer.svg)
 
         Args:
             X_prime (np.ndarray): Vetor $X'_{n}$ embaralhado.
