@@ -114,11 +114,11 @@ class Transmitter:
                 fig_datagram, grid, (0, 0),
                 bits_list=[datagram.msglength, 
                            datagram.pcdid, 
-                           datagram.blocks, 
+                           datagram.payload, 
                            datagram.tail],
                 sections=[("Message Length", len(datagram.msglength)),
                           ("PCD ID", len(datagram.pcdid)),
-                          ("Dados de App.", len(datagram.blocks)),
+                          ("Dados de App.", len(datagram.payload)),
                           ("Tail", len(datagram.tail))],
                 colors=["green", "orange", "red", "blue"],
                 xlabel="Index de Bit"

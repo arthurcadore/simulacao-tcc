@@ -29,8 +29,37 @@ class Datagram:
             ValueError: If the parameters `pcdnum` and `numblocks` or `streambits` are not provided.
             ValueError: If the payload is not provided or if the length of the payload is not the same as the number of blocks.
 
-        Example: 
-            ![pageplot](assets/example_datagram_time.svg)
+        Examples:
+            >>> import argos3
+            >>> datagramTX = argos3.Datagram(pcdnum=123456, numblocks=2, seed=10)
+            >>> streambits = datagramTX.streambits
+            >>> print(streambits)
+            [0 0 1 1 0 0 0 0 0 0 0 0 0 1 0 0 1 1 0 1 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 1 0
+             1 1 0 1 0 0 1 1 1 1 1 1 1 0 1 1 1 0 0 0 0 1 1 0 0 1 0 1 1 1 0 0 0 1 1 1 0
+             1 1 0 1 1 0 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0]
+            >>> 
+            >>> datagramRX = argos3.Datagram(streambits=streambits)
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 2,
+              "pcdid": 123456,
+              "payload": {
+                "block_1": {
+                  "byte_1": 183,
+                  "byte_2": 108,
+                  "byte_3": 125
+                },
+                "block_2": {
+                  "byte_1": 112,
+                  "byte_2": 217,
+                  "byte_3": 78,
+                  "byte_4": 141
+                }
+              },
+              "tail": 8
+            }
+
+            - Bitstream Plot Example: ![pageplot](assets/example_datagram_time.svg)
 
         <div class="referencia">
         <b>Reference:</b><br>
@@ -40,7 +69,7 @@ class Datagram:
 
         # Attributes
         self.streambits = None
-        self.blocks_json = None
+        self.parsed_json = None
         
         # The constructor will be called depending on how the datagram is created (TX or RX)
         if pcdnum is not None and numblocks is not None and streambits is None:
@@ -78,20 +107,20 @@ class Datagram:
             if payload_blocks != numblocks:
                 raise ValueError("The number of blocks must be the same as the number of blocks calculated from the payload.")
             
-            self.blocks = payload
+            self.payload = payload
         else:
-            self.blocks = self.generate_blocks()
+            self.payload = self.generate_blocks()
 
         # Generate datagram components
         self.pcdid = self.generate_pcdid()
         self.tail = self.generate_tail()
         self.msglength = self.generate_msglength()
 
-        # The datagram bitstream>
-        self.streambits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
+        # The datagram bitstream
+        self.streambits = np.concatenate((self.msglength, self.pcdid, self.payload, self.tail))
 
         # Create the datagram JSON representation
-        self.blocks_json = self.parse_datagram()
+        self.parsed_json = self.parse_datagram()
 
     def _init_rx(self, streambits):
         r"""
@@ -99,7 +128,9 @@ class Datagram:
         """
 
         self.streambits = streambits
-        self.blocks_json = self.parse_datagram()
+
+        # Create the datagram JSON representation
+        self.parsed_json = self.parse_datagram()
 
     def generate_blocks(self):
         r"""
@@ -124,9 +155,13 @@ class Datagram:
         </div>
         """
 
-        length = [24] + [32] * (self.numblocks - 1)
-        total_length = sum(length)
-        return self.rng.integers(0, 2, size=total_length, dtype=np.uint8)
+        # Generate data blocks length
+        l_app = sum([24] + [32] * (self.numblocks - 1))
+
+        # Generate random payload
+        payload = self.rng.integers(0, 2, size=l_app, dtype=np.uint8)
+        
+        return payload
 
     def generate_pcdid(self):
         r"""
@@ -164,12 +199,16 @@ class Datagram:
         </div>
         """
 
-        bin_str = format(self.pcdnum, '020b')
-        pcd_bits = np.array([int(b) for b in bin_str], dtype=np.uint8)
+        # Convert PCD number to binary
+        pcdnum_b = np.array([int(b) for b in format(self.pcdnum, '020b')], dtype=np.uint8)
 
-        checksum_val = pcd_bits.sum() % 256
-        checksum_bits = np.array([int(b) for b in format(checksum_val, '08b')], dtype=np.uint8)
-        return np.concatenate((pcd_bits, checksum_bits))
+        # Calculate checksum
+        rpcd = pcdnum_b.sum() % 256
+        rpcd_b = np.array([int(b) for b in format(rpcd, '08b')], dtype=np.uint8)
+
+        # Generate PCD_ID
+        pcd_id = np.concatenate((pcdnum_b, rpcd_b))
+        return pcd_id
 
     def generate_msglength(self):
         r"""
@@ -209,11 +248,16 @@ class Datagram:
         </div>
         """
 
-        n = self.numblocks - 1
-        bin_str = format(n, '03b')
-        bits = np.array([int(b) for b in bin_str], dtype=np.uint8)
-        paridade = bits.sum() % 2
-        return np.append(bits, paridade)
+        # Convert number of blocks to binary
+        bm = np.array([int(b) for b in format((self.numblocks - 1), '03b')], dtype=np.uint8)
+
+        # Calculate parity bit
+        pm = bm.sum() % 2
+
+        # Generate message length
+        tm = np.append(bm, pm)
+
+        return tm
     
     def generate_tail(self):
         r"""
@@ -235,10 +279,17 @@ class Datagram:
         AS3-SP-516-274-CNES (section 3.1.4.3)
         </div>
         """
+        
+        # The tail can vary between 7, 8 or 9 bits, based on the number of blocks (mod 3)
+        em_dict = [7, 8, 9]
 
-        tail_pad = [7, 8, 9]
-        tail_length = tail_pad[(self.numblocks - 1) % 3]
-        return np.zeros(tail_length, dtype=np.uint8)
+        # Calculate tail length
+        em_length = em_dict[(self.numblocks - 1) % 3]
+
+        # Generate tail
+        em = np.zeros(em_length, dtype=np.uint8)
+
+        return em
 
     def parse_datagram(self):
         r"""
@@ -251,98 +302,76 @@ class Datagram:
             ValueError: If the parity check of the message length $T_m$ fails.
             ValueError: If the checksum of the $PCD_{ID}$ field fails.
             ValueError: If the application bit sequence does not correspond to the length of $T_m$.
-
-        Example:
-            ```python
-            >>> datagram = Datagram(streambits=bits)
-            >>> print(datagram.parse_datagram())
-            {
-              "msglength": 2,
-              "pcdid": 1234,
-              "data": {
-                "block_1": {
-                  "sensor_1": 42,
-                  "sensor_2": 147,
-                  "sensor_3": 75
-                },
-                "block_2": {
-                  "sensor_1": 138,
-                  "sensor_2": 7,
-                  "sensor_3": 134,
-                  "sensor_4": 182
-                }
-              },
-              "tail": 8
-            }
-            ```
         """
 
         # extract the message length field
-        msglength = self.streambits[:4]
-        value_bits = msglength[:3]
-        paridade_bit = msglength[3]
+        tm = self.streambits[:4]
+        bm = tm[:3]
+        pm = tm[3]
+
+        # calculate the number of blocks
+        self.numblocks = int("".join(map(str, bm)), 2) + 1
 
         # Verify the integrity of the field
-        if paridade_bit != value_bits.sum() % 2:
+        if pm != bm.sum() % 2:
             raise ValueError("Parity check failed for the message length field.")
         else:
-            self.msglength = msglength
+            self.msglength = tm
 
         # extract the PCD ID field
-        pcdid_bits = self.streambits[4:32]
-        pcdnum_bits = pcdid_bits[:20]
-        checksum_bits = pcdid_bits[20:28]
+        pcd_id = self.streambits[4:32]
+        pcd_num = pcd_id[:20]
+        rpcd = pcd_id[20:28]
 
         # Verify the integrity of the field
-        checksum_val = pcdnum_bits.sum() % 256
-        if checksum_val != int("".join(map(str, checksum_bits)), 2):
+        rpcd_prime = pcd_num.sum() % 256
+        if rpcd_prime != int("".join(map(str, rpcd)), 2):
             raise ValueError("Checksum check failed for the PCD ID field.")
         else:
-            self.pcdid = pcdid_bits
-            self.pcdnum = int("".join(map(str, pcdnum_bits)), 2)            
+            self.pcdid = pcd_id
+            self.pcdnum = int("".join(map(str, pcd_num)), 2)            
 
-        
-        # extract the application data field
-        self.numblocks = int("".join(map(str, value_bits)), 2) + 1
-        self.blocks = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
+        # extract the payload, any validation is done in the receiver
+        self.payload = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
 
-        # extract the final bits
-        finalbits = self.streambits[32 + 24 + (32 * (self.numblocks - 1)):]
-
-        # extract the tail
+        # calculate the tail bits based on the number of blocks
         tail_pad = [7, 8, 9]
         tail_length = tail_pad[(self.numblocks - 1) % 3]
-        tail_bits = finalbits[:tail_length]
+
+        # extract the tail bits
+        self.tail = self.streambits[32 + 24 + (32 * (self.numblocks - 1)) + tail_length:]
 
         # Verify the integrity of the tail, all bits must be 0.
-        if any(int(b) != 0 for b in tail_bits):
+        if any(int(b) != 0 for b in self.tail):
             raise ValueError("Tail check failed.")
-        else:
-            self.tail = tail_bits
-    
+
         # create the JSON object
         data = {
             "msglength": self.numblocks,
             "pcdid": self.pcdnum,
-            "data": {},
+            "payload": {},
             "tail": tail_length
         }
 
         # build the JSON object
         index = 0
-        for bloco in range(self.numblocks):
-            bloco_nome = f"block_{bloco+1}"
-            data["data"][bloco_nome] = {}
+        for block in range(self.numblocks):
+            block_index = f"block_{block+1}"
+            data["payload"][block_index] = {}
             
-            num_sensores = 3 if bloco == 0 else 4
-            for sensor in range(num_sensores):
-                sensor_nome = f"sensor_{sensor+1}"
-                sensor_bits = self.blocks[index:index+8]
-                sensor_valor = int("".join(map(str, sensor_bits)), 2)
-                data["data"][bloco_nome][sensor_nome] = sensor_valor
+            # the first block has 24 bits, other 32.
+            num_bytes = 3 if block == 0 else 4
+
+            # add the payload to the JSON object
+            for byte in range(num_bytes):
+                byte_index = f"byte_{byte+1}"
+                byte_data = self.payload[index:index+8]
+                byte_parsed = int("".join(map(str, byte_data)), 2)
+                data["payload"][block_index][byte_index] = byte_parsed
                 index += 8
 
-        return json.dumps(data, indent=2)
+        datagram_json = json.dumps(data, indent=2)
+        return datagram_json
 
 if __name__ == "__main__":
     
@@ -357,11 +386,11 @@ if __name__ == "__main__":
         fig_datagram, grid, (0, 0),
         bits_list=[datagram_tx.msglength, 
                    datagram_tx.pcdid, 
-                   datagram_tx.blocks, 
+                   datagram_tx.payload, 
                    datagram_tx.tail],
         sections=[("Message Length", len(datagram_tx.msglength)),
                   ("PCD ID", len(datagram_tx.pcdid)),
-                  ("Dados de App.", len(datagram_tx.blocks)),
+                  ("Dados de App.", len(datagram_tx.payload)),
                   ("Tail", len(datagram_tx.tail))],
         colors=["green", "orange", "red", "blue"],
         xlabel="Index de Bit"
