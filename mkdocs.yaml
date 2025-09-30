@@ -50,7 +50,7 @@ nav:
       - Instalação manual: api/guia.md
       - Changelog: changelog.md
   - Componentes:
-      - Datagrama: api/datagram.md
+      - Datagram: api/datagram.md
       - Codificador Convolutional: api/convolutional.md
       - Embaralhador: api/scrambler.md
       - Preâmbulo: api/preamble.md

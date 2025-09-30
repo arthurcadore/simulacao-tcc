@@ -1,11 +1,8 @@
 # """
-# Implementa um datagrama compatível com o padrão PPT-A3.
+# Implementation of a datagram compatible with the PPT-A3 standard.
 
-# Referência:
-#     AS3-SP-516-274-CNES (seção 3.1.4)
-
-# Autor: Arthur Cadore
-# Data: 28-07-2025
+# Author: Arthur Cadore (github.com/arthurcadore)
+# Date: 28-07-2025
 # """
 
 import numpy as np
@@ -15,84 +12,90 @@ from .plotter import BitsPlot, create_figure, save_figure
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None, seed=None, payload=None):
         r"""
-        Gera um datagrama no padrão ARGOS-3. O formato do datagrama é ilustrado na figura abaixo.
+        Generate a datagram in the ARGOS-3 standard. The datagram format is illustrated in the figure below.
 
         ![pageplot](../assets/datagram.svg)
 
         Args:
-            pcdnum (int): Número identificador da PCD. Necessário para o modo TX.
-            numblocks (int): Quantidade de blocos de dados. Necessário para o modo TX.
-            streambits (np.ndarray): Sequência de bits do datagrama. Necessário para o modo RX.
-            seed (int): Seed do gerador de números aleatórios.
-            payload (np.ndarray): Payload do datagrama. 
+            pcdnum (int): PCD number. Required for TX mode.
+            numblocks (int): Number of blocks. Required for TX mode.
+            seed (int): Seed of the random number generator. Optional for TX mode.
+            payload (np.ndarray): Payload of the datagram. Optional for TX mode.
+            streambits (np.ndarray): Bitstream of the datagram. Required for RX mode.
 
         Raises:
-            ValueError: Se o número de blocos não estiver entre 1 e 8.
-            ValueError: Se o número PCD não estiver entre 0 e 1048575 $(2^{20} - 1)$.
-            ValueError: Se os parâmetros `pcdnum` e `numblocks` ou `streambits` não forem fornecidos.
-            ValueError: Se o payload não for fornecido ou se o comprimento do payload não for o mesmo que o número de blocos.
+            ValueError: If the number of blocks is not between 1 and 8.
+            ValueError: If the PCD number is not between 0 and 1048575 $(2^{20} - 1)$.
+            ValueError: If the parameters `pcdnum` and `numblocks` or `streambits` are not provided.
+            ValueError: If the payload is not provided or if the length of the payload is not the same as the number of blocks.
 
         Example: 
             ![pageplot](assets/example_datagram_time.svg)
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.1.4.2)
         </div>
         """
 
-        # Atributos comuns
+        # Attributes
         self.streambits = None
         self.blocks_json = None
         
-        # O construtor será chamado dependendo de como o datagrama é criado (TX ou RX)
+        # The constructor will be called depending on how the datagram is created (TX or RX)
         if pcdnum is not None and numblocks is not None and streambits is None:
-            # Construtor TX
+            # TX constructor
             self._init_tx(pcdnum, numblocks, seed, payload)
         elif streambits is not None and pcdnum is None and numblocks is None:
-            # Construtor RX
+            # RX constructor
             self._init_rx(streambits)
         else:
-            raise ValueError("Você deve fornecer ou (pcdnum e numblocks) ou streambits")
+            raise ValueError("You must provide either (pcdnum and numblocks) or streambits")
     
     def _init_tx(self, pcdnum, numblocks, seed, payload):
         r"""
-        Construtor TX
+        TX constructor
         """
 
         if not (1 <= numblocks <= 8):
-            raise ValueError("O número de blocos deve estar entre 1 e 8.")
+            raise ValueError("The number of blocks must be between 1 and 8.")
         if not (0 <= pcdnum <= 1048575):  # 2^20 - 1
-            raise ValueError("O número PCD deve estar entre 0 e 1048575.")
+            raise ValueError("The PCD number must be between 0 and 1048575.")
         if (payload is not None) and (len(payload) != (numblocks -1) * 32 + 24):
-            raise ValueError("O payload deve ter o mesmo comprimento que o número de blocos.")
+            raise ValueError("The payload must have the same length as the number of blocks.")
         
         self.pcdnum = pcdnum
         self.numblocks = numblocks
         self.rng = np.random.default_rng(seed)
 
-        # Se não for passado payload, gera os blocos automaticamente
+        # If payload is not provided, generate blocks automatically
         if payload is not None:
+            # calculate the number of blocks based on the length of the payload
+            payload_blocks = (len(payload) + 24) // 32
+            if not (1 <= payload_blocks <= 8):
+                raise ValueError("The payload length should be between 24 and 248 bits.")
+
+            if payload_blocks != numblocks:
+                raise ValueError("The number of blocks must be the same as the number of blocks calculated from the payload.")
+            
             self.blocks = payload
-            # TODO: Relcalcular o tamanho do numblocks.
-            # verificar se o numblos está dentro de 1 e 8 
         else:
             self.blocks = self.generate_blocks()
 
-        # Gera os componentes do datagrama
+        # Generate datagram components
         self.pcdid = self.generate_pcdid()
         self.tail = self.generate_tail()
         self.msglength = self.generate_msglength()
 
-        # A sequência de bits do datagrama
+        # The datagram bitstream>
         self.streambits = np.concatenate((self.msglength, self.pcdid, self.blocks, self.tail))
 
-        # Cria a representação JSON do datagrama
+        # Create the datagram JSON representation
         self.blocks_json = self.parse_datagram()
 
     def _init_rx(self, streambits):
         r"""
-        Construtor RX
+        RX constructor
         """
 
         self.streambits = streambits
@@ -100,24 +103,24 @@ class Datagram:
 
     def generate_blocks(self):
         r"""
-        Gera os blocos de dados simulados (valores aleatórios), com base na quantidade especificada de blocos. 
+        Generate simulated data blocks (random values), based on the specified number of blocks. 
         
-        A quantidade de blocos pode variar de 1 á 8. O primeiro bloco tem comprimento de 24bits, enquanto que todos os demais blocos tem 32bits. Dessa forma, os dados o comprimento dos dados de aplicação são dados pela expressão abaixo.
+        The number of blocks can be between 1 and 8. The first block has a length of 24 bits, and all other blocks have 32 bits. In this way, the length of the data application is given by the expression below.
 
         $$
         L_{app} = 24 + 32 \cdot (n-1)
         $$
 
-        Sendo: 
-            - $L_{app}$: Comprimento do datagrama em bits 
-            - $n$: Número de blocos do datagrama, podendo variar de 1 á 8. 
+        Where: 
+            - $L_{app}$: Data application length in bits 
+            - $n$: Number of blocks of the datagram, varying from 1 to 8. 
 
         Returns:
-            blocks (np.ndarray): Vetor de bits representando os blocos de dados.
+            blocks (np.ndarray): Bit array representing the data blocks.
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.1.4.2)
         </div>
         """
 
@@ -127,17 +130,17 @@ class Datagram:
 
     def generate_pcdid(self):
         r"""
-        Gera o campo $PCD_{ID}$ a partir do número PCD ($PCD_{num}$), Primeiro gera-se a sequência de 20 bits correspondente ao número PCD.
+        Generate the PCD_ID field from the PCD number ($PCD_{num}$), First generate the sequence of 20 bits corresponding to the PCD number.
 
         $$
           PCDnum_{10} \mapsto PCDnum_{2}  
         $$
 
-        Sendo: 
-            - $PCDnum_{10}$: Valor decimal do campo $PCD_{num}$, podendo variar de 0 á 1048575 $(2^{20} - 1)$.
-            - $PCDnum_{2}$: Sequência de 20 bits correspondente ao valor de $PCD_{num}$.
+        Where: 
+            - $PCDnum_{10}$: Decimal value of the $PCD_{num}$ field, varying from 0 to 1048575 $(2^{20} - 1)$.
+            - $PCDnum_{2}$: Sequence of 20 bits corresponding to the value of $PCD_{num}$.
 
-        Em seguida, é calculado o checksum, $R_{PCD}$, do campo $PCD_{num}$, obtido através da soma dos bits e aplicação da operação módulo 256 ($2^8$).
+        Then, the checksum, $R_{PCD}$, of the $PCD_{num}$ field is calculated, obtained through the sum of the bits and application of the modulo 256 ($2^8$) operation.
 
         $$
         \begin{equation}
@@ -145,19 +148,19 @@ class Datagram:
         \end{equation}
         $$
 
-        Sendo: 
-            - $R_{PCD}$: Sequência de 8 bits correspondente ao checksum do campo $PCD_{num}$.
-            - $i$: Indice do bit do campo $PCD_{num}$.
-            - $b$: Valor do bit do campo $PCD_{num}$.
+        Where: 
+            - $R_{PCD}$: Sequence of 8 bits corresponding to the checksum of the $PCD_{num}$ field.
+            - $i$: Index of the bit of the $PCD_{num}$ field.
+            - $b$: Value of the bit of the $PCD_{num}$ field.
 
-        O campo $PCD_{ID}$ é gerado concatenando os parâmetros gerados, sendo $PCD_{ID} = PCD_{num} \oplus R_{PCD}$.
+        The $PCD_{ID}$ field is generated by concatenating the generated parameters, being $PCD_{ID} = PCD_{num} \oplus R_{PCD}$.
 
         Returns:
-            pcd_id (np.ndarray): Vetor de bits contendo o PCD ID e o checksum.       
+            pcd_id (np.ndarray): Bit array containing the PCD ID and checksum.       
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.1.4.2)
         </div>
         """
 
@@ -170,17 +173,16 @@ class Datagram:
 
     def generate_msglength(self):
         r"""
-        Gera o valor do comprimento de mensagem $T_{m}$ com base na quantidade de blocos $n$. Primeiro, deve-se calcular a sequência de bits $B_m$. 
-        
+        Generate the value of the message length $T_{m}$ based on the number of blocks $n$. First, the sequence of bits $B_m$ must be calculated. 
          $$
            Bm_{10} = (n - 1) \mapsto Bm_{2} 
          $$
 
-        Sendo: 
-            - $B_m$: Sequência de três bits correspondendo ao tamanho de mensagem. 
-            - $n$: Número de blocos do datagrama, podendo variar de 1 á 8. 
+        Where: 
+            - $B_m$: Sequence of three bits corresponding to the message length. 
+            - $n$: Number of blocks of the datagram, varying from 1 to 8. 
 
-        Em seguida, é calculado o quarto bit $P_m$ (bit de paridade).
+        Then, the fourth bit $P_m$ (parity bit) is calculated.
 
         $$
         \begin{equation}
@@ -192,18 +194,18 @@ class Datagram:
         \end{equation}
         $$
         
-        Sendo: 
-            - $P_m$: Bit de paridade.
-            - $i$: Indice de bit do campo $B_m$.
+        Where: 
+            - $P_m$: Parity bit.
+            - $i$: Index of bit of the $B_m$ field.
 
-        O campo $T_{m}$ é gerado concatenando os parâmetros gerados, sendo $T_{m} = B_{m} \oplus P_{m}$.
+        The $T_{m}$ field is generated by concatenating the generated parameters, being $T_{m} = B_{m} \oplus P_{m}$.
 
         Returns:
-           msg_length (np.ndarray): Vetor de 4 bits representando o campo Message Length.
+           msg_length (np.ndarray): Bit array representing the Message Length field.
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.1.4.2)
         </div>
         """
 
@@ -215,22 +217,22 @@ class Datagram:
     
     def generate_tail(self):
         r"""
-        Gera a cauda do datagrama $E_m$, utilizado para limpar o registrador do codificador convolucional.
+        Generate the tail of the datagram $E_m$, used to clear the codifier's register.
 
         $$
         E_m = 7 + [(n - 1) \bmod 3]
         $$
 
-        Sendo: 
-            - $E_m$: Comprimento de cauda do datagrama (zeros) adicionada ao final do datagrama. 
-            - $n$: Número de blocos do datagrama.
+        Where: 
+            - $E_m$: Tail of the datagram (zeros) added to the end of the datagram. 
+            - $n$: Number of blocks of the datagram.
 
         Returns:
-            tail (np.ndarray): Vetor de bits zerados com comprimento variável (7, 8 ou 9 bits).
+            tail (np.ndarray): Bit array of zeros with variable length (7, 8 or 9 bits).
             
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1.4.3)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.1.4.3)
         </div>
         """
 
@@ -240,15 +242,15 @@ class Datagram:
 
     def parse_datagram(self):
         r"""
-        Interpreta a sequência de bits do datagrama, extraindo campos e validando integridade.
+        Interprets the bit sequence of the datagram, extracting fields and validating integrity.
         
         Returns:
-            str (json): Objeto JSON contendo a representação estruturada do datagrama.
+            str (json): JSON object containing the structured representation of the datagram.
         
         Raises:
-            ValueError: Caso haja falha na validação de paridade do comprimento de mensagem $T_m$.
-            ValueError: Caso haja falha no checksum do campo $PCD_{ID}$. 
-            ValueError: Se a sequência de bits de aplicação não corresponder ao comprimento de $T_m$.
+            ValueError: If the parity check of the message length $T_m$ fails.
+            ValueError: If the checksum of the $PCD_{ID}$ field fails.
+            ValueError: If the application bit sequence does not correspond to the length of $T_m$.
 
         Example:
             ```python
@@ -258,12 +260,12 @@ class Datagram:
               "msglength": 2,
               "pcdid": 1234,
               "data": {
-                "bloco_1": {
+                "block_1": {
                   "sensor_1": 42,
                   "sensor_2": 147,
                   "sensor_3": 75
                 },
-                "bloco_2": {
+                "block_2": {
                   "sensor_1": 138,
                   "sensor_2": 7,
                   "sensor_3": 134,
@@ -275,50 +277,50 @@ class Datagram:
             ```
         """
 
-        # extrai o campo message length
+        # extract the message length field
         msglength = self.streambits[:4]
         value_bits = msglength[:3]
         paridade_bit = msglength[3]
 
-        # Verifica a integridade do campo
+        # Verify the integrity of the field
         if paridade_bit != value_bits.sum() % 2:
-            raise ValueError("Paridade inválida no campo Message Length.")
+            raise ValueError("Parity check failed for the message length field.")
         else:
             self.msglength = msglength
 
-        # extrai o campo PCD ID
+        # extract the PCD ID field
         pcdid_bits = self.streambits[4:32]
         pcdnum_bits = pcdid_bits[:20]
         checksum_bits = pcdid_bits[20:28]
 
-        # verifica a integridade do campo
+        # Verify the integrity of the field
         checksum_val = pcdnum_bits.sum() % 256
         if checksum_val != int("".join(map(str, checksum_bits)), 2):
-            raise ValueError("Checksum inválido no campo PCD ID.")
+            raise ValueError("Checksum check failed for the PCD ID field.")
         else:
             self.pcdid = pcdid_bits
             self.pcdnum = int("".join(map(str, pcdnum_bits)), 2)            
 
         
-        # extrai o campo dados de aplicação
+        # extract the application data field
         self.numblocks = int("".join(map(str, value_bits)), 2) + 1
         self.blocks = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
 
-        # Pega os ultimos bits após dados de app.
+        # extract the final bits
         finalbits = self.streambits[32 + 24 + (32 * (self.numblocks - 1)):]
 
-        # verifica a cauda esperada de acordo com numblocks, e extrai ela.
+        # extract the tail
         tail_pad = [7, 8, 9]
         tail_length = tail_pad[(self.numblocks - 1) % 3]
         tail_bits = finalbits[:tail_length]
 
-        # verifica a integridade da cauda, todos os bits tem que ser 0.
+        # Verify the integrity of the tail, all bits must be 0.
         if any(int(b) != 0 for b in tail_bits):
-            raise ValueError("Cauda inválida.")
+            raise ValueError("Tail check failed.")
         else:
             self.tail = tail_bits
     
-        # cria o objeto JSON
+        # create the JSON object
         data = {
             "msglength": self.numblocks,
             "pcdid": self.pcdnum,
@@ -326,10 +328,10 @@ class Datagram:
             "tail": tail_length
         }
 
-        # monta o objeto JSON
+        # build the JSON object
         index = 0
         for bloco in range(self.numblocks):
-            bloco_nome = f"bloco_{bloco+1}"
+            bloco_nome = f"block_{bloco+1}"
             data["data"][bloco_nome] = {}
             
             num_sensores = 3 if bloco == 0 else 4
@@ -378,11 +380,13 @@ if __name__ == "__main__":
 
 
     # Teste com payload:
+    numblocks = 3
+    payload_length = (numblocks - 1) * 32 + 24
 
     # Gera um vetor com 24 uns
-    payload = np.ones(24, dtype=np.uint8)
+    payload = np.ones(payload_length, dtype=np.uint8)
 
-    datagram_tx = Datagram(pcdnum=123456, numblocks=1, payload=payload, seed=10)
+    datagram_tx = Datagram(pcdnum=123456, numblocks=numblocks, payload=payload, seed=10)
     print(datagram_tx.parse_datagram())
     print("Stream bits: ", ''.join(str(b) for b in datagram_tx.streambits))
 
