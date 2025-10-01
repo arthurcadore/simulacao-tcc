@@ -63,7 +63,6 @@ nav:
       - Matched Filter: api/matchedfilter.md
       - Synchronizer: api/synchronizer.md
       - Decisor: api/sampler.md
-      - Viterbi Decoder: api/viterbi.md
   - Transmitter: api/transmitter.md
   - Channel: 
       - Channel: api/channel.md

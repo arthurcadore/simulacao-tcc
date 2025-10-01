@@ -17,7 +17,7 @@ from .encoder import Encoder
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
         r"""
-        Inicializa o codificador convolucional, com base em uma tupla de polinômios geradores $G$ que determinam a estrutura do codificador.
+        Inicialize the Convolutional Encoder with the given polynomials $G$. The default polynomials are $G_0 = 121_{10}$ and $G_1 = 91_{10}$. 
 
         $$
         \begin{equation}
@@ -28,57 +28,92 @@ class EncoderConvolutional:
         \end{equation}
         $$
 
-        O codificador convolucional, considerando $G_0$ e $G_1$ pode ser representado pelo diagrama de blocos abaixo.
+        The Convolutional Encoder can be represented by the block diagram below that corresponds to the shift register organization.
 
         ![pageplot](../assets/cod_convolucional.svg)
         
         Args:
-            G (np.ndarray): Tupla de polinômios geradores $G$.
+            G (np.ndarray): Tuple of generator polynomials $G$.
 
-        Example: 
-            ![pageplot](assets/example_conv_time.svg)
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np
+            >>>
+            >>> ut = np.random.randint(0, 2, 30)
+            >>> encoder = argos3.EncoderConvolutional(G=np.array([[121, 91]]))
+            >>> vt0, vt1 = encoder.encode(ut)
+            >>>
+            >>> print(ut)
+            [1 0 0 0 0 1 0 0 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 0 1 1 0 0 1 1]
+            >>>
+            >>> decoder = argos3.DecoderViterbi(G=np.array([[121, 91]]))
+            >>> ut_prime = decoder.decode(vt0, vt1)
+            >>>
+            >>> print(ut_prime)
+            >>>
+            [1 0 0 0 0 1 0 0 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 0 1 1 0 0 1 1]
+            >>> print("ut = ut': ", np.array_equal(ut, ut_prime))
+            ut = ut':  True
+
+            - Bitstream Plot Example: ![pageplot](assets/example_conv_time.svg)
 
         <div class="referencia">
-          <b>Referência:</b>
+          <b>Reference:</b>
           <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
           <p>CCSDS 131.1-G-2</p>
         </div>
         """
+
+        # Attributes
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
+
+        # Calculate the number of bits in the shift register
         self.K = max(self.G0.bit_length(), self.G1.bit_length())
+
+        # Calculate the taps for each generator polynomial
         self.g0_taps = self.calc_taps(self.G0)
         self.g1_taps = self.calc_taps(self.G1)
+
+        # Initialize the shift register
         self.shift_register = np.zeros(self.K, dtype=int)
+
+        # Initialize komm library (for free distance calculation)
         self.komm = komm.ConvolutionalCode(G)
 
     def calc_taps(self, poly):
         r"""
-        Calcula os índices dos bits ativos ($'1'$), ou taps, do polinômio gerador $G_n$.
+        Generate the taps for each generator polynomial.
 
         Args:
-            poly (int): Polinômio gerador $G_n$ em formato binário. 
+            poly (int): Generator polynomial $G_n$ in binary format.
 
         Returns:
-            taps (int): Lista com os índices dos taps ativos.
+            taps (int): List of active tap indices.
         """
-        bin_str = f"{poly:0{self.K}b}"
-        taps = [i for i, b in enumerate(bin_str) if b == '1']
+
+        # Convert the generator polynomial to a binary string
+        poly_bin = f"{poly:0{self.K}b}"
+
+        # Generate the taps for each generator polynomial
+        taps = [i for i, b in enumerate(poly_bin) if b == '1']
         return taps
 
     def calc_free_distance(self):
         r"""
-        Calcula a distância livre $d_{free}$ do código convolucional, definida como a menor distância de Hamming entre quaisquer duas sequências de saída distintas.
+        Calculate the free distance $d_{free}$ of the convolutional code, defined as the minimum Hamming distance between any two distinct output sequences.
 
         Returns:
-            dist (int): Distância livre $d_{free}$ do codificador convolucional organizado com $G$.
+            dist (int): Free distance $d_{free}$ of the convolutional encoder organized with $G$.
         """
+
+        # Calculate the free distance using the komm library
         return self.komm.free_distance()
 
     def encode(self, ut):
         r"""
-        Codifica uma sequência binária de entrada $u_t$, retornando as sequências de saida $v_t^{(0)}$ e $v_t^{(1)}$. O processo de codificação pode ser representado pela expressão abaixo.
+        Encode a binary input sequence $u_t$, returning the output sequences $v_t^{(0)}$ and $v_t^{(1)}$. The encoding process can be represented by the expression below.
 
         $$
         \begin{equation}
@@ -92,25 +127,32 @@ class EncoderConvolutional:
         \end{equation}
         $$
 
-        Sendo: 
-            - $v_t^{(0)}$ e $v_t^{(1)}$: Canais de saída do codificador.
-            - $u_t$: Vetor de bits de entrada.
-            - $G_{0}$ e $G_{1}$: Polinômios geradores do codificador.
+        Where: 
+            - $v_t^{(0)}$ and $v_t^{(1)}$: Output channels of the encoder.
+            - $u_t$: Input bit vector.
+            - $G_{0}$ and $G_{1}$: Generator polynomials of the encoder.
 
         Args:
-            ut (np.ndarray): Vetor de bits $u_t$ de entrada a serem codificados.
+            ut (np.ndarray): Input bit vector $u_t$ to be encoded.
 
         Returns:
-                tuple (np.ndarray, np.ndarray): Tupla com os dois canais de saída $v_t^{(0)}$ e $v_t^{(1)}$.
+                tuple (np.ndarray, np.ndarray): Tuple with the two output channels $v_t^{(0)}$ and $v_t^{(1)}$.
         """
         ut = np.array(ut, dtype=int)
         vt0 = []
         vt1 = []
 
+        # Encode the input sequence
         for bit in ut:
+
+            # Shift the shift register
             self.shift_register = np.insert(self.shift_register, 0, bit)[:self.K]
+            
+            # Calculate the output bits
             out0 = np.sum(self.shift_register[self.g0_taps]) % 2
             out1 = np.sum(self.shift_register[self.g1_taps]) % 2
+            
+            # Append the output bits to the output sequences
             vt0.append(out0)
             vt1.append(out1)
 
@@ -119,7 +161,7 @@ class EncoderConvolutional:
 class DecoderViterbi:
     def __init__(self, G=np.array([[0b1111001, 0b1011011]]), decision="hard"):
         r"""
-        Inicializa o decodificador convolucional (algoritmo Viterbi), com base em uma tupla de polinômios geradores $G$ que determinam a estrutura do decodificador.
+        Initialize the Viterbi decoder, based on a tuple of generator polynomials $G$ that determine the structure of the decoder.
 
         $$
         \begin{equation}
@@ -131,7 +173,33 @@ class DecoderViterbi:
         $$
 
         Args:
-            G (np.ndarray): Tupla de polinômios geradores $G$.
+            G (np.ndarray): Tuple of generator polynomials $G$.
+            decision (str): Decision type, either "hard" or "soft".
+
+        Raises:
+            ValueError: If decision is not "hard" or "soft".
+
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np
+            >>>
+            >>> ut = np.random.randint(0, 2, 30)
+            >>> encoder = argos3.EncoderConvolutional(G=np.array([[121, 91]]))
+            >>> vt0, vt1 = encoder.encode(ut)
+            >>>
+            >>> print(ut)
+            [1 0 0 0 0 1 0 0 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 0 1 1 0 0 1 1]
+            >>>
+            >>> decoder = argos3.DecoderViterbi(G=np.array([[121, 91]]))
+            >>> ut_prime = decoder.decode(vt0, vt1)
+            >>>
+            >>> print(ut_prime)
+            >>>
+            [1 0 0 0 0 1 0 0 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 0 1 1 0 0 1 1]
+            >>> print("ut = ut': ", np.array_equal(ut, ut_prime))
+            ut = ut':  True
+
+            - Bitstream Plot Example: ![pageplot](assets/example_conv_time.svg)
 
         <div class="referencia">
           <b>Referência:</b>
@@ -141,12 +209,19 @@ class DecoderViterbi:
         </div>
         """
         
+        # Attributes
         self.G = G
         self.G0 = int(G[0][0])
         self.G1 = int(G[0][1])
+
+        # Calculate the number of bits in the shift register
         self.K = max(self.G0.bit_length(), self.G1.bit_length())
         self.num_states = 2**(self.K - 1)
+
+        # Build the trellis
         self.trellis = self.build_trellis()
+
+        # Set the decision type
         self.decision_type = decision.lower()
 
     def build_trellis(self):
@@ -157,74 +232,154 @@ class DecoderViterbi:
             trellis (dict): Trelica do decodificador Viterbi.
         """
         trellis = {}
+
+        # Build the trellis
         for state in range(self.num_states):
             trellis[state] = {}
+            # for each bit, calculate the output bits and the next state
             for bit in [0, 1]:
+
+                # Calculate the shift register
                 sr = [bit] + [int(b) for b in format(state, f'0{self.K - 1}b')]
+                
+                # Calculate the output bits
                 out0 = sum([sr[i] for i in range(self.K) if (self.G0 >> (self.K - 1 - i)) & 1]) % 2
                 out1 = sum([sr[i] for i in range(self.K) if (self.G1 >> (self.K - 1 - i)) & 1]) % 2
+
+                # Calculate the next state
                 next_state = int(''.join(str(b) for b in sr[:-1]), 2)
+                
+                # Add the transition to the trellis
                 trellis[state][bit] = (next_state, [out0, out1])
         return trellis
 
-    def branch_metric(self, expected_out, received):
-        """
-        Calcula a métrica de ramo dependendo do tipo de decisão.
-        - Hard: distância de Hamming
-        - Soft: distância euclidiana
+    def branch_metric(self, trellis_symbol, received_symbol):
+        r"""
+        Calculate the branch metric depending on the decision type for the Viterbi decoder.
+
+        For Hard Decision uses Hamming distance, given by the expression below.
+
+        $$
+        \begin{equation}
+            \begin{split}
+                d_{hamming} &= \sum_{i=0}^{N-1} |r_i - s_i|
+            \end{split}
+        \end{equation}
+        $$
+        
+        Where: 
+            - $d_{hamming}$: Hamming distance.
+            - $r_i$: Received bit.
+            - $s_i$: Expected trellis output bit.
+
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/example_conv_time.svg)
+
+        For Soft Decision uses Euclidean distance, given by the expression below.
+
+        $${
+        \begin{equation}
+            \begin{split}
+                d_{euclidean} &= \sum_{i=0}^{N-1} (r_i - s_i)^2 
+            \end{split}
+        \end{equation}
+        }$$
+
+        Where: 
+            - $d_{euclidean}$: Euclidean distance.
+            - $r_i$: Received symbol.
+            - $s_i$: Expected trellis output symbol.
+
+        Examples:
+            - Soft Decision Example: 
+            ![pageplot](assets/example_conv_time_soft.svg)
+            ![pageplot](assets/example_conv_time_soft_quantized.svg)
+            
+    
+        Args:
+            trellis_symbol (np.ndarray): Expected trellis output symbol, based on the trellis state. 
+            received_symbol (np.ndarray): Received symbol.
+
+        Returns:
+            metric (float): Branch metric.
         """
         if self.decision_type == "hard":
             # Hamming between expected and rounded received
-            return (expected_out[0] != int(round(received[0]))) + \
-                   (expected_out[1] != int(round(received[1])))
+            return (trellis_symbol[0] != int(round(received_symbol[0]))) + \
+                   (trellis_symbol[1] != int(round(received_symbol[1])))
         elif self.decision_type == "soft":
+
+            # Convert expected trellis output to NRZ
+            nrz_symbol = 2*np.array(trellis_symbol, dtype=float) - 1.0
+            
             # squared euclidean distance (cost): (r - s)^2 summed
-            expected_nrz = 2*np.array(expected_out, dtype=float) - 1.0
-            return np.sum((received - expected_nrz)**2)
+            return np.sum((received_symbol - nrz_symbol)**2)
         else:
             raise ValueError("decision_type deve ser 'hard' ou 'soft'.")
 
     def decode(self, vt0, vt1):
         r"""
-        Decodifica os bits de entrada $v_t^{(0)}$ e $v_t^{(1)}$, retornando os bits decodificados $u_t$.
+        Decode the bits of the input $v_t^{(0)}$ and $v_t^{(1)}$, returning the decoded bits $u_t$.
 
         Args:
-            vt0 (np.ndarray): Bits de entrada do canal I.
-            vt1 (np.ndarray): Bits de entrada do canal Q.
+            vt0 (np.ndarray): Bits of the input channel I.
+            vt1 (np.ndarray): Bits of the input channel Q.
 
         Returns:
-            ut_hat (np.ndarray): Bits decodificados.
+            ut_hat (np.ndarray): Decoded bits.
         """
+
+        # Convert the input to numpy arrays
         vt0 = np.array(vt0, dtype=float)
         vt1 = np.array(vt1, dtype=float)
         T = len(vt0)
 
+        # Initialize the path metrics
         path_metrics = np.full((T + 1, self.num_states), np.inf, dtype=float)
         path_metrics[0, 0] = 0.0
 
+        # Initialize the previous state and input
         prev_state = np.full((T + 1, self.num_states), -1, dtype=int)
         prev_input = np.full((T + 1, self.num_states), -1, dtype=int)
 
-        min_metric_per_bit = np.full((T, 2), np.inf, dtype=float)
+        # Initialize the minimum metric per bit
+        bit_metric = np.full((T, 2), np.inf, dtype=float)
 
+        # for each time step
         for t in range(T):
+            # for each state
             for state in range(self.num_states):
+                # if the path metric is not infinite
                 if path_metrics[t, state] < np.inf:
+                    # for each bit
                     for bit in [0, 1]:
+
+                        # get the next state and expected output
                         next_state, expected_out = self.trellis[state][bit]
+                        
+                        # get the received symbol
                         received = np.array([vt0[t], vt1[t]])
+                        
+                        # calculate the branch metric
                         bm = self.branch_metric(expected_out, received)
+                        
+                        # calculate the metric
                         metric = path_metrics[t, state] + bm
 
-                        if metric < min_metric_per_bit[t, bit]:
-                            min_metric_per_bit[t, bit] = metric
+                        # update the minimum metric per bit
+                        if metric < bit_metric[t, bit]:
+                            bit_metric[t, bit] = metric
 
+                        # update the path metrics
                         if metric < path_metrics[t + 1, next_state]:
                             path_metrics[t + 1, next_state] = metric
                             prev_state[t + 1, next_state] = state
                             prev_input[t + 1, next_state] = bit
 
+        # get the final state
         state = np.argmin(path_metrics[T])
+        
+        # backtracking
         ut_hat_rev = []
         for t in range(T, 0, -1):
             bit = prev_input[t, state]
@@ -233,23 +388,16 @@ class DecoderViterbi:
             ut_hat_rev.append(bit)
             state = prev_state[t, state]
 
+        # reverse the decoded bits
         ut_hat = np.array(ut_hat_rev[::-1], dtype=int)
 
+        # hard decision
         if self.decision_type == "hard":
             return ut_hat
-
-        mm0 = min_metric_per_bit[:, 0]
-        mm1 = min_metric_per_bit[:, 1]
-        invalid = np.logical_or(~np.isfinite(mm0), ~np.isfinite(mm1))
-        mm0[invalid] = np.inf
-        mm1[invalid] = np.inf
-
-        llrs = mm0 - mm1
-
-        if self.decision_type == "soft":
-            return llrs
-        else:
-            return ut_hat
+        
+        # calculate the log-likelihood ratios
+        llrs = bit_metric[:, 0] - bit_metric[:, 1]
+        return llrs
 
 
 if __name__ == "__main__":
@@ -257,7 +405,7 @@ if __name__ == "__main__":
     print("\n\n ==== HARD DECISION ==== \n\n")
 
     encoder = EncoderConvolutional()
-    print("Distância livre:", encoder.calc_free_distance())
+    print("Free Distance:", encoder.calc_free_distance())
     print("G0:  ", format(encoder.G0, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g0_taps))
     print("G1:  ", format(encoder.G1, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g1_taps))
 
@@ -306,7 +454,7 @@ if __name__ == "__main__":
     print("\n\n ==== SOFT DECISION ==== \n\n")
 
     encoder = EncoderConvolutional()
-    print("Distância livre:", encoder.calc_free_distance())
+    print("Free Distance:", encoder.calc_free_distance())
     print("G0:  ", format(encoder.G0, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g0_taps))
     print("G1:  ", format(encoder.G1, 'b'), " |  Taps: ", ''.join(str(b) for b in encoder.g1_taps))
 
@@ -479,7 +627,9 @@ if __name__ == "__main__":
         xlabel="Index de Simbolo",
         ylabel="$X_{t}^{(0)}$",
         label="$X_{t}^{(0)}$",
-        show_symbol_values=False
+        show_symbol_values=False,
+        ylim=[min(X_prime)*1.1, max(X_prime)*1.1],
+        x_axis_label=(min(X_prime), max(X_prime))
     ).plot()
 
     SymbolsPlot(
@@ -490,7 +640,9 @@ if __name__ == "__main__":
         xlabel="Index de Simbolo",
         ylabel="$Y_{t}^{(1)}$",
         label="$Y_{t}^{(1)}$",
-        show_symbol_values=False
+        show_symbol_values=False,
+        ylim=[min(Y_prime)*1.1, max(Y_prime)*1.1],
+        x_axis_label=(min(Y_prime), max(Y_prime))
     ).plot()
 
     SymbolsPlot(
