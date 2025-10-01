@@ -48,6 +48,7 @@ class Multiplexer:
     def concatenate(self, SI, SQ, Xn, Yn):
         r"""
         Concatenates the input data vectors $X_n$ and $Y_n$ with the preamble vectors $S_I$ and $S_Q$, returning the concatenated vectors $X_n$ and $Y_n$. 
+
         Args:
             SI (np.ndarray): Input vector $S_I$.
             SQ (np.ndarray): Input vector $S_Q$.
@@ -70,16 +71,21 @@ class Multiplexer:
 
 if __name__ == "__main__":
 
-    mux = Multiplexer()
-
     SI = np.random.randint(0, 2, 15)
     SQ = np.random.randint(0, 2, 15)
     X = np.random.randint(0, 2, 60)
     Y = np.random.randint(0, 2, 60)
+
     print("SI:", ''.join(str(int(b)) for b in SI))
     print("SQ:", ''.join(str(int(b)) for b in SQ))
     print("X: ", ''.join(str(int(b)) for b in X))
     print("Y: ", ''.join(str(int(b)) for b in Y))
+
+    mux = Multiplexer()
+    Xn, Yn = mux.concatenate(SI, SQ, X, Y)
+
+    print("Xn:", ''.join(str(int(b)) for b in Xn))
+    print("Yn:", ''.join(str(int(b)) for b in Yn))
 
     fig_mux, grid_mux = create_figure(2, 1, figsize=(16, 9))
 
@@ -92,8 +98,6 @@ if __name__ == "__main__":
         ylabel="Channel $I$"
     ).plot()
     
-    Xn, Yn = mux.concatenate(SI, SQ, X, Y)
-
     BitsPlot(
         fig_mux, grid_mux, (1,0),
         bits_list=[SQ, Y],
@@ -106,6 +110,3 @@ if __name__ == "__main__":
 
     fig_mux.tight_layout()
     save_figure(fig_mux, "example_mux.pdf")
-
-    print("Xn:", ''.join(str(int(b)) for b in Xn))
-    print("Yn:", ''.join(str(int(b)) for b in Yn))
