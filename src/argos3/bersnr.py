@@ -15,6 +15,7 @@ from .transmitter import Transmitter
 from .receiver import Receiver
 from .noise import NoiseEBN0
 from .data import ExportData, ImportData
+from .convolutional import EncoderConvolutional, DecoderViterbi
 from .plotter import create_figure, save_figure, BersnrPlot
 
 def interpolate(positions, ref_points, ref_values):
@@ -301,6 +302,116 @@ class BERSNR_QPSK:
         Qx = 0.5 * erfc(x / np.sqrt(2))
         return Qx
 
+class BERSNR_QPSK_CONV:
+    """
+    BER vs Eb/N0 para QPSK com codificação convolucional (rate 1/2).
+    Mantém o laço e paralelização parecidos com BERSNR_QPSK.run().
+    """
+    def __init__(self, EbN0_values=np.arange(0, 10, 1), num_workers=8, num_bits=10_000,
+                 max_repetitions=2000, error_values=None, decision="hard", G=None):
+        if error_values is None or len(error_values) != len(EbN0_values):
+            raise ValueError("error_values deve ter o mesmo tamanho que EbN0_values")
+
+        self.EbN0_values = EbN0_values
+        self.num_workers = num_workers
+        self.num_bits = num_bits
+        self.max_repetitions = max_repetitions
+        self.error_values = error_values
+        self.decision = decision.lower()
+
+    @staticmethod
+    def _get_rng(rng):
+        # aceita seed (int/None) ou um np.random.Generator
+        if isinstance(rng, np.random.Generator):
+            return rng
+        return np.random.default_rng(rng)
+
+    @staticmethod
+    def simulate_conv(ebn0_db, num_bits=1000, rng=None, decision="hard"):
+        """
+        Uma execução: gera ut, codifica convolucional (rate 1/2), mapeia p/ QPSK,
+        passa por AWGN e faz Viterbi (hard/soft). Retorna número de erros (inteiro).
+        """
+        gen = BERSNR_QPSK_CONV._get_rng(rng)
+
+        # 1) gera bits de entrada (ut)
+        ut = gen.integers(0, 2, size=num_bits)
+
+        # 2) codifica convolucional (retorna vt0, vt1 de tamanho num_bits)
+        encoder = EncoderConvolutional()
+        vt0, vt1 = encoder.encode(ut)
+
+        # 3) mapeamento NRZ para +/-1 e composição QPSK com normalização
+        sI = 2 * vt0.astype(float) - 1.0   # +/-1
+        sQ = 2 * vt1.astype(float) - 1.0   # +/-1
+        signal = (sI + 1j * sQ) / np.sqrt(2)  # normalizado (energia por símbolo = 1)
+
+        # 4) AWGN conforme Eb/N0
+        ebn0_lin = 10 ** (ebn0_db / 10.0)
+        signal_power = np.mean(np.abs(signal) ** 2)  # deve ser ~1
+        bits_per_symbol = 2
+        Eb = signal_power / bits_per_symbol
+        N0 = Eb / ebn0_lin
+        variance = N0 / 2.0
+        sigma = np.sqrt(variance)
+
+        noise = gen.normal(0.0, sigma, size=signal.shape) + 1j * gen.normal(0.0, sigma, size=signal.shape)
+        r = signal + noise
+
+        # 5) decodificador Viterbi
+        decoder = DecoderViterbi(decision=decision)
+
+        if decision == "hard":
+            # detecta bits demodulados (hard) e passa pro Viterbi (entradas inteiras)
+            bI_dec = (r.real >= 0).astype(int)
+            bQ_dec = (r.imag >= 0).astype(int)
+            ut_hat = decoder.decode(bI_dec, bQ_dec)  # já retorna bits (hard)
+        else:
+            # soft: escala os r.real e r.imag para recuperar amplitude +/-1 antes de passar
+            # lembre: signal.real = sI / sqrt(2); multiplicando por sqrt(2) recuperamos sI + ruído escalado
+            received0 = r.real * np.sqrt(2)
+            received1 = r.imag * np.sqrt(2)
+            llrs = decoder.decode(received0, received1)  # retorna LLRs (mm0 - mm1)
+            # converter LLR -> bit: se llr >= 0 => bit=1 (ver comentário no decode)
+            ut_hat = (llrs >= 0).astype(int)
+
+        # 6) contar erros (comparando com ut original)
+        # garantir compatibilidade de comprimento (por precaução)
+        L = min(len(ut_hat), len(ut))
+        errors = int(np.count_nonzero(ut_hat[:L] != ut[:L]))
+        return errors
+
+    def run(self):
+        ber_results = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.num_workers) as executor:
+            for ebn0_db in self.EbN0_values:
+                total_errors = 0
+                repetitions = 0
+                total_bits = 0
+
+                with tqdm(total=self.max_repetitions, desc=f"CONV-{self.decision} Eb/N0 = {ebn0_db} dB", ncols=100) as pbar:
+                    while (repetitions < self.max_repetitions) and (total_errors < self.error_values[int(ebn0_db)]):
+                        # dispara N simulações paralelas (uma por worker)
+                        futures = [executor.submit(self.simulate_conv, ebn0_db,
+                                                   num_bits=self.num_bits,
+                                                   rng=np.random.default_rng(),
+                                                   decision=self.decision)
+                                   for _ in range(self.num_workers)]
+
+                        for future in concurrent.futures.as_completed(futures):
+                            errors = future.result()
+                            total_errors += errors
+                            total_bits += self.num_bits
+                            repetitions += 1
+                            pbar.update(1)
+
+                            if total_errors >= self.error_values[int(ebn0_db)]:
+                                break
+
+                ber = (total_errors + 1) / (total_bits + 1) if total_bits > 0 else 0.0
+                print(f"[CONV-{self.decision}] Eb/N0={ebn0_db} dB -> Bits={total_bits}, Erros={total_errors}, BER={ber}")
+                ber_results.append((ebn0_db, ber))
+        return ber_results
 
 
 if __name__ == "__main__":
@@ -323,6 +434,8 @@ if __name__ == "__main__":
 
     ### QPSK
     bersnr_qpsk = BERSNR_QPSK(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=50_000, max_repetitions=5000)
+    bersnr_qpsk_hard = BERSNR_QPSK_CONV(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=1000, max_repetitions=2000, decision="hard")
+    bersnr_qpsk_soft = BERSNR_QPSK_CONV(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=1000, max_repetitions=2000, decision="soft")
 
     # Simulação
     # ###############################################
@@ -332,6 +445,12 @@ if __name__ == "__main__":
 
     results_qpsk = bersnr_qpsk.run()
     ExportData(results_qpsk, "bersnr_qpsk").save()
+
+    results_conv_hard = bersnr_qpsk_hard.run()
+    ExportData(results_conv_hard, "bersnr_conv_hard").save()
+
+    results_conv_soft = bersnr_qpsk_soft.run()
+    ExportData(results_conv_soft, "bersnr_conv_soft").save()
     
     # PLOT
     # ###############################################
