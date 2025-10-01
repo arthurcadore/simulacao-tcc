@@ -1,6 +1,6 @@
 # """
-# Codificação e decodificação convolucional segundo o padrão CCSDS 131.1-G-2, utilizado no sistema PTT-A3.
-
+# Encoder e Decoder using CCSDS 131.1-G-2 standard polynomials, used in ARGOS-3 system standard.
+# 
 # Autor: Arthur Cadore
 # Data: 28-07-2025
 # """

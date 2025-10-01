@@ -1,6 +1,6 @@
 # """
-# Implementação do multiplexador. O multiplexador concatena os vetores I e Q de dois canais, conforme o padrão PPT-A3.
-
+# Implements the multiplexer in the ARGOS-3 standard.
+#
 # Autor: Arthur Cadore
 # Data: 28-07-2025
 # """
@@ -11,37 +11,57 @@ from .plotter import create_figure, save_figure, BitsPlot
 class Multiplexer:
     def __init__(self):
         r"""
-        Inicializa o multiplexador no padrão ARGOS-3.
-        
-        Example: 
-            ![pageplot](assets/example_mux.svg)
-        """
-        pass
-
-    def concatenate(self, SI, SQ, Xn, Yn):
-        r"""
-        Concatena os vetores $X_n$ e $Y_n$ de entrada, com $S_I$ e $S_Q$, retornando os vetores concatenados $X_n$ e $Y_n$. O processo de multiplexação é dado pela expressão abaixo.
+        Initializes the multiplexer used on transmission. Used to concatenate the input data vectors $X_n$ and $Y_n$ with the preamble vectors $S_I$ and $S_Q$, returning the concatenated vectors $X_n$ and $Y_n$. The multiplexing process is given by the expression below.
 
         $$
         \begin{align}
         X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
         \end{align}
         $$
+        
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np
+            >>> 
+            >>> Si = np.random.randint(0,2,15)
+            >>> Sq = np.random.randint(0,2,15)
+            >>> 
+            >>> X = np.random.randint(0,2,30)
+            >>> Y = np.random.randint(0,2,30)
+            >>> 
+            >>> mux = argos3.Multiplexer()
+            >>> 
+            >>> Xn, Yn = mux.concatenate(Si, Sq, X, Y)
+            >>> 
+            >>> print(Xn)
+            [0 0 0 1 0 0 1 0 0 1 1 0 0 0 1 0 0 0 0 0 0 0 1 1 0 1 0 1 0 0 1 0 1 0 1 1 1
+             0 1 0 1 0 0 0 1]
+            >>> 
+            >>> print(Yn)
+            [0 1 1 0 0 0 1 1 0 0 0 1 1 0 0 1 1 0 0 0 1 1 0 1 1 0 1 1 0 1 1 0 0 1 0 1 1
+             0 1 0 0 1 1 1 0]
 
+            - Bitstream Plot Example: ![pageplot](assets/example_mux.svg)
+        """
+        pass
+
+    def concatenate(self, SI, SQ, Xn, Yn):
+        r"""
+        Concatenates the input data vectors $X_n$ and $Y_n$ with the preamble vectors $S_I$ and $S_Q$, returning the concatenated vectors $X_n$ and $Y_n$. 
         Args:
-            SI (np.ndarray): Vetor de entrada $S_I$.
-            SQ (np.ndarray): Vetor de entrada $S_Q$.
-            Xn (np.ndarray): Vetor de entrada $X_n$.
-            Yn (np.ndarray): Vetor de entrada $Y_n$.
+            SI (np.ndarray): Input vector $S_I$.
+            SQ (np.ndarray): Input vector $S_Q$.
+            Xn (np.ndarray): Input vector $X_n$.
+            Yn (np.ndarray): Input vector $Y_n$.
 
         Returns:
-            Xn (np.ndarray): Vetor $X_n$ concatenado.
-            Yn (np.ndarray): Vetor $Y_n$ concatenado.
+            Xn (np.ndarray): Concatenated vector $X_n$.
+            Yn (np.ndarray): Concatenated vector $Y_n$.
         
         Raises:
-            AssertionError: Se os vetores I e Q não tiverem o mesmo comprimento em ambos os canais.
+            AssertionError: If the vectors I and Q do not have the same length in both channels.
         """
-        assert len(SI) == len(SQ) and len(Xn) == len(Yn), "Os vetores I e Q devem ter o mesmo comprimento em ambos os canais."
+        assert len(SI) == len(SQ) and len(Xn) == len(Yn), "The vectors I and Q must have the same length in both channels."
 
         Xn = np.concatenate((SI, Xn))
         Yn = np.concatenate((SQ, Yn))
@@ -66,10 +86,10 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (0,0),
         bits_list=[SI, X],
-        sections=[("Preambulo $S_I$", len(SI)),
-                  ("Canal I $(X_n)$", len(X))],
+        sections=[("$S_I$", len(SI)),
+                  ("$X_n$", len(X))],
         colors=["blue", "purple"],
-        ylabel="Canal $I$"
+        ylabel="Channel $I$"
     ).plot()
     
     Xn, Yn = mux.concatenate(SI, SQ, X, Y)
@@ -77,11 +97,11 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (1,0),
         bits_list=[SQ, Y],
-        sections=[("Preambulo $S_Q$", len(SQ)),
-                  ("Canal Q $(Y_n)$", len(Y))],
+        sections=[("$S_Q$", len(SQ)),
+                  ("$Y_n$", len(Y))],
         colors=["blue", "purple"],
-        xlabel="Index de Bit", 
-        ylabel="Canal $Q$"
+        xlabel="Bit Index", 
+        ylabel="Channel $Q$"
     ).plot()
 
     fig_mux.tight_layout()
