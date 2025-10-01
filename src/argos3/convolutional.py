@@ -137,6 +137,7 @@ class DecoderViterbi:
           <b>Referência:</b>
           <p>https://rwnobrega.page/apontamentos/codigos-convolucionais/</p>
           <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
+          <p>https://dsplog.com/2009/01/14/soft-viterbi/</p>
         </div>
         """
         
@@ -147,7 +148,6 @@ class DecoderViterbi:
         self.num_states = 2**(self.K - 1)
         self.trellis = self.build_trellis()
         self.decision_type = decision.lower()
-        self.sigma2 = 1.0
 
     def build_trellis(self):
         r"""
@@ -244,12 +244,7 @@ class DecoderViterbi:
         mm0[invalid] = np.inf
         mm1[invalid] = np.inf
 
-        if self.sigma2 is None:
-            factor = 1.0
-        else:
-            factor = 1.0 / (2.0 * float(self.sigma2))
-
-        llrs = (mm0 - mm1) * factor
+        llrs = mm0 - mm1
 
         if self.decision_type == "soft":
             return llrs
@@ -335,7 +330,7 @@ if __name__ == "__main__":
     mfI = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="RRC-Inverted", channel="I", bits_per_symbol=1)
     mfQ = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
-    noise = np.random.normal(0, 1, len(dX)) * 0.5
+    noise = np.random.normal(0, 1, len(dX)) * 0.6
 
     dX_prime = mfI.apply_filter(dX + noise)
     dY_prime = mfQ.apply_filter(dY + noise)
