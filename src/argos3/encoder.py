@@ -136,7 +136,7 @@ class Encoder:
             n = encodedstream.size 
             decoded = np.empty(n, dtype=int)
             for i in range(n):
-                if encodedstream[i] == -1:
+                if encodedstream[i] <= 0:
                     decoded[i] = 0
                 else:
                     decoded[i] = 1

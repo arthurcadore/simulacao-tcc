@@ -12,6 +12,7 @@ from .formatter import Formatter
 from .matchedfilter import MatchedFilter
 from .encoder import Encoder
 from .sampler import Sampler
+from .encoder import Encoder
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
@@ -115,7 +116,6 @@ class EncoderConvolutional:
 
         return np.array(vt0, dtype=int), np.array(vt1, dtype=int)
 
-
 class DecoderViterbi:
     def __init__(self, G=np.array([[0b1111001, 0b1011011]]), decision="hard"):
         r"""
@@ -147,6 +147,7 @@ class DecoderViterbi:
         self.num_states = 2**(self.K - 1)
         self.trellis = self.build_trellis()
         self.decision_type = decision.lower()
+        self.sigma2 = 1.0
 
     def build_trellis(self):
         r"""
@@ -162,7 +163,8 @@ class DecoderViterbi:
                 sr = [bit] + [int(b) for b in format(state, f'0{self.K - 1}b')]
                 out0 = sum([sr[i] for i in range(self.K) if (self.G0 >> (self.K - 1 - i)) & 1]) % 2
                 out1 = sum([sr[i] for i in range(self.K) if (self.G1 >> (self.K - 1 - i)) & 1]) % 2
-                trellis[state][bit] = (int(''.join(str(b) for b in sr[:-1]), 2), [out0, out1])
+                next_state = int(''.join(str(b) for b in sr[:-1]), 2)
+                trellis[state][bit] = (next_state, [out0, out1])
         return trellis
 
     def branch_metric(self, expected_out, received):
@@ -172,10 +174,13 @@ class DecoderViterbi:
         - Soft: distância euclidiana
         """
         if self.decision_type == "hard":
+            # Hamming between expected and rounded received
             return (expected_out[0] != int(round(received[0]))) + \
                    (expected_out[1] != int(round(received[1])))
         elif self.decision_type == "soft":
-            return np.sum((np.array(expected_out, dtype=float) - received)**2)
+            # squared euclidean distance (cost): (r - s)^2 summed
+            expected_nrz = 2*np.array(expected_out, dtype=float) - 1.0
+            return np.sum((received - expected_nrz)**2)
         else:
             raise ValueError("decision_type deve ser 'hard' ou 'soft'.")
 
@@ -194,10 +199,13 @@ class DecoderViterbi:
         vt1 = np.array(vt1, dtype=float)
         T = len(vt0)
 
-        path_metrics = np.full((T + 1, self.num_states), np.inf)
-        path_metrics[0][0] = 0
+        path_metrics = np.full((T + 1, self.num_states), np.inf, dtype=float)
+        path_metrics[0, 0] = 0.0
+
         prev_state = np.full((T + 1, self.num_states), -1, dtype=int)
         prev_input = np.full((T + 1, self.num_states), -1, dtype=int)
+
+        min_metric_per_bit = np.full((T, 2), np.inf, dtype=float)
 
         for t in range(T):
             for state in range(self.num_states):
@@ -205,22 +213,48 @@ class DecoderViterbi:
                     for bit in [0, 1]:
                         next_state, expected_out = self.trellis[state][bit]
                         received = np.array([vt0[t], vt1[t]])
-                        dist = self.branch_metric(expected_out, received)
-                        metric = path_metrics[t, state] + dist
+                        bm = self.branch_metric(expected_out, received)
+                        metric = path_metrics[t, state] + bm
+
+                        if metric < min_metric_per_bit[t, bit]:
+                            min_metric_per_bit[t, bit] = metric
+
                         if metric < path_metrics[t + 1, next_state]:
                             path_metrics[t + 1, next_state] = metric
                             prev_state[t + 1, next_state] = state
                             prev_input[t + 1, next_state] = bit
 
-        # Traceback
         state = np.argmin(path_metrics[T])
-        ut_hat = []
+        ut_hat_rev = []
         for t in range(T, 0, -1):
             bit = prev_input[t, state]
-            ut_hat.append(bit)
+            if bit == -1:
+                bit = 0
+            ut_hat_rev.append(bit)
             state = prev_state[t, state]
 
-        return np.array(ut_hat[::-1], dtype=int)
+        ut_hat = np.array(ut_hat_rev[::-1], dtype=int)
+
+        if self.decision_type == "hard":
+            return ut_hat
+
+        mm0 = min_metric_per_bit[:, 0]
+        mm1 = min_metric_per_bit[:, 1]
+        invalid = np.logical_or(~np.isfinite(mm0), ~np.isfinite(mm1))
+        mm0[invalid] = np.inf
+        mm1[invalid] = np.inf
+
+        if self.sigma2 is None:
+            factor = 1.0
+        else:
+            factor = 1.0 / (2.0 * float(self.sigma2))
+
+        llrs = (mm0 - mm1) * factor
+
+        if self.decision_type == "soft":
+            return llrs
+        else:
+            return ut_hat
 
 
 if __name__ == "__main__":
@@ -301,7 +335,7 @@ if __name__ == "__main__":
     mfI = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="RRC-Inverted", channel="I", bits_per_symbol=1)
     mfQ = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
-    noise = np.random.normal(0, 1, len(dX)) * 0.3
+    noise = np.random.normal(0, 1, len(dX)) * 0.5
 
     dX_prime = mfI.apply_filter(dX + noise)
     dY_prime = mfQ.apply_filter(dY + noise)
@@ -384,10 +418,8 @@ if __name__ == "__main__":
 
     decoder = DecoderViterbi(decision="soft")
     ut_prime = decoder.decode(X_prime, Y_prime)
-    print("ut': ", ''.join(str(b) for b in ut_prime))
-    print("ut = ut': ", np.array_equal(ut, ut_prime))
 
-    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+    fig_time, grid_time = create_figure(2, 2, figsize=(16, 9))
 
     SampledSignalPlot(
         fig_time, grid_time, (0, 0),
@@ -433,19 +465,64 @@ if __name__ == "__main__":
         show_symbol_values=False
     ).plot()
 
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_conv_time_soft_sampled.pdf")
+
+    print("ut': ", ''.join(str(b) for b in ut_prime))
+
+    encoder_NRZ = Encoder(method="NRZ")
+    ut_nrz = encoder_NRZ.decode(ut_prime)
+
+
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+
     SymbolsPlot(
-        fig_time, grid_time, (2, slice(0, 2)),
-        symbols_list=[ut_prime],
+        fig_time, grid_time, (0, 0),
+        symbols_list=[X_prime],
         samples_per_symbol=1,
-        colors=["darkred"],
-        xlabel="Index",
-        ylabel="$U_{t}^{(0)}$",
-        label="$U_{t}^{(0)}$",
+        colors=["darkgreen"],
+        xlabel="Index de Simbolo",
+        ylabel="$X_{t}^{(0)}$",
+        label="$X_{t}^{(0)}$",
         show_symbol_values=False
     ).plot()
 
-    fig_time.tight_layout()
-    save_figure(fig_time, "example_conv_time_soft_sampled.pdf")
-    
+    SymbolsPlot(
+        fig_time, grid_time, (0, 1),
+        symbols_list=[Y_prime],
+        samples_per_symbol=1,
+        colors=["navy"],
+        xlabel="Index de Simbolo",
+        ylabel="$Y_{t}^{(1)}$",
+        label="$Y_{t}^{(1)}$",
+        show_symbol_values=False
+    ).plot()
 
-    
+    SymbolsPlot(
+        fig_time, grid_time, (1, slice(0, 2)),
+        symbols_list=[ut_prime],
+        samples_per_symbol=1,
+        colors=["darkred"],
+        xlabel="Index de Simbolo",
+        ylabel="$U_{t}^{(0)}$",
+        label="$U_{t}^{(0)}$",
+        show_symbol_values=False,
+        ylim=[min(ut_prime)*1.1, max(ut_prime)*1.1],
+        x_axis_label=(min(ut_prime), max(ut_prime))
+    ).plot()
+
+    BitsPlot(
+        fig_time, grid_time, (2, slice(0, 2)),
+        bits_list=[ut_nrz],
+        sections=[("$u_t^{(0)}$", len(ut_nrz))],
+        colors=["darkred"],
+        xlabel="Index de Bit", 
+        ylabel="$u_t^{(0)}$"
+    ).plot()
+
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_conv_time_soft_quantized.pdf")
+
+    print("ut:  ", ''.join(str(b) for b in ut))
+    print("ut': ", ''.join(str(b) for b in ut_nrz))
+    print("ut = ut': ", np.array_equal(ut, ut_nrz))

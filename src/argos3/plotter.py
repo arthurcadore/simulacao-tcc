@@ -597,6 +597,7 @@ class SymbolsPlot(BasePlot):
                  ylabel: Optional[str] = None,
                  label: Optional[str] = None,
                  xlim: Optional[Tuple[float, float]] = None,
+                 x_axis_label: Optional[Tuple[int, int]] = (-1, 1),
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
@@ -612,6 +613,7 @@ class SymbolsPlot(BasePlot):
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.label = label
+        self.x_axis_label = x_axis_label
 
     def plot(self) -> None:
 
@@ -629,7 +631,7 @@ class SymbolsPlot(BasePlot):
         else:
             self.ax.set_xlim(0, len(symbols_up))
         self.ax.set_ylim(-1.5, y_upper)
-        self.ax.set_yticks([-1, 0, 1])
+        self.ax.set_yticks([self.x_axis_label[0], 0, self.x_axis_label[1]])
         self.ax.grid(False)
 
         # Linhas verticais marcando início de cada símbolo
