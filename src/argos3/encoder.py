@@ -1,11 +1,8 @@
 # """
-# Codificação de canais I e Q usando NRZ e Manchester conforme o padrão PPT-A3.
-
-# Referência:
-#     AS3-SP-516-274-CNES (seção 3.2.4)
-
-# Autor: Arthur Cadore
-# Data: 28-07-2025
+# Channel encoder for I and Q channels using NRZ and Manchester encoding according to the PPT-A3 standard.
+#
+# Author: Arthur Cadore
+# Date: 28-07-2025
 # """
 
 import numpy as np
@@ -14,20 +11,52 @@ from .plotter import BitsPlot, SymbolsPlot, create_figure, save_figure
 class Encoder:
     def __init__(self, method="NRZ"):
         r"""
-        Inicializa o codificador de linha com o método de codificação especificado. 
+        Initializes the channel encoder with the specified encoding method, used to encode the bitstream into symbols.
 
         Args:
-            method (str): Método de codificação desejado, $NRZ$ ou $Manchester$.
+            method (str): Encoding method, 'NRZ' or 'Manchester'.
 
         Raises:
-            ValueError: Se o método de codificação não for suportado.
+            ValueError: If the encoding method is not supported.
 
-        Example: 
-            ![pageplot](assets/example_encoder_time.svg)
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np
+            >>> 
+            >>> Xn = np.random.randint(0, 2, 20)
+            >>> Yn = np.random.randint(0, 2, 20)
+            >>> 
+            >>> print(Xn)
+            [1 0 1 1 0 0 1 0 0 0 0 0 0 0 1 0 1 1 0 0]
+            >>> print(Yn)
+            [1 0 0 0 0 0 1 0 1 0 0 0 0 1 1 1 0 1 1 1]
+            >>> 
+            >>> encoder_nrz = argos3.Encoder(method="NRZ")
+            >>> encoder_man = argos3.Encoder(method="Manchester")
+            >>> 
+            >>> Xnrz = encoder_nrz.encode(Xn)
+            >>> Yman = encoder_man.encode(Yn)
+            >>> 
+            >>> print(Xnrz)
+            [ 1 -1  1  1 -1 -1  1 -1 -1 -1 -1 -1 -1 -1  1 -1  1  1 -1 -1]
+            >>> 
+            >>> print(Yman)
+            [ 1 -1 -1  1 -1  1 -1  1 -1  1 -1  1  1 -1 -1  1  1 -1 -1  1 -1  1 -1  1
+             -1  1  1 -1  1 -1  1 -1 -1  1  1 -1  1 -1  1 -1]
+            >>> 
+            >>> Xn_prime = encoder_nrz.decode(Xnrz)
+            >>> Yn_prime = encoder_man.decode(Yman)
+            >>> 
+            >>> print(Xn_prime)
+            [1 0 1 1 0 0 1 0 0 0 0 0 0 0 1 0 1 1 0 0]
+            >>> print(Yn_prime)
+            [1 0 0 0 0 0 1 0 1 0 0 0 0 1 1 1 0 1 1 1]
+            
+            - Bitstream Plot Example: ![pageplot](assets/example_encoder_time.svg)
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.2.4)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.2.4)
         </div>
         """
         method_map = {
@@ -37,41 +66,41 @@ class Encoder:
 
         method = method.lower()
         if method not in method_map:
-            raise ValueError("Método de codificação inválido. Use 'NRZ', 'Manchester'.")
+            raise ValueError("Invalid encoding method. Use 'NRZ' or 'Manchester'.")
                 
         self.method = method_map[method]
 
     def encode(self, bitstream):
         r"""
-        Codifica o vetor de bits usando o método especificado na inicialização. O processo de codificação de linha é dado pelas expressões abaixo correspondente a cada método. 
+        Encodes the bitstream using the specified encoding method. The encoding process is given by the expressions below corresponding to each method.
 
         $$
         \begin{equation}
         \begin{aligned}
         X_{\text{NRZ}}[n] &= 
         \begin{cases}
-        +1, & \text{se } X_n = 1 \\
-        -1, & \text{se } X_n = 0 ,
+        +1, & \text{if } X_n = 1 \\
+        -1, & \text{if } X_n = 0 ,
         \end{cases}
         &\quad\quad
         X_{\text{MAN}}[n] &=
         \begin{cases}
-        +1,-1, & \text{se } X_n = 1 \\
-        -1, +1, & \text{se } X_n = 0 .
+        +1,-1, & \text{if } X_n = 1 \\
+        -1, +1, & \text{if } X_n = 0 .
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
 
-        Sendo:
-            - $X_n$: Vetor de bits de entrada.
-            - $X_{\text{NRZ}}[n]$ ou $X_{\text{MAN}}[n]$: Vetor de simbolos de saída.
+        Where:
+            - $X_n$: Input bitstream.
+            - $X_{\text{NRZ}}[n]$ or $X_{\text{MAN}}[n]$: Output symbol stream.
 
         Args:
-            bitstream (np.ndarray): Vetor de bits a ser codificado.
+            bitstream (np.ndarray): Input bitstream.
 
         Returns:
-            out (np.ndarray): Vetor de simbolos codificados.
+            out (np.ndarray): Encoded symbol stream.
         """
 
         if self.method == 0:  # NRZ
@@ -93,42 +122,42 @@ class Encoder:
                     out[2*i + 1] = -1
 
         else:
-            raise ValueError(f"Método de codificação não implementado: {self.method}")
+            raise ValueError(f"Encoding method not implemented: {self.method}")
 
         return out
 
 
     def decode(self, encodedstream):
         r"""
-        Decodifica o vetor de simbolos usando o método especificado na inicialização. O processo de decodificação de linha é dado pelas expressões abaixo correspondente a cada método.
+        Decodes the symbol stream using the specified encoding method. The decoding process is given by the expressions below corresponding to each method.
 
         $$
         \begin{equation}
         \begin{aligned}
         X_n &= 
         \begin{cases}
-        1, & \text{se } X_{\text{NRZ}}[n] = +1 \\
-        0, & \text{se } X_{\text{NRZ}}[n] = -1
+        1, & \text{if } X_{\text{NRZ}}[n] = +1 \\
+        0, & \text{if } X_{\text{NRZ}}[n] = -1
         \end{cases}
         &\quad\quad
         X_n &=
         \begin{cases}
-        1, & \text{se } X_{\text{MAN}}[n] = +1, -1 \\
-        0, & \text{se } X_{\text{MAN}}[n] = -1, +1
+        1, & \text{if } X_{\text{MAN}}[n] = +1, -1 \\
+        0, & \text{if } X_{\text{MAN}}[n] = -1, +1
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
         
-        Sendo: 
-            - $X_{\text{NRZ}}[n]$ ou $X_{\text{MAN}}[n]$: Vetor de simbolos de entrada
-            - $X_n$: Vetor de bits de saída.
+        Where: 
+            - $X_{\text{NRZ}}[n]$ or $X_{\text{MAN}}[n]$: Input symbol stream
+            - $X_n$: Output bitstream.
 
         Args:
-            encoded_stream (np.ndarray): Vetor codificado.
+            encoded_stream (np.ndarray): Input symbol stream.
 
         Returns:
-            out (np.ndarray): Vetor de bits decodificado.
+            out (np.ndarray): Decoded bitstream.
 
         """
 
@@ -153,7 +182,7 @@ class Encoder:
                     decoded[i] = 1
 
         else:
-            raise ValueError(f"Método de decodificação não implementado: {self.method}")
+            raise ValueError(f"Decoding method not implemented: {self.method}")
 
         return decoded
 
@@ -164,14 +193,12 @@ if __name__ == "__main__":
     print("Channel Xn: ", ''.join(str(int(b)) for b in Xn))
     print("Channel Yn: ", ''.join(str(int(b)) for b in Yn))
 
-    # Inicializando o Encoder com o nome do método desejado ('NRZ' ou 'Manchester')
     encoder_nrz = Encoder(method="NRZ")
     encoder_man = Encoder(method="Manchester")
 
     Xnrz = encoder_nrz.encode(Xn)
     Yman = encoder_man.encode(Yn)
 
-    # imprime +1 e -1 
     print("Channel X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in Xnrz[:10]))
     print("Channel Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Yman[:10]))
 
@@ -182,7 +209,8 @@ if __name__ == "__main__":
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
         colors=["darkgreen"],
-        xlabel="Index de Bit", ylabel="$X_n$"
+        xlabel="Bit Index", 
+        ylabel="$X_n$"
     ).plot()
 
     SymbolsPlot(
@@ -190,7 +218,7 @@ if __name__ == "__main__":
         symbols_list=[Xnrz],
         samples_per_symbol=1,
         colors=["darkgreen"],
-        xlabel="Index de Simbolo",
+        xlabel="Symbol Index",
         ylabel="$X_{NRZ}[n]$", 
         label="$X_{NRZ}[n]$"
     ).plot()
@@ -200,7 +228,8 @@ if __name__ == "__main__":
         bits_list=[Yn],
         sections=[("$Y_n$", len(Yn))],
         colors=["navy"],
-        xlabel="Index de Bit", ylabel="$Y_n$"
+        xlabel="Bit Index", 
+        ylabel="$Y_n$"
     ).plot()
 
     SymbolsPlot(
@@ -208,7 +237,7 @@ if __name__ == "__main__":
         symbols_list=[Yman],
         samples_per_symbol=2,
         colors=["navy"],
-        xlabel="Index de Simbolo",
+        xlabel="Symbol Index",
         ylabel="$Y_{MAN}[n]$", 
         label="$Y_{MAN}[n]$"
     ).plot()
