@@ -1,8 +1,8 @@
 # """
-# Implementação de um modulador IQ para transmissão de sinais digitais.
-
-# Autor: Arthur Cadore
-# Data: 28-07-2025
+# Implementation of a QPSK modulator for digital signal transmission.
+# 
+# Author: Arthur Cadore
+# Date: 28-07-2025
 # """
 
 import numpy as np
@@ -14,117 +14,155 @@ from scipy.signal import hilbert
 class Modulator:
     def __init__(self, fc=None, fs=128_000):
         r"""
-        Inicializa um modulador QPSK no padrão ARGOS-3. O modulador pode ser representado pelo diagrama de blocos apresentado abaixo.
+        Initializes a QPSK modulator in the ARGOS-3 standard. The modulator can be represented by the block diagram shown below.
 
         ![pageplot](../assets/modulator.svg)
 
         Args:
-            fc (float): Frequência da portadora.
-            fs (int): Frequência de amostragem.
+            fc (float): Carrier frequency.
+            fs (int): Sampling frequency.
 
         Raises:
-            ValueError: Se a frequência de amostragem não for maior que o dobro da frequência da portadora. (Teorema de Nyquist)
+            ValueError: If the sampling frequency is not greater than twice the carrier frequency. (Nyquist Theorem)
        
-        Example: 
-            ![pageplot](assets/transmitter_modulator_time.svg)
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> X = np.random.randint(0, 2, 20)
+            >>> Y = np.random.randint(0, 2, 20)
+            >>>
+            >>> print(X)
+            [0 1 1 1 0 1 1 1 0 0 0 0 0 0 1 0 1 1 1 1]
+            >>> print(Y)
+            [0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 1 1 0 1]
+            >>> 
+            >>> symbols_I = argos3.Encoder(method="NRZ").encode(X)
+            >>> symbols_Q = argos3.Encoder(method="NRZ").encode(Y)
+            >>> 
+            >>> formatter_I = argos3.Formatter(Rb=400, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.082)
+            >>> formatter_Q = argos3.Formatter(Rb=400, type="RRC", channel="Q", bits_per_symbol=2, prefix_duration=0.082)
+            >>> 
+            >>> dI = formatter_I.apply_format(symbols_I, add_prefix=True)
+            >>> dQ = formatter_Q.apply_format(symbols_Q, add_prefix=True)
+            >>> 
+            >>> modulator = argos3.Modulator(fc=4000)
+            >>> t, s = modulator.modulate(dI, dQ)
+            >>> 
+            >>> print(s[:10])
+            [-0.07484442 -0.05456886 -0.03230473 -0.00879478  0.01503904  0.03826391
+              0.05997333  0.07932302  0.09556429  0.10807341]
+            >>> print(t[:10])
+            [0.00000e+00 7.81250e-06 1.56250e-05 2.34375e-05 3.12500e-05 3.90625e-05
+              4.68750e-05 5.46875e-05 6.25000e-05 7.03125e-05]
+
+            - Time domain: ![pageplot](assets/example_modulator_time.svg)
+            - Frequency domain: ![pageplot](assets/example_modulator_freq.svg)
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.2.5.3)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (section 3.2.5.3)
         </div>
         """
+        # Checks if the carrier frequency is valid
         if fc is None or fc <= 0:
-            raise ValueError("A frequência da portadora deve ser maior que zero.")
+            raise ValueError("Carrier frequency must be greater than zero.")
         
+        # Checks if the sampling frequency is valid
         if fs <= fc*2:
-            raise ValueError("A frequência de amostragem deve ser maior que o dobro da frequência da portadora.")
+            raise ValueError("Sampling frequency must be greater than twice the carrier frequency.")
         
         self.fc = fc
         self.fs = fs
 
     def modulate(self, i_signal, q_signal):
         r"""
-        Modula em QPSK os sinais $d_I$ e $d_Q$ com uma portadora $f_c$, resultando no sinal modulado $s(t)$. O processo de modulação é dado pela expressão abaixo.
+        Modulates the signals $d_I$ and $d_Q$ with a carrier $f_c$, resulting in the modulated signal $s(t)$. The modulation process is given by the expression below.
 
         $$
             s(t) = d_I(t) \cdot \cos(2\pi f_c t) - d_Q(t) \cdot \sin(2\pi f_c t)
         $$
 
-        Sendo: 
-            - $s(t)$: Sinal modulado.
-            - $d_I(t)$ e $d_Q(t)$: Sinais formatados correspondentes aos canais $I$ e $Q$.
-            - $f_c$: Frequência da portadora.
-            - $t$: Vetor de tempo.
+        Where: 
+            - $s(t)$: Modulated signal.
+            - $d_I(t)$ and $d_Q(t)$: Formatted signals corresponding to the $I$ and $Q$ channels.
+            - $f_c$: Carrier frequency.
+            - $t$: Time vector.
 
         Args:
-            i_signal (np.ndarray): Sinal $d_I$ correspondente ao canal $I$ a ser modulado.
-            q_signal (np.ndarray): Sinal $d_Q$ correspondente ao canal $Q$ a ser modulado.
+            i_signal (np.ndarray): Signal $d_I$ corresponding to the $I$ channel to be modulated.
+            q_signal (np.ndarray): Signal $d_Q$ corresponding to the $Q$ channel to be modulated.
 
         Returns:
-            modulated_signal (np.ndarray): Sinal modulado $s(t)$ resultante.
-            t (np.ndarray): Vetor de tempo $t$ correspondente ao sinal modulado.
+            modulated_signal (np.ndarray): Modulated signal $s(t)$ result.
+            t (np.ndarray): Time vector $t$ corresponding to the modulated signal.
 
         Raises:
-            ValueError: Se os sinais I e Q não tiverem o mesmo tamanho.
+            ValueError: If the signals I and Q do not have the same size.
         """
+        # Checks if the signals I and Q have the same size
         n = len(i_signal)
         if len(q_signal) != n:
-            raise ValueError("i_signal e q_signal devem ter o mesmo tamanho.")
+            raise ValueError("i_signal and q_signal must have the same size.")
         
+        # Time vector
         t = np.arange(n) / self.fs
+        
+        # Carrier signals
         carrier_cos = np.cos(2 * np.pi * self.fc * t)
         carrier_sin = np.sin(2 * np.pi * self.fc * t)
         
+        # Modulated signal
         modulated_signal = (i_signal * carrier_cos - q_signal * carrier_sin)
 
         return t, modulated_signal
     
     def demodulate(self, modulated_signal, carrier_length=0.07, carrier_delay=0):
         r"""
-        Demodula o sinal modulado em QPSK, com sincronização de fase usando os primeiros `carrier_length` segundos de portadora.
+        Demodulates the modulated signal $s(t)$, with phase synchronization using the first `carrier_length` seconds of carrier.
 
         Args:
-            modulated_signal (np.ndarray): Sinal modulado $s(t)$ a ser demodulado.
-            carrier_length (float): O comprimento da portadora para sincronização da fase (em segundos).
-            carrier_delay (float): O delay da portadora para sincronização da fase (em segundos).
+            modulated_signal (np.ndarray): Modulated signal $s(t)$ to be demodulated.
+            carrier_length (float): The length of the carrier for phase synchronization (in seconds).
+            carrier_delay (float): The delay of the carrier for phase synchronization (in seconds).
 
         Returns:
-            i_signal (np.ndarray): Sinal $x_I'(t)$ recuperado.
-            q_signal (np.ndarray): Sinal $y_Q'(t)$ recuperado.
+            i_signal (np.ndarray): Signal $x_I'(t)$ recovered.
+            q_signal (np.ndarray): Signal $y_Q'(t)$ recovered.
         """
-        # Verifica se o sinal não está vazio
+        # Checks if the modulated signal is empty
         n = len(modulated_signal)
         if n == 0:
-            raise ValueError("O sinal modulado não pode estar vazio.")
+            raise ValueError("The modulated signal cannot be empty.")
 
-        # Vetor de tempo
+        # Time vector
         t = np.arange(n) / self.fs
 
-        # Pega um subvetor do sinal modulado para estimar a fase
+        # Extracts a subvector of the modulated signal to estimate the phase
         carrier_signal = modulated_signal[int(carrier_delay * self.fs):(int(carrier_delay * self.fs) + int(carrier_length * self.fs))]
 
-        # Aplicando a Transformada de Hilbert para obter a fase instantânea
+        # Applies the Hilbert Transform to obtain the instantaneous phase
         analytic_signal = hilbert(carrier_signal)
         original_phase = np.angle(analytic_signal)
 
-        # Estima a fase e corrige o sinal
+        # Estimates the phase and corrects the signal
         phase_estimate = np.mean(original_phase)
         modulated_signal_corrected = modulated_signal * np.exp(-1j * phase_estimate)
 
-        # Calcula os componentes de demodulação
+        # Calculates the demodulation components
         carrier_cos = 2 * np.cos(2 * np.pi * self.fc * t)
         carrier_sin = 2 * np.sin(2 * np.pi * self.fc * t)
 
-        # Demodula o sinal
+        # Demodulates the signal
         i_signal = modulated_signal_corrected * carrier_cos
         q_signal = -modulated_signal_corrected * carrier_sin
 
-        # Correção de polaridade
+        # Polarity correction
         if np.mean(i_signal) < 0:
             i_signal = -i_signal
             q_signal = -q_signal
 
-        return np.real(i_signal), np.real(q_signal), phase_estimate, original_phase
+        return np.real(i_signal), np.real(q_signal)
 
 
 if __name__ == "__main__":
@@ -160,7 +198,6 @@ if __name__ == "__main__":
     t, s = modulator.modulate(dI, dQ)
     print("s:", ''.join(str(b) for b in s[:5]))
 
-    # PLOT 1 - Tempo
     fig_time, grid = create_figure(2, 1, figsize=(16, 9))
     TimePlot(
         fig_time, grid, (0, 0),
@@ -195,7 +232,6 @@ if __name__ == "__main__":
     fig_time.tight_layout()
     save_figure(fig_time, "example_modulator_time.pdf")
 
-    # PLOT 2 - Frequência
     fig_freq, grid = create_figure(2, 2, figsize=(16, 9))
     FrequencyPlot(
         fig_freq, grid, (0, 0),
@@ -228,7 +264,7 @@ if __name__ == "__main__":
         fc=fc,
         labels=["$S(f)$"],
         title="Sinal Modulado $IQ$",
-        xlim=(-10, 10),
+        xlim=(0, 8),
         colors="darkred",
         style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
     ).plot()
@@ -236,7 +272,6 @@ if __name__ == "__main__":
     fig_freq.tight_layout()
     save_figure(fig_freq, "example_modulator_freq.pdf")
 
-    # PLOT 3 - Constelação
     fig_const, grid = create_figure(1, 2, figsize=(16, 8))
     PhasePlot(
         fig_const, grid, (0, 0),
@@ -266,7 +301,6 @@ if __name__ == "__main__":
     fig_const.tight_layout()
     save_figure(fig_const, "example_modulator_constellation.pdf")
 
-    # Plot 4 - Portadora pura e sinal modulado
     fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
     FrequencyPlot(
         fig_portadora, grid, (0, 0),
@@ -295,12 +329,10 @@ if __name__ == "__main__":
     fig_portadora.tight_layout()
     save_figure(fig_portadora, "example_modulator_portadora.pdf")
     
-    # Demodulação
     i_signal, q_signal = modulator.demodulate(s)
     print("i_signal:", ''.join(str(b) for b in i_signal[:5]))
     print("q_signal:", ''.join(str(b) for b in q_signal[:5]))
 
-    # PLOT 1 - Tempo
     fig_time, grid = create_figure(2, 1, figsize=(16, 9))
     TimePlot(
         fig_time, grid, (0, 0),
@@ -336,7 +368,6 @@ if __name__ == "__main__":
     save_figure(fig_time, "example_demodulator_time.pdf")
     
 
-    # PLOT 2 - Frequência
     fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
     FrequencyPlot(
         fig_freq, grid, (0, 0),

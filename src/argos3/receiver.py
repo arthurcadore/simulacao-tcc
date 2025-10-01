@@ -120,14 +120,13 @@ class Receiver:
             - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
 
-        xI_prime, yQ_prime, phase_estimate, original_phase = self.demodulator.demodulate(s)
+        xI_prime, yQ_prime = self.demodulator.demodulate(s)
 
         if self.output_print:
             print("\n ==== DEMODULADOR ==== \n")
             print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
             print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
             print("\n")
-            print("Erro médio estimado:", np.mean(np.angle(np.exp(1j*(phase_estimate - original_phase)))))
 
         if self.output_plot:
             fig_time, grid = create_figure(2, 1, figsize=(16, 9))
