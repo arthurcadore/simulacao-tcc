@@ -202,7 +202,7 @@ class DecoderViterbi:
             - Bitstream Plot Example: ![pageplot](assets/example_conv_time.svg)
 
         <div class="referencia">
-          <b>Referência:</b>
+          <b>References:</b>
           <p>https://rwnobrega.page/apontamentos/codigos-convolucionais/</p>
           <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
           <p>https://dsplog.com/2009/01/14/soft-viterbi/</p>
@@ -226,10 +226,10 @@ class DecoderViterbi:
 
     def build_trellis(self):
         r"""
-        Constroi a trelica do decodificador Viterbi.
+        Build the trellis for the Viterbi decoder based on the generator polynomials $G$.
 
         Returns:
-            trellis (dict): Trelica do decodificador Viterbi.
+            trellis (dict): Trellis for the Viterbi decoder.
         """
         trellis = {}
 
