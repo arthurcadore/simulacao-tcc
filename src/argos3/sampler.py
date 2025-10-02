@@ -7,6 +7,7 @@
 
 import numpy as np
 from .plotter import save_figure, create_figure, SampledSignalPlot
+from .env_vars import *
 
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, delay=0.08):
@@ -163,11 +164,11 @@ if __name__ == "__main__":
         signal,
         sampled_time,
         sampled_signal,
-        colors='red',
-        label_signal="Sinal original", 
-        label_samples="Amostras", 
-        xlim=(40, 100), 
-        title="Sinal $Cos(t)$ amostrado"
+        colors=COLOR_I,
+        label_signal="Original Signal", 
+        label_samples="Sampled Signal", 
+        xlim=SYNC_XLIM,
+        title="Cos(t) sampled"
     ).plot()
 
     SampledSignalPlot(
@@ -176,11 +177,11 @@ if __name__ == "__main__":
         signal2,
         sampled_time2,
         sampled_signal2,
-        colors='navy',
-        label_signal="Sinal original", 
-        label_samples="Amostras", 
-        xlim=(40, 100), 
-        title="Sinal $Sin(t)$ amostrado"
+        colors=COLOR_Q,
+        label_signal="Original Signal", 
+        label_samples="Sampled Signal", 
+        xlim=SYNC_XLIM, 
+        title="Sin(t) sampled"
     ).plot()
 
     fig_sampler.tight_layout()

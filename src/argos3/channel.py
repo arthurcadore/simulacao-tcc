@@ -11,6 +11,7 @@ from .transmitter import Transmitter
 from .datagram import Datagram
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot
 from .noise import Noise, NoiseEBN0
+from .env_vars import *
 
 
 class Channel:
@@ -150,12 +151,8 @@ if __name__ == "__main__":
         t=np.arange(0, len(s)/tx.fs, 1/tx.fs),
         signals=[s],
         labels=["$s(t)$"],
-        title="Sinal Modulado $s(t)$",
-        colors=["darkred"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal $s(t)$",
+        colors=[COLOR_COMBINED],
     ).plot()    
     
     TimePlot(
@@ -163,12 +160,8 @@ if __name__ == "__main__":
         t=canal1.t,
         signals=[canal1.channel],
         labels=["$s(t)$"], 
-        title="Sinal Modulado - Canal 1",
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal - Channel 1",
+        colors=[COLOR_COMBINED],
     ).plot()
 
     TimePlot(
@@ -176,12 +169,8 @@ if __name__ == "__main__":
         t=canal2.t,
         signals=[canal2.channel],
         labels=["$s(t)$"], 
-        title="Sinal Modulado - Canal 2",
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal - Channel 2",
+        colors=[COLOR_COMBINED],
     ).plot()
 
     TimePlot(
@@ -189,12 +178,8 @@ if __name__ == "__main__":
         t=canal3.t,
         signals=[canal3.channel],
         labels=["$s(t)$"], 
-        title="Sinal Modulado - Canal 3",
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal - Channel 3",
+        colors=[COLOR_COMBINED],
     ).plot()
 
     fig_time.tight_layout()
@@ -211,12 +196,8 @@ if __name__ == "__main__":
         t=np.arange(0, len(canalT)/tx.fs, 1/tx.fs),
         signals=[canalT],
         labels=["$s(t)$"], 
-        title="Sinal Modulado - Canal Total",
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal - Channel Total",
+        colors=[COLOR_COMBINED],
     ).plot()
 
     TimePlot(
@@ -224,12 +205,8 @@ if __name__ == "__main__":
         t=np.arange(0, len(canalT_NoiseEBN0)/tx.fs, 1/tx.fs),
         signals=[canalT_NoiseEBN0],
         labels=["$s(t)$"], 
-        title="Sinal Modulado - Canal Total + Ruido",
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title="Modulated Signal - Channel Total + Noise",
+        colors=[COLOR_COMBINED],
     ).plot()
     
     fig_time.tight_layout()

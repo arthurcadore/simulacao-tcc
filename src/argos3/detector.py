@@ -11,6 +11,7 @@ from .datagram import Datagram
 from .transmitter import Transmitter
 from .receiver import Receiver
 from .channel import Channel
+from .env_vars import *
 
 
 class CarrierDetector:
@@ -468,7 +469,7 @@ if __name__ == "__main__":
     WaterfallDecisionPlot(fig, grid, 0,
                  detector.detected_matrix,
                  fs=detector.fs, 
-                 legend_list=["Detectada", "Confirmada"],
+                 legend_list=["Detected", "Confirmed"],
                  N=detector.N).plot()
 
     save_figure(fig, "example_detector_waterfall_detection.pdf")
@@ -477,7 +478,7 @@ if __name__ == "__main__":
     WaterfallDecisionPlot(fig, grid, 0,
                  detector.decision_matrix,
                  fs=detector.fs, 
-                 legend_list=["Detectada", "Confirmada", "Span", "Demodulação"],
+                 legend_list=["Detected", "Confirmed", "Span", "Demodulation"],
                  N=detector.N).plot()
     save_figure(fig, "example_detector_waterfall_decision.pdf")
 
@@ -488,9 +489,9 @@ if __name__ == "__main__":
               signal=detector.power_matrix[seg_index, :], 
               threshold=detector.threshold, 
               xlim=(0, 10),
-              title="Detecção de portadora de $s(t)$ - Segmento %d" % seg_index,
+              title="Detection of $s(t)$ - Segment %d" % seg_index,
               labels=["$S(f)$"],
-              colors="darkred",
+              colors=COLOR_COMBINED,
               freqs_detected=detector.detected_matrix[seg_index, :]
     ).plot()
     DetectionFrequencyPlot(fig, grid, 1, 
@@ -498,22 +499,22 @@ if __name__ == "__main__":
               signal=detector.power_matrix[seg_index+1, :], 
               threshold=detector.threshold, 
               xlim=(0, 10),
-              title="Detecção de portadora de $s(t)$ - Segmento %d" % (seg_index+1),
+              title="Detection of $s(t)$ - Segment %d" % (seg_index+1),
               labels=["$S(f)$"],
-              colors="darkred",
+              colors=COLOR_COMBINED,
               freqs_detected=detector.detected_matrix[seg_index+1, :]
     ).plot()
     save_figure(fig, "example_detector_freq.pdf")
 
     channels = detector.return_channels()
 
-    print("Frequências confirmadas (Hz) com início e fim de segmentos:")
+    print("Confirmed frequencies (Hz) with start and end segments:")
     for f, start, end in channels:
-        print(f"Frequência {f:.1f} Hz: segmento {start} -> {end}")
+        print(f"Frequency {f:.1f} Hz: segment {start} -> {end}")
     
     for idx, (freq, start_seg, end_seg) in enumerate(channels, start=1):
         print(f"\n ==============================================")
-        print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq:.1f} Hz ==== \n")
+        print(f"\n ==== RECEPTION OF s(t) WITH f_c = {freq:.1f} Hz ==== \n")
     
         first_segment = int((start_seg - 5) * detector.fs * detector.seg_s)
         last_segment = int(end_seg * detector.fs * detector.seg_s)
@@ -524,5 +525,5 @@ if __name__ == "__main__":
     
         if not success:
             bitsRX = datagramRX
-            print("Decodificação incorreta: ")
+            print("Decoding failed: ")
             print("Bits RX: ", ''.join(str(b) for b in bitsRX))

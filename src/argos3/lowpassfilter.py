@@ -8,6 +8,7 @@
 import numpy as np
 from scipy.signal import butter, filtfilt, lfilter
 from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, PoleZeroPlot, FrequencyResponsePlot, FrequencyPlot
+from .env_vars import *
 
 class LPF:
     def __init__(self, cut_off=600, order=6, fs=128_000, type="butter"):
@@ -158,10 +159,9 @@ if __name__ == "__main__":
         fig_impulse, grid_impulse, (0, 0),
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$h(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", xlim=(0, 5), 
+        xlim=(0, 5), 
         amp_norm=True
     ).plot()
 
@@ -174,10 +174,8 @@ if __name__ == "__main__":
         fig_signal, grid_signal, (0, slice(0, 2)),
         filtro.t_impulse, filtro.impulse_response,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$h(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
         xlim=(0, 5), 
         amp_norm=True
     ).plot()
@@ -187,10 +185,10 @@ if __name__ == "__main__":
         t, 
         signal,
         labels=[r"$x(t)$"],
-        title="Sinal original",
+        title="Input Signal",
         xlim=(0, 8),
         amp_norm=True,
-        colors="navy"
+        colors=COLOR_I
     ).plot()
 
     TimePlot(
@@ -198,10 +196,10 @@ if __name__ == "__main__":
         t, 
         signal_filtered,
         labels=[r"$x'(t)$"],
-        title="Sinal filtrado",
+        title="Filtered Signal",
         xlim=(0, 8),
         amp_norm=True,
-        colors="darkred"
+        colors=COLOR_Q
     ).plot()
 
     fig_signal.tight_layout()
@@ -211,8 +209,8 @@ if __name__ == "__main__":
     PoleZeroPlot(
             fig_pz, grid_pz, (0,0), 
             filtro.b, filtro.a,
-            colors="darkblue",
-            title="Polos e Zeros",
+            colors=COLOR_AUX1,
+            title="Poles and Zeros",
         ).plot()
     save_figure(fig_pz, "example_lpf_pz.pdf")
 
@@ -240,9 +238,9 @@ if __name__ == "__main__":
         fs=filtro.fs,
         signal=signal,
         labels=[r"$X(f)$"],
-        title="Sinal original",
-        xlim=(-8000, 8000),
-        colors="navy"
+        title="Input Signal",
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_AUX1
     ).plot()
 
     FrequencyPlot(
@@ -250,9 +248,9 @@ if __name__ == "__main__":
         fs=filtro.fs,
         signal=signal_filtered,
         labels=[r"$X'(f)$"],
-        title="Sinal filtrado",
-        xlim=(-8000, 8000),
-        colors="darkred"
+        title="Filtered Signal",
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_AUX2
     ).plot()
     
     save_figure(fig_freq, "example_lpf_freq.pdf")

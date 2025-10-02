@@ -14,6 +14,7 @@ from .encoder import Encoder
 from .plotter import create_figure, save_figure, TimePlot, SincronizationPlot, CorrelationPlot
 from .multiplexer import Multiplexer
 from .matchedfilter import MatchedFilter
+from .env_vars import *
 
 class Synchronizer:
     def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF", channel_encode=("nrz", "man"), sync_window=None):
@@ -226,11 +227,7 @@ if __name__ == "__main__":
         labels=[r"$S_I(t)$"],
         title=r"Canal $I$",
         amp_norm=True,
-        colors="darkgreen",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_I],
     ).plot()
     
     TimePlot(
@@ -240,17 +237,12 @@ if __name__ == "__main__":
         labels=[r"$S_Q(t)$"],
         title=r"Canal $Q$",
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_Q],
     ).plot()
     
     fig_format.tight_layout()
     save_figure(fig_format, "example_synchronizer_word.pdf")
 
-    # TESTE
     preamble = Preamble()  
     SI = preamble.preamble_sI
     SQ = preamble.preamble_sQ
@@ -277,7 +269,6 @@ if __name__ == "__main__":
     dI = matched_filter_I.apply_filter(dI)
     dQ = matched_filter_Q.apply_filter(dQ)
     
-    # Faz a sincronização apenas no canal Q, pois o canal I é apenas uns.
     delayQ_min, delayQ_max, delayQ, corr_vec = synchronizer.correlation(dQ, "Q")
     delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
 
@@ -295,12 +286,8 @@ if __name__ == "__main__":
         max_corr=delayI,
         title=r"Canal $I$",
         labels=[r"$d_I(t)$"],
-        colors="darkgreen",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        },
-        xlim=(40, 200),
+        colors=[COLOR_I],
+        xlim=SYNC_XLIM,
     ).plot()
 
     SincronizationPlot(
@@ -312,12 +299,8 @@ if __name__ == "__main__":
         max_corr=delayQ,
         title=r"Canal $Q$",
         labels=[r"$d_Q(t)$"],
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        },
-        xlim=(40, 200),
+        colors=[COLOR_Q],
+        xlim=SYNC_XLIM,
     ).plot()
 
     fig_sync.tight_layout()
@@ -328,13 +311,10 @@ if __name__ == "__main__":
         fig_corr, grid_corr, (0, 0),
         corr_vec=corr_vec,  
         fs=formatterQ.fs,
-        xlim_ms=(40, 200),
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        },
+        xlim_ms=SYNC_XLIM,
+        colors=[COLOR_Q],
     ).plot()
+
     fig_corr.tight_layout()
     save_figure(fig_corr, "example_synchronizer_corr.pdf")
     

@@ -9,6 +9,7 @@ import numpy as np
 from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, BitsPlot
 from .formatter import Formatter
 from .encoder import Encoder
+from .env_vars import * 
 
 class MatchedFilter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC-Inverted", channel=None, bits_per_symbol=1):
@@ -171,11 +172,11 @@ if __name__ == "__main__":
         fig_impulse, grid_impulse, (0,0),
         filtroQ1.t_rc, [filtroQ1.g, filtroQ1.g_inverted],
         t_unit="ms",
-        colors=["darkorange", "steelblue"],
+        colors=[COLOR_AUX1, COLOR_AUX2],
         label=[r"$g(t)$", r"$g(-t)$"],
-        xlabel=r"Tempo ($ms$)",
-        ylabel="Amplitude",
-        xlim=(-15, 15),
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
         amp_norm=True
     ).plot()
     fig_impulse.tight_layout()
@@ -187,11 +188,11 @@ if __name__ == "__main__":
         fig_impulse, grid_impulse, (0,0),
         filtroQ2.t_rc, [filtroQ2.g, filtroQ2.g_inverted],
         t_unit="ms",
-        colors=["darkorange", "steelblue"],
+        colors=[COLOR_AUX1, COLOR_AUX2],
         label=[r"$g(t)$", r"$g(-t)$"],
-        xlabel=r"Tempo ($ms$)",
-        ylabel="Amplitude",
-        xlim=(-15, 15),
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
         amp_norm=True
     ).plot()
     fig_impulse.tight_layout()
@@ -207,24 +208,16 @@ if __name__ == "__main__":
         fig_time, grid_time, (0,0),
         bits_list=[bit1],
         sections=[("Bits", len(bit1))],
-        title=r"Bits $Q1$",
-        colors=["darkblue"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title=BITSTREAM_X,
+        colors=[COLOR_AUX1],
     ).plot()
 
     BitsPlot(
         fig_time, grid_time, (0,1),
         bits_list=[bit2],
         sections=[("Bits", len(bit2))],
-        title=r"Bits $Q2$",
-        colors=["darkblue"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        title=BITSTREAM_X,
+        colors=[COLOR_AUX2],
     ).plot()
 
     TimePlot(
@@ -234,11 +227,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q1(t)$"],
         title=r"Canal $Q1$",
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_AUX1],
     ).plot()
 
     TimePlot(
@@ -247,13 +236,8 @@ if __name__ == "__main__":
         signals=[dQ2],
         labels=[r"$d_Q2(t)$"],
         title=r"Canal $Q2$",
-        # xlim=(40, 140),
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_AUX2],
     ).plot()
     
     TimePlot(
@@ -262,13 +246,8 @@ if __name__ == "__main__":
         signals=[dQ1_filtered],
         labels=[r"$d_Q1(t)$"],
         title=r"Canal $Q1$",
-        # xlim=(40, 140),
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_AUX1],
     ).plot()
 
     TimePlot(
@@ -277,13 +256,8 @@ if __name__ == "__main__":
         signals=[dQ2_filtered],
         labels=[r"$d_Q2(t)$"],
         title=r"Canal $Q2$",
-        # xlim=(40, 140),
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_AUX2],
     ).plot()
 
     fig_time.tight_layout()
