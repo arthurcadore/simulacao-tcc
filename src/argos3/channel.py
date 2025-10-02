@@ -1,8 +1,8 @@
 # """
-# Implementação de um canal para agregação de multiplos sinais.
-
-# Autor: Arthur Cadore
-# Data: 16-08-2025
+# Implementation of a channel for aggregation of multiple signals.
+#
+# Author: Arthur Cadore
+# Date: 16-08-2025
 # """
 
 import numpy as np
@@ -16,20 +16,20 @@ from .noise import Noise, NoiseEBN0
 class Channel:
     def __init__(self, fs=128_000, duration=1, noise_mode="snr", noise_db=20, seed=10):
         r"""
-        Implementação de um canal para agregação de multiplos sinais.
+        Implementation of a channel for aggregation of multiple signals.
         
         Args:
-            fs (int): taxa de amostragem do sinal.
-            duration (int): duração do canal em segundos.
-            noise_mode (str): modo de ruído ('snr' ou 'ebn0').
-            noise_db (int): nível de ruído em dB.
-            seed (int): semente para geração de números aleatórios. 
+            fs (int): sampling rate of the signal.
+            duration (int): duration of the channel in seconds.
+            noise_mode (str): noise mode ('snr' or 'ebn0').
+            noise_db (int): noise level in dB.
+            seed (int): seed for random number generation. 
     
         Returns:
-            Channel: objeto do canal.
+            Channel: channel object.
     
         Raises:
-            ValueError: se o modo de ruído for inválido.
+            ValueError: if the noise mode is invalid.
         """
         self.fs = fs
         self.channel = np.zeros(int(fs * duration))
@@ -42,7 +42,7 @@ class Channel:
 
         noise_mode = noise_mode.lower()
         if noise_mode not in noise_map:
-            raise ValueError("Modo de ruído inválido. Use 'EBN0', 'SNR'.")
+            raise ValueError("Invalid noise mode. Use 'EBN0', 'SNR'.")
 
         self.noise_mode = noise_map[noise_mode]
         self.noise_db = noise_db
@@ -50,41 +50,41 @@ class Channel:
 
     def add_signal(self, signal, position_factor=0.5):
         r"""
-        Adiciona um sinal ao canal em uma posição relativa.
+        Adds a signal to the channel at a relative position.
 
         Args:
-            signal (np.ndarray): vetor de amostras do sinal a inserir.
-            position_factor (float): fator de posição entre [0, 1] (0 = início do canal, 1 = final).
+            signal (np.ndarray): signal samples to insert.
+            position_factor (float): position factor between [0, 1] (0 = start of the channel, 1 = end).
 
         Raises:
-            ValueError: se position_factor não estiver entre [0, 1].
+            ValueError: if position_factor is not between [0, 1].
         
-        Example: 
-            ![pageplot](assets/example_channel_time_subchannels.svg)
+        Examples: 
+            - Time Domain Plot Example: ![pageplot](assets/example_channel_time_subchannels.svg)
         """
         if not 0 <= position_factor <= 1:
-            raise ValueError("position_factor deve estar entre 0 e 1.")
+            raise ValueError("Position factor must be between 0 and 1.")
 
         chan_len = len(self.channel)
         sig_len = len(signal)
 
-        # Calcula posição inicial no vetor do canal
+        # Calculate initial position in the channel vector
         start_idx = int(round(position_factor * (chan_len - sig_len)))
         if start_idx < 0:
             start_idx = 0
         if start_idx + sig_len > chan_len:
             sig_len = chan_len - start_idx
-            signal = signal[:sig_len]  # corta se não couber
+            signal = signal[:sig_len]  # cut if it doesn't fit
 
-        # Insere (soma) o sinal no canal
+        # Insert (sum) the signal into the channel
         self.channel[start_idx:start_idx + sig_len] += signal
 
     def add_noise(self):
         r"""
-        Adiciona ruído ao canal.
+        Adds noise to the channel.
 
-        Example: 
-            ![pageplot](assets/example_channel_time_channel.svg)
+        Examples: 
+            - Time Domain Plot Example: ![pageplot](assets/example_channel_time_channel.svg)
         """
         if self.noise_mode == 0:
             noise = NoiseEBN0(ebn0_db=self.noise_db, seed=self.seed)

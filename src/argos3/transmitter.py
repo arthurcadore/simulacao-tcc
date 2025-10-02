@@ -33,6 +33,43 @@ class Transmitter:
             output_print (bool): If `True`, prints intermediate vectors to the console.
             output_plot (bool): If `True`, generates and saves the graphs of the intermediate processes.
 
+        Raises:
+            ValueError: If the sampling frequency is less than or equal to zero.
+            ValueError: If the bit rate is less than or equal to zero.
+            ValueError: If the carrier length is less than or equal to zero.
+            ValueError: If the preamble is empty.
+            ValueError: If the channel encoding types are not 'nrz' or 'manchester'.
+
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> fc = np.random.randint(10,80)*100
+            >>> print(fc)
+            2400
+            >>>
+            >>> transmitter = argos3.Transmitter(fc=fc, output_print=False, output_plot=False)
+            >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
+            >>> 
+            >>> receiver = argos3.Receiver(fc=fc, output_print=False, output_plot=False)
+            >>> datagramRX, success = receiver.receive(s)
+            >>> 
+            >>> print(success)
+            True
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 1,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 37,
+                  "sensor_2": 198,
+                  "sensor_3": 9
+                }
+              },
+              "tail": 7
+            }
+
         <div class="referencia">
         <b>Reference:</b><br>
         AS3-SP-516-274-CNES (sections 3.1 and 3.2)

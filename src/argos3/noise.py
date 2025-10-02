@@ -1,8 +1,8 @@
 # """
-# Implementação de um canal para aplicação de ruido AWGN.
-
-# Autor: Arthur Cadore
-# Data: 16-08-2025
+# Implementation of AWGN noise classes. 
+#
+# Author: Arthur Cadore
+# Date: 16-08-2025
 # """
 
 import numpy as np
@@ -13,16 +13,16 @@ from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, Gaussi
 class Noise:
     def __init__(self, snr=15, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
-        Implementação de canal para aplicação de ruido $AWGN$, com base em $SNR$.
+        Implementation of AWGN noise, based on $SNR$.
 
         Args:
-            snr (float): Relação sinal-ruído em decibéis (dB).
-            seed (int): Seed do gerador de números aleatórios.
-            length_multiplier (float): Multiplicador de comprimento do sinal.
-            position_factor (float): Fator de posição do ruído.
+            snr (float): Signal-to-noise ratio in decibels (dB).
+            seed (int): Seed of the random number generator.
+            length_multiplier (float): Multiplier of the signal length.
+            position_factor (float): Position factor of the noise.
 
-        Example: 
-            ![pageplot](assets/example_noise_time.svg) 
+        Examples: 
+            - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg) 
         """
         self.snr = snr
         self.rng = np.random.default_rng(seed)
@@ -32,36 +32,36 @@ class Noise:
     
     def add_noise(self, signal):
         r"""
-        Adiciona ruído AWGN $n(t)$ ao sinal de entrada $s(t)$, com base na $\mathrm{SNR}_{dB}$ definida na inicialização. 
+        Adds AWGN noise $n(t)$ to the input signal $s(t)$, based on the $\mathrm{SNR}_{dB}$ defined in initialization. 
 
         $$
         r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
         $$
 
-        Sendo: 
-            - $r(t)$: Sinal retornado com ruído AWGN adicionado.
-            - $s(t)$: Sinal de entrada sem ruído. 
-            - $n(t)$: Ruído adicionado, com distribuição normal $\mathcal{N}(0, \sigma^2)$.
+        Where: 
+            - $r(t)$: Signal returned with AWGN noise added.
+            - $s(t)$: Input signal without noise. 
+            - $n(t)$: Noise added, with normal distribution $\mathcal{N}(0, \sigma^2)$.
 
-        A variância do ruído $\sigma^2$ é dada por:
+        The noise variance $\sigma^2$ is given by:
 
         $$
         \sigma^2 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{10^{\frac{\mathrm{SNR}_{dB}}{10}}}
         $$
 
-        Sendo: 
-            - $\sigma^2$: A variância do ruído.
-            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Potência média do sinal de entrada.
-            - $\mathrm{SNR}_{dB}$: Relação sinal-ruído em decibéis (dB).
+        Where: 
+            - $\sigma^2$: Noise variance.
+            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Input signal power.
+            - $\mathrm{SNR}_{dB}$: Signal-to-noise ratio in decibels (dB).
 
         Args:
-            signal (np.ndarray): Sinal transmitido $s(t)$.
+            signal (np.ndarray): Input signal $s(t)$.
 
         Returns:
-            signal (np.ndarray): Sinal $r(t)$, com ruído AWGN adicionado.
+            signal (np.ndarray): Signal $r(t)$, with AWGN noise added.
 
-        Example:
-            ![pageplot](assets/example_noise_gaussian_snr.svg)
+        Examples:
+            - Noise Density Plot Example: ![pageplot](assets/example_noise_gaussian_snr.svg)
         """
 
         self.signal_power = np.mean(np.abs(signal) ** 2)
@@ -71,14 +71,14 @@ class Noise:
         sig_len = len(signal)
         noise_len = int(sig_len * self.length_multiplier)
 
-        # gera vetor de ruído maior
+        # generate a noise vector
         noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
 
-        # calcula posição de inserção do sinal
+        # calculate the position of the signal
         start_idx = int((noise_len - sig_len) * self.position_factor)
         end_idx = start_idx + sig_len
 
-        # insere o sinal no ruído
+        # insert the signal into the noise
         noisy_signal = noise.copy()
         noisy_signal[start_idx:end_idx] += signal
 
@@ -87,18 +87,18 @@ class Noise:
 class NoiseEBN0:
     def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
-        Implementação de canal para aplicação de ruido $AWGN$, com base em $Eb/N_{0}$.
+        Implementation of AWGN noise, based on $Eb/N_{0}$.
 
         Args:
-            ebn0_db (float): Valor alvo de $Eb/N_{0}$ em $dB$
-            fs (int): Taxa de amostragem do sinal em $Hz$.
-            Rb (int): Taxa de bits em bits/s.
-            seed (int): Seed do gerador de números aleatórios.
-            length_multiplier (float): Multiplicador de comprimento do sinal.
-            position_factor (float): Fator de posição do ruído.
+            ebn0_db (float): Target value of $Eb/N_{0}$ in $dB$
+            fs (int): Signal sampling rate in $Hz$.
+            Rb (int): Bit rate in bits/s.
+            seed (int): Seed of the random number generator.
+            length_multiplier (float): Multiplier of the signal length.
+            position_factor (float): Position factor of the noise.
         
-        Example: 
-            ![pageplot](assets/example_noise_time.svg)
+        Examples: 
+            - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg)
         """
         self.ebn0_db = ebn0_db
         self.ebn0_lin = 10 ** (ebn0_db / 10)
@@ -110,41 +110,41 @@ class NoiseEBN0:
 
     def add_noise(self, signal):
         r"""
-        Adiciona ruído AWGN $n(t) ao sinal de entrada $s(t), com base na $Eb/N0_{dB}$ definida na inicialização. 
+        Adds AWGN noise $n(t) to the input signal $s(t), based on the $Eb/N0_{dB}$ defined in initialization. 
 
         $$
         r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
         $$
 
-        Sendo: 
-            - $r(t)$: Sinal retornado com ruído AWGN adicionado.
-            - $s(t)$: Sinal de entrada sem ruído. 
-            - $n(t)$: Ruído adicionado, com distribuição normal $\mathcal{N}(0, \sigma^2)$.
+        Where: 
+            - $r(t)$: Signal returned with AWGN noise added.
+            - $s(t)$: Input signal without noise. 
+            - $n(t)$: Noise added, with normal distribution $\mathcal{N}(0, \sigma^2)$.
 
         
-        A variância do ruído $\sigma^2$ é dada por:
+        The noise variance $\sigma^2$ is given by:
 
         $$
         \sigma^2 = \frac{N_0 \cdot f_s}{2}
         $$
 
-        Sendo: 
-            - $\sigma^2$: A variância do ruído.
-            - $N_0$: Densidade espectral de ruído.
-            - $f_s$: Taxa de amostragem do sinal em $Hz$.
+        Where: 
+            - $\sigma^2$: Noise variance.
+            - $N_0$: Noise density.
+            - $f_s$: Signal sampling rate in $Hz$.
 
         
-        A densidade espectral de ruído $N_0$ é dada por:
+        The noise density $N_0$ is given by:
 
         $$
         N_0 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b \cdot 10^{\frac{Eb/N_0}{10}}}
         $$
 
-        Sendo: 
-            - $N_0$: Densidade espectral de ruído.
-            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Potência média do sinal amostrado.
-            - $R_b$: Taxa de bits em bits/s.
-            - $Eb/N_0$: Relação $dB$ da energia por bit $E_b$ por densidade espectral de ruído $N_0$ dada na inicialização.
+        Where: 
+            - $N_0$: Noise density.
+            - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Signal power.
+            - $R_b$: Bit rate in bits/s.
+            - $Eb/N_0$: Target value of $Eb/N_{0}$ in $dB$.
 
         Args:
             signal (np.ndarray): Sinal transmitido $s(t)$.
@@ -152,11 +152,11 @@ class NoiseEBN0:
         Returns:
             signal (np.ndarray): Sinal recebido $r(t)$, com ruído AWGN adicionado.
 
-        Example:
-            ![pageplot](assets/example_noise_gaussian_ebn0.svg)
+        Examples:
+            - Noise Density Plot Example: ![pageplot](assets/example_noise_gaussian_ebn0.svg)
 
         <div class="referencia">
-          <b>Referência:</b>
+          <b>Reference:</b>
           <p>Digital communications / John G. Proakis, Masoud Salehi.—5th ed. (pg. 283)</p>
           <p>https://rwnobrega.page/posts/snr/</p>
         </div>
@@ -165,21 +165,21 @@ class NoiseEBN0:
         self.signal_power = np.mean(np.abs(signal)**2)
         self.bit_energy = self.signal_power / self.Rb
 
-        # densidade espectral de ruído
+        # noise density
         self.noise_density = self.bit_energy / self.ebn0_lin
         self.variance = (self.noise_density * self.fs) / 2.0
 
         sig_len = len(signal)
         noise_len = int(sig_len * self.length_multiplier)
 
-        # vetor de ruído maior
+        # generate a noise vector
         noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
 
-        # posição de inserção
+        # calculate the position of the signal
         start_idx = int((noise_len - sig_len) * self.position_factor)
         end_idx = start_idx + sig_len
 
-        # insere o sinal
+        # insert the signal into the noise
         noisy_signal = noise.copy()
         noisy_signal[start_idx:end_idx] += signal
 
@@ -189,7 +189,7 @@ def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
     n_est = s_noisy - s
     P = np.mean(s**2)
     Eb = P / add_noise.Rb
-    # de sigma^2 -> N0 estimado:
+    # from sigma^2 -> N0 estimated:
     sigma2_meas = np.var(n_est)
     N0_meas = 2 * sigma2_meas / add_noise.fs
     ebn0_meas_db = 10*np.log10(Eb / N0_meas)
