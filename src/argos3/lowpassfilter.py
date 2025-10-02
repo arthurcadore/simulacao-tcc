@@ -73,7 +73,8 @@ class LPF:
             fNyquist (float): Nyquist factor. Default is 0.5 * fs.
 
         Returns:
-            tuple: Coefficients $b$ and $a$ corresponding to the transfer function of the Butterworth filter.
+            b (np.ndarray): Coefficients $b$ corresponding to the transfer function of the Butterworth filter.
+            a (np.ndarray): Coefficients $a$ corresponding to the transfer function of the Butterworth filter.
 
         Examples:
             - Pole-Zero Plot: ![pageplot](assets/example_lpf_pz.svg)
