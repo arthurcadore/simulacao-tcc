@@ -22,6 +22,34 @@ class Noise:
             position_factor (float): Position factor of the noise.
 
         Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> transmitter = argos3.Transmitter(fc=2400, output_print=False, output_plot=False)
+            >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
+            >>> 
+            >>> noise = argos3.Noise(snr=15, seed=11)
+            >>> s_prime = noise.add_noise(s)
+            >>>                   
+            >>> receiver = argos3.Receiver(fc=2400, output_print=False, output_plot=False)
+            >>> datagramRX, success = receiver.receive(s_prime)
+            >>> 
+            >>> print(success)
+            True
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 1,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 37,
+                  "sensor_2": 198,
+                  "sensor_3": 9
+                }
+              },
+              "tail": 7
+            }
+
             - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg) 
         """
         self.snr = snr
@@ -98,6 +126,34 @@ class NoiseEBN0:
             position_factor (float): Position factor of the noise.
         
         Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>>
+            >>> transmitter = argos3.Transmitter(fc=2400, output_print=False, output_plot=False)
+            >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
+            >>> 
+            >>> noise = argos3.NoiseEBN0(ebn0_db=15, fs=128000, Rb=400, seed=11)
+            >>> s_prime = noise.add_noise(s)
+            >>>                   
+            >>> receiver = argos3.Receiver(fc=2400, output_print=False, output_plot=False)
+            >>> datagramRX, success = receiver.receive(s_prime)
+            >>> 
+            >>> print(success)
+            True
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 1,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 37,
+                  "sensor_2": 198,
+                  "sensor_3": 9
+                }
+              },
+              "tail": 7
+            }
+
             - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg)
         """
         self.ebn0_db = ebn0_db

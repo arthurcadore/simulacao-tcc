@@ -34,12 +34,8 @@ class Channel:
         Examples: 
             >>> import argos3
             >>> import numpy as np 
-            >>> 
-            >>> fc = np.random.randint(10,80)*100
-            >>> print(fc)
-            2400
             >>>
-            >>> transmitter = argos3.Transmitter(fc=fc, output_print=False, output_plot=False)
+            >>> transmitter = argos3.Transmitter(fc=2400, output_print=False, output_plot=False)
             >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
             >>> 
             >>> channel = argos3.Channel(duration=1, noise_mode="ebn0", noise_db=20)
@@ -47,7 +43,7 @@ class Channel:
             >>> channel.add_noise()
             >>> st = channel.channel
             >>>                   
-            >>> receiver = argos3.Receiver(fc=fc, output_print=False, output_plot=False)
+            >>> receiver = argos3.Receiver(fc=2400, output_print=False, output_plot=False)
             >>> datagramRX, success = receiver.receive(st)
             >>> 
             >>> print(success)
