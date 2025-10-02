@@ -8,28 +8,28 @@
       
       
       
-        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/api/viterbi/">
+        <link rel="canonical" href="https://github.com/arthurcadore/simulacao-tcc/guide_pip/">
       
       
-        <link rel="prev" href="../sampler/">
+        <link rel="prev" href="..">
       
       
-        <link rel="next" href="../transmitter/">
+        <link rel="next" href="../guide/">
       
       
-      <link rel="icon" href="../../assets/icon.svg">
+      <link rel="icon" href="../assets/icon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
-        <title>Decodificador Viterbi - Simulador ARGOS-3</title>
+        <title>Installation pip - ARGOS-3 Simulator</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,11 +48,11 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../site/styles.css">
+      <link rel="stylesheet" href="../site/styles.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#convolutional.DecoderViterbi" class="md-skip">
+        <a href="#installation-guide-pip" class="md-skip">
           Skip to content
         </a>
       
@@ -92,9 +92,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Simulador ARGOS-3" class="md-header__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+    <a href=".." title="ARGOS-3 Simulator" class="md-header__button md-logo" aria-label="ARGOS-3 Simulator" data-md-component="logo">
       
-  <img src="../../assets/icon.svg" alt="logo">
+  <img src="../assets/icon.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -105,13 +105,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Simulador ARGOS-3
+            ARGOS-3 Simulator
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Decodificador Viterbi
+              Installation pip
             
           </span>
         </div>
@@ -224,36 +224,16 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
     
   
-  Início
+  Home
 
       </a>
     </li>
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../api/" class="md-tabs__link">
-          
-  
-  
-  Instalação
-
-        </a>
-      </li>
-    
   
 
       
@@ -267,11 +247,31 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../datagram/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
   
-  Componentes
+  Installation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/datagram/" class="md-tabs__link">
+          
+  
+  
+  Components
 
         </a>
       </li>
@@ -285,13 +285,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../transmitter/" class="md-tabs__link">
+      <a href="../api/transmitter/" class="md-tabs__link">
         
   
   
     
   
-  Transmissor
+  Transmitter
 
       </a>
     </li>
@@ -306,11 +306,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../channel/" class="md-tabs__link">
+        <a href="../api/channel/" class="md-tabs__link">
           
   
   
-  Canal
+  Channel
 
         </a>
       </li>
@@ -324,13 +324,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../receiver/" class="md-tabs__link">
+      <a href="../api/receiver/" class="md-tabs__link">
         
   
   
     
   
-  Receptor
+  Receiver
 
       </a>
     </li>
@@ -345,7 +345,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../bersnr/" class="md-tabs__link">
+        <a href="../api/bersnr/" class="md-tabs__link">
           
   
   
@@ -381,12 +381,12 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Simulador ARGOS-3" class="md-nav__button md-logo" aria-label="Simulador ARGOS-3" data-md-component="logo">
+    <a href=".." title="ARGOS-3 Simulator" class="md-nav__button md-logo" aria-label="ARGOS-3 Simulator" data-md-component="logo">
       
-  <img src="../../assets/icon.svg" alt="logo">
+  <img src="../assets/icon.svg" alt="logo">
 
     </a>
-    Simulador ARGOS-3
+    ARGOS-3 Simulator
   </label>
   
     <div class="md-nav__source">
@@ -410,138 +410,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Início
+    Home
     
   </span>
   
 
       </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Instalação
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Instalação
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Instalação pip
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../guia/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Instalação manual
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../changelog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Changelog
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -571,15 +450,15 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
-    Componentes
+    Installation
     
   </span>
   
@@ -587,10 +466,251 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Installation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Installation pip
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation pip
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-virtual-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create virtual environment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-latest-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install latest version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-specific-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install specific version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      License
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contact" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contact
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation manual
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Components
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Componentes
+            Components
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -601,12 +721,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../datagram/" class="md-nav__link">
+      <a href="../api/datagram/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Datagrama
+    Datagram
     
   </span>
   
@@ -624,12 +744,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../convolutional/" class="md-nav__link">
+      <a href="../api/convolutional/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Codificador Convolutional
+    Convolutional Encoder
     
   </span>
   
@@ -647,12 +767,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../scrambler/" class="md-nav__link">
+      <a href="../api/scrambler/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Embaralhador
+    Scrambler
     
   </span>
   
@@ -670,12 +790,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../preamble/" class="md-nav__link">
+      <a href="../api/preamble/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Preâmbulo
+    Preamble
     
   </span>
   
@@ -693,12 +813,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../multiplexer/" class="md-nav__link">
+      <a href="../api/multiplexer/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Multiplexador
+    Multiplexer
     
   </span>
   
@@ -716,12 +836,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../encoder/" class="md-nav__link">
+      <a href="../api/encoder/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Codificador de Canal
+    Channel Encoder
     
   </span>
   
@@ -739,12 +859,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../formatter/" class="md-nav__link">
+      <a href="../api/formatter/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Formatador
+    Pulse Modulate
     
   </span>
   
@@ -762,12 +882,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../modulator/" class="md-nav__link">
+      <a href="../api/modulator/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Modulador
+    Bandpass Modulate
     
   </span>
   
@@ -785,7 +905,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../detector/" class="md-nav__link">
+      <a href="../api/detector/" class="md-nav__link">
         
   
   
@@ -808,12 +928,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../lpf/" class="md-nav__link">
+      <a href="../api/lpf/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Filtro Passa-Baixa
+    Low Pass Filter
     
   </span>
   
@@ -831,12 +951,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../matchedfilter/" class="md-nav__link">
+      <a href="../api/matchedfilter/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Filtro Casado
+    Matched Filter
     
   </span>
   
@@ -854,12 +974,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../synchronizer/" class="md-nav__link">
+      <a href="../api/synchronizer/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Sincronizador
+    Synchronizer
     
   </span>
   
@@ -877,114 +997,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../sampler/" class="md-nav__link">
+      <a href="../api/sampler/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Decisor
+    Sampler
     
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Decodificador Viterbi
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Decodificador Viterbi
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.DecoderViterbi" class="md-nav__link">
-    <span class="md-ellipsis">
-      DecoderViterbi
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.DecoderViterbi.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      __init__
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.DecoderViterbi.build_trellis" class="md-nav__link">
-    <span class="md-ellipsis">
-      build_trellis
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convolutional.DecoderViterbi.decode" class="md-nav__link">
-    <span class="md-ellipsis">
-      decode
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1004,12 +1027,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../transmitter/" class="md-nav__link">
+      <a href="../api/transmitter/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Transmissor
+    Transmitter
     
   </span>
   
@@ -1049,7 +1072,7 @@
   
   
   <span class="md-ellipsis">
-    Canal
+    Channel
     
   </span>
   
@@ -1060,7 +1083,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
-            Canal
+            Channel
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1071,12 +1094,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../channel/" class="md-nav__link">
+      <a href="../api/channel/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Canal
+    Channel
     
   </span>
   
@@ -1094,12 +1117,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../noiseSNR/" class="md-nav__link">
+      <a href="../api/noiseSNR/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Adição Ruído SNR
+    SNR Noise
     
   </span>
   
@@ -1117,12 +1140,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../noiseEBN0/" class="md-nav__link">
+      <a href="../api/noiseEBN0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Adição Ruído EBN0
+    EB/N0 Noise
     
   </span>
   
@@ -1147,12 +1170,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../receiver/" class="md-nav__link">
+      <a href="../api/receiver/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Receptor
+    Receiver
     
   </span>
   
@@ -1214,7 +1237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bersnr/" class="md-nav__link">
+      <a href="../api/bersnr/" class="md-nav__link">
         
   
   
@@ -1237,7 +1260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../plots/" class="md-nav__link">
+      <a href="../api/plots/" class="md-nav__link">
         
   
   
@@ -1260,7 +1283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../data/" class="md-nav__link">
+      <a href="../api/data/" class="md-nav__link">
         
   
   
@@ -1302,233 +1325,42 @@
   
 
 
-  <h1>Decodificador Viterbi</h1>
-
-<div class="doc doc-object doc-class">
-
-
-
-<a id="convolutional.DecoderViterbi"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">121</span><span class="p">,</span> <span class="mi">91</span><span class="p">]]))</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Inicializa o decodificador convolucional (algoritmo Viterbi), com base em uma tupla de polinômios geradores <span class="arithmatex">\(G\)</span> que determinam a estrutura do decodificador.</p>
-<div class="arithmatex">\[
-\begin{equation}
-    \begin{split}
-        G_0 &amp;= 121_{10} \quad \mapsto \quad G_0 = [1, 1, 1, 1, 0, 0, 1] \\
-        G_1 &amp;= 91_{10} \quad \mapsto \quad G_1 = [1, 0, 1, 1, 0, 1, 1]
-    \end{split}
-\end{equation}
-\]</div>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>G</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Tupla de polinômios geradores <span class="arithmatex">\(G\)</span>.</p>
-              </div>
-            </td>
-            <td>
-                  <code><span title="numpy.array">array</span>([[121, 91]])</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-        <div class="referencia">
-  <b>Referência:</b>
-  <p>https://rwnobrega.page/apontamentos/codigos-convolucionais/</p>
-  <p>AS3-SP-516-274-CNES (seção 3.1.4.4)</p>
-</div>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.build_trellis" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">build_trellis</span><span class="p">()</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Constroi a trelica do decodificador Viterbi.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>trellis</code></td>            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Trelica do decodificador Viterbi.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="convolutional.DecoderViterbi.decode" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">vt0</span><span class="p">,</span> <span class="n">vt1</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Decodifica os bits de entrada <span class="arithmatex">\(v_t^{(0)}\)</span> e <span class="arithmatex">\(v_t^{(1)}\)</span>, retornando os bits decodificados <span class="arithmatex">\(u_t\)</span>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>vt0</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Bits de entrada do canal I.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>vt1</code>
-            </td>
-            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Bits de entrada do canal Q.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>ut_hat</code></td>            <td>
-                  <code><span title="numpy.ndarray">ndarray</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Bits decodificados.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+<h1 id="installation-guide-pip">Installation Guide - Pip</h1>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><code>Python 3.8</code> (or higher);</li>
+<li><code>Python-venv 3.12.7</code> (or higher);</li>
+<li><code>pip 24.0</code> (or higher);</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>To know the available versions for installation, and their changelog, check the releases at <a href="https://github.com/arthurcadore/simulacao-tcc/releases">Repository</a>.</p>
+<h3 id="create-virtual-environment">Create virtual environment</h3>
+<p>First, create a virtual environment to isolate the project dependencies.</p>
+<pre><code class="language-bash">python -m venv .venv
+</code></pre>
+<p>Activate the virtual environment:</p>
+<pre><code class="language-bash">source .venv/bin/activate
+</code></pre>
+<h3 id="install-latest-version">Install latest version</h3>
+<p>To install the latest version, run:</p>
+<pre><code class="language-bash">pip install argos3
+</code></pre>
+<h3 id="install-specific-version">Install specific version</h3>
+<p>To install a specific version, run:</p>
+<pre><code class="language-bash">pip install argos3==1.0.1
+</code></pre>
+<h2 id="support">Support</h2>
+<p>To report issues or request features, please <a href="https://github.com/arthurcadore/simulacao-tcc/issues">open an issue</a> on GitHub.</p>
+<h2 id="license">License</h2>
+<p>This project is part of the IFSC - Federal Institute of Santa Catarina. Consult the <a href="https://github.com/arthurcadore/simulacao-tcc/blob/main/LICENSE">LICENSE</a> file for more details about the terms of use.</p>
+<h2 id="contact">Contact</h2>
+<ul>
+<li><strong>Author</strong>: Arthur Cadore M. Barcella</li>
+<li><strong>Professors</strong>: </li>
+<li>Prof. Roberto Wanderley da Nóbrega, Dr.</li>
+<li>Prof. Richard Demo Souza, Dr.</li>
+<li><strong>Institution</strong>: IFSC - Federal Institute of Santa Catarina</li>
+</ul>
 
 
 
@@ -1583,14 +1415,14 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.tabs", "header.autohide", "search.suggest", "search.highlight", "toc.integrate", "content.code.copy", "content.code.highlight", "content.tooltips", "navigation.expand", "navigation.top", "repository.icon"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.tabs", "header.autohide", "search.suggest", "search.highlight", "toc.integrate", "content.code.copy", "content.code.highlight", "content.tooltips", "navigation.expand", "navigation.top", "repository.icon"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
-        <script src="../../site/hide_sidebar.js"></script>
+        <script src="../site/hide_sidebar.js"></script>
       
     
   </body>
