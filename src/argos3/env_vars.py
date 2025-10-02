@@ -1,3 +1,4 @@
+# Labels
 BITSTREAM_X = "Bit Index"
 BITSTREAM_Y = "Bit Value"
 SYMBOLS_X = "Symbol Index"
@@ -6,6 +7,10 @@ TIMEDOMAIN_X = "Time"
 TIMEDOMAIN_Y = "Amplitude"
 FREQUENCY_X = "Frequency"
 FREQUENCY_Y = "Magnitude (dB)"
+IMPULSE_X = "Time"
+IMPULSE_Y = "Amplitude"
+
+# Colors
 COLOR_I = "darkgreen"
 COLOR_Q = "navy"
 COLOR_COMBINED = "purple"

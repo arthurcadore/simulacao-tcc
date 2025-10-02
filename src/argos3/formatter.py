@@ -8,6 +8,7 @@
 import numpy as np
 from .plotter import ImpulseResponsePlot, TimePlot, SymbolsPlot, create_figure, save_figure
 from .encoder import Encoder
+from .env_vars import *
 
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", prefix_duration=0.082, channel=None, bits_per_symbol=1):
@@ -273,10 +274,10 @@ if __name__ == "__main__":
         fig_impulse, grid_impulse, (0, 0),
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$g(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
         xlim=(-5, 5), 
         amp_norm=True
     ).plot()
@@ -291,10 +292,10 @@ if __name__ == "__main__":
         formatterQ.t_rc, 
         [formatterQ.g_left, formatterQ.g_right],
         t_unit="ms",
-        colors=["darkorange", "navy"],
+        colors=[COLOR_AUX1, COLOR_AUX2],
         label=[r"$g_{L}(t)$", r"$g_{R}(t)$"], 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
         xlim=(-5, 5), 
     ).plot()
 
@@ -302,10 +303,10 @@ if __name__ == "__main__":
         fig_impulse_man, grid_impulse_man, (1, 0),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$g(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
         xlim=(-5, 5), 
         amp_norm=True
     ).plot()
@@ -319,10 +320,10 @@ if __name__ == "__main__":
         fig_format, grid_format, (0,0),
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$g(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
         xlim=(-5, 5), 
         amp_norm=True
     ).plot()
@@ -331,10 +332,10 @@ if __name__ == "__main__":
         fig_format, grid_format, (0,1),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
-        colors="darkorange",
+        colors=COLOR_IMPULSE,
         label=r"$g(t)$", 
-        xlabel=r"Tempo ($ms$)", 
-        ylabel="Amplitude", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
         xlim=(-5, 5), 
         amp_norm=True
     ).plot()
@@ -343,18 +344,18 @@ if __name__ == "__main__":
         fig_format, grid_format, (1,0),
         symbols_list=[symbols_I],
         sections=[("$X_n$", len(symbols_I))],
-        colors=["darkgreen"],
-        xlabel="Index de Bit", 
-        ylabel="$X_n$", 
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
     ).plot()
 
     SymbolsPlot(
         fig_format, grid_format, (1,1),
         symbols_list=[symbols_Q],
         sections=[("$Y_n$", len(symbols_Q))],
-        colors=["darkblue"],
-        xlabel="Index de Bit", 
-        ylabel="$Y_n$", 
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
     ).plot()
         
     TimePlot(
@@ -362,13 +363,8 @@ if __name__ == "__main__":
         t= np.arange(len(dI1)) / formatterI.fs,
         signals=[dI1],
         labels=[r"$d_I(t)$"],
-        title=r"Canal $I$",
         amp_norm=True,
-        colors="darkgreen",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=COLOR_I,
     ).plot()
     
     TimePlot(
@@ -376,13 +372,8 @@ if __name__ == "__main__":
         t= np.arange(len(dQ1)) / formatterQ.fs,
         signals=[dQ1],
         labels=[r"$d_Q(t)$"],
-        title=r"Canal $Q$",
         amp_norm=True,
-        colors="darkblue",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=COLOR_Q,
     ).plot()
     
     fig_format.tight_layout()
