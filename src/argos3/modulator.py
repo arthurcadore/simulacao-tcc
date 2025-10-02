@@ -56,8 +56,8 @@ class Modulator:
             [0.00000e+00 7.81250e-06 1.56250e-05 2.34375e-05 3.12500e-05 3.90625e-05
               4.68750e-05 5.46875e-05 6.25000e-05 7.03125e-05]
 
-            - Time domain: ![pageplot](assets/example_modulator_time.svg)
-            - Frequency domain: ![pageplot](assets/example_modulator_freq.svg)
+            - Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
+            - Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
 
         <div class="referencia">
         <b>Reference:</b><br>
