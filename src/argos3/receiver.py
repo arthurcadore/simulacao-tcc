@@ -1,8 +1,8 @@
 # """
-# Implementação de um receptor PTT-A3 com seus componentes.
-
-# Autor: Arthur Cadore
-# Data: 16-08-2025
+# Implementation of a PTT-A3 receiver with its components.
+#
+# Author: Arthur Cadore
+# Date: 16-08-2025
 # """
 
 import numpy as np
@@ -23,31 +23,34 @@ from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, Impuls
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, fc=None, lpf_cutoff=600, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
-        Classe que encapsula todo o processo de recepção no padrão ARGOS-3.
+        Class that encapsulates the entire reception process in the ARGOS-3 standard.
 
         Args:
-            fs (int): Frequência de amostragem em Hz.
-            Rb (int): Taxa de bits em bps.
-            fc (int): Frequência de portadora em Hz.
-            lpf_cutoff (int): Frequência de corte do filtro passa-baixa em Hz.
-            preamble (str): String de preâmbulo em hex.
-            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
-            G (np.ndarray): Matriz de geração para codificação convolucional.
-            output_print (bool): Se `True`, imprime os vetores intermediários no console. 
-            output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
+            fs (int): Sampling frequency in Hz.
+            Rb (int): Bit rate in bps.
+            fc (int): Carrier frequency in Hz.
+            lpf_cutoff (int): Cutoff frequency of the low-pass filter in Hz.
+            preamble (str): String of preamble in hex.
+            channel_encode (tuple): Tuple with the type of encoding of channels I and Q respectively.
+            G (np.ndarray): Generation matrix for convolutional encoding.
+            output_print (bool): If `True`, prints the intermediate vectors to the console. 
+            output_plot (bool): If `True`, generates and saves the graphs of the intermediate processes.
+
+        Raises:
+            ValueError: If the encoding types are not 'nrz' or 'manchester'.
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-2097-CNES (section 3.1 and 3.2)
         </div>
         """
 
-        # Validar os valores de channel_encode
+        # Validate the values of channel_encode
         valid_encodings = ["nrz", "man"]
         if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
-            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
+            raise ValueError("The encoding types must be 'nrz' or 'manchester'.")
 
-        # Parâmetros
+        # Attributes
         self.fs = fs
         self.Rb = Rb
         self.fc = fc
@@ -57,7 +60,7 @@ class Receiver:
         self.preamble = preamble
         self.G = G
 
-        # Parâmetros fixos
+        # Fixed Attributes
         self.alpha = 0.8
         self.span = 24
         self.lpf_order = 6
@@ -66,17 +69,15 @@ class Receiver:
         self.cI_encoder = "nrz"
         self.cQ_encoder = "nrz"
 
-        # Codificação I e Q
+        # Channel encoding types
         self.cI_type = channel_encode[0]
         self.cQ_type = channel_encode[1]
-
-        # Mapeamento das configurações de codificação
         encoding_params = {
             "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1, "matched": "RRC-Inverted"},
             "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2, "matched": "Manchester-Inverted"}
         }
 
-        # Parâmetros para o canal I e Q
+        # Attributes for the I and Q channels
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
@@ -89,7 +90,7 @@ class Receiver:
         self.cQ_matched = cQ_params["matched"]
 
 
-        # Submodulos
+        # Submodules
         self.demodulator = Modulator(fc=self.fc, fs=self.fs)
         self.lpf = LPF(cut_off=self.lpf_cutoff, order=self.lpf_order, fs=self.fs, type="butter")
         self.matched_filterI = MatchedFilter(alpha=self.alpha, fs=self.fs, Rb=self.Rb, span=self.span, type="RRC-Inverted", channel="I", bits_per_symbol=1)
@@ -104,26 +105,26 @@ class Receiver:
         self.conv_viterbi = DecoderViterbi(G=self.G)
 
     def demodulate(self, s, t):
-        r"""normalmente
-        Demodula o sinal $s'(t)$ com ruído recebido, recuperando os sinais $x'_{I}(t)$ e $y'_{Q}(t)$.
+        r"""
+        Demodulates the received signal $s'(t)$ with noise, recovering the signals $x'_{I}(t)$ and $y'_{Q}(t)$.
 
         Args:
-            s (np.ndarray): Sinal $s'(t)$ a ser demodulado.
-            t (np.ndarray): Vetor de tempo.
+            s (np.ndarray): Received signal $s'(t)$ to be demodulated.
+            t (np.ndarray): Time vector.
 
         Returns:
-            xI_prime (np.ndarray): Sinal $x'_{I}(t)$ demodulado.
-            yQ_prime (np.ndarray): Sinal $y'_{Q}(t)$ demodulado.
+            xI_prime (np.ndarray): Demodulated signal $x'_{I}(t)$.
+            yQ_prime (np.ndarray): Demodulated signal $y'_{Q}(t)$.
         
-        Example:
-            - Tempo: ![pageplot](assets/receiver_demodulator_time.svg)
-            - Frequência: ![pageplot](assets/receiver_demodulator_freq.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_demodulator_time.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
 
         xI_prime, yQ_prime = self.demodulator.demodulate(s)
 
         if self.output_print:
-            print("\n ==== DEMODULADOR ==== \n")
+            print("\n ==== DEMODULATOR ==== \n")
             print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
             print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
             print("\n")
@@ -209,20 +210,20 @@ class Receiver:
     
     def lowpassfilter(self, xI_prime, yQ_prime, t):
         r"""
-        Aplica o filtro passa-baixa com resposta ao impuslo $h(t)$ aos sinais $x'_{I}(t)$ e $y'_{Q}(t)$, retornando os sinais filtrados $d'_{I}(t)$ e $d'_{Q}(t)$.
+        Applies the low-pass filter with impulse response $h(t)$ to the signals $x'_{I}(t)$ and $y'_{Q}(t)$, returning the filtered signals $d'_{I}(t)$ and $d'_{Q}(t)$.
 
         Args:
-            xI_prime (np.ndarray): Sinal $x'_{I}(t)$ a ser filtrado.
-            yQ_prime (np.ndarray): Sinal $y'_{Q}(t)$ a ser filtrado.
-            t (np.ndarray): Vetor de tempo.
+            xI_prime (np.ndarray): Signal $x'_{I}(t)$ to be filtered.
+            yQ_prime (np.ndarray): Signal $y'_{Q}(t)$ to be filtered.
+            t (np.ndarray): Time vector.
 
         Returns:
-            dI_prime (np.ndarray): Sinal $d'_{I}(t)$ filtrado.
-            dQ_prime (np.ndarray): Sinal $d'_{Q}(t)$ filtrado.
+            dI_prime (np.ndarray): Signal $d'_{I}(t)$ filtered.
+            dQ_prime (np.ndarray): Signal $d'_{Q}(t)$ filtered.
 
-        Example:
-            - Tempo: ![pageplot](assets/receiver_lpf_time.svg)
-            - Frequência: ![pageplot](assets/receiver_lpf_freq.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_lpf_time.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/receiver_lpf_freq.svg)
         """
 
         impulse_response, t_impulse = self.lpf.calc_impulse_response()
@@ -231,7 +232,7 @@ class Receiver:
         dQ_prime = self.lpf.apply_filter(yQ_prime)
 
         if self.output_print:
-            print("\n ==== FILTRAGEM PASSA-BAIXA ==== \n")
+            print("\n ==== LOW-PASS FILTER ==== \n")
             print("d'I(t):", ''.join(map(str, dI_prime[:5])),"...")
             print("d'Q(t):", ''.join(map(str, dQ_prime[:5])),"...")
         
@@ -344,27 +345,27 @@ class Receiver:
 
     def matchedfilter(self, dI_prime, dQ_prime, t):
         r"""
-        Aplica o filtro casado com resposta ao impuslo $g(-t)$ aos sinais $d'_{I}(t)$ e $d'_{Q}(t)$, retornando os sinais filtrados $I'(t)$ e $Q'(t)$.
+        Applies the matched filter with impulse response $g(-t)$ to the signals $d'_{I}(t)$ and $d'_{Q}(t)$, returning the filtered signals $I'(t)$ and $Q'(t)$.
 
         Args:
-            dI_prime (np.ndarray): Sinal $d'_{I}(t)$ a ser filtrado.
-            dQ_prime (np.ndarray): Sinal $d'_{Q}(t)$ a ser filtrado.
-            t (np.ndarray): Vetor de tempo.
+            dI_prime (np.ndarray): Signal $d'_{I}(t)$ to be filtered.
+            dQ_prime (np.ndarray): Signal $d'_{Q}(t)$ to be filtered.
+            t (np.ndarray): Time vector.
 
         Returns:
-            It_prime (np.ndarray): Sinal $I'(t)$ filtrado.
-            Qt_prime (np.ndarray): Sinal $Q'(t)$ filtrado.
+            It_prime (np.ndarray): Signal $I'(t)$ filtered.
+            Qt_prime (np.ndarray): Signal $Q'(t)$ filtered.
 
-        Example:
-            - Tempo: ![pageplot](assets/receiver_mf_time.svg)
-            - Frequência: ![pageplot](assets/receiver_mf_freq.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_mf_time.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/receiver_mf_freq.svg)
         """
 
         It_prime = self.matched_filterI.apply_filter(dI_prime)
         Qt_prime = self.matched_filterQ.apply_filter(dQ_prime)
 
         if self.output_print:
-            print("\n ==== FILTRAGEM CASADA ==== \n")
+            print("\n ==== MATCHED FILTER ==== \n")
             print("I'(t):", ''.join(map(str, It_prime[:5])),"...")
             print("Q'(t):", ''.join(map(str, Qt_prime[:5])),"...")
 
@@ -501,26 +502,26 @@ class Receiver:
 
     def synchronizer(self, It_prime, Qt_prime):
         r"""
-        Realiza a sincronização do sinal recebido, retornando o sinal sincronizado.
+        Performs the signal synchronization, returning the synchronized signal.
 
         Args:
-            It_prime (np.ndarray): Sinal $I'(t)$ a ser sincronizado.
-            Qt_prime (np.ndarray): Sinal $Q'(t)$ a ser sincronizado.
+            It_prime (np.ndarray): Signal $I'(t)$ to be synchronized.
+            Qt_prime (np.ndarray): Signal $Q'(t)$ to be synchronized.
 
         Returns:
-            delayI (float): Delay do sinal $I'(t)$.
-            delayQ (float): Delay do sinal $Q'(t)$.
+            delayI (float): Delay of the signal $I'(t)$.
+            delayQ (float): Delay of the signal $Q'(t)$.
 
-        Example:
-            Tempo: ![pageplot](assets/receiver_sync_time.svg)
-            Módulo Correlação: ![pageplot](assets/receiver_sync_corr.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_sync_time.svg)
+            - Correlation Module Plot Example: ![pageplot](assets/receiver_sync_corr.svg)
         """
 
         delayI_min, delayI_max, delayI, corr_vec_I = self.synchronizerI.correlation(It_prime, "I")
         delayQ_min, delayQ_max, delayQ, corr_vec_Q = self.synchronizerQ.correlation(Qt_prime, "Q")
 
         if self.output_print:
-            print("\n ==== SINCRONIZADOR ==== \n")
+            print("\n ==== SYNCHRONIZER ==== \n")
             print("Delay Q Min  :", delayQ_min)
             print("Delay Q Max  :", delayQ_max)
             print("Delay Q Corr :", delayQ)
@@ -592,21 +593,21 @@ class Receiver:
 
     def sampler(self, It_prime, Qt_prime, t):
         r"""
-        Realiza a decisão (amostragem e quantização) dos sinais $I'(t)$ e $Q'(t)$, retornando os vetores de simbolos $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$.
+        Performs the decision (sampling and quantization) of the signals $I'(t)$ and $Q'(t)$, returning the symbol vectors $X'_{NRZ}[n]$ and $Y'_{MAN}[n]$.
 
         Args:
-            It_prime (np.ndarray): Sinal $I'(t)$ a ser amostrado e quantizado.
-            Qt_prime (np.ndarray): Sinal $Q'(t)$ a ser amostrado e quantizado.
-            t (np.ndarray): Vetor de tempo.
+            It_prime (np.ndarray): Signal $I'(t)$ to be sampled and quantized.
+            Qt_prime (np.ndarray): Signal $Q'(t)$ to be sampled and quantized.
+            t (np.ndarray): Time vector.
 
         Returns:
-            Xnrz_prime (np.ndarray): Sinal $X'_{NRZ}[n]$ amostrado e quantizado.
-            Yman_prime (np.ndarray): Sinal $Y'_{MAN}[n]$ amostrado e quantizado.
+            Xnrz_prime (np.ndarray): Signal $X'_{NRZ}[n]$ sampled and quantized.
+            Yman_prime (np.ndarray): Signal $Y'_{MAN}[n]$ sampled and quantized.
         
-        Example:
-            - Tempo: ![pageplot](assets/receiver_sampler_time.svg)
-            - Constelação: ![pageplot](assets/receiver_sampler_const.svg)  
-            - Fase: ![pageplot](assets/receiver_sampler_phase.svg)  
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_sampler_time.svg)
+            - Constellation Plot Example: ![pageplot](assets/receiver_sampler_const.svg)  
+            - Phase Plot Example: ![pageplot](assets/receiver_sampler_phase.svg)  
         """ 
 
         s_sampledI = self.samplerI.sample(It_prime)
@@ -618,7 +619,7 @@ class Receiver:
         Yq_prime = self.samplerQ.quantize(s_sampledQ)
 
         if self.output_print:
-            print("\n ==== DECISOR ==== \n")
+            print("\n ==== SAMPLER ==== \n")
             print("X'i:", ' '.join(f"{x:+d}" for x in Xi_prime[:20]),"...")
             print("Y'q:", ' '.join(f"{y:+d}" for y in Yq_prime[:20]),"...")
 
@@ -718,18 +719,18 @@ class Receiver:
 
     def decode(self, Xnrz_prime, Yman_prime):
         r"""
-        Decodifica os vetores de simbolos codificados $X'_{NRZ}[n]$ e $Y'_{MAN}[n]$, retornando os vetores de bits $X'n$ e $Y'n$.
+        Decodes the symbol vectors $X'_{NRZ}[n]$ and $Y'_{MAN}[n]$, returning the bit vectors $X'n$ and $Y'n$.
 
         Args:
-            Xnrz_prime (np.ndarray): Sinal $X'_{NRZ}[n]$ quantizado.
-            Yman_prime (np.ndarray): Sinal $Y'_{MAN}[n]$ quantizado.
+            Xnrz_prime (np.ndarray): Signal $X'_{NRZ}[n]$ quantized.
+            Yman_prime (np.ndarray): Signal $Y'_{MAN}[n]$ quantized.
 
         Returns:
-            Xn_prime (np.ndarray): Sinal $X'n$ decodificado.
-            Yn_prime (np.ndarray): Sinal $Y'n$ decodificado.
+            Xn_prime (np.ndarray): Signal $X'n$ decoded.
+            Yn_prime (np.ndarray): Signal $Y'n$ decoded.
         
-        Example:
-            - Tempo: ![pageplot](assets/receiver_decoder_time.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_decoder_time.svg)
         """
 
         i_quantized = np.array(Xnrz_prime)
@@ -739,7 +740,7 @@ class Receiver:
         Yn_prime = self.decoderQ.decode(q_quantized)
 
         if self.output_print:
-            print("\n ==== DECODIFICADOR DE LINHA ==== \n")
+            print("\n ==== CHANNEL DECODER ==== \n")
             print("X'n:", ''.join(map(str, Xn_prime)))
             print("Y'n:", ''.join(map(str, Yn_prime)))
         
@@ -795,24 +796,24 @@ class Receiver:
 
     def descrambler(self, Xn_prime, Yn_prime):
         r"""
-        Desembaralha os vetores de bits $X'n$ e $Y'n$, retornando os vetores de bits $v_{t}^{0'}$ e $v_{t}^{1'}$.
+        Unscrambles the bit vectors $X'n$ and $Y'n$, returning the bit vectors $v_{t}^{0'}$ and $v_{t}^{1'}$.
 
         Args:
-            Xn_prime (np.ndarray): Vetor de bits $X'n$ embaralhados.
-            Yn_prime (np.ndarray): Vetor de bits $Y'n$ embaralhados.
+            Xn_prime (np.ndarray): Bit vector $X'n$ shuffled.
+            Yn_prime (np.ndarray): Bit vector $Y'n$ shuffled.
 
         Returns:
-            vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
-            vt1 (np.ndarray): Vetor de bits $v_{t}^{1'}$ desembaralhado.
+            vt0 (np.ndarray): Bit vector $v_{t}^{0'}$ unshuffled.
+            vt1 (np.ndarray): Bit vector $v_{t}^{1'}$ unshuffled.
 
-        Example:
-            - Tempo: ![pageplot](assets/receiver_descrambler_time.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_descrambler_time.svg)
         """
 
         vt0, vt1 = self.unscrambler.descramble(Xn_prime, Yn_prime)
 
         if self.output_print:
-            print("\n ==== DESEMBARALHADOR ==== \n")
+            print("\n ==== UNSCRAMBLER ==== \n")
             print("vt0':", ''.join(map(str, vt0)))
             print("vt1':", ''.join(map(str, vt1)))
         
@@ -863,23 +864,23 @@ class Receiver:
 
     def conv_decoder(self, vt0, vt1):
         r"""
-        Decodifica os vetores de bits $v_{t}^{0'}$ e $v_{t}^{1'}$, retornando o vetor de bits $u_{t}'$.
+        Decodes the bit vectors $v_{t}^{0'}$ and $v_{t}^{1'}$, returning the bit vector $u_{t}'$.
 
         Args:
-            vt0 (np.ndarray): Vetor de bits $v_{t}^{0'}$ desembaralhado.
-            vt1 (np.ndarray): Vetor de bits $v_{t}^{1'}$ desembaralhado.
+            vt0 (np.ndarray): Bit vector $v_{t}^{0'}$ unshuffled.
+            vt1 (np.ndarray): Bit vector $v_{t}^{1'}$ unshuffled.
 
         Returns:
-            ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+            ut (np.ndarray): Bit vector $u_{t}'$ decoded.
         
-        Example:
-            - Tempo: ![pageplot](assets/receiver_conv_time.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_conv_time.svg)
         """
 
         ut = self.conv_viterbi.decode(vt0, vt1)
 
         if self.output_print:
-            print("\n ==== DECODIFICADOR VITERBI ==== \n")
+            print("\n ==== VITERBI DECODER ==== \n")
             print("u't:", ''.join(map(str, ut)))
         
         if self.output_plot:
@@ -921,23 +922,23 @@ class Receiver:
     
     def datagram(self, ut):
         r"""
-        Recebe um vetor de bits $u_{t}'$ decodificado e retorna um datagrama no padrão ARGOS-3, ou o vetor de bits $u_{t}'$ se houver erro.
+        Receives a decoded bit vector $u_{t}'$ and returns a datagram in the ARGOS-3 format, or the bit vector $u_{t}'$ if there is an error.
 
         Args:
-            ut (np.ndarray): Vetor de bits $u_{t}'$ decodificado.
+            ut (np.ndarray): Bit vector $u_{t}'$ decoded.
 
         Returns:
-            datagram (np.ndarray): Datagrama gerado, ou o vetor de bits $u_{t}'$ se houver erro.
-            success (bool): Indica se a operação foi bem-sucedida.
+            datagram (np.ndarray): Datagram generated, or the bit vector $u_{t}'$ if there is an error.
+            success (bool): Indicates if the operation was successful.
 
-        Example:
-            - Tempo: ![pageplot](assets/receiver_datagram_time.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/receiver_datagram_time.svg)
         """
         try:
             datagramRX = Datagram(streambits=ut)
 
             if self.output_print:
-                print("\n ==== DATAGRAMA ==== \n")
+                print("\n ==== DATAGRAM PARSING ==== \n")
                 print("\n",datagramRX.parse_datagram())
 
             if self.output_plot:
@@ -967,13 +968,13 @@ class Receiver:
     
     def receive(self, s):
         r"""
-        Executa o processo de recepção, retornando o resultado da recepção.
+        Receives a signal $s(t)$ and returns the result of the reception.
 
         Args:
-            s (np.ndarray): Sinal $s(t)$ recebido.
+            s (np.ndarray): Signal $s(t)$ received.
 
         Returns:
-            datagramRX (np.ndarray): Datagrama gerado, ou vetor ut se houver erro.
+            datagramRX (np.ndarray): Datagram generated, or the bit vector $u_{t}'$ if there is an error.
         """
 
         t = np.arange(0, len(s)/self.fs, 1/self.fs)
@@ -999,13 +1000,13 @@ class Receiver:
 if __name__ == "__main__":
 
     fc = np.random.randint(10, 90)*100
-    print("SIMULANDO TRANSMISSÃO/RECEPÇÃO COM FC =", fc)
+    print("\n\n==== SIMULATING TRANSMISSION/RECEPTION WITH FC =", fc)
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(fc=fc, output_print=True, output_plot=True)
     t, s = transmitter.transmit(datagramTX)
 
-    print("\n\n ==== CANAL ==== \n")    
+    print("\n\n ==== CHANNEL ==== \n")    
 
     channel = Channel(fs=transmitter.fs, duration=0.335, noise_mode="ebn0", noise_db=20, seed=11)
     channel.add_signal(s, position_factor=1)
@@ -1013,13 +1014,13 @@ if __name__ == "__main__":
 
     # Comprimentos (para verificação do canal)
     signal_length = len(s) / transmitter.fs
-    print("Comprimento do sinal modulado:", signal_length)
+    print("Signal length:", signal_length)
 
     signalnoise_length = len(channel.channel) / transmitter.fs
-    print("Comprimento do sinal recebido:", signalnoise_length)
+    print("Signal noise length:", signalnoise_length)
 
     noise_first = (signalnoise_length - signal_length)
-    print("Comprimento ruido antes do sinal:", noise_first)
+    print("Noise length before signal:", noise_first)
     
     receiver = Receiver(fc=fc, output_print=True)
     datagramRX, success = receiver.receive(channel.channel)
@@ -1030,10 +1031,10 @@ if __name__ == "__main__":
         print("Bits TX: ", ''.join(str(b) for b in bitsTX))
         print("Bits RX: ", ''.join(str(b) for b in bitsRX))
 
-        # Calcula a Taxa de Erro de Bit (BER)
+        # Calculate Bit Error Rate (BER)
         num_errors = sum(1 for tx, rx in zip(bitsTX, bitsRX) if tx != rx)
         ber = num_errors / len(bitsTX)
 
-        print(f"Número de erros: {num_errors}")
-        print(f"Taxa de Erro de Bit (BER): {ber:.6f}")
+        print(f"Number of errors: {num_errors}")
+        print(f"Bit Error Rate (BER): {ber:.6f}")
 
