@@ -1,8 +1,8 @@
 # """
-# Implementação de um transmissor PTT-A3 com seus componentes.
-
-# Autor: Arthur Cadore
-# Data: 16-08-2025
+# Implementation of a PTT-A3 transmitter with its components.
+#
+# Author: Arthur Cadore
+# Date: 16-08-2025
 # """
 
 import numpy as np
@@ -20,31 +20,31 @@ from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, 
 class Transmitter:
     def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
-        Classe que encapsula todo o processo de transmissão no padrão PTT-A3. A estrutura do transmissor é representada pelo diagrama de blocos abaixo.
+        Encapsulates the entire transmission process in the PTT-A3 standard. The transmitter structure is represented by the block diagram below.
     
         Args:
-            fc (float): Frequência da portadora em Hz. 
-            fs (float): Frequência de amostragem em Hz. 
-            Rb (float): Taxa de bits em bps.
-            carrier_length (float): Comprimento do prefixo em segundos.
-            preamble (str): String de preâmbulo em hex.
-            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
-            G (np.ndarray): Matriz de geração para codificação convolucional.
-            output_print (bool): Se `True`, imprime os vetores intermediários no console.
-            output_plot (bool): Se `True`, gera e salva os gráficos dos processos intermediários.
+            fc (float): Carrier frequency in Hz. 
+            fs (float): Sampling frequency in Hz. 
+            Rb (float): Bit rate in bps.
+            carrier_length (float): Prefix duration in seconds.
+            preamble (str): Preamble string in hex.
+            channel_encode (tuple): Tuple with the type of encoding for channels I and Q respectively.
+            G (np.ndarray): Generation matrix for convolutional encoding.
+            output_print (bool): If `True`, prints intermediate vectors to the console.
+            output_plot (bool): If `True`, generates and saves the graphs of the intermediate processes.
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-274-CNES (seção 3.1 e 3.2)
+        <b>Reference:</b><br>
+        AS3-SP-516-274-CNES (sections 3.1 and 3.2)
         </div>
         """
 
         # Validar os valores de channel_encode
         valid_encodings = ["nrz", "man"]
         if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
-            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
+            raise ValueError("The encoding types must be 'nrz' or 'manchester'.")
 
-        # Parâmetros
+        # Parameters
         self.fc = fc
         self.fs = fs
         self.Rb = Rb
@@ -52,23 +52,23 @@ class Transmitter:
         self.output_plot = output_plot
         self.prefix_duration = carrier_length
 
-        # Parâmetros fixos
+        # Fixed parameters
         self.alpha = 0.8
         self.span = 12
         self.cI_encoder = "nrz"
         self.cQ_encoder = "nrz"
 
-        # Codificação I e Q
+        # Channel encoding
         self.cI_type = channel_encode[0]
         self.cQ_type = channel_encode[1]
 
-        # Mapeamento das configurações de codificação
+        # Encoding configurations
         encoding_params = {
             "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1},
             "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2}
         }
 
-        # Parâmetros para o canal I e Q
+        # Channel I and Q parameters
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
@@ -78,7 +78,7 @@ class Transmitter:
         self.cQ_bits_per_symbol = cQ_params["bits_per_symbol"]
         self.cQ_Rb = self.Rb
 
-        # Submodulos
+        # Submodules
         self.encoder = EncoderConvolutional(G=G)
         self.scrambler = Scrambler()
         self.preamble = Preamble(preamble_hex=preamble)
@@ -91,19 +91,19 @@ class Transmitter:
 
     def prepare_datagram(self, datagram: Datagram):
         r"""
-        Gera o datagrama para transmissão, retornando o vetor de bits $u_t$.
+        Prepares the datagram for transmission, returning the bit vector $u_t$.
 
         Returns:
-            ut (np.ndarray): Vetor de bits do datagrama.
+            ut (np.ndarray): Bit vector of the datagram.
 
-        Example:
-            ![pageplot](assets/transmitter_datagram_time.svg)
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/transmitter_datagram_time.svg)
         """
 
         ut = datagram.streambits
 
         if self.output_print:
-            print("\n ==== MONTAGEM DATAGRAMA ==== \n")
+            print("\n ==== DATAGRAM BUILDING ==== \n")
             print(datagram.parse_datagram())
             print("\nut:", ''.join(map(str, ut)))
 
@@ -118,10 +118,10 @@ class Transmitter:
                            datagram.tail],
                 sections=[("Message Length", len(datagram.msglength)),
                           ("PCD ID", len(datagram.pcdid)),
-                          ("Dados de App.", len(datagram.payload)),
+                          ("Payload", len(datagram.payload)),
                           ("Tail", len(datagram.tail))],
                 colors=["green", "orange", "red", "blue"],
-                xlabel="Index de Bit"
+                xlabel="Bit Index"
             ).plot()
 
             fig_datagram.tight_layout()
@@ -131,23 +131,23 @@ class Transmitter:
 
     def encode_convolutional(self, ut):
         r"""
-        Codifica o vetor de bits $u_t$ usando codificação convolucional, retornando os vetores de bits $v_t^{(0)}$ e $v_t^{(1)}$.
+        Encodes the bit vector $u_t$ using convolutional encoding, returning the bit vectors $v_t^{(0)}$ and $v_t^{(1)}$.
 
         Args:
-            ut (np.ndarray): Vetor de bits a ser codificado.
+            ut (np.ndarray): Bit vector to be encoded.
 
         Returns:
-            vt0 (np.ndarray): Saída do canal I.
-            vt1 (np.ndarray): Saída do canal Q.
+            vt0 (np.ndarray): Bit vector of channel I.
+            vt1 (np.ndarray): Bit vector of channel Q.
 
-        Example:
-            ![pageplot](assets/transmitter_conv_time.svg)
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/transmitter_conv_time.svg)
         """
 
         vt0, vt1 = self.encoder.encode(ut)
 
         if self.output_print:
-            print("\n ==== CODIFICADOR CONVOLUCIONAL ==== \n")
+            print("\n ==== CONVOLUTIONAL ENCODER ==== \n")
             print("vt0:", ''.join(map(str, vt0)))
             print("vt1:", ''.join(map(str, vt1)))
 
@@ -179,7 +179,7 @@ class Transmitter:
                 colors=["navy"],
                 ylabel="$v_t^{(1)}$", 
                 xlim=(0, 60),
-                xlabel="Index de Bit"
+                xlabel="Bit Index"
             ).plot()
 
             fig_conv.tight_layout()
@@ -188,24 +188,24 @@ class Transmitter:
 
     def scramble(self, vt0, vt1):
         r"""
-        Embaralha os vetores de bits $v_t^{(0)}$ e $v_t^{(1)}$, criando os vetores $X_n$ e $Y_n$ embaralhados.
+        Scrambles the bit vectors $v_t^{(0)}$ and $v_t^{(1)}$, creating the shuffled vectors $X_n$ and $Y_n$.
 
         Args:
-            vt0 (np.ndarray): Vetor de bits do canal I.
-            vt1 (np.ndarray): Vetor de bits do canal Q.
+            vt0 (np.ndarray): Bit vector of channel I.
+            vt1 (np.ndarray): Bit vector of channel Q.
 
         Returns:
-            Xn (np.ndarray): Vetor embaralhado do canal I.
-            Yn (np.ndarray): Vetor embaralhado do canal Q.
+            Xn (np.ndarray): Scrambled bit vector of channel I.
+            Yn (np.ndarray): Scrambled bit vector of channel Q.
 
-        Example:
-            ![pageplot](assets/transmitter_scrambler_time.svg)
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/transmitter_scrambler_time.svg)
         """
 
         X, Y = self.scrambler.scramble(vt0, vt1)
 
         if self.output_print:
-            print("\n ==== EMBARALHADOR ==== \n")
+            print("\n ==== SCRAMBLER ==== \n")
             print("Xn:", ''.join(map(str, X)))
             print("Yn:", ''.join(map(str, Y)))
             
@@ -226,7 +226,7 @@ class Transmitter:
                 bits_list=[X],
                 sections=[("$X_n$", len(X))],
                 colors=["darkgreen"],
-                ylabel="Embaralhado", 
+                ylabel="Scrambled", 
                 xlim=(0, 60),
             ).plot()
 
@@ -244,8 +244,8 @@ class Transmitter:
                 bits_list=[Y],
                 sections=[("$Y_n$", len(Y))],
                 colors=["navy"], 
-                ylabel="Embaralhado", 
-                xlabel="Index de Bit",
+                ylabel="Scrambled", 
+                xlabel="Bit Index",
                 xlim=(0, 60),
             ).plot()
 
@@ -256,20 +256,20 @@ class Transmitter:
 
     def generate_preamble(self):
         r"""
-        Gera os vetores de preâmbulo $S_I$ e $S_Q$.
+        Generates the preamble vectors $S_I$ and $S_Q$.
 
         Returns:
-            sI (np.ndarray): Vetor do preâmbulo do canal I.
-            sQ (np.ndarray): Vetor do preâmbulo do canal Q.
+            sI (np.ndarray): Preamble vector of channel I.
+            sQ (np.ndarray): Preamble vector of channel Q.
 
-        Example:
-            ![pageplot](assets/transmitter_preamble_time.svg)
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/transmitter_preamble_time.svg)
         """
         
         sI, sQ = self.preamble.generate_preamble()
 
         if self.output_print:
-            print("\n ==== MONTAGEM PREAMBULO ==== \n")
+            print("\n ==== PREAMBLE BUILDING ==== \n")
             print("sI:", ''.join(map(str, sI)))
             print("sQ:", ''.join(map(str, sQ)))
 
@@ -289,7 +289,7 @@ class Transmitter:
                 bits_list=[sQ],
                 sections=[("$S_Q$", len(sQ))],
                 colors=["navy"], 
-                xlabel="Index de Bit", 
+                xlabel="Bit Index", 
                 ylabel="Canal $Q$"
             ).plot()
 
@@ -300,26 +300,26 @@ class Transmitter:
 
     def multiplex(self, sI, sQ, X, Y):
         r"""
-        Multiplexa os vetores de preâmbulo $S_I$ e $S_Q$ com os vetores de dados $X$ e $Y$, retornando os vetores multiplexados $X_n$ e $Y_n$.
+        Multiplexes the preamble vectors $S_I$ and $S_Q$ with the data vectors $X$ and $Y$, returning the multiplexed vectors $X_n$ and $Y_n$.
 
         Args:
-            sI (np.ndarray): Vetor do preâmbulo do canal I.
-            sQ (np.ndarray): Vetor do preâmbulo do canal Q.
-            X (np.ndarray): Vetor de dados do canal I.
-            Y (np.ndarray): Vetor de dados do canal Q.
+            sI (np.ndarray): Preamble vector of channel I.
+            sQ (np.ndarray): Preamble vector of channel Q.
+            X (np.ndarray): Data vector of channel I.
+            Y (np.ndarray): Data vector of channel Q.
         
         Returns:
-            Xn (np.ndarray): Vetor multiplexado do canal I.
-            Yn (np.ndarray): Vetor multiplexado do canal Q.
+            Xn (np.ndarray): Multiplexed vector of channel I.
+            Yn (np.ndarray): Multiplexed vector of channel Q.
 
-        Example:
-            ![pageplot](assets/transmitter_mux_time.svg)
+        Examples:
+            - Bitstream Plot Example: ![pageplot](assets/transmitter_mux_time.svg)
         """
 
         Xn, Yn = self.multiplexer.concatenate(sI, sQ, X, Y)
 
         if self.output_print:
-            print("\n ==== MULTIPLEXADOR ==== \n")
+            print("\n ==== MULTIPLEXER ==== \n")
             print("Xn:", ''.join(map(str, Xn)))
             print("Yn:", ''.join(map(str, Yn)))
 
@@ -353,25 +353,25 @@ class Transmitter:
 
     def encode_channels(self, Xn, Yn):
         r"""
-        Codifica os vetores dos canais $X_n$ e $Y_n$ usando $NRZ$ e $Manchester$, respectivamente, retornando os vetores de sinal codificados $X_{NRZ}$ e $Y_{MAN}$.
+        Encodes the bit vectors $X_n$ and $Y_n$ using $NRZ$ and $Manchester$, respectively, returning the encoded signal vectors $X_{NRZ}$ and $Y_{MAN}$.
 
         Args:
-            Xn (np.ndarray): Vetor do canal $X_n$ a ser codificado.
-            Yn (np.ndarray): Vetor do canal $Y_n$ a ser codificado.
+            Xn (np.ndarray): Bit vector of channel $X_n$ to be encoded.
+            Yn (np.ndarray): Bit vector of channel $Y_n$ to be encoded.
         
         Returns:
-            Xnrz (np.ndarray): Vetor de sinal codificado do canal I $NRZ$. 
-            Yman (np.ndarray): Vetor de sinal codificado do canal Q $Manchester$. 
+            Xnrz (np.ndarray): Encoded signal vector of channel I $NRZ$. 
+            Yman (np.ndarray): Encoded signal vector of channel Q $Manchester$. 
 
-        Example:
-            ![pageplot](assets/transmitter_encoder_time.svg)
+        Examples:
+            - Signal Plot Example: ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
         Xi = self.c_encoderI.encode(Xn)
         Yq = self.c_encoderQ.encode(Yn)
 
         if self.output_print:
-            print("\n ==== CODIFICAÇÃO DE LINHA ==== \n")
+            print("\n ==== CODING CHANNELS ==== \n")
             print("Xi:", ' '.join(f"{x:+d}" for x in Xi[:40]),"...")
             print("Yq:", ' '.join(f"{y:+d}" for y in Yq[:40]),"...")
 
@@ -425,26 +425,26 @@ class Transmitter:
 
     def format_signals(self, Xi, Yq):
         r"""
-        Formata os vetores de sinal codificados $X_{NRZ}$ e $Y_{MAN}$ usando filtro RRC, retornando os vetores formatados $d_I$ e $d_Q$.
+        Formats the encoded signal vectors $X_{NRZ}$ and $Y_{MAN}$ using RRC filter, returning the formatted vectors $d_I$ and $d_Q$.
 
         Args:
-            Xnrz (np.ndarray): Vetor do canal $X_{NRZ}$ a ser formatado.
-            Yman (np.ndarray): Vetor do canal $Y_{MAN}$ a ser formatado.
+            Xnrz (np.ndarray): Signal vector of channel $X_{NRZ}$ to be formatted.
+            Yman (np.ndarray): Signal vector of channel $Y_{MAN}$ to be formatted.
         
         Returns:
-            dI (np.ndarray): Vetor formatado do canal I, $d_I$.
-            dQ (np.ndarray): Vetor formatado do canal Q, $d_Q$.
+            dI (np.ndarray): Formatted vector of channel I, $d_I$.
+            dQ (np.ndarray): Formatted vector of channel Q, $d_Q$.
 
-        Example:
-            - Tempo: ![pageplot](assets/transmitter_formatter_time.svg)
-            - Frequência: ![pageplot](assets/transmitter_formatter_freq.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/transmitter_formatter_time.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
         dI = self.formatterI.apply_format(Xi)
         dQ = self.formatterQ.apply_format(Yq)
         
         if self.output_print:
-            print("\n ==== FORMATADOR ==== \n")
+            print("\n ==== PULSE MODULATE ==== \n")
             print("dI:", ''.join(map(str, dI[:5])),"...")
             print("dQ:", ''.join(map(str, dQ[:5])),"...")
             print("Prefix Duration:", self.prefix_duration)
@@ -566,27 +566,27 @@ class Transmitter:
 
     def modulate(self, dI, dQ):
         r"""
-        Modula os vetores de sinal $d_I(t)$ e $d_Q(t)$ usando modulação QPSK, retornando o sinal modulado $s(t)$.
+        Modulates the signal vectors $d_I(t)$ and $d_Q(t)$ using QPSK modulation, returning the modulated signal $s(t)$.
 
         Args:
-            dI (np.ndarray): Vetor formatado do canal I, $d_I(t)$.
-            dQ (np.ndarray): Vetor formatado do canal Q, $d_Q(t)$.
+            dI (np.ndarray): Formatted vector of channel I, $d_I(t)$.
+            dQ (np.ndarray): Formatted vector of channel Q, $d_Q(t)$.
         
         Returns:
-            t (np.ndarray): Vetor de tempo, $t$.
-            s (np.ndarray): Sinal modulado, $s(t)$.
+            t (np.ndarray): Time vector, $t$.
+            s (np.ndarray): Modulated signal, $s(t)$.
 
-        Example:
-            - Tempo: ![pageplot](assets/transmitter_modulator_time.svg)
-            - Frequência: ![pageplot](assets/transmitter_modulator_freq.svg)
-            - Portadora: ![pageplot](assets/transmitter_modulator_portadora.svg)
-            - Fase e Constelação: ![pageplot](assets/transmitter_modulator_constellation.svg)
+        Examples:
+            - Time Domain Plot Example: ![pageplot](assets/transmitter_modulator_time.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/transmitter_modulator_freq.svg)
+            - Pure Carrier Plot Example: ![pageplot](assets/transmitter_modulator_portadora.svg)
+            - Phase/Constellation Plot Example: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
 
         t, s = self.modulator.modulate(dI, dQ)
 
         if self.output_print:
-            print("\n ==== MODULADOR ==== \n")
+            print("\n ==== BANDPASS MODULATE ==== \n")
             print("s(t):", ''.join(map(str, s[:5])),"...")
             print("t:   ", ''.join(map(str, t[:5])),"...")
 
@@ -729,14 +729,14 @@ class Transmitter:
 
     def transmit(self, datagram: Datagram):
         r"""
-        Executa toda a cadeia de transmissão para um datagrama, retornando o sinal modulado $s(t)$ e o vetor de tempo $t$.
+        Executes the entire transmission chain for a datagram, returning the modulated signal $s(t)$ and the time vector $t$.
 
         Args:
-            datagram (Datagram): Instância do datagrama a ser transmitido.
+            datagram (Datagram): Instance of the datagram to be transmitted.
 
         Returns:
-            t (np.ndarray): Vetor de tempo, $t$.
-            s (np.ndarray): Sinal modulado, $s(t)$.
+            t (np.ndarray): Time vector, $t$.
+            s (np.ndarray): Modulated signal, $s(t)$.
         """
         ut = self.prepare_datagram(datagram)
         vt0, vt1 = self.encode_convolutional(ut)
@@ -751,22 +751,22 @@ class Transmitter:
 
 if __name__ == "__main__":
 
-    # Cria uma instância de transmissor
+    # Creates a transmitter instance
     transmitter = Transmitter(output_print=True, output_plot=True)
 
     datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=10)
     datagram2 = Datagram(pcdnum=1234, numblocks=1, seed=10)
 
-    # Transmite o datagrama 1
+    # Transmits the datagram 1
     t1, s1 = transmitter.transmit(datagram1)
     t2, s2 = transmitter.transmit(datagram2)
 
-    # Verifica se os vetores são iguais
+    # Verifies if the vectors are equal
     if np.array_equal(s1, s2):
         print("S1 == S2")
     else:
         print("S1 != S2")
 
-    # Exporta os dados
+    # Export the data
     ExportData([s1, t1], "transmitter_st").save()
 

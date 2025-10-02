@@ -1,10 +1,10 @@
-# Transmissor
+# Transmission Chain
 
-O processo de transmissão para um vetor de dados $u_t^{(0)}$ é dado pelo diagrama de blocos abaixo.
+The transmission process for a data vector $u_t^{(0)}$ is given by the block diagram below.
 
 ![pageplot](../assets/blocos_modulador.svg)
 
-## Transmissor
+## Transmitter
 
 ::: transmitter.Transmitter
     options:
