@@ -1,32 +1,34 @@
 # """
-# Implementa uma classe de filtro passa baixa para remover a componente de frequência alta do sinal recebido.
+# Implements a low-pass filter to remove the high frequency component of the received signal.
 
-# Autor: Arthur Cadore
-# Data: 28-07-2025
+# Author: Arthur Cadore
+# Date: 28-07-2025
 # """
 
 import numpy as np
 from scipy.signal import butter, filtfilt, lfilter
-from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, PoleZeroPlot, FrequencyResponsePlot
+from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, PoleZeroPlot, FrequencyResponsePlot, FrequencyPlot
 
 class LPF:
     def __init__(self, cut_off=600, order=6, fs=128_000, type="butter"):
         r"""
-        Inicializa um filtro passa-baixa com base em uma frequência de corte $f_{cut}$ e uma ordem $N$.
+        Initializes a low-pass filter with a cutoff frequency $f_{cut}$ and an order $N$, used to remove high frequency components from the received signal.
 
         Args:
-            cut_off (float): Frequência de corte $f_{cut}$ do filtro.
-            order (int): Ordem $N$ do filtro.
-            fs (int, opcional): Frequência de amostragem $f_s$. 
-            type (str, opcional): Tipo de filtro. Padrão é "butter".
+            cut_off (float): Cutoff frequency $f_{cut}$ of the filter.
+            order (int): Order $N$ of the filter.
+            fs (int, optional): Sampling frequency $f_s$. 
+            type (str, optional): Filter type. Default is "butter".
         
         Raises:
-            ValueError: Se o tipo de filtro for inválido.
+            ValueError: If the filter type is invalid.
 
-        Example: 
-            ![pageplot](assets/example_lpf_signals.svg) 
+        Examples: 
+            - Time Domain Example: ![pageplot](assets/example_lpf_signals.svg) 
+            - Frequency Domain Example: ![pageplot](assets/example_lpf_freq.svg)
         """
 
+        # Attributes
         self.cut_off = cut_off
         self.order = order
         self.fs = fs
@@ -35,90 +37,89 @@ class LPF:
         if type != "butter":
             raise ValueError("Tipo de filtro inválido. Use 'butter'.")
 
-        # Coeficientes b (numerador) e a (denominador) do filtro
+        # Filter Coefficients
         self.b, self.a = self.butterworth_filter()
         self.impulse_response, self.t_impulse = self.calc_impulse_response()
 
     def butterworth_filter(self, fNyquist=0.5):
         r"""
-        Calcula os coeficientes do filtro Butterworth utilizando a biblioteca `scipy.signal`. A função de transferência contínua $H(s)$ de um filtro Butterworth é dada pela expressão abaixo.
+        Calculates the Butterworth filter coefficients using the `scipy.signal` library. The continuous-time transfer function $H(s)$ of a Butterworth filter is given by the expression below.
 
         $$
         H(s) = \frac{1}{1 + \left(\frac{s}{2 \pi f_{cut}}\right)^{2n}}
         $$
 
-        Sendo:
-            - $s$: Variável complexa no domínio de Laplace.
-            - $2 \pi f_{cut}$: Frequência angular de corte do filtro.
-            - $n$: Ordem do filtro.
+        Where:
+            - $s$: Complex variable in the Laplace domain.
+            - $2 \pi f_{cut}$: Cutoff frequency of the filter.
+            - $n$: Order of the filter.
 
         Args: 
-            fNyquist (float): Fator de Nyquist. Padrão é 0.5 * fs.
+            fNyquist (float): Nyquist factor. Default is 0.5 * fs.
 
         Returns:
-            tuple: Coeficientes $b$ e $a$ correspondentes à função de transferência do filtro Butterworth.
+            tuple: Coefficients $b$ and $a$ corresponding to the transfer function of the Butterworth filter.
 
-        Example:
-            ![pageplot](assets/example_lpf_pz.svg)
+        Examples:
+            - Pole-Zero Plot: ![pageplot](assets/example_lpf_pz.svg)
         """
+
+        # Calculate filter coefficients
         b, a = butter(self.order, self.cut_off / (fNyquist * self.fs), btype='low')
         return b, a
 
     def calc_impulse_response(self, impulse_len=1024):
         r"""
-        Para obter a resposta ao impulso no dominio do tempo, um impulso unitário é aplicado como entrada. Para um filtro Butterworth, o calculo é dado pela expressão abaixo. 
+        To obtain the impulse response in the time domain, a unit impulse is applied as input. For a Butterworth filter, the calculation is given by the expression below. 
 
         $$
         h(t) = \mathcal{L}^{-1}\left\{H(f)\right\}
         $$
 
-        Sendo:
-            - $h(t)$: Resposta ao impulso do filtro.
-            - $H(f)$: Função de transferência do filtro.
-            - $\mathcal{L}^{-1}$: Transformada de Laplace inversa.
+        Where:
+            - $h(t)$: Impulse response of the filter.
+            - $H(f)$: Transfer function of the filter.
+            - $\mathcal{L}^{-1}$: Inverse Laplace transform.
 
         Args: 
-            impulse_len (int): Comprimento do vetor de impulso.
+            impulse_len (int): Length of the impulse vector.
 
         Returns:
-            impulse_response (tuple[np.ndarray, np.ndarray]): Resposta ao impulso e vetor de tempo.
+            impulse_response (tuple[np.ndarray, np.ndarray]): Impulse response and time vector.
         
-        Example: 
-            ![pageplot](assets/example_lpf_impulse.svg)
+        Examples: 
+            - Impulse Response: ![pageplot](assets/example_lpf_impulse.svg)
         """
-        # Impulso unitário
+        # Unit impulse
         impulse_input = np.zeros(impulse_len)
         impulse_input[0] = 1
 
-        # Resposta ao impulso
+        # Impulse response
         impulse_response = lfilter(self.b, self.a, impulse_input)
         t_impulse = np.arange(impulse_len) / self.fs
         return impulse_response, t_impulse
 
     def apply_filter(self, signal):
         r"""
-        Aplica o filtro passa-baixa com resposta ao impulso $h(t)$ ao sinal de entrada $s(t)$, utilizando a função `scipy.signal.filtfilt`. O processo de filtragem é dado pela expressão abaixo. 
+        Applies the low-pass filter with impulse response $h(t)$ to the input signal $s(t)$, using the `scipy.signal.filtfilt` function. The filtering process is given by the expression below. 
 
         $$
             x(t) = s(t) \ast h(t)
         $$
 
-        Sendo: 
-            - $x(t)$: Sinal filtrado.
-            - $s(t)$: Sinal de entrada.
-            - $h(t)$: Resposta ao impulso do filtro.
+        Where: 
+            - $x(t)$: Filtered signal.
+            - $s(t)$: Input signal.
+            - $h(t)$: Impulse response of the filter.
 
         Args:
-            signal (np.ndarray): Sinal de entrada $s(t)$.
+            signal (np.ndarray): Input signal $s(t)$.
 
         Returns:
-            signal_filtered (np.ndarray): Sinal filtrado $x(t)$.
+            signal_filtered (np.ndarray): Filtered signal $x(t)$.
         """
+        # Filter signal
         signal_filtered = filtfilt(self.b, self.a, signal)
-
-        # normalização
-        # signal_filtered *= np.sqrt(2)
-
         return signal_filtered
 
 
@@ -208,4 +209,35 @@ if __name__ == "__main__":
             xlim=(0, 3*filtro.cut_off)
         ).plot()
     save_figure(freq_response, "example_lpf_freq_response.pdf")
+
+    fig_freq, grid_freq = create_figure(2, 2, figsize=(16,6))
+    FrequencyResponsePlot(
+            fig_freq, grid_freq, (0,slice(0,2)), 
+            filtro.b, filtro.a, 
+            fs=filtro.fs, 
+            f_cut=filtro.cut_off, 
+            xlim=(0, 3*filtro.cut_off)
+        ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,0),
+        fs=filtro.fs,
+        signal=signal,
+        labels=[r"$X(f)$"],
+        title="Sinal original",
+        xlim=(-8000, 8000),
+        colors="navy"
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,1),
+        fs=filtro.fs,
+        signal=signal_filtered,
+        labels=[r"$X'(f)$"],
+        title="Sinal filtrado",
+        xlim=(-8000, 8000),
+        colors="darkred"
+    ).plot()
+    
+    save_figure(fig_freq, "example_lpf_freq.pdf")
     
