@@ -46,8 +46,8 @@ extra_css:
 nav:
   - Home: index.md
   - Installation: 
-      - Installation pip: api/api.md
-      - Installation manual: api/guia.md
+      - Installation pip: guide_pip.md
+      - Installation manual: guide.md
       - Changelog: changelog.md
   - Components:
       - Datagram: api/datagram.md

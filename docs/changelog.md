@@ -106,13 +106,13 @@
 - [X] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
 - [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
-- [] Verificar equacionamento sklar e alterar nome das variáveis.
-- [] Diagrama de blocos
-    - [] Alterar diagrama do modulador
-    - [] Alterar nome das variáveis
-    - [] Alterar bloco do receptor pra ficar dentro de detector.
-    - [] Alterar indices no diagrama para ficar no mesmo tamanho. 
-    - [] waterfall, transpor 
+- [X] Verificar equacionamento sklar e alterar nome das variáveis.
+- [X] Diagrama de blocos
+    - [X] Alterar diagrama do modulador
+    - [X] Alterar nome das variáveis
+    - [X] Alterar bloco do receptor pra ficar dentro de detector.
+    - [X] Alterar indices no diagrama para ficar no mesmo tamanho. 
+    - [X] waterfall, transpor 
 - [] Otimizar plots
     - [X] Verificar plot de constelação, normalização do sinal recebido
     - [X] Otimizar plot do encoder. 
@@ -121,7 +121,7 @@
     - [] Alterar xlim para plots necessários. 
     - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
     - [] Padronizar cor dos plots.
-- [] Criar diretório para armazenar diagramas e notebooks.    
+- [X] Criar diretório para armazenar diagramas e notebooks.    
 
 --- 
 ### v1.0.8 - Soft Decision and Performance

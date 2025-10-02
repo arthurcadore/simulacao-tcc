@@ -1,20 +1,20 @@
-# Simulador ARGOS-3
+# ARGOS-3 Simulator
 
-O **Simulador ARGOS-3** é uma ferramenta computacional desenvolvida em Python com o objetivo de **estudar, analisar e validar a comunicação via satélite** no padrão **ARGOS-3**.  
+The **ARGOS-3 Simulator** is a computational tool developed in Python with the objective of **studying, analyzing and validating satellite communication** in the **ARGOS-3** standard.  
 
 --- 
 
-O padrão ARGOS-3 é empregado pelo **Sistema Brasileiro de Coleta de Dados Ambientais (SBCDA)**, sob responsabilidade do **Instituto Nacional de Pesquisas Espaciais (INPE)**, para o recebimento de informações provenientes de milhares de **Plataformas de Coleta de Dados (PCDs)** distribuídas em todo o território nacional. As transmissões realizadas pelas PCDs são retransmitidas por satélites como o **SCD-1**, **SCD-2** e pela série **CBERS**, que orbitam a aproximadamente **750 km de altitude**.  
+The ARGOS-3 standard is used by the **Brazilian System for Collecting Environmental Data (SBCDA)**, under the responsibility of the **National Institute of Space Research (INPE)**, to receive information from thousands of **Data Collection Platforms (PCDs)** distributed throughout the national territory. The transmissions made by the PCDs are retransmitted by satellites such as the **SCD-1**, **SCD-2** and the **CBERS** series, which orbit at approximately **750 km of altitude**.  
 
 <p align="center" class="image-container">
-  <img src="./assets/geoplot.svg" alt="Mapa do Brasil com PCDs" class="responsive-image">
+  <img src="./assets/geoplot.svg" alt="Map of Brazil with PCDs" class="responsive-image">
 </p>
 
-O simulador foi projetado para reproduzir os principais aspectos e desafios da comunicação com satélites, incorporando conceitos fundamentais, tais como:
+The simulator was designed to reproduce the main aspects and challenges of satellite communication, incorporating fundamental concepts, such as:
 
-- Técnicas de modulação, codificação e sincronização de sinais  
-- Modelagem de efeitos de canal, incluindo ruído, interferências e atenuação
+- Signal modulation, coding and synchronization techniques  
+- Channel modeling, including noise, interference and attenuation
 
 ---
 
-Este repositório consolida a **documentação, os testes e os resultados de simulação** do ARGOS-3, constituindo uma base de referência para **pesquisas acadêmicas, iniciativas de desenvolvimento tecnológico e aplicações em monitoramento ambiental no Brasil**.
+This repository consolidates the **documentation, tests and simulation results** of the ARGOS-3, constituting a reference base for **academic research, technological development initiatives and applications in environmental monitoring in Brazil**.
