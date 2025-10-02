@@ -25,16 +25,63 @@ class CarrierDetector:
             seg_ms (float): Duration of each segment [ms]
             threshold (float): Power threshold for detection
             freq_window (tuple[float, float]): Frequency interval (`f_min`, `f_max`). Frequencies outside this interval will be discarded.
+            bandwidth (float): Bandwidth of span [Hz], used to ignore other frequencies that can be confirmed.
+            history (int): Number of previous segments to consider for carrier detection. 
         
         Raises:
             ValueError: If the sampling frequency is less than or equal to zero.
             ValueError: If the segment duration is less than or equal to zero.
 
-        Example: 
-            - Segmentos de tempo: ![pageplot](assets/example_detector_freq.svg)
-            - Diagrama Waterfall: ![pageplot](assets/example_detector_waterfall.svg)
-            - Diagrama Waterfall de detecção: ![pageplot](assets/example_detector_waterfall_detection.svg)
-            - Diagrama Waterfall de decisão: ![pageplot](assets/example_detector_waterfall_decision.svg)
+        Examples:
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> fc = np.random.randint(10,80)*100
+            >>> print(fc)
+            2400
+            >>>
+            >>> transmitter = argos3.Transmitter(fc=fc, output_print=False, output_plot=False)
+            >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
+            >>> 
+            >>> channel = argos3.Channel(duration=1, noise_mode="ebn0", noise_db=20)
+            >>> channel.add_signal(s, position_factor=0.5)
+            >>> channel.add_noise()
+            >>> st = channel.channel
+            >>> 
+            >>> detector = argos3.CarrierDetector(seg_ms=10, threshold=-15)
+            >>> detector.detect(st.copy())
+            >>> detections = detector.return_channels()
+            >>>
+            >>> print(detections)
+            [(np.float64(2400.0), 41, 65)]
+            >>>                   
+            >>> first_sample = int((detections[0][1] - 5) * detector.fs * detector.seg_s)
+            >>> last_sample = int(detections[0][2] * detector.fs * detector.seg_s)
+            >>> st_prime = st[first_sample:last_sample]
+            >>> 
+            >>> receiver = argos3.Receiver(fc=detections[0][0], output_print=False, output_plot=False)
+            >>> datagramRX, success = receiver.receive(st_prime)
+            >>> 
+            >>> print(success)
+            True
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 1,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 37,
+                  "sensor_2": 198,
+                  "sensor_3": 9
+                }
+              },
+              "tail": 7
+            }
+            
+            - Frequency Domain Segment: ![pageplot](assets/example_detector_freq.svg)
+            - Waterfall Diagram: ![pageplot](assets/example_detector_waterfall.svg)
+            - Waterfall Detection Diagram: ![pageplot](assets/example_detector_waterfall_detection.svg)
+            - Waterfall Decision Diagram: ![pageplot](assets/example_detector_waterfall_decision.svg)
 
 
         <div class="referencia">
@@ -47,6 +94,7 @@ class CarrierDetector:
         if seg_ms <= 0:
             raise ValueError("The segment duration must be greater than zero.")
 
+        # Attributes
         self.fs = fs
         self.ts = 1 / self.fs
         self.seg_s = seg_ms / 1000.0
@@ -56,14 +104,14 @@ class CarrierDetector:
         self.bandwidth = bandwidth
         self.history = history
 
-        # Valores fixos de espectro
+        # Fixed values of spectrum
         self.delta_f = self.fs / self.N
         self.span = self.delta_f / 2
 
-        # Quantos bins de FFT correspondem à largura de banda
+        # Number of FFT bins corresponding to the bandwidth
         self.bandwidth_bins = int(self.bandwidth / self.delta_f)
 
-
+        # Matrices
         self.power_matrix = None
         self.detected_matrix = None
         self.decision_matrix = None
@@ -89,9 +137,11 @@ class CarrierDetector:
         Returns:
             list[np.ndarray]: List of time segments
         """
+
         segments = []
         total_samples = len(signal)
 
+        # Segment signal
         for start in range(0, total_samples, self.N):
             end = min(start + self.N, total_samples)
             segments.append(signal[start:end])
@@ -101,22 +151,22 @@ class CarrierDetector:
 
     def analyze_signal(self, signal: np.ndarray):
         r"""
-        Calcula a FFT de cada segmento $x_n[m]$, usando a expressão abaixo. 
+        Calculates the FFT of each segment $x_n[m]$, using the expression below. 
         
         $$
             X_n[k] = \sum_{m=0}^{N-1} x_n[m]\, e^{-j2\pi km/N} 
         $$
 
         Where: 
-            - $X_n[k]$ : Transformada de Fourier of segment $n$.
+            - $X_n[k]$ : FFT of segment $n$.
             - $x_n[m]$ : Segment of time $n$.
             - $N$ : Number of samples in the segment.
             - $k$ : Number of the Fourier transform.
             - $m$ : Sample number.
-            - $T_s$ : Período de amostragem.
-            - $e^{-j2\pi km/N}$ : Exponencial complexa.
+            - $T_s$ : Sampling period.
+            - $e^{-j2\pi km/N}$ : Complex exponential.
 
-        Em seguida, calcula a potência espectral $P_n[k]$ em $dB$, e divide pelo número de amostras $N$ contidas no segmento para normalização.
+        Then, calculates the power spectral density $P_n[k]$ in $dB$, and divides by the number of samples $N$ contained in the segment for normalization.
 
         $$
             P_n[k] = \frac{|X_n[k]|^2}{N}
@@ -124,7 +174,7 @@ class CarrierDetector:
 
         Where: 
             - $P_n[k]$ : Power spectral density of segment $n$, normalized in $dB$.
-            - $X_n[k]$ : Transformada de Fourier of segment $n$.
+            - $X_n[k]$ : FFT of segment $n$.
             - $N$ : Number of samples in the segment.
 
         Args:
@@ -133,53 +183,57 @@ class CarrierDetector:
         Returns:
             freqs (tuple[np.ndarray,np.ndarray]): tuple with frequencies and power spectral density in $dB$
 
-        Example: 
-            Matriz de Potência 2D: ![pageplot](assets/example_detector_waterfall.svg)
-            Matriz de Potência 3D: ![pageplot](assets/example_detector_waterfall_3d.svg)
+        Examples: 
+            - Waterfall Diagram: ![pageplot](assets/example_detector_waterfall.svg)
+            - 3D Waterfall Diagram: ![pageplot](assets/example_detector_waterfall_3d.svg)
         """
 
+        # Segments
         segments = self.segment_signal(signal)
         n_segments = len(segments)
+
+        # Number of FFT bins
         n_freqs = self.N // 2 + 1
 
+        # Power matrix (m x n), where m is the number of segments and n is the number of FFT bins
         self.power_matrix = np.zeros((n_segments, n_freqs))
 
+        # Calculate power spectral density for each segment and stores in the power matrix
         for i, seg in enumerate(segments):
             X = np.fft.rfft(seg, n=self.N)
-            P_bin = (np.abs(X) ** 2) / len(seg)  # normaliza pelo tamanho real do segmento
-            P_db = 10.0 * np.log10(P_bin + 1e-12)  # evita log(0)
+            P_bin = (np.abs(X) ** 2) / len(seg)
+            P_db = 10.0 * np.log10(P_bin + 1e-12)  
             self.power_matrix[i, :] = P_db
-
 
     def detect(self, signal: np.ndarray):
         r"""
-        Detects possible carriers in the signal, comparing $P_n[k]$ with the threshold $P_t$, for each index $k$ of the FFT.
+        Detects possible carriers in the signal, comparing $P_n[k]$ with the threshold $P_t$, for each index $k$ of the FFT, as shown below.
 
         $$
             f_n[k] =
             \begin{cases}
-            \dfrac{k}{N} \cdot f_s, & \text{se } P_n[k] > P_t\\
-            \text{não detectada}, & \text{se } P_n[k] \leq P_t
+            \dfrac{k}{N} \cdot f_s, & \text{if } P_n[k] > P_t\\
+            \text{not detected}, & \text{if } P_n[k] \leq P_t
             \end{cases}
         $$
 
-        Sendo: 
-            - $f_n[k]$ : frequência detectada no segmento $n$.
-            - $P_n[k]$ : potência espectral do segmento $n$.
-            - $P_t$ : limiar de potência.
-            - $N$ : número de amostras do segmento.
-            - $f_s$ : sampling frequency.
-            - $k$ : index of the FFT.
+        Where: 
+            - $f_n[k]$ : Detected frequency in segment $n$.
+            - $P_n[k]$ : Power spectral density of segment $n$.
+            - $P_t$ : Power threshold.
+            - $N$ : Number of samples in the segment.
+            - $f_s$ : Sampling frequency.
+            - $k$ : Index of the FFT.
             - `not detected`: Frequency ignored in the detection process.  
 
         Args:
             signal (np.ndarray): Received signal
 
         Returns:
-            results (list[tuple[np.ndarray, list[float]]]): list of tuples with the segments and detected frequencies
+            results (list[tuple[np.ndarray, list[float]]]): List of tuples with the segments and detected frequencies
 
-        Example: 
-            ![pageplot](assets/example_detector_waterfall_detection.svg)
+        Examples: 
+            - Waterfall Detection Diagram: ![pageplot](assets/example_detector_waterfall_detection.svg)
         """
         # Calculates the power matrix FFT
         self.analyze_signal(signal)
@@ -239,8 +293,8 @@ class CarrierDetector:
         Returns:
             confirmed_freqs (list[float]): list of confirmed carrier frequencies
 
-        Example: 
-            ![pageplot](assets/example_detector_waterfall_decision.svg)
+        Examples: 
+            - Waterfall Decision Diagram: ![pageplot](assets/example_detector_waterfall_decision.svg)
         """
 
         self.decision_matrix = np.copy(self.detected_matrix)
@@ -260,11 +314,11 @@ class CarrierDetector:
                     continue
 
                 center_k = k
-                s = i + 1  # starts at the next segment
+                s = i + 1
                 zero_count = 0
                 start_s = s
 
-                # applies 4 and span in the first segment after 2
+                # applies "4" and span in the first segment after "2"
                 lower = max(center_k - half_span, 0)
                 upper = min(center_k + half_span, n_freqs - 1)
                 self.decision_matrix[s, lower:upper + 1] = np.where(
@@ -274,9 +328,9 @@ class CarrierDetector:
                 )
                 span_matrix[s, lower:upper + 1] = True
 
-                s += 1  # advances to continue the extension loop
+                # advances to continue the extension loop
+                s += 1
 
-                # now continues filling the sequence while there is activity
                 while s < n_segments and zero_count < 2:
                     neighbors = [center_k]
                     if center_k > 0:
@@ -465,7 +519,6 @@ if __name__ == "__main__":
         last_segment = int(end_seg * detector.fs * detector.seg_s)
         selected_signal = st[first_segment:last_segment]
     
-        receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)
         receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)
         datagramRX, success = receiver.receive(selected_signal)
     
