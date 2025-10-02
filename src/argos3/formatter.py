@@ -278,7 +278,7 @@ if __name__ == "__main__":
         label=r"$g(t)$", 
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
-        xlim=(-5, 5), 
+        xlim=IMPULSE_XLIM, 
         amp_norm=True
     ).plot()
 
@@ -296,7 +296,7 @@ if __name__ == "__main__":
         label=[r"$g_{L}(t)$", r"$g_{R}(t)$"], 
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
-        xlim=(-5, 5), 
+        xlim=IMPULSE_XLIM, 
     ).plot()
 
     ImpulseResponsePlot(
@@ -307,7 +307,7 @@ if __name__ == "__main__":
         label=r"$g(t)$", 
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
-        xlim=(-5, 5), 
+        xlim=IMPULSE_XLIM, 
         amp_norm=True
     ).plot()
 
@@ -324,7 +324,7 @@ if __name__ == "__main__":
         label=r"$g(t)$", 
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
-        xlim=(-5, 5), 
+        xlim=IMPULSE_XLIM, 
         amp_norm=True
     ).plot()
 
@@ -336,7 +336,7 @@ if __name__ == "__main__":
         label=r"$g(t)$", 
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
-        xlim=(-5, 5), 
+        xlim=IMPULSE_XLIM, 
         amp_norm=True
     ).plot()
 

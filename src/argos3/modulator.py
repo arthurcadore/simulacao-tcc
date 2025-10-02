@@ -5,11 +5,13 @@
 # Date: 28-07-2025
 # """
 
+from audioop import rms
 import numpy as np
 from .formatter import Formatter
 from .encoder import Encoder
 from .plotter import PhasePlot, create_figure, save_figure, TimePlot, FrequencyPlot, ConstellationPlot 
 from scipy.signal import hilbert
+from .env_vars import *
 
 class Modulator:
     def __init__(self, fc=None, fs=128_000):
@@ -204,14 +206,9 @@ if __name__ == "__main__":
         t=t,
         signals=[dI, dQ],
         labels=["$dI(t)$", "$dQ(t)$"],
-        title="Sinal $IQ$ - Formatados RRC",
-        xlim=(40, 140),
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors=["darkgreen", "navy"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_I, COLOR_Q],
     ).plot()
     
     TimePlot(
@@ -219,14 +216,9 @@ if __name__ == "__main__":
         t=t,
         signals=[s],
         labels=["$s(t)$"],
-        title="Sinal Modulado $IQ$",
-        xlim=(40, 140),
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=COLOR_COMBINED,
     ).plot()
     
     fig_time.tight_layout()
@@ -239,10 +231,8 @@ if __name__ == "__main__":
         signal=dI,
         fc=fc,
         labels=["$D_I(f)$"],
-        title="Componente I",
-        xlim=(-1.5, 1.5),
-        colors="navy",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_COMPONENTS_XLIM,
+        colors=COLOR_I,
     ).plot()
 
     FrequencyPlot(
@@ -251,10 +241,8 @@ if __name__ == "__main__":
         signal=dQ,
         fc=fc,
         labels=["$D_Q(f)$"],
-        title="Componente Q",
-        xlim=(-1.5, 1.5),
-        colors="darkgreen",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_COMPONENTS_XLIM,
+        colors=COLOR_Q,
     ).plot()
 
     FrequencyPlot(
@@ -263,10 +251,8 @@ if __name__ == "__main__":
         signal=s,
         fc=fc,
         labels=["$S(f)$"],
-        title="Sinal Modulado $IQ$",
-        xlim=(0, 8),
-        colors="darkred",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_COMBINED_XLIM,
+        colors=COLOR_COMBINED,
     ).plot()
 
     fig_freq.tight_layout()
@@ -278,24 +264,18 @@ if __name__ == "__main__":
         t=t,
         signals=[dI, dQ],
         labels=["Fase $I + jQ$"],
-        title="Fase $I + jQ$",
-        xlim=(40, 140),
-        colors=["darkred"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        xlim=PHASE_XLIM,
+        colors=[COLOR_COMBINED],
     ).plot()
 
     ConstellationPlot(
         fig_const, grid, (0, 1),
         dI=dI[:20000:5],
         dQ=dQ[:20000:5],
-        title="Constelação $IQ$",
-        xlim=(-1.2, 1.2),
-        ylim=(-1.2, 1.2),
-        colors=["darkred"],
-        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=CONSTELLATION_XLIM,
+        ylim=CONSTELLATION_YLIM,
+        colors=[COLOR_COMBINED],
+        rms_norm=True,
     ).plot()
 
     fig_const.tight_layout()
@@ -308,10 +288,8 @@ if __name__ == "__main__":
         signal=s[0:(int(round(0.082 * fs)))],
         fc=fc,
         labels=["$S(f)$"],
-        title="Portadora Pura - $0$ a $80$ms",
-        xlim=(-10, 10),
-        colors="darkred",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
     ).plot()
 
     FrequencyPlot(
@@ -320,10 +298,8 @@ if __name__ == "__main__":
         signal=s[(int(round(0.082 * fs))):],
         fc=fc,
         labels=["$S(f)$"],
-        title="Sinal Modulado - $80$ms em diante",
-        xlim=(-10, 10),
-        colors="darkred",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
     ).plot()
 
     fig_portadora.tight_layout()
@@ -339,14 +315,9 @@ if __name__ == "__main__":
         t=t,
         signals=[i_signal, q_signal],
         labels=["$xI'(t)$", "$yQ'(t)$"],
-        title="Componentes $IQ$ - Demoduladas",
-        xlim=(40, 140),
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors=["darkgreen", "navy"],
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=[COLOR_I, COLOR_Q]
     ).plot()
     
     TimePlot(
@@ -354,14 +325,9 @@ if __name__ == "__main__":
         t=t,
         signals=[s],
         labels=["$s(t)$"],
-        title="Sinal Modulado $IQ$",
-        xlim=(40, 140),
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors="darkred",
-        style={
-            "line": {"linewidth": 2, "alpha": 1},
-            "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-        }
+        colors=COLOR_COMBINED
     ).plot()
     
     fig_time.tight_layout()
@@ -375,10 +341,8 @@ if __name__ == "__main__":
         signal=s,
         fc=fc,
         labels=["$S(f)$"],
-        title="Sinal Modulado $IQ$",
-        xlim=(-10, 10),
-        colors="darkred",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_COMBINED_XLIM,
+        colors=COLOR_COMBINED
     ).plot()
     
     FrequencyPlot(
@@ -387,10 +351,8 @@ if __name__ == "__main__":
         signal=i_signal,
         fc=fc,
         labels=["$X_I'(f)$"],
-        title="Componente $I$ - Demodulado",
-        xlim=(-10, 10),
-        colors="darkgreen",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_I
     ).plot()
 
     FrequencyPlot(
@@ -399,10 +361,8 @@ if __name__ == "__main__":
         signal=q_signal,
         fc=fc,
         labels=["$Y_Q'(f)$"],
-        title="Componente $Q$ - Demodulado",
-        xlim=(-10, 10),
-        colors="navy",
-        style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_Q
     ).plot()
     
 

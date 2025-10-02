@@ -294,9 +294,9 @@ class FrequencyPlot(BasePlot):
         # Frequency scale
         if self.fc > 1000:
             freqs = freqs / 1000
-            self.ax.set_xlabel(r"Frequência ($kHz$)")
+            self.ax.set_xlabel(r"Frequency ($kHz$)")
         else:
-            self.ax.set_xlabel(r"Frequência ($Hz$)")
+            self.ax.set_xlabel(r"Frequency ($Hz$)")
 
         # Plot
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
@@ -1105,7 +1105,7 @@ class FrequencyResponsePlot(BasePlot):
                  xlim: tuple = None,
                  worN: int = 1024,
                  show_phase: bool = False,
-                 xlabel: str = r"Frequência ($Hz$)",
+                 xlabel: str = r"Frequency ($Hz$)",
                  ylabel: str = r"Magnitude ($dB$)",
                  **kwargs) -> None:
 
