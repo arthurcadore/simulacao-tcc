@@ -332,14 +332,15 @@ class Datagram:
             self.pcdnum = int("".join(map(str, pcd_num)), 2)            
 
         # extract the payload, any validation is done in the receiver
-        self.payload = self.streambits[32:32 + 24 + (32 * (self.numblocks - 1))]
+        data_length = 24 + (32 * (self.numblocks - 1))
+        self.payload = self.streambits[32:32 + data_length]
 
         # calculate the tail bits based on the number of blocks
         tail_pad = [7, 8, 9]
         tail_length = tail_pad[(self.numblocks - 1) % 3]
 
         # extract the tail bits
-        self.tail = self.streambits[32 + 24 + (32 * (self.numblocks - 1)) + tail_length:]
+        self.tail = self.streambits[32 + data_length:32 + data_length + tail_length]
 
         # Verify the integrity of the tail, all bits must be 0.
         if any(int(b) != 0 for b in self.tail):

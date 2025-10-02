@@ -1,8 +1,8 @@
 # """
-# Implementação de um detector de portadora para recepção PTT-A3.
-
-# Autor: Arthur Cadore
-# Data: 07-09-2025
+# Implementation of carrier detector for PTT-A3 reception.
+#
+# Author: Arthur Cadore
+# Date: 07-09-2025
 # """
 
 import numpy as np
@@ -16,19 +16,19 @@ from .channel import Channel
 class CarrierDetector:
     def __init__(self, fs: float = 128_000, seg_ms: float = 10.0, threshold: float = -10, freq_window: tuple[float, float] = (0000, 10000), bandwidth: float = 1600, history: int = 4):
         """
-        Inicializa um detector de portadora, utilizado para detectar possíveis portadoras no sinal recebido.
+        Initializes a carrier detector, used to detect possible carriers in the received signal.
 
         ![pageplot](../assets/detector.svg)
 
         Args:
-            fs (float): Frequência de amostragem [Hz]
-            seg_ms (float): Duração de cada segmento [ms]
-            threshold (float): Limiar de potência para detecção
-            freq_window (tuple[float, float]): Intervalo de frequências (`f_min`, `f_max`).Frequências fora deste intervalo serão descartadas.
+            fs (float): Sampling frequency [Hz]
+            seg_ms (float): Duration of each segment [ms]
+            threshold (float): Power threshold for detection
+            freq_window (tuple[float, float]): Frequency interval (`f_min`, `f_max`). Frequencies outside this interval will be discarded.
         
         Raises:
-            ValueError: Se a frequência de amostragem for menor ou igual a zero.
-            ValueError: Se o comprimento de cada segmento for menor ou igual a zero.
+            ValueError: If the sampling frequency is less than or equal to zero.
+            ValueError: If the segment duration is less than or equal to zero.
 
         Example: 
             - Segmentos de tempo: ![pageplot](assets/example_detector_freq.svg)
@@ -38,14 +38,14 @@ class CarrierDetector:
 
 
         <div class="referencia">
-        <b>Referência:</b><br>
-        AS3-SP-516-2097-CNES (Seção 3.3)
+        <b>Reference:</b><br>
+        AS3-SP-516-2097-CNES (Section 3.3)
         </div>
         """
         if fs <= 0:
-            raise ValueError("A frequência de amostragem deve ser maior que zero.")
+            raise ValueError("The sampling frequency must be greater than zero.")
         if seg_ms <= 0:
-            raise ValueError("O comprimento de cada segmento deve ser maior que zero.")
+            raise ValueError("The segment duration must be greater than zero.")
 
         self.fs = fs
         self.ts = 1 / self.fs
@@ -70,24 +70,24 @@ class CarrierDetector:
         
     def segment_signal(self, signal: np.ndarray) -> list[np.ndarray]:
         r"""
-        Divide o sinal recebido em segmentos de tempo $x_n[m]$, cada segmento com `seg_ms` de duração, conforme a expressão abaixo. 
+        Divides the received signal into segments of time $x_n[m]$, each segment with `seg_ms` duration, according to the expression below. 
 
         $$
         x_n[m] = s(t_{n} + mT_s)
         $$
 
-        Sendo: 
-            - $x_n[m]$ : Segmento de tempo $n$.
-            - $s(t)$ : Sinal recebido.
-            - $T_s$ : Período de amostragem.
-            - $m$ : Número do segmento.
-            - $t_n$ : Instante de início do segmento $n$.
+        Where: 
+            - $x_n[m]$ : Segment of time $n$.
+            - $s(t)$ : Received signal.
+            - $T_s$ : Sampling period.
+            - $m$ : Segment number.
+            - $t_n$ : Start time of segment $n$.
 
         Args:
-            signal (np.ndarray): sinal recebido
+            signal (np.ndarray): Received signal
 
         Returns:
-            list[np.ndarray]: lista de segmentos de tempo
+            list[np.ndarray]: List of time segments
         """
         segments = []
         total_samples = len(signal)
@@ -107,12 +107,12 @@ class CarrierDetector:
             X_n[k] = \sum_{m=0}^{N-1} x_n[m]\, e^{-j2\pi km/N} 
         $$
 
-        Sendo: 
-            - $X_n[k]$ : Transformada de Fourier do segmento $n$.
-            - $x_n[m]$ : Segmento de tempo $n$.
-            - $N$ : Número de amostras do segmento.
-            - $k$ : Número da transformada de Fourier.
-            - $m$ : Número da amostra.
+        Where: 
+            - $X_n[k]$ : Transformada de Fourier of segment $n$.
+            - $x_n[m]$ : Segment of time $n$.
+            - $N$ : Number of samples in the segment.
+            - $k$ : Number of the Fourier transform.
+            - $m$ : Sample number.
             - $T_s$ : Período de amostragem.
             - $e^{-j2\pi km/N}$ : Exponencial complexa.
 
@@ -122,16 +122,16 @@ class CarrierDetector:
             P_n[k] = \frac{|X_n[k]|^2}{N}
         $$
 
-        Sendo: 
-            - $P_n[k]$ : Potência espectral do segmento $n$, normalizada em $dB$.
-            - $X_n[k]$ : Transformada de Fourier do segmento $n$.
-            - $N$ : Número de amostras do segmento.
+        Where: 
+            - $P_n[k]$ : Power spectral density of segment $n$, normalized in $dB$.
+            - $X_n[k]$ : Transformada de Fourier of segment $n$.
+            - $N$ : Number of samples in the segment.
 
         Args:
-            segment (np.ndarray): segmento de tempo
+            signal (np.ndarray): Received signal
 
         Returns:
-            freqs (tuple[np.ndarray,np.ndarray]): tupla com as frequências e a potência espectral em $dB$
+            freqs (tuple[np.ndarray,np.ndarray]): tuple with frequencies and power spectral density in $dB$
 
         Example: 
             Matriz de Potência 2D: ![pageplot](assets/example_detector_waterfall.svg)
@@ -151,9 +151,9 @@ class CarrierDetector:
             self.power_matrix[i, :] = P_db
 
 
-    def detect(self, s: np.ndarray):
+    def detect(self, signal: np.ndarray):
         r"""
-        Detecta possíveis portadoras no sinal, comparando $P_n[k]$ com o limiar $P_t$, para cada índice $k$ da FFT.
+        Detects possible carriers in the signal, comparing $P_n[k]$ with the threshold $P_t$, for each index $k$ of the FFT.
 
         $$
             f_n[k] =
@@ -168,35 +168,35 @@ class CarrierDetector:
             - $P_n[k]$ : potência espectral do segmento $n$.
             - $P_t$ : limiar de potência.
             - $N$ : número de amostras do segmento.
-            - $f_s$ : frequência de amostragem.
-            - $k$ : índice da FFT.
-            - `não detectada`: Frequência ignorada no processo de detecção.  
+            - $f_s$ : sampling frequency.
+            - $k$ : index of the FFT.
+            - `not detected`: Frequency ignored in the detection process.  
 
         Args:
-            s (np.ndarray): sinal recebido
+            signal (np.ndarray): Received signal
 
         Returns:
-            results (list[tuple[np.ndarray, list[float]]]): lista de tuplas com os segmentos e as frequências detectadas
+            results (list[tuple[np.ndarray, list[float]]]): list of tuples with the segments and detected frequencies
 
         Example: 
             ![pageplot](assets/example_detector_waterfall_detection.svg)
         """
-        # Calcula matriz de potência FFT
-        self.analyze_signal(s)
+        # Calculates the power matrix FFT
+        self.analyze_signal(signal)
 
         n_segments, n_freqs = self.power_matrix.shape
         self.detected_matrix = np.zeros((n_segments, n_freqs), dtype=int)
 
-        # Frequências reais dos bins da FFT
+        # Real frequencies of the FFT bins
         freqs = np.fft.rfftfreq(self.N, d=self.ts)
 
         for i in range(n_segments):
             P_db = self.power_matrix[i, :]
 
-            # Máscara de detecção pelo limiar
+            # Detection threshold mask
             mask = P_db > self.threshold
 
-            # Restringe à janela de frequências
+            # Restricts to the frequency window
             if self.freq_window is not None:
                 fmin, fmax = self.freq_window
                 mask &= (freqs >= fmin) & (freqs <= fmax)
@@ -205,40 +205,39 @@ class CarrierDetector:
 
             for k in detected_bins:
                 if i >= self.history:
-                    # confirma somente se todos os últimos 'history' forem exatamente 1
+                    # Confirms only if the last 'history' are exactly 1
                     past_values = self.detected_matrix[i-self.history:i, k]
                     if np.all(past_values == 1):
 
-                        # frequência confirmada, vai pra demodulação
+                        # frequency confirmed, goes to demodulation
                         self.detected_matrix[i, k] = 2
                     else:
-                        # frequência detectada, mas não confirmada
+                        # frequency detected, but not confirmed
                         self.detected_matrix[i, k] = 1
                 else:
-                    # apenas detectado, sem histórico
+                    # only detected, without history
                     self.detected_matrix[i, k] = 1
 
         self.decision()
 
     def decision(self):
         """
-        Retorna apenas frequências que foram detectadas em dois segmentos consecutivos. A tolerância é dada pela resolução espectral da FFT, $\Delta f$, conforme a expressão abaixo. 
+        Returns only frequencies that were detected in two consecutive segments. The tolerance is given by the FFT spectral resolution, $\Delta f$, according to the expression below. 
 
         $$
             \Delta f = \dfrac{f_s}{N}
         $$
 
-        Sendo: 
-            - $\Delta f$ : resolução espectral da FFT.
-            - $f_s$ : frequência de amostragem.
-            - $N$ : número de amostras do segmento.
+        Where: 
+            - $\Delta f$ : FFT spectral resolution.
+            - $f_s$ : sampling frequency.
+            - $N$ : number of samples in the segment.
 
         Args:
-            results (list[tuple[np.ndarray, list[float]]]): saída de self.detect()
-            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
+            signal (np.ndarray): Received signal
 
         Returns:
-            confirmed_freqs (list[float]): lista de frequências confirmadas como portadora
+            confirmed_freqs (list[float]): list of confirmed carrier frequencies
 
         Example: 
             ![pageplot](assets/example_detector_waterfall_decision.svg)
@@ -247,37 +246,37 @@ class CarrierDetector:
         self.decision_matrix = np.copy(self.detected_matrix)
         n_segments, n_freqs = self.detected_matrix.shape
 
-        # matriz auxiliar para controlar spans existentes
+        # auxiliary matrix to control existing spans
         span_matrix = np.zeros_like(self.detected_matrix, dtype=bool)
 
         runs = []
 
-        half_span = (self.bandwidth_bins - 1) // 2  # calcula metade do span para aplicar acima e abaixo do centro
+        half_span = (self.bandwidth_bins - 1) // 2  # calculates half span to apply above and below the center
 
         for i in range(n_segments):
             for k in range(n_freqs):
-                # só processa centros detectados (2) que não estão dentro de um span existente
+                # only processes confirmed centers (2) that are not inside an existing span
                 if self.detected_matrix[i, k] != 2 or span_matrix[i, k]:
                     continue
 
                 center_k = k
-                s = i + 1  # começa no próximo segmento
+                s = i + 1  # starts at the next segment
                 zero_count = 0
                 start_s = s
 
-                # aplica o 4 e o span no primeiro segmento após o 2
+                # applies 4 and span in the first segment after 2
                 lower = max(center_k - half_span, 0)
                 upper = min(center_k + half_span, n_freqs - 1)
                 self.decision_matrix[s, lower:upper + 1] = np.where(
                     np.arange(lower, upper + 1) == center_k,
-                    4,  # centro
+                    4,  # center
                     3   # span
                 )
                 span_matrix[s, lower:upper + 1] = True
 
-                s += 1  # avança para continuar o loop de extensão
+                s += 1  # advances to continue the extension loop
 
-                # agora continua preenchendo a sequência enquanto houver atividade
+                # now continues filling the sequence while there is activity
                 while s < n_segments and zero_count < 2:
                     neighbors = [center_k]
                     if center_k > 0:
@@ -294,7 +293,7 @@ class CarrierDetector:
                             found_activity = True
                             break
 
-                    # aplica o span no segmento atual
+                    # applies span in the current segment
                     self.decision_matrix[s, lower:upper + 1] = np.where(
                         np.arange(lower, upper + 1) == center_k,
                         4,
@@ -313,11 +312,11 @@ class CarrierDetector:
 
     def return_channels(self):
         """
-        Varre a decision_matrix e retorna as frequências confirmadas.
-        com o início e fim do segmento onde a portadora foi demodulada.
+        Scans the decision_matrix and returns the confirmed frequencies.
+        with the start and end segment where the carrier was demodulated.
 
         Returns:
-            channels (list[tuple[float, int, int]]): Lista de tuplas (freq_Hz, start_segment, end_segment)
+            channels (list[tuple[float, int, int]]): List of tuples (freq_Hz, start_segment, end_segment)
         """
         if not hasattr(self, 'decision_matrix'):
             raise ValueError("A decision_matrix ainda não foi criada. Execute self.decision() antes.")
@@ -326,18 +325,18 @@ class CarrierDetector:
         visited = np.zeros_like(self.decision_matrix, dtype=bool)
         channels = []
 
-        # Frequências reais dos bins da FFT
+        # Frequencies of the FFT bins
         freqs = np.fft.rfftfreq(self.N, d=self.ts)
 
         for i in range(n_segments):
             for k in range(n_freqs):
-                # só processa centros não visitados
+                # only processes confirmed centers (4) that are not visited
                 if self.decision_matrix[i, k] != 4 or visited[i, k]:
                     continue
 
                 start_segment = i
                 s = i
-                # percorre os segmentos enquanto houver 4 no centro
+                # goes through the segments while there is 4 in the center
                 while s < n_segments and self.decision_matrix[s, k] == 4:
                     visited[s, k] = True
                     s += 1
@@ -369,39 +368,31 @@ if __name__ == "__main__":
     transmitter3 = Transmitter(fc=fc3, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
     transmitter4 = Transmitter(fc=fc1, fs=fs, Rb=Rb, output_print=False, output_plot=False, carrier_length=0.08)
 
-    print("Gerando vetores de transmissão")
     t1, s1 = transmitter1.transmit(datagram1)
     t2, s2 = transmitter2.transmit(datagram2)
     t3, s3 = transmitter3.transmit(datagram3)
     t4, s4 = transmitter4.transmit(datagram1)
 
-    # Canal
     channel = Channel(fs=fs, duration=1, noise_mode="ebn0", noise_db=20, seed=11)
 
-    # gera distâncias aleatórias. 
     p1 = np.random.choice(np.arange(0, 0.21, 0.1))
     p2 = np.random.choice(np.arange(0, 1.01, 0.1))  
     p3 = np.random.choice(np.arange(0, 1.01, 0.1))  
     p4 = p1 + 0.6
 
-    print("Adicionando sinais ao canal")
     s1 = channel.add_signal(s1, position_factor=p1)
     s2 = channel.add_signal(s2, position_factor=p2)
     s3 = channel.add_signal(s3, position_factor=p3)
     s4 = channel.add_signal(s4, position_factor=p4)
 
-    # Adiciona ruído
     channel.add_noise()
     st = channel.channel
 
-
-    # Detecção de portadora
     threshold = -15
     detector = CarrierDetector(fs=fs, seg_ms=10, threshold=threshold) 
     detector.detect(st.copy())
-
-    # Heatmap da potência
     fig, grid = create_figure(1, 1, figsize=(16, 9))
+
     PowerMatrixPlot(fig, grid, 0,
                 detector.power_matrix,
                 fs=detector.fs, N=detector.N).plot()
@@ -419,7 +410,6 @@ if __name__ == "__main__":
     
     save_figure(fig, "example_detector_waterfall_3d.pdf")
 
-    # Heatmap da detecção
     fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.detected_matrix,
@@ -429,7 +419,6 @@ if __name__ == "__main__":
 
     save_figure(fig, "example_detector_waterfall_detection.pdf")
 
-    # Heatmap da decisão
     fig, grid = create_figure(1, 1)
     MatrixSquarePlot(fig, grid, 0,
                  detector.decision_matrix,
@@ -438,7 +427,6 @@ if __name__ == "__main__":
                  N=detector.N).plot()
     save_figure(fig, "example_detector_waterfall_decision.pdf")
 
-    # plota o espectro do sinal no segmento desejado
     seg_index = 1
     fig, grid = create_figure(2, 1)
     DetectionFrequencyPlot(fig, grid, 0, 
@@ -463,7 +451,6 @@ if __name__ == "__main__":
     ).plot()
     save_figure(fig, "example_detector_freq.pdf")
 
-    # Recepção: 
     channels = detector.return_channels()
 
     print("Frequências confirmadas (Hz) com início e fim de segmentos:")
@@ -474,12 +461,11 @@ if __name__ == "__main__":
         print(f"\n ==============================================")
         print(f"\n ==== RECEPÇÃO DE s(t) COM f_c = {freq:.1f} Hz ==== \n")
     
-        # Seleciona apenas os segmentos necessários e concatena
         first_segment = int((start_seg - 5) * detector.fs * detector.seg_s)
         last_segment = int(end_seg * detector.fs * detector.seg_s)
         selected_signal = st[first_segment:last_segment]
     
-        # Instancia o receptor
+        receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)
         receiver = Receiver(fc=freq, fs=detector.fs, Rb=Rb, output_print=True, output_plot=True)
         datagramRX, success = receiver.receive(selected_signal)
     
