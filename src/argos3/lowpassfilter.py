@@ -24,6 +24,21 @@ class LPF:
             ValueError: If the filter type is invalid.
 
         Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> fs = 128000
+            >>> t = np.arange(10000) / fs
+            >>> 
+            >>> signal1 = np.cos(2 * np.pi * 1000 * t)
+            >>> signal2 = np.cos(2 * np.pi * 4000 * t) 
+            >>> 
+            >>> lpf = argos3.LPF(cut_off=1500, order=6, fs=fs, type="butter")
+            >>> 
+            >>> signal = signal1 + signal2
+            >>> 
+            >>> signal_filtered = lpf.apply_filter(signal)
+
             - Time Domain Example: ![pageplot](assets/example_lpf_signals.svg) 
             - Frequency Domain Example: ![pageplot](assets/example_lpf_freq.svg)
         """
