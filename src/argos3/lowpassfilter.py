@@ -1,6 +1,6 @@
 # """
 # Implements a low-pass filter to remove the high frequency component of the received signal.
-
+#
 # Author: Arthur Cadore
 # Date: 28-07-2025
 # """
