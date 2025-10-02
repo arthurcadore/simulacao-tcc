@@ -1,6 +1,6 @@
 # """
-# Implementa um formatador de pulso para transmissão de sinais digitais. 
-
+# Implements a symbol synchronizer to identify the moment of maximum correlation between the received signal and the synchronization signal.
+#
 # Autor: Arthur Cadore
 # Data: 28-07-2025
 # """
@@ -18,49 +18,80 @@ from .matchedfilter import MatchedFilter
 class Synchronizer:
     def __init__(self, fs=128_000, Rb=400, sync_word="2BEEEEBF", channel_encode=("nrz", "man"), sync_window=None):
         r"""
-         Inicializa o sincronizador de simbolos para identificar o momento de maior correlação entre o sinal recebido e o sinal de sincronismo.
+        Initializes the symbol synchronizer to identify the moment of maximum correlation between the received signal and the synchronization signal.
 
         ![pageplot](../assets/sync.svg)
 
         Args:
-            fs (int): Frequência de amostragem do sinal recebido.
-            Rb (int): Taxa de transmissão do sinal recebido.
-            sync_word (str): Palavra de sincronismo.
-            channel_encode (tuple): Tupla com o tipo de codificação dos canais I e Q respectivamente.
+            fs (int): Sampling frequency of the received signal.
+            Rb (int): Transmission rate of the received signal.
+            sync_word (str): Synchronization word.
+            channel_encode (tuple): Tuple with the type of encoding of the I and Q channels respectively.
 
-        Example: 
-            ![pageplot](assets/example_synchronizer_sync.svg)
+        Examples:
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> Si, Sq = argos3.Preamble(preamble_hex="2BEEEEBF").generate_preamble()
+            >>> 
+            >>> X = np.random.randint(0,2,20)
+            >>> Y = np.random.randint(0,2,20)
+            >>> X, Y = argos3.Multiplexer().concatenate(Si, Sq, X, Y)
+            >>> 
+            >>> Xn = argos3.Encoder().encode(X)
+            >>> Yn = argos3.Encoder().encode(Y)
+            >>> 
+            >>> formatterI = argos3.Formatter(type="RRC", channel="I", bits_per_symbol=1)
+            >>> formatterQ = argos3.Formatter(type="Manchester", channel="Q", bits_per_symbol=2)
+            >>> 
+            >>> mfI = argos3.MatchedFilter(type="RRC-Inverted", channel="I", bits_per_symbol=1)
+            >>> mfQ = argos3.MatchedFilter(type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+            >>> 
+            >>> dI = mfI.apply_filter(formatterI.apply_format(Xn))
+            >>> dQ = mfQ.apply_filter(formatterQ.apply_format(Yn))
+            >>> 
+            >>> sync = argos3.Synchronizer()
+            >>> delayQ_min, delayQ_max, delayQ, corr_vec = sync.correlation(dQ, "Q")
+            >>> 
+            >>> print(delayQ_min)
+            0.079984375
+            >>> print(delayQ_max)
+            0.117484375
+            >>> print(delayQ)
+            0.098734375
+            
+            - Time Domain: ![pageplot](assets/example_synchronizer_sync.svg)
         """
 
         # Validar os valores de channel_encode
         valid_encodings = ["nrz", "man"]
         if channel_encode[0] not in valid_encodings or channel_encode[1] not in valid_encodings:
-            raise ValueError("Os tipos de codificação devem ser 'nrz' ou 'manchester'.")
+            raise ValueError("The encoding types must be 'nrz' or 'manchester'.")
         
-        # Parâmetros
+        # Parameters
         self.fs = fs
         self.Rb = Rb
         self.Tb = 1 / Rb
         self.sps = int(fs / Rb)
 
-        # Parâmetros fixos
+        # Fixed parameters
         self.alpha = 0.8
         self.span = 6
         self.cI_encoder = "nrz"
         self.cQ_encoder = "nrz"
         self.sync_window = sync_window
 
-        # Codificação I e Q
+        # Channel encoding
         self.cI_type = channel_encode[0]
         self.cQ_type = channel_encode[1]
 
-        # Mapeamento das configurações de codificação
+        # Encoding configuration mapping
         encoding_params = {
             "nrz": {"format": "RRC", "bits_per_symbol": 1, "Rb_multiplier": 1, "matched": "RRC-Inverted"},
             "man": {"format": "Manchester", "bits_per_symbol": 2, "Rb_multiplier": 2, "matched": "Manchester-Inverted"}
         }
 
-        # Parâmetros para o canal I e Q
+        # Channel parameters
         cI_params = encoding_params[self.cI_type]
         self.cI_format = cI_params["format"]
         self.cI_bits_per_symbol = cI_params["bits_per_symbol"]
@@ -72,7 +103,7 @@ class Synchronizer:
         self.cQ_Rb = self.Rb
         self.cQ_matched = cQ_params["matched"]
 
-
+        # Build sync world
         self.encoder_I = Encoder(method=self.cI_encoder)
         self.encoder_Q = Encoder(method=self.cQ_encoder)
         self.formatterI = Formatter(alpha=self.alpha, fs=self.fs, Rb=self.cI_Rb, span=self.span, type=self.cI_format, channel="I", bits_per_symbol=self.cI_bits_per_symbol)
@@ -83,23 +114,23 @@ class Synchronizer:
 
     def create_sincronized_word(self, sync_word):
         r"""
-        Monta os vetores de simbolo $S_I(t)$ e $S_Q(t)$, correspondente a palavra de sincronismo do canal $I$ e $Q$, respectivamente. O comprimento da palavra de sincronismo é dado por $\Delta \tau$, conforme a expressão abaixo.
+        Creates the vectors of symbol $S_I(t)$ and $S_Q(t)$, corresponding to the synchronization word of channel $I$ and $Q$, respectively. The length of the synchronization word is given by $\Delta \tau$, according to the expression below.
 
         $$
         \Delta \tau = L_{sync} \cdot \frac{f_s}{R_b}
         $$
 
-        Sendo: 
-            - $\Delta \tau$ é o comprimento da palavra de sincronismo.
-            - $L_{sync}$ é o comprimento da palavra de sincronismo de $S_I(t)$ e $S_Q(t)$.
-            - $R_b$ é a taxa de bits.
-            - $f_s$ é a frequência de amostragem.
+        Where: 
+            - $\Delta \tau$ is the length of the synchronization word.
+            - $L_{sync}$ is the length of the synchronization word of $S_I(t)$ and $S_Q(t)$.
+            - $R_b$ is the bit rate.
+            - $f_s$ is the sampling frequency.
 
         Args:
-            sync_word (str): Palavra de sincronismo.
+            sync_word (str): Synchronization word.
 
-        Example: 
-            ![pageplot](assets/example_synchronizer_word.svg)
+        Examples: 
+            - Time Domain: ![pageplot](assets/example_synchronizer_word.svg)
         """
 
         self.preamble = Preamble(sync_word)
@@ -115,47 +146,47 @@ class Synchronizer:
     def correlation(self, signal, channel):
         r"""
 
-        Realiza a correlação cruzada entre o sinal recebido $s(t)$ e a palavra de sincronismo $d(t)$, para cada index de tempo $t$.
+        Performs the cross-correlation between the received signal $s(t)$ and the synchronization word $d(t)$, for each time index $t$.
 
         $$
         c[k] = \sum_{t=0} s[t] d[t - k]
         $$ 
 
-        Sendo: 
-            - $s(t)$ e $d(t)$ são os vetores de simbolos do sinal recebido e da palavra de sincronismo, respectivamente.
-            - $k$ é o index de tempo no vetor de correlação cruzada.
-            - $c[k]$ é o valor da correlação cruzada para o index $k$.
+        Where: 
+            - $s(t)$ and $d(t)$ are the symbol vectors of the received signal and the synchronization word, respectively.
+            - $k$ is the time index in the cross-correlation vector.
+            - $c[k]$ is the cross-correlation value for the index $k$.
 
-        Em seguida localiza-se o indice de $c[k]$ com maior valor, resultando em $k_{max}$, este é o indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo, por fim, calcula-se o delay $\tau$. 
+        Subsequently, the index of $c[k]$ with the highest value is located, resulting in $k_{max}$, this is the sample index with the highest correlation between the received signal and the synchronization word, finally, the delay $\tau$ is calculated. 
 
         $$
             \tau = \frac{k_{max}}{f_s}
         $$
 
-        Sendo: 
-            - $\tau$: Delay entre o sinal recebido e a palavra de sincronismo.
-            - $f_s$: Frequência de amostragem do sinal recebido.
-            - $k_{max}$: Indice de amostra com a maior correlação entre o sinal recebido e a palavra de sincronismo.
+        Where: 
+            - $\tau$: Delay between the received signal and the synchronization word.
+            - $f_s$: Sampling frequency of the received signal.
+            - $k_{max}$: Sample index with the highest correlation between the received signal and the synchronization word.
 
         Args:
-            signal (np.ndarray): Sinal recebido.
-            channel (str): Canal de recebimento, $I$ ou $Q$.
+            signal (np.ndarray): Received signal.
+            channel (str): Channel of reception, $I$ or $Q$.
 
         Returns:
-           delay (tuple): Tupla contendo o delay $\tau$, o delay $\tau_{min}$ e o delay $\tau_{max}$.
+           delay (tuple): Tuple containing the delay $\tau$, the delay $\tau_{min}$ and the delay $\tau_{max}$.
         
-        Example: 
-            ![pageplot](assets/example_synchronizer_corr.svg)
+        Examples: 
+            - Correlation Factor: ![pageplot](assets/example_synchronizer_corr.svg)
         """
         if channel == "I":
             correlation_vec = np.correlate(signal, self.sincronized_word_I, mode="same")
         elif channel == "Q":
             correlation_vec = np.correlate(signal, self.sincronized_word_Q, mode="same")
         else:
-            raise ValueError("Canal inválido. Use 'I' ou 'Q'.")
+            raise ValueError("Invalid channel. Use 'I' or 'Q'.")
 
 
-        # converte janela de segundos para índices
+        # converts seconds window to indices
         if self.sync_window is not None:
             t_start, t_end = self.sync_window
             start_idx = int(t_start * self.fs)
@@ -168,14 +199,14 @@ class Synchronizer:
         local_argmax = correlation_vec[start_idx:end_idx].argmax()
         max_correlation_index = start_idx + local_argmax
 
-        # normaliza o vetor
+        # normalizes the vector
         correlation_vec = (correlation_vec - correlation_vec.min()) / (correlation_vec.max() - correlation_vec.min())
         
-        # calcula o index do início e fim da palavra de sincronismo
+        # calculates the index of the start and end of the synchronization word
         low_index = max_correlation_index - len(self.sincronized_word_I) // 2
         high_index = max_correlation_index + len(self.sincronized_word_I) // 2
 
-        # calcula o delay com base no index: 
+        # calculates the delay based on the index
         low_delay = low_index / self.fs
         high_delay = high_index / self.fs
         delay = max_correlation_index / self.fs
