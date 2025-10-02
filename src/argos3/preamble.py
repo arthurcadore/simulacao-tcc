@@ -7,6 +7,7 @@
 
 import numpy as np
 from .plotter import save_figure, create_figure, BitsPlot
+from .env_vars import *
 
 class Preamble:
     def __init__(self, preamble_hex="2BEEEEBF"):
@@ -95,17 +96,17 @@ if __name__ == "__main__":
         fig_preamble, grid_preamble, (0,0),
         bits_list=[Si],
         sections=[("$S_I$", len(Si))],
-        colors=["darkgreen"],
-        ylabel="Channel $I$"
+        colors=[COLOR_I],
+        ylabel=BITSTREAM_Y
     ).plot()
     
     BitsPlot(
         fig_preamble, grid_preamble, (1,0),
         bits_list=[Sq],
         sections=[("$S_Q$", len(Sq))],
-        colors=["navy"],
-        xlabel="Bit Index", 
-        ylabel="Channel $Q$"
+        colors=[COLOR_Q],
+        xlabel=BITSTREAM_X, 
+        ylabel=BITSTREAM_Y
     ).plot()
     
     fig_preamble.tight_layout()

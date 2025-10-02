@@ -8,6 +8,7 @@
 import numpy as np
 import json
 from .plotter import BitsPlot, create_figure, save_figure
+from .env_vars import *
 
 class Datagram: 
     def __init__(self, pcdnum=None, numblocks=None, streambits=None, seed=None, payload=None):
@@ -391,10 +392,10 @@ if __name__ == "__main__":
                    datagram_tx.tail],
         sections=[("Message Length", len(datagram_tx.msglength)),
                   ("PCD ID", len(datagram_tx.pcdid)),
-                  ("Dados de App.", len(datagram_tx.payload)),
+                  ("Payload", len(datagram_tx.payload)),
                   ("Tail", len(datagram_tx.tail))],
-        colors=["green", "orange", "red", "blue"],
-        xlabel="Index de Bit"
+        colors=[COLOR_AUX1, COLOR_AUX2, COLOR_AUX3, COLOR_AUX4],
+        xlabel=BITSTREAM_X,
     ).plot()
 
     fig_datagram.tight_layout()

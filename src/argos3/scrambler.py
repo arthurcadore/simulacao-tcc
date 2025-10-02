@@ -10,6 +10,7 @@
 
 import numpy as np
 from .plotter import save_figure, create_figure, BitsPlot
+from .env_vars import *
 
 class Scrambler:
     def __init__(self):
@@ -243,46 +244,46 @@ if __name__ == "__main__":
         fig_scrambler, grid_scrambler, (0, 0),
         bits_list=[vt0],
         sections=[("$v_t^{0}$", len(vt0))],
-        colors=["darkgreen"],
-        ylabel="Original"
+        colors=[COLOR_I],
+        ylabel=BITSTREAM_Y
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (0, 1),
         bits_list=[vt1],
         sections=[("$v_t^{1}$", len(vt1))],
-        colors=["navy"]
+        colors=[COLOR_Q]
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (1, 0),
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
-        colors=["darkgreen"],
-        ylabel="Embaralhado"
+        colors=[COLOR_I],
+        ylabel=BITSTREAM_Y
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (1, 1),
         bits_list=[Yn],
         sections=[("$Y_n$", len(Yn))],
-        colors=["navy"]
+        colors=[COLOR_Q]
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 0),
         bits_list=[vt0_prime],
         sections=[("$v_t^{0}$", len(vt0_prime))],
-        colors=["darkgreen"],
-        ylabel="Restaurado", xlabel="Index de Bit"
+        colors=[COLOR_I],
+        ylabel=BITSTREAM_Y, xlabel=BITSTREAM_X
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 1),
         bits_list=[vt1_prime],
         sections=[("$v_t^{1}$", len(vt1_prime))],
-        colors=["navy"],
-        xlabel="Index de Bit"
+        colors=[COLOR_Q],
+        xlabel=BITSTREAM_X
     ).plot()
 
     fig_scrambler.tight_layout()

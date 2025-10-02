@@ -43,7 +43,6 @@ plt.rc("ytick", labelsize=16)
 plt.rc("legend", fontsize=12, frameon=True)
 plt.rc("figure", titlesize=22)
 
-
 def mag2db(signal: np.ndarray) -> np.ndarray:
     r"""
     Converts the signal magnitude to a logarithmic scale ($dB$). The conversion process is given by the expression below.
@@ -767,10 +766,10 @@ class ImpulseResponsePlot(BasePlot):
         # time unit
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
-            default_xlabel = r"Tempo ($ms$)"
+            default_xlabel = r"Time ($ms$)"
         else:
             t_plot = self.t_imp
-            default_xlabel = r"Tempo ($s$)"
+            default_xlabel = r"Time ($s$)"
 
         # Label
         if isinstance(self.label, str) or self.label is None:
@@ -842,7 +841,7 @@ class SampledSignalPlot(BasePlot):
         self.label_signal = label_signal
         self.label_samples = label_samples
         if xlabel is None:
-            xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
+            xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.title = title
@@ -945,8 +944,8 @@ class PhasePlot(BasePlot):
         self.ax.set_yticklabels(labels)
 
         # Adjust axis
-        self.ax.set_xlabel(r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)")
-        self.ax.set_ylabel(r"Fase ($rad$)")
+        self.ax.set_xlabel(r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)")
+        self.ax.set_ylabel(r"Phase ($rad$)")
         self.ax.legend()
         self.apply_ax_style()
 

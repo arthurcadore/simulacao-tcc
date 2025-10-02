@@ -105,7 +105,7 @@
 - [X] Otimizar conversor de plots pra permitir darkTheme
 - [X] Alterar mkdocs para darkTheme
 - [] Adicionar melhor documentação a aba inicio
-- [] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
+- [X] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
 - [X] Verificar equacionamento sklar e alterar nome das variáveis.
 - [X] Diagrama de blocos
     - [X] Alterar diagrama do modulador

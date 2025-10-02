@@ -7,6 +7,7 @@
 
 import numpy as np
 from .plotter import BitsPlot, SymbolsPlot, create_figure, save_figure
+from .env_vars import *
 
 class Encoder:
     def __init__(self, method="NRZ"):
@@ -208,18 +209,18 @@ if __name__ == "__main__":
         fig_encoder, grid, (0, 0),
         bits_list=[Xn],
         sections=[("$X_n$", len(Xn))],
-        colors=["darkgreen"],
-        xlabel="Bit Index", 
-        ylabel="$X_n$"
+        colors=[COLOR_I],
+        xlabel=BITSTREAM_X,
+        ylabel=BITSTREAM_Y
     ).plot()
 
     SymbolsPlot(
         fig_encoder, grid, (1, 0),
         symbols_list=[Xnrz],
         samples_per_symbol=1,
-        colors=["darkgreen"],
-        xlabel="Symbol Index",
-        ylabel="$X_{NRZ}[n]$", 
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$X_{NRZ}[n]$"
     ).plot()
 
@@ -227,18 +228,18 @@ if __name__ == "__main__":
         fig_encoder, grid, (2, 0),
         bits_list=[Yn],
         sections=[("$Y_n$", len(Yn))],
-        colors=["navy"],
-        xlabel="Bit Index", 
-        ylabel="$Y_n$"
+        colors=[COLOR_Q],
+        xlabel=BITSTREAM_X, 
+        ylabel=BITSTREAM_Y
     ).plot()
 
     SymbolsPlot(
         fig_encoder, grid, (3, 0),
         symbols_list=[Yman],
         samples_per_symbol=2,
-        colors=["navy"],
-        xlabel="Symbol Index",
-        ylabel="$Y_{MAN}[n]$", 
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$Y_{MAN}[n]$"
     ).plot()
 

@@ -13,6 +13,7 @@ from .matchedfilter import MatchedFilter
 from .encoder import Encoder
 from .sampler import Sampler
 from .encoder import Encoder
+from .env_vars import *
 
 class EncoderConvolutional: 
     def __init__(self, G=np.array([[0b1111001, 0b1011011]])):
@@ -421,7 +422,7 @@ if __name__ == "__main__":
         fig_conv, grid_conv, (0, 0),
         bits_list=[ut],
         sections=[("$u_t$", len(ut))],
-        colors=["darkred"],
+        colors=[COLOR_COMBINED],
         ylabel="$u_t$"
     ).plot()
 
@@ -429,7 +430,7 @@ if __name__ == "__main__":
         fig_conv, grid_conv, (1, 0),
         bits_list=[vt0],
         sections=[("$v_t^{(0)}$", len(vt0))],
-        colors=["darkgreen"],
+        colors=[COLOR_I],
         ylabel="$v_t^{(0)}$"
     ).plot()
 
@@ -437,8 +438,8 @@ if __name__ == "__main__":
         fig_conv, grid_conv, (2, 0),
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
-        colors=["navy"],
-        xlabel="Index de Bit", 
+        colors=[COLOR_Q],
+        xlabel=BITSTREAM_X, 
         ylabel="$v_t^{(1)}$"
     ).plot()
 
@@ -489,7 +490,8 @@ if __name__ == "__main__":
         fig_time, grid_time, (0, 0),
         bits_list=[vt0],
         sections=[("$v_t^{(0)}$", len(vt0))],
-        colors=["darkgreen"],
+        colors=[COLOR_I],
+        xlabel=BITSTREAM_X,
         ylabel="$v_t^{(0)}$"
     ).plot()
 
@@ -497,8 +499,8 @@ if __name__ == "__main__":
         fig_time, grid_time, (0, 1),
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
-        colors=["navy"],
-        xlabel="Index de Bit", 
+        colors=[COLOR_Q],
+        xlabel=BITSTREAM_X, 
         ylabel="$v_t^{(1)}$"
     ).plot()
 
@@ -507,7 +509,7 @@ if __name__ == "__main__":
         t = np.arange(len(dX)) / formatterI.fs,
         signals=[dX],
         labels=[r"$d_t^{(0)}$"],
-        colors=["darkgreen"],
+        colors=[COLOR_I],
     ).plot()
 
     TimePlot(
@@ -515,7 +517,7 @@ if __name__ == "__main__":
         t = np.arange(len(dY)) / formatterQ.fs,
         signals=[dY],
         labels=[r"$d_t^{(1)}$"],
-        colors=["navy"],
+        colors=[COLOR_Q],
     ).plot()
 
     TimePlot(
@@ -523,7 +525,7 @@ if __name__ == "__main__":
         t = np.arange(len(dX_prime)) / formatterI.fs,
         signals=[dX_prime],
         labels=[r"$d_t^{(0)}$"],
-        colors=["darkgreen"],
+        colors=[COLOR_I],
     ).plot()
 
     TimePlot(
@@ -531,7 +533,7 @@ if __name__ == "__main__":
         t = np.arange(len(dY_prime)) / formatterQ.fs,
         signals=[dY_prime],
         labels=[r"$d_t^{(1)}$"],
-        colors=["navy"],
+        colors=[COLOR_Q],
     ).plot()
 
     fig_time.tight_layout()
@@ -570,9 +572,9 @@ if __name__ == "__main__":
         dX_prime, 
         tX,
         X_prime,
-        colors="darkgreen",
-        label_signal="Sinal original", 
-        label_samples="Amostras"    
+        colors=COLOR_I,
+        label_signal="Signal", 
+        label_samples="Samples"
     ).plot()
         
     SampledSignalPlot(
@@ -581,18 +583,18 @@ if __name__ == "__main__":
         dY_prime,
         tY,
         Y_prime,
-        colors="navy",
-        label_signal="Sinal original", 
-        label_samples="Amostras"
+        colors=COLOR_Q,
+        label_signal="Signal", 
+        label_samples="Samples"
     ).plot()
 
     SymbolsPlot(
         fig_time, grid_time, (1, 0),
         symbols_list=[X_prime],
         samples_per_symbol=1,
-        colors=["darkgreen"],
-        xlabel="Index",
-        ylabel="$X_{t}^{(0)}$",
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$X_{t}^{(0)}$",
         show_symbol_values=False
     ).plot()
@@ -601,9 +603,9 @@ if __name__ == "__main__":
         fig_time, grid_time, (1, 1),
         symbols_list=[Y_prime],
         samples_per_symbol=1,
-        colors=["navy"],
-        xlabel="Index",
-        ylabel="$Y_{t}^{(1)}$",
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$Y_{t}^{(1)}$",
         show_symbol_values=False
     ).plot()
@@ -623,9 +625,9 @@ if __name__ == "__main__":
         fig_time, grid_time, (0, 0),
         symbols_list=[X_prime],
         samples_per_symbol=1,
-        colors=["darkgreen"],
-        xlabel="Index de Simbolo",
-        ylabel="$X_{t}^{(0)}$",
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$X_{t}^{(0)}$",
         show_symbol_values=False,
         ylim=[min(X_prime)*1.1, max(X_prime)*1.1],
@@ -636,9 +638,9 @@ if __name__ == "__main__":
         fig_time, grid_time, (0, 1),
         symbols_list=[Y_prime],
         samples_per_symbol=1,
-        colors=["navy"],
-        xlabel="Index de Simbolo",
-        ylabel="$Y_{t}^{(1)}$",
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$Y_{t}^{(1)}$",
         show_symbol_values=False,
         ylim=[min(Y_prime)*1.1, max(Y_prime)*1.1],
@@ -649,9 +651,9 @@ if __name__ == "__main__":
         fig_time, grid_time, (1, slice(0, 2)),
         symbols_list=[ut_prime],
         samples_per_symbol=1,
-        colors=["darkred"],
-        xlabel="Index de Simbolo",
-        ylabel="$U_{t}^{(0)}$",
+        colors=[COLOR_COMBINED],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
         label="$U_{t}^{(0)}$",
         show_symbol_values=False,
         ylim=[min(ut_prime)*1.1, max(ut_prime)*1.1],
@@ -662,9 +664,9 @@ if __name__ == "__main__":
         fig_time, grid_time, (2, slice(0, 2)),
         bits_list=[ut_nrz],
         sections=[("$u_t^{(0)}$", len(ut_nrz))],
-        colors=["darkred"],
-        xlabel="Index de Bit", 
-        ylabel="$u_t^{(0)}$"
+        colors=[COLOR_COMBINED],
+        xlabel=BITSTREAM_X, 
+        ylabel=BITSTREAM_Y
     ).plot()
 
     fig_time.tight_layout()

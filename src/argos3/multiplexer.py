@@ -7,6 +7,7 @@
 
 import numpy as np
 from .plotter import create_figure, save_figure, BitsPlot
+from .env_vars import *
 
 class Multiplexer:
     def __init__(self):
@@ -92,20 +93,18 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (0,0),
         bits_list=[SI, X],
-        sections=[("$S_I$", len(SI)),
-                  ("$X_n$", len(X))],
-        colors=["blue", "purple"],
-        ylabel="Channel $I$"
+        sections=[("$S_I$", len(SI)),("$X_n$", len(X))],
+        colors=[COLOR_AUX1, COLOR_I],
+        ylabel=BITSTREAM_Y
     ).plot()
     
     BitsPlot(
         fig_mux, grid_mux, (1,0),
         bits_list=[SQ, Y],
-        sections=[("$S_Q$", len(SQ)),
-                  ("$Y_n$", len(Y))],
-        colors=["blue", "purple"],
-        xlabel="Bit Index", 
-        ylabel="Channel $Q$"
+        sections=[("$S_Q$", len(SQ)),("$Y_n$", len(Y))],
+        colors=[COLOR_AUX1, COLOR_Q],
+        xlabel=BITSTREAM_X, 
+        ylabel=BITSTREAM_Y
     ).plot()
 
     fig_mux.tight_layout()
