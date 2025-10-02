@@ -30,6 +30,42 @@ class Channel:
     
         Raises:
             ValueError: if the noise mode is invalid.
+
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> fc = np.random.randint(10,80)*100
+            >>> print(fc)
+            2400
+            >>>
+            >>> transmitter = argos3.Transmitter(fc=fc, output_print=False, output_plot=False)
+            >>> t, s = transmitter.transmit(argos3.Datagram(pcdnum=1234, numblocks=1))
+            >>> 
+            >>> channel = argos3.Channel(duration=1, noise_mode="ebn0", noise_db=20)
+            >>> channel.add_signal(s, position_factor=0.5)
+            >>> channel.add_noise()
+            >>> st = channel.channel
+            >>>                   
+            >>> receiver = argos3.Receiver(fc=fc, output_print=False, output_plot=False)
+            >>> datagramRX, success = receiver.receive(st)
+            >>> 
+            >>> print(success)
+            True
+            >>> print(datagramRX.parse_datagram())
+            {
+              "msglength": 1,
+              "pcdid": 1234,
+              "data": {
+                "bloco_1": {
+                  "sensor_1": 37,
+                  "sensor_2": 198,
+                  "sensor_3": 9
+                }
+              },
+              "tail": 7
+            }
+
         """
         self.fs = fs
         self.channel = np.zeros(int(fs * duration))
