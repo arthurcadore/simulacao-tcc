@@ -1,8 +1,8 @@
 # """
-# Implementação de um decisor (amostrador e quantizador) para recepção.
-
-# Autor: Arthur Cadore
-# Data: 15-08-2025
+# Implements a sampler to sample and quantize the received signal.
+#
+# Author: Arthur Cadore
+# Date: 15-08-2025
 # """
 
 import numpy as np
@@ -11,51 +11,71 @@ from .plotter import save_figure, create_figure, SampledSignalPlot
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, delay=0.08):
         r"""
-        Inicializa o decisor, utilizado para amostragem e quantização no receptor.
+        Initializes the sampler, used for sampling and quantizing the received signal.
 
         Args: 
-            fs (int): Frequência de amostragem.
-            delay (float): Delay de amostragem, em segundos.
-            Rb (int): Taxa de bits.
-            t (numpy.ndarray): Vetor de tempo.
+            fs (int): Sampling frequency.
+            delay (float): Sampling delay, in seconds.
+            Rb (int): Bit rate.
+            t (numpy.ndarray): Time vector.
 
-        Example: 
-            ![pageplot](assets/example_sampler_time.svg) 
+        Examples: 
+            >>> import argos3
+            >>> import numpy as np 
+            >>> 
+            >>> fs = 128000
+            >>> t = np.arange(10000) / fs
+            >>> 
+            >>> signal1 = np.cos(2 * np.pi * 1000 * t)
+            >>> signal2 = np.cos(2 * np.pi * 4000 * t)
+            >>> 
+            >>> signal = signal1 + signal2
+            >>> 
+            >>> sampler = argos3.Sampler(t=t)
+            >>> 
+            >>> signal_sampled = sampler.sample(signal)
+            >>> t_indexes = sampler.sample(t)
+
+            - Time Domain: ![pageplot](assets/example_sampler_time.svg) 
         """
+
+        # Attributes
         self.fs = fs
         self.Rb = Rb
         self.sps = int(self.fs / self.Rb)
         self.delay = int(round(delay * self.fs))
 
+        # check if t is not None
         if t is not None:
             self.indexes = self.calc_indexes(t)
 
     def update_sampler(self, delay, t):
+        # function to update the sampler delay and indexes
         self.delay = int(round(delay * self.fs))
         self.indexes = self.calc_indexes(t)
     
     def calc_indexes(self, t):
         r"""
-        Calcula os índices de amostragem $I[n]$ com base no vetor de tempo $t$. O vetor de índices de amostragem $I[n]$ é dado pela expressão abaixo. 
+        Calculates the sampling indexes $I[n]$ based on the time vector $t$. The sampling indexes vector $I[n]$ is given by the expression below. 
 
         $$
         \begin{align}
-        I[n] = \tau + n \cdot \left( \frac{f_s}{R_b}\right) \text{ , onde: } \quad I[n] < \text{len}(t)
+        I[n] = \tau + n \cdot \left( \frac{f_s}{R_b}\right) \text{ , where: } \quad I[n] < \text{len}(t)
         \end{align}
         $$
 
-        Sendo:
-            - $\tau$: Delay inicial de amostragem.
-            - $f_s$: Frequência de amostragem.
-            - $R_b$: Taxa de bits.
-            - $n$: Índice da amostra.
-            - $\text{len}(t)$: Comprimento do vetor de tempo.
+        Where:
+            - $\tau$: Sampling delay.
+            - $f_s$: Sampling frequency.
+            - $R_b$: Bit rate.
+            - $n$: Sample index.
+            - $\text{len}(t)$: Length of the time vector.
 
         Args:
-            t (numpy.ndarray): Vetor de tempo.
+            t (numpy.ndarray): Time vector.
 
         Returns:
-            indexes (numpy.ndarray): Vetor de índices de amostragem $I[n]$.
+            indexes (numpy.ndarray): Sampling indexes $I[n]$.
         """
         indexes = np.arange(self.delay, len(t), self.sps)
         indexes = indexes[indexes < len(t)]
@@ -63,48 +83,48 @@ class Sampler:
     
     def sample(self, signal):
         r"""
-        Amostra o sinal $s(t)$ com base nos índices de amostragem $I[n]$.
+        Samples the signal $s(t)$ based on the sampling indexes $I[n]$.
 
         $$
             s(t) \rightarrow  s([I[n]) \rightarrow s[n]
         $$
 
-        Sendo:
-            - $s(t)$: Sinal de entrada $s(t)$.
-            - $s[n]$ Sinal amostrado $s[n]$.
-            - $I[n]$ Índices de amostragem $I[n]$.
+        Where:
+            - $s(t)$: Input signal $s(t)$.
+            - $s[n]$ Sampled signal $s[n]$.
+            - $I[n]$ Sampling indexes $I[n]$.
 
         Args:
-            signal (numpy.ndarray): Sinal de entrada $s(t)$ a ser amostrado.
+            signal (numpy.ndarray): Input signal $s(t)$ to be sampled.
 
         Returns:
-            sampled_signal (numpy.ndarray): Sinal amostrado $s[n]$.
+            sampled_signal (numpy.ndarray): Sampled signal $s[n]$.
         """
         sampled_signal = signal[self.indexes]
         return sampled_signal
 
     def quantize(self, signal):
         r"""
-        Quantiza o sinal $s[n]$ em valores discretos. O processo de quantização é dado pela expressão abaixo.
+        Quantizes the signal $s[n]$ into discrete values. The quantization process is given by the expression below.
 
         $$
         \begin{align}
         s'[n] = \begin{cases}
-            +1 & \text{se } s[n] \geq 0 \\
-            -1 & \text{se } s[n] < 0
+            +1 & \text{if } s[n] \geq 0 \\
+            -1 & \text{if } s[n] < 0
         \end{cases}
         \end{align}
         $$
 
-        Sendo:
-            - $s[n]$ Simbolos amostrados $s[n]$.
-            - $s'[n]$ Símbolos quantizados $s'[n]$.
+        Where:
+            - $s[n]$ Sampled signal $s[n]$.
+            - $s'[n]$ Quantized signal $s'[n]$.
 
         Args:
-            signal (numpy.ndarray): Sinal de entrada $s[n]$.
+            signal (numpy.ndarray): Sampled signal $s[n]$.
 
         Returns:
-            symbols (numpy.ndarray): Símbolos quantizados $s'[n]$.
+            symbols (numpy.ndarray): Quantized signal $s'[n]$.
         """
         symbols = []
         for i in range(len(signal)):

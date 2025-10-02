@@ -62,7 +62,7 @@ nav:
       - Low Pass Filter: api/lpf.md
       - Matched Filter: api/matchedfilter.md
       - Synchronizer: api/synchronizer.md
-      - Decisor: api/sampler.md
+      - Sampler: api/sampler.md
   - Transmitter: api/transmitter.md
   - Channel: 
       - Channel: api/channel.md
