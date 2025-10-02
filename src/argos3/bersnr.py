@@ -69,6 +69,7 @@ class BERSNR_ARGOS:
 
         Examples: 
             - BER vs Eb/N0 Plot Example: ![pageplot](assets/ber_vs_ebn0.svg)
+            
         """
         if len(error_values) != len(EbN0_values):
             raise ValueError("error_values must have the same length as EbN0_values")

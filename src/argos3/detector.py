@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import create_figure, save_figure, PowerMatrixPlot, MatrixSquarePlot, DetectionFrequencyPlot, PowerMatrix3DPlot
+from .plotter import create_figure, save_figure, WaterfallPlot, WaterfallDecisionPlot, DetectionFrequencyPlot, Waterfall3DPlot
 from .datagram import Datagram
 from .transmitter import Transmitter
 from .receiver import Receiver
@@ -447,13 +447,13 @@ if __name__ == "__main__":
     detector.detect(st.copy())
     fig, grid = create_figure(1, 1, figsize=(16, 9))
 
-    PowerMatrixPlot(fig, grid, 0,
+    WaterfallPlot(fig, grid, 0,
                 detector.power_matrix,
                 fs=detector.fs, N=detector.N).plot()
     save_figure(fig, "example_detector_waterfall.pdf")
 
     fig, grid = create_figure(1, 1, figsize=(12, 12))
-    PowerMatrix3DPlot(fig, grid, 0,
+    Waterfall3DPlot(fig, grid, 0,
                       detector.power_matrix,
                       fs=detector.fs,
                       N=detector.N,
@@ -465,7 +465,7 @@ if __name__ == "__main__":
     save_figure(fig, "example_detector_waterfall_3d.pdf")
 
     fig, grid = create_figure(1, 1)
-    MatrixSquarePlot(fig, grid, 0,
+    WaterfallDecisionPlot(fig, grid, 0,
                  detector.detected_matrix,
                  fs=detector.fs, 
                  legend_list=["Detectada", "Confirmada"],
@@ -474,7 +474,7 @@ if __name__ == "__main__":
     save_figure(fig, "example_detector_waterfall_detection.pdf")
 
     fig, grid = create_figure(1, 1)
-    MatrixSquarePlot(fig, grid, 0,
+    WaterfallDecisionPlot(fig, grid, 0,
                  detector.decision_matrix,
                  fs=detector.fs, 
                  legend_list=["Detectada", "Confirmada", "Span", "Demodulação"],

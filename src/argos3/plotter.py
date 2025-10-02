@@ -1,8 +1,8 @@
 # """
-# Implementação das operações de plot
-
-# Autor: Arthur Cadore
-# Data: 16-08-2025
+# Implementation of plot operations.
+# 
+# Author: Arthur Cadore
+# Date: 16-08-2025
 # """
 
 import numpy as np
@@ -19,23 +19,23 @@ from scipy.ndimage import gaussian_filter
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
 
-# Parâmetros gerais de plotagem
+# General plot parameters
 mpl.rcParams["pdf.fonttype"] = 42
 mpl.rcParams["ps.fonttype"] = 42
 mpl.rcParams["svg.fonttype"] = "none"
 mpl.rcParams["savefig.transparent"] = True
 
-# Estilização science para os plots
+# Science plot style
 plt.style.use("science")
 
-# Cores e estilos
+# Colors and styles
 mpl.rcParams["text.color"] = "black"
 mpl.rcParams["axes.labelcolor"] = "black"
 mpl.rcParams["xtick.color"] = "black"
 mpl.rcParams["ytick.color"] = "black"
 plt.rcParams["figure.figsize"] = (16, 9)
 
-# Fontes e legendas
+# Fonts
 plt.rc("font", size=16)
 plt.rc("axes", titlesize=22, labelsize=22)
 plt.rc("xtick", labelsize=16)
@@ -46,22 +46,22 @@ plt.rc("figure", titlesize=22)
 
 def mag2db(signal: np.ndarray) -> np.ndarray:
     r"""
-    Converte a magnitude do sinal para escala logarítmica ($dB$). O processo de conversão é dado pela expressão abaixo.
+    Converts the signal magnitude to a logarithmic scale ($dB$). The conversion process is given by the expression below.
 
     $$
      dB(x) = 20 \log_{10}\left(\frac{|x|}{x_{peak} + 10^{-12}}\right)
     $$
 
-    Sendo:
-        - $x$: Sinal a ser convertido para $dB$.
-        - $x_{peak}$: Pico de maior magnitude do sinal.
-        - $10^{-12}$: Constante para evitar divisão por zero.
+    Where:
+        - $x$: Signal to be converted to $dB$.
+        - $x_{peak}$: Peak magnitude of the signal.
+        - $10^{-12}$: Constant to avoid division by zero.
     
     Args:
-        signal: Array com os dados do sinal
+        signal: Array with signal data
         
     Returns:
-        Array com o sinal convertido para $dB$
+        Array with signal converted to $dB$
     """
     mag = np.abs(signal)
     peak = np.max(mag) if np.max(mag) != 0 else 1.0
@@ -70,15 +70,15 @@ def mag2db(signal: np.ndarray) -> np.ndarray:
 
 def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> Tuple[plt.Figure, gridspec.GridSpec]:
     r"""
-    Cria uma figura com `GridSpec`, retornando o objeto `fig` e `grid` para desenhar os plots.
+    Creates a figure with `GridSpec`, returning the `fig` and `grid` objects for plotting.
     
     Args:
-        rows (int): Número de linhas do GridSpec
-        cols (int): Número de colunas do GridSpec
-        figsize (Tuple[int, int]): Tamanho da figura
+        rows (int): Number of rows in the GridSpec
+        cols (int): Number of columns in the GridSpec
+        figsize (Tuple[int, int]): Figure size
         
     Returns:
-        Tuple[plt.Figure, gridspec.GridSpec]: Tupla com a figura e o GridSpec
+        Tuple[plt.Figure, gridspec.GridSpec]: Tuple with the figure and GridSpec objects
     """
     fig = plt.figure(figsize=figsize)
     grid = gridspec.GridSpec(rows, cols, figure=fig)
@@ -86,15 +86,15 @@ def create_figure(rows: int, cols: int, figsize: Tuple[int, int] = (16, 9)) -> T
 
 def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../../out") -> None:
     r"""
-    Salva a figura em `<out_dir>/<filename>` a partir do diretório raiz do script. 
+    Saves the figure in `<out_dir>/<filename>` from the script root directory. 
     
     Args:
-        fig (plt.Figure): Objeto `Figure` do matplotlib
-        filename (str): Nome do arquivo de saída
-        out_dir (str): Diretório de saída
+        fig (plt.Figure): Matplotlib `Figure` object
+        filename (str): Output file name
+        out_dir (str): Output directory
     
     Raises:
-        ValueError: Se o diretório de saída for inválido
+        ValueError: If the output directory is invalid
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
     out_dir = os.path.abspath(os.path.join(script_dir, out_dir))
@@ -106,16 +106,16 @@ def save_figure(fig: plt.Figure, filename: str, out_dir: str = "../../out") -> N
 
 class BasePlot:
     r"""
-    Classe base para plotagem de gráficos, implementando funcionalidades comuns a todos os plots.
+    Base class for plotting graphs, implementing common functionality for all plots.
     
     Args:
-        ax (plt.Axes): Objeto `Axes` do matplotlib. 
-        title (str): Título do plot. 
-        labels (Optional[List[str]]): Lista de rótulos para os eixos. 
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x `x = [xlim[0], xlim[1]]`. 
-        ylim (Optional[Tuple[float, float]]): Limites do eixo y `y = [ylim[0], ylim[1]]`. 
-        colors (Optional[Union[str, List[str]]]): Cores do plot. 
-        style (Optional[Dict[str, Any]]): Estilo do plot.
+        ax (plt.Axes): Matplotlib `Axes` object. 
+        title (str): Plot title. 
+        labels (Optional[List[str]]): List of axis labels. 
+        xlim (Optional[Tuple[float, float]]): Limits of the x-axis `x = [xlim[0], xlim[1]]`. 
+        ylim (Optional[Tuple[float, float]]): Limits of the y-axis `y = [ylim[0], ylim[1]]`. 
+        colors (Optional[Union[str, List[str]]]): Plot colors. 
+        style (Optional[Dict[str, Any]]): Plot style.
     """
     def __init__(self,
                  ax: plt.Axes,
@@ -133,7 +133,7 @@ class BasePlot:
         self.colors = colors
         self.style = style or {}
 
-    # Aplica estilos gerais ao eixo
+    # Apply general styles to the axis
     def apply_ax_style(self) -> None:
         grid_kwargs = self.style.get("grid", {"alpha": 0.6, "linestyle": "--", "linewidth": 0.5})
         self.ax.grid(True, **grid_kwargs)
@@ -145,7 +145,7 @@ class BasePlot:
             self.ax.set_title(self.title)
         self.apply_legend()
 
-    # Aplica legendas
+    # Apply legends
     def apply_legend(self) -> None:
         handles, labels = self.ax.get_legend_handles_labels()
         if not handles:
@@ -162,7 +162,7 @@ class BasePlot:
         frame.set_edgecolor("black")
         frame.set_alpha(1)
 
-    # Aplica cores
+    # Apply colors
     def apply_color(self, idx: int) -> Optional[str]:
         if self.colors is None:
             return None
@@ -174,21 +174,21 @@ class BasePlot:
 
 class TimePlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio do tempo, recebendo um vetor de tempo $t$, e uma lista de sinais $s(t)$.
+    Class for plotting signals in the time domain, receiving a time vector $t$, and a list of signals $s(t)$.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        t (np.ndarray): Vetor de tempo
-        signals (Union[np.ndarray, List[np.ndarray]]): Sinal ou lista de sinais $s(t)$.
-        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
-        amp_norm (bool): Normalização do sinal para amplitude máxima
+        fig (plt.Figure): Figure object
+        grid (gridspec.GridSpec): GridSpec object
+        pos (int): Plot position
+        t (np.ndarray): Time vector
+        signals (Union[np.ndarray, List[np.ndarray]]): Signal or list of signals $s(t)$.
+        time_unit (str): Time unit for plotting ("ms" by default, can be "s").
+        amp_norm (bool): Signal normalization for maximum amplitude
 
-    Example:
-        - Modulador: ![pageplot](assets/example_modulator_time.svg)
-        - Demodulador: ![pageplot](assets/example_demodulator_time.svg)
-        - Adição de AWGN ![pageplot](assets/example_noise_time.svg)
+    Examples:
+        - Modulator Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
+        - Demodulator Time Domain Example: ![pageplot](assets/example_demodulator_time.svg)
+        - AWGN addition Time Domain Example: ![pageplot](assets/example_noise_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -204,23 +204,23 @@ class TimePlot(BasePlot):
 
         self.amp_norm = amp_norm
 
-        # Copia os sinais de entrada para evitar modificações no sinal original
+        # Copy the input signals to avoid modifying the original signal
         original_signals = signals if isinstance(signals, (list, tuple)) else [signals]
         self.signals = [sig.copy() for sig in original_signals]
 
-        # Unidade de tempo
+        # Time unit
         self.time_unit = time_unit.lower()
         if self.time_unit == "ms":
             self.t = t * 1e3
         else:
             self.t = t
 
-        # Sinal ou lista de sinais
+        # Signal or list of signals
         if self.labels is None:
             self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
 
     def plot(self) -> None:
-        # Normalização
+        # Normalization
         if self.amp_norm:
             max_val = np.max(np.abs(np.concatenate(self.signals)))
             if max_val > 0:
@@ -228,7 +228,7 @@ class TimePlot(BasePlot):
                 for i, sig in enumerate(self.signals):
                     self.signals[i] *= f
 
-        # Plotagem
+        # Plot
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         for i, sig in enumerate(self.signals):
@@ -239,14 +239,14 @@ class TimePlot(BasePlot):
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
         # Labels
-        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
+        xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
 
 class FrequencyPlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
+    Class for plotting signals in the frequency domain, receiving a sampling frequency $f_s$ and a signal $s(t)$ and performing the Fourier transform of the signal, according to the expression below. 
 
     $$
     \begin{equation}
@@ -254,23 +254,23 @@ class FrequencyPlot(BasePlot):
     \end{equation}
     $$
 
-    Sendo:
-        - $S(f)$: Sinal no domínio da frequência.
-        - $s(t)$: Sinal no domínio do tempo.
-        - $\mathcal{F}$: Transformada de Fourier.
+    Where:
+        - $S(f)$: Signal in the frequency domain.
+        - $s(t)$: Signal in the time domain.
+        - $\mathcal{F}$: Fourier transform.
     
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        fs (float): Frequência de amostragem
-        signal (np.ndarray): Sinal a ser plotado
-        fc (float): Frequência central
+        fig (plt.Figure): Figure object
+        grid (gridspec.GridSpec): GridSpec object
+        pos (int): Plot position
+        fs (float): Sampling frequency
+        signal (np.ndarray): Signal to be plotted
+        fc (float): Central frequency
 
-    Example:
-        - Modulador: ![pageplot](assets/example_modulator_freq.svg)
-        - Demodulador: ![pageplot](assets/example_demodulator_freq.svg)
-        - Adição de AWGN ![pageplot](assets/example_noise_freq.svg)
+    Examples:
+        - Modulator Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
+        - Demodulator Frequency Domain Example: ![pageplot](assets/example_demodulator_freq.svg)
+        - AWGN addition Frequency Domain Example: ![pageplot](assets/example_noise_freq.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -287,19 +287,19 @@ class FrequencyPlot(BasePlot):
         self.signal = signal
 
     def plot(self) -> None:
-        # Transformada de Fourier
+        # Fourier transform
         freqs = np.fft.fftshift(np.fft.fftfreq(len(self.signal), d=1 / self.fs))
         fft_signal = np.fft.fftshift(np.fft.fft(self.signal))
         y = mag2db(fft_signal)
 
-        # Escala de frequência
+        # Frequency scale
         if self.fc > 1000:
             freqs = freqs / 1000
             self.ax.set_xlabel(r"Frequência ($kHz$)")
         else:
             self.ax.set_xlabel(r"Frequência ($Hz$)")
 
-        # Plotagem
+        # Plot
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0)
@@ -318,19 +318,19 @@ class FrequencyPlot(BasePlot):
 
 class ConstellationPlot(BasePlot):
     r"""
-    Classe para plotar sinais no domínio da constelação, recebendo os sinais $d_I$ e $d_Q$, realizando o plot em fase $I$ e quadratura $Q$, conforme a expressão abaixo.
+    Class for plotting signals in the constellation domain, receiving the signals $d_I$ and $d_Q$, performing the plot in phase $I$ and quadrature $Q$, according to the expression below.
 
     $$
     s(t) = d_I(t) + j d_Q(t)
     $$
 
-    Sendo:
-        - $s(t)$: Sinal complexo.
-        - $d_I(t)$: Sinal em fase.
-        - $d_Q(t)$: Sinal em quadratura.
+    Where:
+        - $s(t)$: Complex signal.
+        - $d_I(t)$: In-phase signal.
+        - $d_Q(t)$: Quadrature signal.
 
 
-    O plot de constelação pode ser normalizado por um fator de normalização dado por: 
+    The constellation plot can be normalized by a normalization factor given by: 
 
     $$
     \varphi = \frac{\text{A}}{
@@ -341,21 +341,21 @@ class ConstellationPlot(BasePlot):
         }
     $$
 
-    Sendo:
-        - $\text{A}$: Amplitude desejada, definido como `1`. 
-        - $\varphi$: Fator de normalização.
-        - $N$: Número de amostras.
-        - $I(n)$ e $Q(n)$: Sinais em fase e quadratura.
+    Where:
+        - $\text{A}$: Desired amplitude, defined as `1`. 
+        - $\varphi$: Normalization factor.
+        - $N$: Number of samples.
+        - $I(n)$ and $Q(n)$: In-phase and quadrature signals.
     
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        dI (np.ndarray): Sinal I
-        dQ (np.ndarray): Sinal Q
+        fig (plt.Figure): Figure object
+        grid (gridspec.GridSpec): GridSpec object
+        pos (int): Plot position
+        dI (np.ndarray): In-phase signal
+        dQ (np.ndarray): Quadrature signal
 
-    Example:
-        - Fase e Constelação: ![pageplot](assets/example_modulator_constellation.svg)
+    Examples:
+        - Modulator Constellation Example: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -375,10 +375,10 @@ class ConstellationPlot(BasePlot):
         self.rms_norm = rms_norm
 
     def plot(self) -> None:
-        # Centraliza os dados em torno do zero
+        # Centralize the data around zero
         dI_c, dQ_c = self.dI.copy(), self.dQ.copy()
     
-        # Se amp_norm for True, normaliza os sinais usando 1/RMS
+        # If amp_norm is True, normalize the signals using 1/RMS
         if self.rms_norm:
             max_val = np.sqrt(np.mean(dI_c**2 + dQ_c**2))
             if max_val > 0:
@@ -389,13 +389,13 @@ class ConstellationPlot(BasePlot):
         else:
             lim = 1.2 * np.max(np.abs(np.concatenate([dI_c, dQ_c])))
     
-        # Amostras IQ
+        # IQ samples
         scatter_kwargs = {"s": 20, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
         color = self.apply_color(0) or "darkgreen"
-        self.ax.scatter(dI_c, dQ_c, label="Amostras IQ", color=color, **scatter_kwargs)
+        self.ax.scatter(dI_c, dQ_c, label="IQ samples", color=color, **scatter_kwargs)
     
-        # Pontos ideais QPSK
+        # QPSK ideal points
         qpsk_points = np.array([
             [self.amp, self.amp],
             [self.amp, -self.amp],
@@ -405,9 +405,9 @@ class ConstellationPlot(BasePlot):
         if self.show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
                             color="blue", s=160, marker="o",
-                            label="Pontos Ideais", linewidth=2)
+                            label="QPSK Ideal Points", linewidth=2)
     
-        # Linhas auxiliares
+        # Auxiliary lines
         self.ax.axhline(0, color="gray", linestyle="--", alpha=0.5)
         self.ax.axvline(0, color="gray", linestyle="--", alpha=0.5)    
         self.ax.set_xlim(-lim, lim)
@@ -420,27 +420,25 @@ class ConstellationPlot(BasePlot):
 
 class BitsPlot(BasePlot):
     r"""
-    Classe para plotar bits, recebendo uma lista de bits $b_t$ e realizando o plot em função do tempo $t$.
+    Class for plotting bits, receiving a list of bits $b_t$ and performing the plot in function of time $t$.
     
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        bits_list (List[np.ndarray]): Lista de bits
-        sections (Optional[List[Tuple[str, int]]]): Seções do plot
-        colors (Optional[List[str]]): Cores do plot
-        show_bit_values (bool): Se `True`, exibe os valores dos bits.
-        xlabel (Optional[str]): Label do eixo x.
-        ylabel (Optional[str]): Label do eixo y.
-        label (Optional[str]): Label do plot.
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x.
+        fig (plt.Figure): Figure object
+        grid (gridspec.GridSpec): GridSpec object
+        pos (int): Plot position
+        bits_list (List[np.ndarray]): List of bits
+        sections (Optional[List[Tuple[str, int]]]): Plot sections
+        colors (Optional[List[str]]): Plot colors
+        show_bit_values (bool): If `True`, shows the bit values.
+        xlabel (Optional[str]): X-axis label.
+        ylabel (Optional[str]): Y-axis label.
+        label (Optional[str]): Label of the plot.
+        xlim (Optional[Tuple[float, float]]): X-axis limits.
 
-    Example:
-        - Datagrama: ![pageplot](assets/example_datagram_time.svg)
-        - Codificador Convolucional: ![pageplot](assets/example_conv_time.svg)
-        - Embaralhador: ![pageplot](assets/example_scrambler_time.svg)
-        - Preâmbulo: ![pageplot](assets/example_preamble.svg)
-        - Multiplexador: ![pageplot](assets/example_mux.svg)
+    Examples:
+        - Datagram Bitstream Example: ![pageplot](assets/example_datagram_time.svg)
+        - Convolutional Bitstream Example: ![pageplot](assets/example_conv_time.svg)
+        - Scrambler Bitstream Example: ![pageplot](assets/example_scrambler_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -470,15 +468,15 @@ class BitsPlot(BasePlot):
         self.label = label
 
     def plot(self) -> None:
-        # Concatena e superamostra os vetores de bit.
+        # upsample bits
         all_bits = np.concatenate(self.bits_list)
         bits_up = np.repeat(all_bits, 2)
         x = np.arange(len(bits_up))
 
-        # Ajustes de eixo
+        # set y limits
         y_upper = 1.4 if self.show_bit_values else 1.2
         if self.xlim is not None:
-            # Ajusta o limite superior do xlim para xlim*2
+            # double the xlim
             self.xlim = (self.xlim[0], self.xlim[1]*2)
             self.ax.set_xlim(self.xlim)
         else:
@@ -487,13 +485,13 @@ class BitsPlot(BasePlot):
         self.ax.grid(False)
         self.ax.set_yticks([0, 1])
 
-        # Linhas auxiliares
+        # auxiliary lines
         self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val/2)))
         bit_edges = np.arange(0, len(bits_up) + 1, 2)
         for pos in bit_edges:
             self.ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
-        # Para cada vetor de bits, desenha uma seção do plot.
+        # for each bit vector, draw a section of the plot
         if self.sections:
             start_bit = 0
             for i, (sec_name, sec_len) in enumerate(self.sections):
@@ -503,7 +501,7 @@ class BitsPlot(BasePlot):
                 if i > 0:
                     bit_start -= 1
 
-                # Desenha a seção do plot.
+                # draw the section of the plot
                 self.ax.step(
                     x[bit_start:bit_end],
                     bits_up[bit_start:bit_end],
@@ -513,7 +511,7 @@ class BitsPlot(BasePlot):
                     label=sec_name if self.label is None else self.label
                 )
                 
-                # Exibe os valores dos bits acima da linha do plot.
+                # show bit values above the plot line
                 if self.show_bit_values:
                     xmin, xmax = self.ax.get_xlim()
                     section_bits = all_bits[start_bit:start_bit + sec_len]
@@ -533,12 +531,12 @@ class BitsPlot(BasePlot):
                         )
                 start_bit += sec_len
         else:
-            # Desenha a seção do plot.
+            # draw the plot section
             self.ax.step(x, bits_up, where='post',
                          color='black', linewidth=2.0,
                          label=self.label if self.label else None)
 
-            # Exibe os valores dos bits acima da linha do plot.
+            # show bit values above the plot line
             if self.show_bit_values:
                 xmin, xmax = self.ax.get_xlim()
                 for i, bit in enumerate(all_bits):
@@ -555,7 +553,7 @@ class BitsPlot(BasePlot):
                         fontweight=self.bit_value_weight
                     )
 
-        # Labels
+        # labels
         if self.xlabel:
             self.ax.set_xlabel(self.xlabel)
         if self.ylabel:
@@ -564,24 +562,24 @@ class BitsPlot(BasePlot):
 
 class SymbolsPlot(BasePlot):
     r"""
-    Classe para plotar simbolos codificados com codificação de linha, recebendo um vetor de simbolos $s[i]$ e realizando o plot em função do index de simbolo $i$.
+    Class for plotting symbols encoded with line coding, receiving a vector of symbols $s[i]$ and performing the plot in function of the symbol index $i$.
     
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        symbols_list (List[np.ndarray]): Lista de símbolos
-        samples_per_symbol (int): Número de amostras por símbolo
-        sections (Optional[List[Tuple[str, int]]]): Seções do plot
-        colors (Optional[List[str]]): Cores do plot
-        show_symbol_values (bool): Se `True`, exibe os valores dos símbolos.
-        xlabel (Optional[str]): Label do eixo x.
-        ylabel (Optional[str]): Label do eixo y.
-        label (Optional[str]): Label do plot.
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x.
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position of the plot
+        symbols_list (List[np.ndarray]): List of symbols
+        samples_per_symbol (int): Number of samples per symbol
+        sections (Optional[List[Tuple[str, int]]]): Plot sections
+        colors (Optional[List[str]]): Plot colors
+        show_symbol_values (bool): If `True`, shows the symbol values.
+        xlabel (Optional[str]): X-axis label.
+        ylabel (Optional[str]): Y-axis label.
+        label (Optional[str]): Plot label.
+        xlim (Optional[Tuple[float, float]]): X-axis limits.
 
-    Example:
-        - Codificação de Canal: ![pageplot](assets/example_encoder_time.svg)
+    Examples:
+        - Symbols Plot Example: ![pageplot](assets/example_encoder_time.svg)
     """
 
     def __init__(self,
@@ -617,12 +615,12 @@ class SymbolsPlot(BasePlot):
 
     def plot(self) -> None:
 
-        # Concatena e superamostra os vetores de símbolos
+        # concatenate and oversample the symbol vectors
         all_symbols = np.concatenate(self.symbols_list)
         symbols_up = np.repeat(all_symbols, self.samples_per_symbol)
         x = np.arange(len(symbols_up))
 
-        # Ajustes de eixo
+        # axis adjustments
         y_upper = 1.8 if self.show_symbol_values else 1.5
         if self.xlim is not None:
             self.xlim = (self.xlim[0] * self.samples_per_symbol,
@@ -634,13 +632,13 @@ class SymbolsPlot(BasePlot):
         self.ax.set_yticks([self.x_axis_label[0], 0, self.x_axis_label[1]])
         self.ax.grid(False)
 
-        # Linhas verticais marcando início de cada símbolo
+        # vertical lines marking the start of each symbol
         self.ax.xaxis.set_major_formatter(FuncFormatter(lambda val, pos: int(val / self.samples_per_symbol)))
         symbol_edges = np.arange(0, len(symbols_up) + 1, self.samples_per_symbol)
         for pos in symbol_edges:
             self.ax.axvline(x=pos, color='gray', linestyle='--', linewidth=0.5)
 
-        # Para cada vetor de símbolos, desenha uma seção do plot
+        # for each symbol vector, draw a section of the plot
         if self.sections:
             start_symbol = 0
             for i, (sec_name, sec_len) in enumerate(self.sections):
@@ -650,7 +648,7 @@ class SymbolsPlot(BasePlot):
                 if i > 0:
                     sym_start -= 1
 
-                # Desenha a seção do plot.
+                # draw the plot section
                 self.ax.step(
                     x[sym_start:sym_end],
                     symbols_up[sym_start:sym_end],
@@ -660,7 +658,7 @@ class SymbolsPlot(BasePlot):
                     label=sec_name if self.label is None else self.label
                 )
 
-                # Exibe os valores dos símbolos acima da linha do plot.
+                # show symbol values above the plot line
                 if self.show_symbol_values:
                     xmin, xmax = self.ax.get_xlim()
                     section_symbols = all_symbols[start_symbol:start_symbol + sec_len]
@@ -681,14 +679,14 @@ class SymbolsPlot(BasePlot):
                 start_symbol += sec_len
         else:
 
-            # Desenha a seção do plot.
+            # draw the plot section
             color = self.colors[0] if self.colors else 'black'
             self.ax.step(
                 x, symbols_up, where='post',
                 color=color, linewidth=2.0,
                 label=self.label if self.label else None
             )
-            # Exibe os valores dos símbolos acima da linha do plot.
+            # show symbol values above the plot line
             if self.show_symbol_values:
                 xmin, xmax = self.ax.get_xlim()
                 for i, sym in enumerate(all_symbols):
@@ -705,7 +703,7 @@ class SymbolsPlot(BasePlot):
                         fontweight=self.symbol_value_weight
                     )
 
-        # Labels
+        # labels
         if self.xlabel:
             self.ax.set_xlabel(self.xlabel)
         if self.ylabel:
@@ -714,25 +712,25 @@ class SymbolsPlot(BasePlot):
 
 class ImpulseResponsePlot(BasePlot):
     r"""
-    Classe para plotar a resposta ao impulso de um filtro, recebendo um vetor de tempo $t_{imp}$ e realizando o plot em função do tempo $t$.
+    Class for plotting the impulse response of a filter, receiving a vector of time $t_{imp}$ and performing the plot in function of time $t$.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot no GridSpec
-        t_imp (np.ndarray): Vetor de tempo da resposta ao impulso
-        impulse_response (np.ndarray): Amostras da resposta ao impulso
-        t_unit (str, optional): Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"
-        label (Optional[Union[str, List[str]]]): Label do plot
-        xlabel (Optional[str]): Label do eixo x
-        ylabel (Optional[str]): Label do eixo y
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x
-        amp_norm (Optional[bool]): Normaliza a resposta ao impulso para ter amplitude unitária. 
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position of the plot in the GridSpec
+        t_imp (np.ndarray): Vector of time $t_{imp}$
+        impulse_response (np.ndarray): Impulse response
+        t_unit (str, optional): Unit of time on the x-axis ("ms" or "s"). Default is "ms"
+        label (Optional[Union[str, List[str]]]): Plot label
+        xlabel (Optional[str]): x-axis label
+        ylabel (Optional[str]): y-axis label
+        xlim (Optional[Tuple[float, float]]): x-axis limits
+        amp_norm (Optional[bool]): Normalizes the impulse response to have unitary amplitude. 
 
-    Example:
-        - Resposta ao Impulso RRC: ![pageplot](assets/example_formatter_impulse.svg)
-        - Resposta ao Impulso Filtro Passa baixa: ![pageplot](assets/example_lpf_impulse.svg)
-        - Resposta ao Impulso RRC Invertido: ![pageplot](assets/example_mf_impulse.svg)
+    Examples:
+        - Impulse Response RRC: ![pageplot](assets/example_formatter_impulse.svg)
+        - Impulse Response Manchester: ![pageplot](assets/example_formatter_impulse_man.svg)
+        - Impulse Response LPF: ![pageplot](assets/example_lpf_impulse.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -758,7 +756,7 @@ class ImpulseResponsePlot(BasePlot):
         self.amp_norm = amp_norm
         self.t_unit = t_unit
 
-        # Cria lista de respostas ao impulso
+        # create list of impulse responses
         if isinstance(impulse_response, np.ndarray):
             self.impulse_response = [impulse_response]
         else:
@@ -766,7 +764,7 @@ class ImpulseResponsePlot(BasePlot):
 
 
     def plot(self) -> None:
-        # Unidade de tempo
+        # time unit
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
             default_xlabel = r"Tempo ($ms$)"
@@ -782,7 +780,7 @@ class ImpulseResponsePlot(BasePlot):
         self.ax.set_xlabel(self.xlabel if self.xlabel is not None else default_xlabel)
         self.ax.set_ylabel(self.ylabel if self.ylabel is not None else "Amplitude")
 
-        # Plotagem
+        # plot
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         for i, resp in enumerate(self.impulse_response):
@@ -792,33 +790,33 @@ class ImpulseResponsePlot(BasePlot):
                 resp = resp / np.max(resp)
             self.ax.plot(t_plot, resp, color=color, label=lbl, **line_kwargs)
 
-        # Limites
+        # limits
         if self.xlim is not None:
             self.ax.set_xlim(self.xlim)
         self.apply_ax_style()
 
 class SampledSignalPlot(BasePlot):
     r"""
-    Classe para plotar um sinal $s(t)$ amostrado em $t_s$.
+    Class to plot a sampled signal $s(t)$.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int ou tuple): Posição no GridSpec
-        t_signal (np.ndarray): Vetor de tempo do sinal filtrado
-        signal (np.ndarray): Sinal filtrado
-        t_samples (np.ndarray): Instantes de amostragem
-        samples (np.ndarray): Amostras correspondentes
-        time_unit (str): Unidade de tempo. 
-        label_signal (str): Label do sinal filtrado.
-        label_samples (str): Label das amostras.
-        xlabel (str): Label do eixo x.
-        ylabel (str): Label do eixo y.
-        title (str): Título do plot.
-        xlim (tuple): Limites do eixo x.
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        t_signal (np.ndarray): Vector of time $t_{signal}$
+        signal (np.ndarray): Filtered signal
+        t_samples (np.ndarray): Vector of time $t_{samples}$
+        samples (np.ndarray): Samples
+        time_unit (str): Time unit. 
+        label_signal (str): Label of the filtered signal.
+        label_samples (str): Label of the samples.
+        xlabel (str): Label of the x-axis.
+        ylabel (str): Label of the y-axis.
+        title (str): Title of the plot.
+        xlim (tuple): Limits of the x-axis.
 
-    Example:
-        ![pageplot](assets/example_sampler_time.svg)
+    Examples:
+        - Time Domain Plot Example: ![pageplot](assets/example_sampler_time.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -852,7 +850,7 @@ class SampledSignalPlot(BasePlot):
         self.signal = signal
         self.samples = samples
 
-        # Ajusta unidade de tempo
+        # Adjust time unit
         if self.time_unit == "ms":
             self.t_signal = t_signal * 1e3
             self.t_samples = t_samples * 1e3
@@ -861,19 +859,19 @@ class SampledSignalPlot(BasePlot):
             self.t_samples = t_samples
 
     def plot(self) -> None:
-        # Plotagem
+        # plot
         signal_color = self.colors if isinstance(self.colors, str) else "blue"
         self.ax.plot(self.t_signal, self.signal,color=signal_color, label=self.label_signal, linewidth=2)
         self.ax.stem(self.t_samples, self.samples,linefmt="k-", markerfmt="ko", basefmt=" ",label=self.label_samples)
 
-        # Ajuste dos eixos
+        # Adjust axis
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
         self.ax.set_xlim(self.xlim)
         self.ax.set_title(self.title)
         self.apply_ax_style()
         
-        # Legenda
+        # Legend
         if self.label_signal or self.label_samples:
             leg = self.ax.legend(loc='upper right', frameon=True, fontsize=12)
             leg.get_frame().set_facecolor("white")
@@ -882,24 +880,24 @@ class SampledSignalPlot(BasePlot):
 
 class PhasePlot(BasePlot):
     r"""
-    Classe para plotar a fase dos sinais $d_I(t)$ e $d_Q(t)$ no domínio do tempo.
+    Class to plot the phase of the signals $d_I(t)$ and $d_Q(t)$ in the time domain.
 
     $$
         s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
     $$
 
-    Sendo: 
-        - $s(t)$: Vetor de fases por intervalo de tempo.
-        - $d_I(t)$: Componente sinal $d_I(t)$, em fase. 
-        - $d_Q(t)$: Componente sinal $d_Q(t)$, em quadratura.
+    Where: 
+        - $s(t)$: Phase vector $s(t)$.
+        - $d_I(t)$: In-phase signal component $d_I(t)$.
+        - $d_Q(t)$: Quadrature signal component $d_Q(t)$.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        t (np.ndarray): Vetor de tempo
-        signals (Union[np.ndarray, List[np.ndarray]]): Sinais IQ (I e Q)
-        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position of the plot
+        t (np.ndarray): Vector of time
+        signals (Union[np.ndarray, List[np.ndarray]]): IQ signals (I and Q)
+        time_unit (str): Time unit for plot ("ms" by default, can be "s").
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -912,7 +910,7 @@ class PhasePlot(BasePlot):
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
-        # Unidade de tempo
+        # Time unit
         self.time_unit = time_unit.lower()
         self.t = t
         if self.time_unit == "ms":
@@ -921,32 +919,32 @@ class PhasePlot(BasePlot):
         if self.labels is None:
             self.labels = ["Fase IQ"]
 
-        # Garantir que os sinais estão em uma tupla
+        # Ensure signals are in a tuple
         if isinstance(signals, (list, tuple)):
-            assert len(signals) == 2, "Os sinais devem ser passados como tupla com dois componentes (I, Q)."
+            assert len(signals) == 2, "Signals must be passed as a tuple with two components (I, Q)."
             self.I = signals[0]
             self.Q = signals[1]
         else:
-            raise ValueError("Os sinais devem ser passados como tupla com dois componentes (I, Q).")
+            raise ValueError("Signals must be passed as a tuple with two components (I, Q).")
 
     def plot(self) -> None:
-        # Calcula a fase usando atan2
-        fase = np.angle(self.I + 1j * self.Q)
+        # Calculate phase using atan2
+        phase = np.angle(self.I + 1j * self.Q)
 
-        # Plot da fase ao longo do tempo
+        # Plot the phase over time
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0)
-        self.ax.plot(self.t, fase, label=self.labels[0], color=color, **line_kwargs)
+        self.ax.plot(self.t, phase, label=self.labels[0], color=color, **line_kwargs)
 
-        # Limite de fase entre pi e -pi
+        # Limit of phase between pi and -pi
         self.ax.set_ylim([-np.pi*1.1, np.pi*1.1])
         ticks = [0, np.pi/4, 3*np.pi/4, -np.pi/4, -3*np.pi/4, -np.pi, np.pi]
         labels = [r"$0$", r"$\frac{\pi}{4}$", r"$\frac{3\pi}{4}$", r"$-\frac{\pi}{4}$", r"$-\frac{3\pi}{4}$", r"$-\pi$", r"$\pi$"]
         self.ax.set_yticks(ticks)
         self.ax.set_yticklabels(labels)
 
-        # Ajuste dos eixos
+        # Adjust axis
         self.ax.set_xlabel(r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)")
         self.ax.set_ylabel(r"Fase ($rad$)")
         self.ax.legend()
@@ -954,31 +952,31 @@ class PhasePlot(BasePlot):
 
 class GaussianNoisePlot(BasePlot):
     r"""
-    Classe para plotar a densidade de probabilidade $p(x)$ de uma dada variância $\sigma^2$, seguindo a expressão abaixo. 
+    Class to plot the probability density $p(x)$ of a given variance $\sigma^2$, following the expression below. 
 
     $$
     p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
     $$
 
-    Sendo: 
-        - $p(x)$: Densidade de probabilidade do ruído.
-        - $\sigma^2$: Variância do ruído.
-        - $x$: Amplitude do ruído.
+    Where: 
+        - $p(x)$: Probability density of the noise.
+        - $\sigma^2$: Variance of the noise.
+        - $x$: Amplitude of the noise.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot no GridSpec
-        variance (float): Variância do ruído
-        num_points (int): Número de pontos para a curva da gaussiana
-        legend (str): Legenda do plot
-        xlabel (str): Label do eixo x
-        ylabel (str): Label do eixo y
-        xlim (Optional[Tuple[float, float]]): Limites do eixo x
-        span (int): Span do plot
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position of the plot in the GridSpec
+        variance (float): Variance of the noise
+        num_points (int): Number of points for the gaussian curve
+        legend (str): Legend of the plot
+        xlabel (str): Label of the x-axis
+        ylabel (str): Label of the y-axis
+        xlim (Optional[Tuple[float, float]]): Limit of the x-axis
+        span (int): Span of the plot
 
-    Example:
-        ![pageplot](assets/example_noise_gaussian_ebn0.svg)
+    Examples:
+        - Noise Density Plot Example: ![pageplot](assets/example_noise_gaussian_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1003,18 +1001,18 @@ class GaussianNoisePlot(BasePlot):
         self.span = span
 
     def plot(self) -> None:
-        # Calculo da pdf
+        # Calculate the pdf
         sigma = np.sqrt(self.variance)
         x = np.linspace(-self.span*sigma, self.span*sigma, self.num_points)
         pdf = (1 / (np.sqrt(2*np.pi) * sigma)) * np.exp(-x**2 / (2*self.variance))
 
-        # Plotagem
+        # Plot
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkgreen"
         self.ax.plot(x, pdf, label=self.legend, color=color, **line_kwargs)
        
-        # Ajuste dos eixos
+        # Adjust axis
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
         if self.xlim is not None:
@@ -1023,17 +1021,17 @@ class GaussianNoisePlot(BasePlot):
 
 class PoleZeroPlot(BasePlot):
     r"""
-    Classe para plotar o diagrama de polos e zeros de uma função de transferência discreta no plano-z.
+    Plot the diagram of poles and zeros of a discrete transfer function in the z-plane.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição no GridSpec
-        b (np.ndarray): Coeficientes do numerador da função de transferência
-        a (np.ndarray): Coeficientes do denominador da função de transferência
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position in the GridSpec
+        b (np.ndarray): Coefficients of the numerator of the transfer function
+        a (np.ndarray): Coefficients of the denominator of the transfer function
 
-    Example:
-        ![pageplot](assets/example_lpf_pz.svg)
+    Examples:
+        - Pole-Zero Diagram Example: ![pageplot](assets/example_lpf_pz.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1049,17 +1047,17 @@ class PoleZeroPlot(BasePlot):
         self.a = a
 
     def plot(self) -> None:
-        # Calcula zeros e polos
+        # Calculate zeros and poles
         zeros = np.roots(self.b)
         poles = np.roots(self.a)
 
-        # Plot da circuferência, polos e zeros
+        # Plot the circle, poles and zeros
         theta = np.linspace(0, 2*np.pi, 512)
         self.ax.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.6)
         self.ax.scatter(np.real(zeros), np.imag(zeros),marker='o', facecolors='none', edgecolors='blue', s=120, label='Zeros')
-        self.ax.scatter(np.real(poles), np.imag(poles),marker='x', color='red',s=120, label='Polos')
+        self.ax.scatter(np.real(poles), np.imag(poles),marker='x', color='red',s=120, label='Poles')
 
-        # Eixos
+        # Adjust axis
         self.ax.axhline(0, color='black', linewidth=0.8)
         self.ax.axvline(0, color='black', linewidth=0.8)
         self.ax.set_aspect('equal', adjustable='box')
@@ -1067,35 +1065,35 @@ class PoleZeroPlot(BasePlot):
         self.ax.set_ylim([-1.2, 1.2])
 
         # Labels
-        self.ax.set_xlabel("Parte Real")
-        self.ax.set_ylabel("Parte Imaginária")
+        self.ax.set_xlabel("Real")
+        self.ax.set_ylabel("Imaginary")
         self.apply_ax_style()
 
 class FrequencyResponsePlot(BasePlot):
     r"""
-    Classe para plotar a resposta em frequência de um filtro a partir de seus coeficientes (b, a). 
-    Calcula a transformada de Fourier discreta da resposta ao impulso usando `scipy.signal.freqz`.
+    Plot the frequency response of a filter from its coefficients (b, a). 
+    Calculates the Discrete Fourier Transform of the impulse response using `scipy.signal.freqz`.
 
     $$
         H(f) = \sum_{n=0}^{N} b_n e^{-j 2 \pi f n} \Big/ \sum_{m=0}^{M} a_m e^{-j 2 \pi f m}
     $$
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot no GridSpec
-        b (np.ndarray): Coeficientes do numerador do filtro
-        a (np.ndarray): Coeficientes do denominador do filtro
-        fs (float): Frequência de amostragem
-        f_cut (Optional[float]): Frequência de corte do filtro (Hz)
-        xlim (Optional[Tuple[float, float]]): Limites do eixo X (Hz)
-        worN (int): Número de pontos para a transformada de Fourier
-        show_phase (bool): Se `True`, plota a fase da resposta em frequência
-        xlabel (str): Label do eixo X
-        ylabel (str): Label do eixo Y
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position in the GridSpec
+        b (np.ndarray): Coefficients of the numerator of the filter
+        a (np.ndarray): Coefficients of the denominator of the filter
+        fs (float): Sampling frequency
+        f_cut (Optional[float]): Cut-off frequency of the filter (Hz)
+        xlim (Optional[Tuple[float, float]]): Limit of the x-axis (Hz)
+        worN (int): Number of points for the Discrete Fourier Transform
+        show_phase (bool): If `True`, plots the phase of the frequency response
+        xlabel (str): Label of the x-axis
+        ylabel (str): Label of the y-axis
 
-    Example:
-        ![pageplot](assets/example_lpf_freq_response.svg)
+    Examples:
+        - Frequency Domain Plot Example: ![pageplot](assets/example_lpf_freq_response.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1125,41 +1123,41 @@ class FrequencyResponsePlot(BasePlot):
         self.ylabel = ylabel    
 
     def plot(self) -> None:
-        # calcula resposta em frequência
+        # Calculate frequency response
         w, h = freqz(self.b, self.a, worN=self.worN, fs=self.fs)
         magnitude = mag2db(h)
 
-        # Plotagem
+        # Plot
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkorange"
         label = self.labels[0] if self.labels else "$H(f)$"
         self.ax.plot(w, magnitude, color=color, label=label, **line_kwargs)
 
-        # Plotagem da fase
+        # Plot the phase
         if self.show_phase:
             ax2 = self.ax.twinx()
             phase = np.unwrap(np.angle(h))
-            ax2.plot(w, phase, color="darkorange", linestyle="--", linewidth=1.5, label="Fase")
-            ax2.set_ylabel("Fase (rad)")
+            ax2.plot(w, phase, color="darkorange", linestyle="--", linewidth=1.5, label="Phase")
+            ax2.set_ylabel("Phase (rad)")
 
-        # adiciona a barra vertical na frequência de corte
+        # Add vertical bar at cut-off frequency
         if self.f_cut is not None:
             self.ax.axvline(self.f_cut, color="red", linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
 
-        # Eixos
+        # Adjust axis
         if self.xlim is not None:
             self.ax.set_xlim(self.xlim)
         self.ax.set_ylim(-60, 5)
 
-        # Labels
+        # Adjust labels
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
 
 class DetectionFrequencyPlot(BasePlot):
     r"""
-    Classe para plotar o espectro de uma sinal recebido, com threshold e frequências detectadas. Recebendo uma frequência de amostragem $f_s$ e um sinal $s(t)$ e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. 
+    Plot the spectrum of a received signal, with threshold and detected frequencies. Receiving a sampling frequency $f_s$ and a signal $s(t)$ and performing the Fourier transform of the signal, according to the expression below. 
 
     $$
     \begin{equation}
@@ -1167,21 +1165,22 @@ class DetectionFrequencyPlot(BasePlot):
     \end{equation}
     $$
 
-    Sendo:
-        - $S(f)$: Sinal no domínio da frequência.
-        - $s(t)$: Sinal no domínio do tempo.
-        - $\mathcal{F}$: Transformada de Fourier.
+    Where:
+        - $S(f)$: Signal in the frequency domain.
+        - $s(t)$: Signal in the time domain.
+        - $\mathcal{F}$: Fourier transform.
     
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição do plot
-        fs (float): Frequência de amostragem
-        signal (np.ndarray): Sinal a ser plotado
-        fc (float): Frequência central
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position of the plot
+        fs (float): Sampling frequency
+        signal (np.ndarray): Signal to be plotted
+        threshold (float): Threshold of the signal
+        fc (float): Central frequency
 
-    Example: 
-        ![pageplot](assets/example_detector_freq.svg)
+    Examples: 
+        - Frequency Domain Plot Example: ![pageplot](assets/example_detector_freq.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1220,18 +1219,18 @@ class DetectionFrequencyPlot(BasePlot):
     def plot(self) -> None:
         P_db = self.signal
         if P_db.ndim != 1:
-            raise ValueError("DetectionFrequencyPlot espera um vetor de power_matrix.")
+            raise ValueError("DetectionFrequencyPlot expects a power_matrix vector.")
 
         n_bins = len(P_db)
         n_fft = 2 * (n_bins - 1)
         freqs = np.fft.rfftfreq(n_fft, d=1.0 / self.fs)
 
-        # Plotagem em KHz
+        # Plot in KHz
         freqs_plot = freqs / 1000.0
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "blue"
-        label = self.labels[0] if self.labels else "Espectro (dB)"
+        label = self.labels[0] if self.labels else "Magnitude (dB)"
         self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
 
         # Threshold
@@ -1239,7 +1238,7 @@ class DetectionFrequencyPlot(BasePlot):
         thr_label = f"Threshold = {thr_line:.2f} dB"
         self.ax.axhline(thr_line, color="blue", linestyle="--", linewidth=2, label=thr_label)
 
-        # Plota as linhas verticais
+        # Plot vertical lines
         detected_bins = np.where(np.asarray(self.freqs_detected) > 0)[0]
         for idx, k in enumerate(detected_bins, start=1):
             f_plot = freqs[k] / 1000.0
@@ -1247,7 +1246,7 @@ class DetectionFrequencyPlot(BasePlot):
             self.ax.plot(f_plot, Pk, 'o', color='k', markersize=6, label=f"$f_{{{idx}}} = {f_plot:.2f}$ kHz")
             self.ax.axvline(f_plot, color='k', linestyle=':', linewidth=2)
 
-        # Limites dos eixos
+        # Adjust axis
         if self.xlim is not None:
             self.ax.set_xlim(self.xlim)
         if self.ylim is not None:
@@ -1257,29 +1256,29 @@ class DetectionFrequencyPlot(BasePlot):
         handles, labels = self.ax.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         self.ax.legend(by_label.values(), by_label.keys())
-        self.ax.set_xlabel(r"Frequência ($kHz$)")
+        self.ax.set_xlabel(r"Frequency ($kHz$)")
         self.ax.set_ylabel(r"Magnitude ($dB$)")
         self.apply_ax_style()
 
 class BersnrPlot(BasePlot):
     r"""
-    Classe para plotar curvas de BER em função de Eb/N0.
+    Plot BER curves as a function of Eb/N0.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int): Posição no GridSpec
-        EbN0 (np.ndarray): Vetor de valores Eb/N0 (dB)
-        ber_curves (List[np.ndarray]): Lista de curvas BER correspondentes
-        labels (List[str]): Rótulos de cada curva
-        linestyles (List[str], opcional): Lista com estilos de linha. 
-        markers (List[str], opcional): Lista com formatos de marcadores. 
-        xlabel (str, opcional): Rótulo do eixo x
-        ylabel (str, opcional): Rótulo do eixo y
-        logy (bool, opcional): Se deve usar escala logarítmica no eixo y
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int): Position in the GridSpec
+        EbN0 (np.ndarray): Array of Eb/N0 values (dB)
+        ber_curves (List[np.ndarray]): List of BER curves
+        labels (List[str]): Labels of each curve
+        linestyles (List[str], optional): List of line styles
+        markers (List[str], optional): List of marker styles
+        xlabel (str, optional): Label of the x-axis
+        ylabel (str, optional): Label of the y-axis
+        logy (bool, optional): Whether to use a log scale for the y-axis
 
-    Example: 
-        - ![pageplot](assets/ber_vs_ebn0.svg)
+    Examples: 
+        - BER vs Eb/N0 Plot Example: ![pageplot](assets/ber_vs_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1302,12 +1301,12 @@ class BersnrPlot(BasePlot):
         self.logy = logy
         self.EbN0 = EbN0
 
-        # Cria as curvas BER
+        # Create BER curves
         self.ber_curves = ber_curves if isinstance(ber_curves, (list, tuple)) else [ber_curves]
 
-        # Cria os rótulos
+        # Create labels
         if self.labels is None:
-            self.labels = [f"Curva {i+1}" for i in range(len(self.ber_curves))]
+            self.labels = [f"Curve {i+1}" for i in range(len(self.ber_curves))]
         self.linestyles = linestyles if linestyles is not None else ["-"] * len(self.ber_curves)
         self.markers = markers if markers is not None else ["o"] * len(self.ber_curves)
 
@@ -1325,7 +1324,7 @@ class BersnrPlot(BasePlot):
 
             self.ax.plot(self.EbN0, curve, label=label, color=color, **plot_kwargs)
 
-        # Usa escala logarítmica por padrão
+        # Use log scale by default
         if self.logy:
             self.ax.set_yscale("log")
             self.ax.grid(True, which="both", axis="y", linestyle="--", color="gray", alpha=0.6)
@@ -1337,21 +1336,21 @@ class BersnrPlot(BasePlot):
 
 class SincronizationPlot(BasePlot):
     r"""
-    Classe para plotar um sinal no domínio do tempo com marcações de sincronismo.
+    Plot a signal in the time domain with synchronization marks.
 
     Args:
-        fig (plt.Figure): Figura do plot
-        grid (gridspec.GridSpec): GridSpec do plot
-        pos (int ou tuple): Posição no GridSpec
-        t (np.ndarray): Vetor de tempo
-        signal (np.ndarray): Sinal no tempo
-        sync_start (float): Instante de início da palavra de sincronismo
-        sync_end (float): Instante de fim da palavra de sincronismo
-        max_corr (float): Instante do pico de correlação
-        time_unit (str): Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        t (np.ndarray): Array of time
+        signal (np.ndarray): Signal in the time domain
+        sync_start (float): Start time of the synchronization word
+        sync_end (float): End time of the synchronization word
+        max_corr (float): Time of the peak of correlation
+        time_unit (str): Time unit for plotting ("ms" by default, can be "s").
 
-    Example: 
-        ![pageplot](assets/example_synchronizer_sync.svg)
+    Examples: 
+        - Time Domain Synchronization Plot Example: ![pageplot](assets/example_synchronizer_sync.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1367,7 +1366,7 @@ class SincronizationPlot(BasePlot):
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
 
-        # Ajuste de unidade de tempo
+        # Adjust time unit
         self.time_unit = time_unit.lower()
         if self.time_unit == "ms":
             self.t = t * 1e3
@@ -1395,22 +1394,36 @@ class SincronizationPlot(BasePlot):
             else:
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
-        # Periodo de recepção do preambulo
+        # Synchronization word period
         self.ax.axvspan(self.sync_start, self.sync_end,
                         color="gray", alpha=0.2, label=r"$\Delta \tau$")
 
-        # Linhas verticais de sincronismo
+        # Vertical lines of synchronization
         self.ax.axvline(self.max_corr, color="darkorange", linestyle="--", linewidth=2, label=r"$\tau$")
         self.ax.axvline(self.sync_start, color="red", linestyle="--", linewidth=2, label=r"$\tau +/- (\Delta \tau)/2$")
         self.ax.axvline(self.sync_end, color="red", linestyle="--", linewidth=2)
     
         # Labels
-        xlabel = r"Tempo ($ms$)" if self.time_unit == "ms" else r"Tempo ($s$)"
+        xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
 
 class CorrelationPlot(BasePlot):
+    r"""
+    Plot correlation vector $c[k]$ as a function of the index $k$.
+
+    Args:
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        corr_vec (np.ndarray): Correlation vector $c[k]$
+        fs (float): Signal sampling rate in $Hz$
+        xlim_ms (Tuple[float, float]): Time limits in $ms$
+
+    Examples: 
+        - Correlation Plot Example: ![pageplot](assets/example_synchronizer_corr.svg)
+    """
     def __init__(self,
                  fig: plt.Figure,
                  grid: gridspec.GridSpec,
@@ -1422,45 +1435,56 @@ class CorrelationPlot(BasePlot):
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         
-        # Encontrar o índice de maior correlação
+        # Find the index of maximum correlation
         self.corr_vec = corr_vec
         self.sample_indices = np.arange(len(corr_vec))
         self.fs = fs
         self.max_corr_index = np.argmax(corr_vec)
         self.max_corr_value = corr_vec[self.max_corr_index]
 
-        # Limites em índices de amostra
+        # Sample index limits
         self.index_low = int(xlim_ms[0] * 1e-3 * fs)
         self.index_high = int(xlim_ms[1] * 1e-3 * fs)
 
-        # Definir o título e a legenda
+        # Define the title and legend
         if self.labels is None:
             self.labels = [r"$c[k]$"]
 
     def plot(self) -> None:
-        # Plotagem
+        # Plot
         color = self.apply_color(0)
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         self.ax.plot(self.sample_indices, self.corr_vec, label=self.labels[0], color=color, **line_kwargs)
 
-        # Máxima correlação
+        # Maximum correlation
         self.ax.axvline(self.max_corr_index, color='red', linestyle='--', label=f"$k_{{max}}$ = {self.max_corr_index}")
         self.ax.scatter(self.max_corr_index, self.max_corr_value, color='red', zorder=5)
 
-        # limites
+        # Set limits
         self.ax.set_xlim(self.index_low, self.index_high)
 
         # Labels
-        self.ax.set_xlabel(r"Índice de Amostra $k$")
-        self.ax.set_ylabel(r"Fator de Correlação Normalizado $c[k]$")
+        self.ax.set_xlabel(r"Sample Index $k$")
+        self.ax.set_ylabel(r"Normalized Correlation Factor $c[k]$")
         self.ax.legend()
         self.apply_ax_style()
 
-class PowerMatrixPlot(BasePlot):
+class WaterfallPlot(BasePlot):
     r"""
-    Plota a matriz de potência em dB como heatmap quadriculado.
-    Eixo x = segmentos, eixo y = frequência em Hz.
+    Waterfall plot of the power matrix.
+
+    Args:
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        power_matrix (np.ndarray): Power matrix
+        fs (float): Signal sampling rate in $Hz$
+        N (int): Number of samples
+        xlim (Tuple[float, float]): Time limits in $ms$
+
+    Examples: 
+        - Waterfall Plot Example: ![pageplot](assets/example_detector_waterfall.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1481,40 +1505,56 @@ class PowerMatrixPlot(BasePlot):
     def plot(self) -> None:
         n_segments, n_freqs = self.power_matrix.shape
 
-        # Frequências em kHz
+        # Frequencies in kHz
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
         freqs_khz = freqs / 1000.0
         x = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
 
-        # Segmentos no eixo Y
+        # Segments on the Y axis
         y = np.arange(n_segments + 1)
 
-        # Plotagem
+        # Plot
         im = self.ax.pcolormesh(
             x, y, self.power_matrix,
             cmap="inferno", shading="auto"
         )
         self.ax.invert_yaxis()
 
-        # Barra de cores    
+        # Colorbar    
         cbar = self.ax.figure.colorbar(im, ax=self.ax)
         cbar.set_label("Magnitude ($dB$)")
 
-        # Limites de frequência no eixo X
+        # Set limits
         self.ax.set_xlim(self.xlim[0], self.xlim[1])
 
         # Labels
-        self.ax.set_xlabel("Frequência ($kHz$)")
-        self.ax.set_ylabel("Índice de Segmento (tempo)")
+        self.ax.set_xlabel("Frequency ($kHz$)")
+        self.ax.set_ylabel("Segment Index (time)")
         self.ax.grid(False)
         self.apply_ax_style()
 
 
 
-class PowerMatrix3DPlot(BasePlot):
+class Waterfall3DPlot(BasePlot):
     r"""
-    Plota a matriz de potência em dB em 3D, limitando a frequência
-    ao range definido em kHz e adicionando plano de threshold.
+    3D waterfall plot of the power matrix.
+
+    Args:
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        power_matrix (np.ndarray): Power matrix
+        fs (float): Signal sampling rate in $Hz$
+        N (int): Number of samples
+        freq_window (tuple[float, float]): Frequency limits in $kHz$
+        threshold (float): Threshold value
+        smooth (bool): Whether to smooth the power matrix
+        sigma (float): Standard deviation for the Gaussian filter
+        elev (float): Elevation angle in degrees
+        azim (float): Azimuth angle in degrees
+
+    Examples: 
+        - Waterfall 3D Plot Example: ![pageplot](assets/example_detector_waterfall_3d.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1543,10 +1583,9 @@ class PowerMatrix3DPlot(BasePlot):
         self.azim = azim
 
     def plot(self) -> None:
-        n_segments, n_freqs = self.power_matrix.shape
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
 
-        # aplica janela de frequências
+        # apply frequency window
         if self.freq_window is not None:
             fmin, fmax = self.freq_window
             mask = (freqs >= fmin) & (freqs <= fmax)
@@ -1555,7 +1594,7 @@ class PowerMatrix3DPlot(BasePlot):
         else:
             Z = self.power_matrix
 
-        # aplica suavização (apenas para ficar mais legivel)
+        # apply smoothing (only to make it more readable)
         if self.smooth:
             Z = gaussian_filter(Z, sigma=self.sigma)
 
@@ -1563,7 +1602,7 @@ class PowerMatrix3DPlot(BasePlot):
         Y = freqs / 1000.0
         X, Y = np.meshgrid(X, Y, indexing="ij")
 
-        # superfície da matriz de potência
+        # plot surface
         surf = self.ax.plot_surface(
             X, Y, Z,
             cmap="inferno",
@@ -1572,7 +1611,7 @@ class PowerMatrix3DPlot(BasePlot):
             alpha=0.95
         )
 
-        # plano do threshold
+        # plot threshold plane
         if self.threshold is not None:
             Z_thr = np.full_like(Z, self.threshold)
             self.ax.plot_surface(
@@ -1580,23 +1619,36 @@ class PowerMatrix3DPlot(BasePlot):
                 color="blue", alpha=0.5, rstride=1, cstride=1, linewidth=0
             )
 
-        self.ax.set_xlabel("Segmento $n$", labelpad=15)
-        self.ax.set_ylabel("Frequência ($kHz$)", labelpad=15)
+        self.ax.set_xlabel("Segment $n$", labelpad=15)
+        self.ax.set_ylabel("Frequency ($kHz$)", labelpad=15)
         self.ax.set_zlabel("Magnitude ($dB$)", labelpad=15)
 
-        # diminui da legenda do eixo do segmento para ficar mais legivel
+        # reduce the number of ticks on the x axis
         self.ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(3))
 
         if self.freq_window is not None:
             self.ax.set_ylim(self.freq_window[0]/1000, self.freq_window[1]/1000)
 
-        # aplica ângulo da câmera
+        # apply camera angle
         self.ax.view_init(elev=self.elev, azim=self.azim)
 
-class MatrixSquarePlot(BasePlot):
+class WaterfallDecisionPlot(BasePlot):
     r"""
-    Plota matrizes categóricas (detecção/decisão) em formato quadriculado.
-    Eixo x = frequência (kHz), eixo y = segmentos (tempo).
+    Decision waterfall plot.
+
+    Args:
+        fig (plt.Figure): Figure of the plot
+        grid (gridspec.GridSpec): GridSpec of the plot
+        pos (int ou tuple): Position in the GridSpec
+        matrix (np.ndarray): Decision matrix
+        fs (float): Signal sampling rate in $Hz$
+        N (int): Number of samples
+        xlim (Tuple[float, float]): Time limits in $ms$
+        legend_list (List[str]): List of legend labels
+
+    Examples: 
+        - Waterfall Detection Plot Example: ![pageplot](assets/example_detector_waterfall_detection.svg)
+        - Waterfall Decision Plot Example: ![pageplot](assets/example_detector_waterfall_decision.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1614,7 +1666,7 @@ class MatrixSquarePlot(BasePlot):
         self.fs = fs
         self.N = N
         self.xlim = xlim
-        self.legend_list = legend_list or ["Detectada", "Confirmada", "Span", "Demodulação"]
+        self.legend_list = legend_list or ["Detected", "Confirmed", "Span", "Demodulation"]
 
         self.cmap = mpl.colors.ListedColormap([
             (1, 1, 1, 0),
@@ -1629,15 +1681,14 @@ class MatrixSquarePlot(BasePlot):
     def plot(self) -> None:
         n_segments, n_freqs = self.matrix.shape
 
-        # Eixo X = frequências (kHz) -> deve ter comprimento n_freqs + 1
+        # X axis = frequencies (kHz) -> should have length n_freqs + 1
         freqs = np.fft.rfftfreq(self.N, d=1/self.fs)
         freqs_khz = freqs / 1000.0
         x = np.linspace(freqs_khz[0], freqs_khz[-1], n_freqs + 1)
 
-        # Eixo Y = segmentos -> deve ter comprimento n_segments + 1
+        # Y axis = segments -> should have length n_segments + 1
         y = np.arange(n_segments + 1)
 
-        # Agora matrix tem shape (n_segments, n_freqs) -> compatível com (len(y)-1, len(x)-1)
         im = self.ax.pcolormesh(
             x, y, self.matrix,
             cmap=self.cmap,
@@ -1645,12 +1696,12 @@ class MatrixSquarePlot(BasePlot):
             shading="auto"
         )
 
-        # Legenda (categorias)
+        # Legend
         legend_map = {
-            "Detectada": "blue",
-            "Confirmada": "red",
+            "Detected": "blue",
+            "Confirmed": "red",
             "Span": "lightblue",
-            "Demodulação": "orange",
+            "Demodulation": "orange",
         }
 
         legend_elements = [
@@ -1670,15 +1721,15 @@ class MatrixSquarePlot(BasePlot):
             frame.set_edgecolor("black")
             frame.set_alpha(1)
 
-        # Labels e limites
-        self.ax.set_xlabel("Frequência ($kHz$)")
-        self.ax.set_ylabel("Índice de Segmento (tempo)")
+        # Labels and limits
+        self.ax.set_xlabel("Frequency ($kHz$)")
+        self.ax.set_ylabel("Segment Index (time)")
         self.ax.grid(False)
 
-        # Limita frequência no eixo X (já em kHz)
+        # Limit frequency on X axis (already in kHz)
         self.ax.set_xlim(self.xlim[0], self.xlim[1])
 
-        # Inverte o eixo Y (segmento 0 no topo)
+        # Invert Y axis (segment 0 on top)
         self.ax.invert_yaxis()
 
         self.apply_ax_style()

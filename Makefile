@@ -69,18 +69,18 @@ upload: build
 	.venv/bin/python3 -m twine upload dist/*
 
 test: $(LOG_DIR)
-	@echo "Rodando testes..." | tee $(LOG_FILE)
+	@echo "==== RUNNING TESTS ====" | tee $(LOG_FILE)
 	@for f in src/argos3/*.py; do \
 		module=$$(basename $$f .py); \
 		if [ "$$module" != "bersnr" ] && [ "$$module" != "__init__" ] && [ "$$module" != "data" ]; then \
 			{ \
 				echo ""; \
 				echo "--------------------------------"; \
-				echo "Rodando $$module..."; \
+				echo "Running $$module..."; \
 				echo ""; \
 				PYTHONWARNINGS="ignore" .venv/bin/python3 -m src.argos3.$$module; \
 			} | tee -a $(LOG_FILE); \
 		fi; \
 	done
-	@echo "Rodando doc-images após os testes..."
+	@echo "Compiling document images..."
 	@$(MAKE) doc-images

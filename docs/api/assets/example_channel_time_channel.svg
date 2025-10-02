@@ -194,9 +194,9 @@
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 362.50883v1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 595.81936v-1.5" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 595.81936v-1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="540.0915 552.9931 561.8917 578.81228 590.56289 607.2179" y="-324.4211" class="fill">Tempo(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="615.0351 633.79678" y="-324.4211" class="fill">ms</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="643.9161" y="-324.4211" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="547.4076 562.0268 567.4843 584.40487 599.92019" y="-324.4211" class="fill">Time(</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="607.719 626.48068" y="-324.4211" class="fill">ms</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="636.6" y="-324.4211" class="fill">)</tspan></text>
  <g clip-path="url(#c)">
   <path transform="matrix(2,0,0,-2,0,1241.28)" d="M70.729389 376.33827H1121.04" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </g>
@@ -445,9 +445,9 @@
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 47.148809v1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 280.45933v-1.5" />
  <path transform="matrix(2,0,0,-2,0,1241.28)" d="m1025.5643 280.45933v-1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="540.0915 552.9931 561.8917 578.81228 590.56289 607.2179" y="-9.061119" class="fill">Tempo(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="615.0351 633.79678" y="-9.061119" class="fill">ms</tspan></text>
- <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="643.9161" y="-9.061119" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="547.4076 562.0268 567.4843 584.40487 599.92019" y="-9.061119" class="fill">Time(</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="607.719 626.48068" y="-9.061119" class="fill">ms</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 1241.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="636.6" y="-9.061119" class="fill">)</tspan></text>
  <g clip-path="url(#p)">
   <path transform="matrix(2,0,0,-2,0,1241.28)" d="M70.729389 54.303068H1121.04" fill="none" stroke="#808080" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-width=".5" />
  </g>
