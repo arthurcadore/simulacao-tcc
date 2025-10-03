@@ -253,7 +253,7 @@ class Transmitter:
             print("Yn:", ''.join(map(str, Y)))
             
         if self.output_plot:
-            fig_scrambler, grid_scrambler = create_figure(4, 1, figsize=(16, 9))
+            fig_scrambler, grid_scrambler = create_figure(4, 1, figsize=(16, 12))
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (0, 0),
@@ -423,7 +423,7 @@ class Transmitter:
             print("Qn:", ' '.join(f"{y:+d}" for y in Qn[:40]),"...")
 
         if self.output_plot:
-            fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
+            fig_encoder, grid = create_figure(4, 1, figsize=(16, 12))
 
             BitsPlot(
                 fig_encoder, grid, (0, 0),
@@ -586,7 +586,6 @@ class Transmitter:
                 signal=dI,
                 fc=self.fc,
                 labels=[r"$D_I(f)$"],
-                title=I_CHANNEL_TITLE,
                 xlim=FREQ_COMPONENTS_XLIM,
                 colors=COLOR_I,
             ).plot()
@@ -597,7 +596,6 @@ class Transmitter:
                 signal=dQ,
                 fc=self.fc,
                 labels=[r"$D_Q(f)$"],
-                title=Q_CHANNEL_TITLE,
                 xlim=FREQ_COMPONENTS_XLIM,
                 colors=COLOR_Q,
             ).plot()

@@ -311,8 +311,8 @@ if __name__ == "__main__":
         fig_corr, grid_corr, (0, 0),
         corr_vec=corr_vec,  
         fs=formatterQ.fs,
-        xlim_ms=SYNC_XLIM,
-        colors=[COLOR_Q],
+        xlim=SYNC_XLIM,
+        colors=[CORR_PLOT_COLOR],
         title=SYNC_CORR_TITLE,
     ).plot()
 

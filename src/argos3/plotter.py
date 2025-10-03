@@ -1424,7 +1424,7 @@ class CorrelationPlot(BasePlot):
         pos (int ou tuple): Position in the GridSpec
         corr_vec (np.ndarray): Correlation vector $c[k]$
         fs (float): Signal sampling rate in $Hz$
-        xlim_ms (Tuple[float, float]): Time limits in $ms$
+        xlim (Tuple[float, float]): Time limits in $ms$
 
     Examples: 
         - Correlation Plot Example: ![pageplot](assets/example_synchronizer_corr.svg)
@@ -1435,7 +1435,7 @@ class CorrelationPlot(BasePlot):
                  pos,
                  corr_vec: np.ndarray,
                  fs: float,
-                 xlim_ms: Tuple[float, float],
+                 xlim: Tuple[float, float],
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
@@ -1448,8 +1448,8 @@ class CorrelationPlot(BasePlot):
         self.max_corr_value = corr_vec[self.max_corr_index]
 
         # Sample index limits
-        self.index_low = int(xlim_ms[0] * 1e-3 * fs)
-        self.index_high = int(xlim_ms[1] * 1e-3 * fs)
+        self.index_low = int(xlim[0] * 1e-3 * fs)
+        self.index_high = int(xlim[1] * 1e-3 * fs)
 
         # Define the title and legend
         if self.labels is None:
@@ -1534,7 +1534,7 @@ class WaterfallPlot(BasePlot):
 
         # Labels
         self.ax.set_xlabel("Frequency ($kHz$)")
-        self.ax.set_ylabel("Segment Index (time)")
+        self.ax.set_ylabel("Segment Index ($10 ms$)")
         self.ax.grid(False)
         self.apply_ax_style()
 
@@ -1624,7 +1624,7 @@ class Waterfall3DPlot(BasePlot):
                 color="blue", alpha=0.5, rstride=1, cstride=1, linewidth=0
             )
 
-        self.ax.set_xlabel("Segment $n$", labelpad=15)
+        self.ax.set_xlabel("Segment Index ($10 ms$)", labelpad=15)
         self.ax.set_ylabel("Frequency ($kHz$)", labelpad=15)
         self.ax.set_zlabel("Magnitude ($dB$)", labelpad=15)
 
@@ -1728,7 +1728,7 @@ class WaterfallDecisionPlot(BasePlot):
 
         # Labels and limits
         self.ax.set_xlabel("Frequency ($kHz$)")
-        self.ax.set_ylabel("Segment Index (time)")
+        self.ax.set_ylabel("Segment Index ($10 ms$)")
         self.ax.grid(False)
 
         # Limit frequency on X axis (already in kHz)

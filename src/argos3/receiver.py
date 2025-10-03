@@ -19,6 +19,7 @@ from .convolutional import DecoderViterbi
 from .synchronizer import Synchronizer
 from .channel import Channel
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, ImpulseResponsePlot, SampledSignalPlot, BitsPlot, PhasePlot, ConstellationPlot, FrequencyResponsePlot, SincronizationPlot, CorrelationPlot, SymbolsPlot
+from .env_vars import *
 
 class Receiver:
     def __init__(self, fs=128_000, Rb=400, fc=None, lpf_cutoff=600, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
@@ -104,122 +105,123 @@ class Receiver:
         self.unscrambler = Scrambler()
         self.conv_viterbi = DecoderViterbi(G=self.G)
 
-    def demodulate(self, s, t):
+    def bandpass_demodulate(self, s_prime, t):
         r"""
-        Demodulates the received signal $s'(t)$ with noise, recovering the signals $x'_{I}(t)$ and $y'_{Q}(t)$.
+        Demodulates the received signal $s'(t)$ with noise $r(t)$, returning the signals $dX'_{I}(t)$ and $dY'_{Q}(t)$.
 
         Args:
-            s (np.ndarray): Received signal $s'(t)$ to be demodulated.
+            s_prime (np.ndarray): Received signal $s'(t)$ to be demodulated.
             t (np.ndarray): Time vector.
 
         Returns:
-            xI_prime (np.ndarray): Demodulated signal $x'_{I}(t)$.
-            yQ_prime (np.ndarray): Demodulated signal $y'_{Q}(t)$.
+            dX_prime (np.ndarray): Demodulated signal $dX'_{I}(t)$.
+            dY_prime (np.ndarray): Demodulated signal $dY'_{Q}(t)$.
         
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_demodulator_time.svg)
             - Frequency Domain Plot Example: ![pageplot](assets/receiver_demodulator_freq.svg)
         """
 
-        xI_prime, yQ_prime = self.demodulator.demodulate(s)
+        dX_prime, dY_prime = self.demodulator.demodulate(s_prime)
 
         if self.output_print:
             print("\n ==== DEMODULATOR ==== \n")
-            print("x'I(t):", ''.join(map(str, xI_prime[:5])),"...")
-            print("y'Q(t):", ''.join(map(str, yQ_prime[:5])),"...")
+            print("dX'(t):", ''.join(map(str, dX_prime[:5])),"...")
+            print("dY'(t):", ''.join(map(str, dY_prime[:5])),"...")
             print("\n")
 
         if self.output_plot:
-            fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+            fig_time, grid = create_figure(2, 2, figsize=(16, 9))
 
             TimePlot(
-                fig_time, grid, (0, 0),
+                fig_time, grid, (0, slice(0,2)),
                 t=t,
-                signals=[s],
+                signals=[s_prime],
                 labels=[r"$s(t)$ + AWGN"],
-                title=r"Sinal Modulado + Ruído $Eb/N_0$ 20 $dB$",
-                xlim=(40, 200),
+                title=MODULATED_STREAM_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
                 amp_norm=True,
-                colors="darkred",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                colors=COLOR_COMBINED
             ).plot()
 
             TimePlot(
                 fig_time, grid, (1, 0),
                 t=t,
-                signals=[xI_prime, yQ_prime],
-                labels=[r"$xI'(t)$", r"$yQ'(t)$"],
-                title=r"Componentes $IQ$ - Demoduladas",
-                xlim=(40, 200),
+                signals=[dX_prime],
+                labels=[r"$dX'(t)$"],
+                title=I_CHANNEL_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
                 amp_norm=True,
-                colors=["darkgreen", "navy"],
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                colors=[COLOR_I]
             ).plot()
+
+            TimePlot(
+                fig_time, grid, (1, 1),
+                t=t,
+                signals=[dY_prime],
+                labels=[r"$dY'(t)$"],
+                title=Q_CHANNEL_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
+                amp_norm=True,
+                colors=[COLOR_Q]
+            ).plot()
+
 
             fig_time.tight_layout()
             save_figure(fig_time, "receiver_demodulator_time.pdf")
 
-            fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
+            fig_freq, grid = create_figure(3, 1, figsize=(16, 12))
 
             FrequencyPlot(
                 fig_freq, grid, (0, 0),
                 fs=self.fs,
-                signal=s,
+                signal=s_prime,
                 fc=self.fc,
                 labels=[r"$S(f)$"],
-                title=r"Sinal Modulado $IQ$",
-                xlim=(-10, 10),
-                colors="darkred",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=MODULATED_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_COMBINED
             ).plot()
 
             FrequencyPlot(
                 fig_freq, grid, (1, 0),
                 fs=self.fs,
-                signal=xI_prime,
+                signal=dX_prime,
                 fc=self.fc,
                 labels=[r"$X_I'(f)$"],
-                title=r"Componente $I$ - Demodulada",
-                xlim=(-10, 10),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=I_CHANNEL_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
                 fig_freq, grid, (2, 0),
                 fs=self.fs,
-                signal=yQ_prime,
+                signal=dY_prime,
                 fc=self.fc,
                 labels=[r"$Y_Q'(f)$"],
-                title=r"Componente $Q$ - Demodulada",
-                xlim=(-10, 10),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=Q_CHANNEL_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             fig_freq.tight_layout()
             save_figure(fig_freq, "receiver_demodulator_freq.pdf")
 
-        return xI_prime, yQ_prime
+        return dX_prime, dY_prime
     
-    def lowpassfilter(self, xI_prime, yQ_prime, t):
+    def low_pass_filter(self, dX_prime, dY_prime, t):
         r"""
-        Applies the low-pass filter with impulse response $h(t)$ to the signals $x'_{I}(t)$ and $y'_{Q}(t)$, returning the filtered signals $d'_{I}(t)$ and $d'_{Q}(t)$.
+        Applies the low-pass filter (LPF) with impulse response $h(t)$ to the signals $dX'(t)$ and $dY'(t)$, returning the filtered signals $d_{I}'(t)$ and $d_{Q}'(t)$.
 
         Args:
-            xI_prime (np.ndarray): Signal $x'_{I}(t)$ to be filtered.
-            yQ_prime (np.ndarray): Signal $y'_{Q}(t)$ to be filtered.
+            dX_prime (np.ndarray): Signal $dX'(t)$ to be filtered.
+            dY_prime (np.ndarray): Signal $dY'(t)$ to be filtered.
             t (np.ndarray): Time vector.
 
         Returns:
-            dI_prime (np.ndarray): Signal $d'_{I}(t)$ filtered.
-            dQ_prime (np.ndarray): Signal $d'_{Q}(t)$ filtered.
+            dI_prime (np.ndarray): Signal $d_{I}'(t)$ filtered.
+            dQ_prime (np.ndarray): Signal $d_{Q}'(t)$ filtered.
 
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_lpf_time.svg)
@@ -228,57 +230,76 @@ class Receiver:
 
         impulse_response, t_impulse = self.lpf.calc_impulse_response()
 
-        dI_prime = self.lpf.apply_filter(xI_prime)
-        dQ_prime = self.lpf.apply_filter(yQ_prime)
+        dI_prime = self.lpf.apply_filter(dX_prime)
+        dQ_prime = self.lpf.apply_filter(dY_prime)
 
         if self.output_print:
             print("\n ==== LOW-PASS FILTER ==== \n")
-            print("d'I(t):", ''.join(map(str, dI_prime[:5])),"...")
-            print("d'Q(t):", ''.join(map(str, dQ_prime[:5])),"...")
+            print("dI'(t):", ''.join(map(str, dI_prime[:5])),"...")
+            print("dQ'(t):", ''.join(map(str, dQ_prime[:5])),"...")
         
         if self.output_plot:
-            fig_signal, grid_signal = create_figure(2, 2, figsize=(16, 9))
+            fig_signal, grid_signal = create_figure(3, 2, figsize=(16, 12))
 
             ImpulseResponsePlot(
                 fig_signal, grid_signal, (0, slice(0, 2)),
                 t_impulse, impulse_response,
                 t_unit="ms",
-                colors="darkorange",
+                colors=COLOR_IMPULSE,
                 label=r"$h(t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
                 xlim=(0, 8),
                 amp_norm=True,
+                title=LPF_IMPULSE_TITLE
             ).plot()
 
             TimePlot(
                 fig_signal, grid_signal, (1, 0),
                 t=t, 
-                signals=[dI_prime],
-                labels=["$d_I'(t)$"],  
-                title="Sinal filtrado - Componente $I$",
-                xlim=(40, 200),
-                ylim=(-1, 1),
+                signals=[dX_prime],
+                labels=[r"$dX'(t)$"],  
+                title=INPUT_STREAM_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
                 amp_norm=True,
-                colors="darkgreen"
+                colors=COLOR_I
             ).plot()
 
             TimePlot(
                 fig_signal, grid_signal, (1, 1),
                 t=t, 
-                signals=[dQ_prime],
-                labels=["$d_Q'(t)$"],
-                title="Sinal filtrado - Componente $Q$",
-                xlim=(40, 200),
-                ylim=(-1, 1),
+                signals=[dY_prime],
+                labels=[r"$dY'(t)$"],
+                title=INPUT_STREAM_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
                 amp_norm=True,
-                colors="navy"
+                colors=COLOR_Q
+            ).plot()
+
+            TimePlot(
+                fig_signal, grid_signal, (2, 0),
+                t=t, 
+                signals=[dI_prime],
+                labels=[r"$d_I'(t)$"],  
+                title=OUTPUT_STREAM_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
+                amp_norm=True,
+                colors=COLOR_I
+            ).plot()
+
+            TimePlot(
+                fig_signal, grid_signal, (2, 1),
+                t=t, 
+                signals=[dQ_prime],
+                labels=[r"$d_Q'(t)$"],
+                title=OUTPUT_STREAM_TITLE,
+                xlim=TIME_XLIM_RECEIVER,
+                amp_norm=True,
+                colors=COLOR_Q
             ).plot()
 
             fig_signal.tight_layout()
             save_figure(fig_signal, "receiver_lpf_time.pdf")
 
-            fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
+            fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 12))
 
             FrequencyResponsePlot(
                 fig_freq, grid_freq, (0, slice(0, 2)),
@@ -287,30 +308,29 @@ class Receiver:
                 self.fs,
                 f_cut=self.lpf_cutoff,
                 xlim=(0, 3*self.lpf_cutoff),
+                title=LPF_FREQ_TITLE
             ).plot()
 
             FrequencyPlot(
                 fig_freq, grid_freq, (1, 0), 
                 fs=self.fs,
-                signal=xI_prime,
+                signal=dX_prime,
                 fc=self.fc,
-                labels=[r"$X_I'(f)$"],
-                title=r"Componente $I$ - Demodulada",
-                xlim=(-10, 10),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$DX'(f)$"],
+                title=INPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
                 fig_freq, grid_freq, (1, 1), 
                 fs=self.fs,
-                signal=yQ_prime,
+                signal=dY_prime,
                 fc=self.fc,
-                labels=[r"$Y_Q'(f)$"],
-                title=r"Componente $Q$ - Demodulada",
-                xlim=(-10, 10),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$DY'(f)$"],
+                title=INPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             FrequencyPlot(
@@ -318,11 +338,10 @@ class Receiver:
                 fs=self.fs,
                 signal=dI_prime,
                 fc=self.fc,
-                labels=[r"$d_I'(f)$"],
-                title=r"Componente $I$ - Filtrada",
-                xlim=(-10, 10),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_I'(f)$"],
+                title=OUTPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
@@ -330,11 +349,10 @@ class Receiver:
                 fs=self.fs,
                 signal=dQ_prime,
                 fc=self.fc,
-                labels=[r"$d_Q'(f)$"],
-                title=r"Componente $Q$ - Filtrada",
-                xlim=(-10, 10),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_Q'(f)$"],
+                title=OUTPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             fig_freq.tight_layout()
@@ -343,9 +361,9 @@ class Receiver:
 
         return dI_prime, dQ_prime
 
-    def matchedfilter(self, dI_prime, dQ_prime, t):
+    def matched_filter(self, dI_prime, dQ_prime, t):
         r"""
-        Applies the matched filter with impulse response $g(-t)$ to the signals $d'_{I}(t)$ and $d'_{Q}(t)$, returning the filtered signals $I'(t)$ and $Q'(t)$.
+        Applies the matched filter with impulse response $g(-t)$ to the signals $d_{I}'(t)$ and $d_{Q}'(t)$, returning the filtered signals $I'(t)$ and $Q'(t)$.
 
         Args:
             dI_prime (np.ndarray): Signal $d'_{I}(t)$ to be filtered.
@@ -370,81 +388,107 @@ class Receiver:
             print("Q'(t):", ''.join(map(str, Qt_prime[:5])),"...")
 
         if self.output_plot:
-            fig_matched, grid_matched = create_figure(2, 2, figsize=(16, 9))
+            fig_matched, grid_matched = create_figure(3, 2, figsize=(16, 12))
 
             ImpulseResponsePlot(
                 fig_matched, grid_matched, (0, 0),
                 self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
-                colors="darkorange",
+                colors=COLOR_IMPULSE,
                 label=r"$g(-t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                xlabel=IMPULSE_X,
+                ylabel=IMPULSE_Y,
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             ImpulseResponsePlot(
                 fig_matched, grid_matched, (0, 1),
                 self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
-                colors="darkorange",
+                colors=COLOR_IMPULSE,
                 label=r"$g(-t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                xlabel=IMPULSE_X,
+                ylabel=IMPULSE_Y,
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=Q_CHANNEL_TITLE,
             ).plot()
 
             TimePlot(
                 fig_matched, grid_matched, (1, 0),
                 t,
-                It_prime,
-                labels=[r"$I'(t)$"],
-                title=r"Sinal filtrado - Componente $I$",
-                xlim=(40, 200),
+                dI_prime,
+                labels=[r"$d_I'(t)$"],
                 amp_norm=True,
-                colors="darkgreen"
+                xlim=TIME_XLIM_RECEIVER,
+                colors=COLOR_I,
+                title=INPUT_STREAM_TITLE,
             ).plot()
 
             TimePlot(
                 fig_matched, grid_matched, (1, 1),
                 t,
+                dQ_prime,
+                labels=[r"$d_Q'(t)$"],
+                amp_norm=True,
+                xlim=TIME_XLIM_RECEIVER,
+                colors=COLOR_Q,
+                title=INPUT_STREAM_TITLE,
+            ).plot()
+
+            TimePlot(
+                fig_matched, grid_matched, (2, 0),
+                t,
+                It_prime,
+                labels=[r"$I'(t)$"],
+                amp_norm=True,
+                xlim=TIME_XLIM_RECEIVER,
+                colors=COLOR_I,
+                title=OUTPUT_STREAM_TITLE,
+            ).plot()
+
+            TimePlot(
+                fig_matched, grid_matched, (2, 1),
+                t,
                 Qt_prime,
                 labels=[r"$Q'(t)$"],
-                title=r"Sinal filtrado - Componente $Q$",
-                xlim=(40, 200),
                 amp_norm=True,
-                colors="navy"
+                xlim=TIME_XLIM_RECEIVER,
+                colors=COLOR_Q,
+                title=OUTPUT_STREAM_TITLE,
             ).plot()
 
             fig_matched.tight_layout()
             save_figure(fig_matched, "receiver_mf_time.pdf")
 
-            fig_matched_freq, grid_matched_freq = create_figure(3, 2, figsize=(16, 9))
+            fig_matched_freq, grid_matched_freq = create_figure(3, 2, figsize=(16, 12))
 
             ImpulseResponsePlot(
                 fig_matched_freq, grid_matched_freq, (0, 0),
                 self.matched_filterI.t_rc, self.matched_filterI.g_inverted,
                 t_unit="ms",
-                colors="darkorange",
+                colors=COLOR_IMPULSE,
                 label=r"$g(-t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                xlabel=IMPULSE_X,
+                ylabel=IMPULSE_Y,
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             ImpulseResponsePlot(
                 fig_matched_freq, grid_matched_freq, (0, 1),
                 self.matched_filterQ.t_rc, self.matched_filterQ.g_inverted,
                 t_unit="ms",
-                colors="darkorange",
+                colors=COLOR_IMPULSE,
                 label=r"$g(-t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                xlabel=IMPULSE_X,
+                ylabel=IMPULSE_Y,
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             FrequencyPlot(
@@ -453,10 +497,9 @@ class Receiver:
                 signal=dI_prime,
                 fc=self.fc,
                 labels=[r"$d_I'(f)$"],
-                title=r"Componente $I$ - Fitragem Passa-Baixa",
-                xlim=(-10, 10),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=INPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
@@ -465,10 +508,9 @@ class Receiver:
                 signal=dQ_prime,
                 fc=self.fc,
                 labels=[r"$d_Q'(f)$"],
-                title=r"Componente $Q$ - Fitragem Passa-Baixa",
-                xlim=(-10, 10),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=INPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             FrequencyPlot(
@@ -477,10 +519,9 @@ class Receiver:
                 signal=It_prime,
                 fc=self.fc,
                 labels=[r"$I'(f)$"],
-                title=r"Componente $I$ - Fitragem Casada",
-                xlim=(-10, 10),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=OUTPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
@@ -489,10 +530,9 @@ class Receiver:
                 signal=Qt_prime,
                 fc=self.fc,
                 labels=[r"$Q'(f)$"],
-                title=r"Componente $Q$ - Fitragem Casada",
-                xlim=(-10, 10),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=OUTPUT_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             fig_matched_freq.tight_layout()
@@ -529,8 +569,7 @@ class Receiver:
             print("Delay I Max  :", delayI_max)
             print("Delay I Corr :", delayI)
 
-        # Nota: delayI e delayQ devem ser iguais, portanto, delayI é ajustado para ser igual a delayQ
-        # O ajuste deve ser feito pois o canal I não suporta sincronização.
+        # NOTE: delayI and delayQ should be equal, so delayI is set to delayQ
         delayI_min, delayI_max, delayI = delayQ_min, delayQ_max, delayQ
         
         if self.output_plot:
@@ -539,12 +578,8 @@ class Receiver:
                 fig_corr, grid_corr, (0, 0),
                 corr_vec=corr_vec_Q,  
                 fs=self.fs,
-                xlim_ms=(0, 300),
-                colors="darkblue",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                },
+                xlim=SYNC_XLIM,
+                colors=CORR_PLOT_COLOR,
             ).plot()
             fig_corr.tight_layout()
             
@@ -559,14 +594,10 @@ class Receiver:
                 sync_start=delayI_min,
                 sync_end=delayI_max,
                 max_corr=delayI,
-                title=r"Canal $I$",
+                title=I_CHANNEL_TITLE,   
                 labels=[r"$d_I(t)$"],
-                colors="darkgreen",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                },
-                xlim=(40, 200),
+                colors=COLOR_I,
+                xlim=SYNC_XLIM,
             ).plot()
 
             SincronizationPlot(
@@ -576,14 +607,10 @@ class Receiver:
                 sync_start=delayQ_min,
                 sync_end=delayQ_max,
                 max_corr=delayQ,
-                title=r"Canal $Q$",
+                title=Q_CHANNEL_TITLE,
                 labels=[r"$d_Q(t)$"],
-                colors="darkblue",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                },
-                xlim=(40, 200),
+                colors=COLOR_Q,
+                xlim=SYNC_XLIM,
             ).plot()
 
             fig_sync.tight_layout()
@@ -717,7 +744,7 @@ class Receiver:
 
         return Xi_prime, Yq_prime
 
-    def decode(self, Xnrz_prime, Yman_prime):
+    def line_decoder(self, Xnrz_prime, Yman_prime):
         r"""
         Decodes the symbol vectors $X'_{NRZ}[n]$ and $Y'_{MAN}[n]$, returning the bit vectors $X'n$ and $Y'n$.
 
@@ -794,7 +821,7 @@ class Receiver:
                  
         return Xn_prime, Yn_prime
 
-    def descrambler(self, Xn_prime, Yn_prime):
+    def unscrewer(self, Xn_prime, Yn_prime):
         r"""
         Unscrambles the bit vectors $X'n$ and $Y'n$, returning the bit vectors $v_{t}^{0'}$ and $v_{t}^{1'}$.
 
@@ -920,7 +947,7 @@ class Receiver:
         return ut
 
     
-    def datagram(self, ut):
+    def datagram_parser(self, ut):
         r"""
         Receives a decoded bit vector $u_{t}'$ and returns a datagram in the ARGOS-3 format, or the bit vector $u_{t}'$ if there is an error.
 
@@ -979,9 +1006,9 @@ class Receiver:
 
         t = np.arange(0, len(s)/self.fs, 1/self.fs)
 
-        xI_prime, yQ_prime = self.demodulate(s, t)
-        dI_prime, dQ_prime= self.lowpassfilter(xI_prime, yQ_prime, t)
-        It_prime, Qt_prime = self.matchedfilter(dI_prime, dQ_prime, t)
+        xI_prime, yQ_prime = self.bandpass_demodulate(s, t)
+        dI_prime, dQ_prime= self.low_pass_filter(xI_prime, yQ_prime, t)
+        It_prime, Qt_prime = self.matched_filter(dI_prime, dQ_prime, t)
         self.delayI, self.delayQ = self.synchronizer(It_prime, Qt_prime)
 
         # Atualiza o delay do sampler
@@ -989,11 +1016,11 @@ class Receiver:
         self.samplerQ.update_sampler(self.delayQ, t)
 
         Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
-        Xn_prime, Yn_prime = self.decode(Xnrz_prime, Yman_prime)
-        vt0, vt1 = self.descrambler(Xn_prime, Yn_prime)
+        Xn_prime, Yn_prime = self.line_decoder(Xnrz_prime, Yman_prime)
+        vt0, vt1 = self.unscrewer(Xn_prime, Yn_prime)
         ut = self.conv_decoder(vt0, vt1)
 
-        datagramRX, success = self.datagram(ut)
+        datagramRX, success = self.datagram_parser(ut)
         return datagramRX, success 
 
 
