@@ -13,7 +13,7 @@ from .env_vars import *
 class Formatter:
     def __init__(self, alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", prefix_duration=0.082, channel=None, bits_per_symbol=1):
         r"""
-        Initializes a pulse modulator, with pulse response $g(t)$ used to prepare the symbols for modulation. The deployment of the pulse response $g(t)$ for each channel is illustrated in the figure below.
+        Initializes a pulse modulator, with pulse response $g(t)$ used to prepare symbols as $I[n]$ and $Q[n]$ for modulation. The deployment of the pulse response $g(t)$ for each channel is illustrated in the figure below.
 
         ![pageplot](../assets/pulse_modulate.svg)
 
@@ -22,7 +22,7 @@ class Formatter:
             fs (int): Sampling frequency.
             Rb (int): Bit rate.
             span (int): Pulse duration in terms of bit periods.
-            type (str): Type of pulse, currently only $RRC$ is supported.
+            type (str): Type of pulse.
             prefix_duration (int): Duration of the pure carrier at the beginning of the vector
             channel (str): Channel to be formatted, only $I$ and $Q$ are supported.
             bits_per_symbol (int): Number of bits per symbol.
@@ -35,22 +35,22 @@ class Formatter:
             >>> import argos3
             >>> import numpy as np 
             >>> 
-            >>> X = np.random.randint(0, 2, 20)
-            >>> Y = np.random.randint(0, 2, 20)
+            >>> Xn = np.random.randint(0, 2, 20)
+            >>> Yn = np.random.randint(0, 2, 20)
             >>>
-            >>> print(X)
+            >>> print(Xn)
             [0 1 1 1 0 1 1 1 0 0 0 0 0 0 1 0 1 1 1 1]
-            >>> print(Y)
+            >>> print(Yn)
             [0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 1 1 0 1]
             >>> 
-            >>> symbols_I = argos3.Encoder(method="NRZ").encode(X)
-            >>> symbols_Q = argos3.Encoder(method="NRZ").encode(Y)
+            >>> In = argos3.Encoder(method="NRZ").encode(Xn)
+            >>> Qn = argos3.Encoder(method="NRZ").encode(Yn)
             >>> 
             >>> formatter_I = argos3.Formatter(Rb=1000, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.01)
             >>> formatter_Q = argos3.Formatter(Rb=1000, type="RRC", channel="Q", bits_per_symbol=2, prefix_duration=0.01)
             >>> 
-            >>> dI = formatter_I.apply_format(symbols_I, add_prefix=True)
-            >>> dQ = formatter_Q.apply_format(symbols_Q, add_prefix=True)
+            >>> dI = formatter_I.apply_format(In, add_prefix=True)
+            >>> dQ = formatter_Q.apply_format(Qn, add_prefix=True)
             >>> 
             >>> print(dI[:10])
             [-0.07484442 -0.07466479 -0.07461029 -0.07454939 -0.07448207 -0.07440832
@@ -254,17 +254,17 @@ if __name__ == "__main__":
     encoder_I = Encoder(method="NRZ")
     encoded_Q = Encoder(method="NRZ")
 
-    symbols_I = encoder_I.encode(X)
-    symbols_Q = encoded_Q.encode(Y)
+    In = encoder_I.encode(X)
+    Qn = encoded_Q.encode(Y)
     
     formatterI = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.01)
     formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.01)
     
-    dI1 = formatterI.apply_format(symbols_I, add_prefix=True)
-    dQ1 = formatterQ.apply_format(symbols_Q, add_prefix=True)
+    dI1 = formatterI.apply_format(In, add_prefix=True)
+    dQ1 = formatterQ.apply_format(Qn, add_prefix=True)
     
-    print("Xn:",  ' '.join(f"{x:+d}" for x in symbols_I[:10]))
-    print("Yn:",  ' '.join(f"{y:+d}" for y in symbols_Q[:10]))
+    print("Xn:",  ' '.join(f"{x:+d}" for x in In[:10]))
+    print("Yn:",  ' '.join(f"{y:+d}" for y in Qn[:10]))
     print("dI:", ''.join(str(b) for b in dI1[:5]))
     print("dQ:", ''.join(str(b) for b in dQ1[:5]))
 
@@ -342,8 +342,8 @@ if __name__ == "__main__":
 
     SymbolsPlot(
         fig_format, grid_format, (1,0),
-        symbols_list=[symbols_I],
-        sections=[("$X_n$", len(symbols_I))],
+        symbols_list=[In],
+        sections=[(r"$X[n]$", len(In))],
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
@@ -351,8 +351,8 @@ if __name__ == "__main__":
 
     SymbolsPlot(
         fig_format, grid_format, (1,1),
-        symbols_list=[symbols_Q],
-        sections=[("$Y_n$", len(symbols_Q))],
+        symbols_list=[Qn],
+        sections=[(r"$Y[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 

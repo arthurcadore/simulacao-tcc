@@ -55,7 +55,7 @@ nav:
       - Scrambler: api/scrambler.md
       - Preamble: api/preamble.md
       - Multiplexer: api/multiplexer.md
-      - Channel Encoder: api/encoder.md
+      - Line Encoder: api/encoder.md
       - Pulse Modulate: api/formatter.md
       - Bandpass Modulate: api/modulator.md
       - Detector: api/detector.md
