@@ -476,7 +476,7 @@ if __name__ == "__main__":
     mfI = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="RRC-Inverted", channel="I", bits_per_symbol=1)
     mfQ = MatchedFilter(alpha=0.8, fs=128000, Rb=1000, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
-    noise = np.random.normal(0, 1, len(dX)) * 0.6
+    noise = np.random.normal(0, 1, len(dX)) * 0.5
 
     dX_prime = mfI.apply_filter(dX + noise)
     dY_prime = mfQ.apply_filter(dY + noise)
@@ -503,7 +503,7 @@ if __name__ == "__main__":
         fig_time, grid_time, (1, 0),
         t = np.arange(len(dX)) / formatterI.fs,
         signals=[dX],
-        labels=[r"$d_t^{(0)}$"],
+        labels=[r"$d_I(t)$"],
         colors=[COLOR_I],
     ).plot()
 
@@ -511,7 +511,7 @@ if __name__ == "__main__":
         fig_time, grid_time, (1, 1),
         t = np.arange(len(dY)) / formatterQ.fs,
         signals=[dY],
-        labels=[r"$d_t^{(1)}$"],
+        labels=[r"$d_Q(t)$"],
         colors=[COLOR_Q],
     ).plot()
 
@@ -519,7 +519,7 @@ if __name__ == "__main__":
         fig_time, grid_time, (2, 0),
         t = np.arange(len(dX_prime)) / formatterI.fs,
         signals=[dX_prime],
-        labels=[r"$d_t^{(0)}$"],
+        labels=[r"$d_I'(t)$"],
         colors=[COLOR_I],
     ).plot()
 
@@ -527,7 +527,7 @@ if __name__ == "__main__":
         fig_time, grid_time, (2, 1),
         t = np.arange(len(dY_prime)) / formatterQ.fs,
         signals=[dY_prime],
-        labels=[r"$d_t^{(1)}$"],
+        labels=[r"$d_Q'(t)$"],
         colors=[COLOR_Q],
     ).plot()
 
@@ -568,7 +568,7 @@ if __name__ == "__main__":
         tX,
         X_prime,
         colors=COLOR_I,
-        label_signal="Signal", 
+        label_signal=r"$d_I'(t)$", 
         label_samples="Samples"
     ).plot()
         
@@ -579,7 +579,7 @@ if __name__ == "__main__":
         tY,
         Y_prime,
         colors=COLOR_Q,
-        label_signal="Signal", 
+        label_signal=r"$d_Q'(t)$", 
         label_samples="Samples"
     ).plot()
 
@@ -590,7 +590,7 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$X_{t}^{(0)}$",
+        label=r"$X'[n]$",
         show_symbol_values=False
     ).plot()
 
@@ -601,7 +601,7 @@ if __name__ == "__main__":
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$Y_{t}^{(1)}$",
+        label=r"$Y'[n]$",
         show_symbol_values=False
     ).plot()
 
@@ -623,7 +623,7 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$X_{t}^{(0)}$",
+        label=r"$X'[n]$",
         show_symbol_values=False,
         ylim=[min(X_prime)*1.1, max(X_prime)*1.1],
         x_axis_label=(min(X_prime), max(X_prime))
@@ -636,7 +636,7 @@ if __name__ == "__main__":
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$Y_{t}^{(1)}$",
+        label=r"$Y'[n]$",
         show_symbol_values=False,
         ylim=[min(Y_prime)*1.1, max(Y_prime)*1.1],
         x_axis_label=(min(Y_prime), max(Y_prime))
@@ -649,7 +649,7 @@ if __name__ == "__main__":
         colors=[COLOR_COMBINED],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$U_{t}^{(0)}$",
+        label=r"$U'[n]$",
         show_symbol_values=False,
         ylim=[min(ut_prime)*1.1, max(ut_prime)*1.1],
         x_axis_label=(min(ut_prime), max(ut_prime))
