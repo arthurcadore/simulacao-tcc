@@ -718,7 +718,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1330,27 +1330,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#plotter.PowerMatrixPlot" class="md-nav__link">
+  <a href="#plotter.CorrelationPlot" class="md-nav__link">
     <span class="md-ellipsis">
-      PowerMatrixPlot
+      CorrelationPlot
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#plotter.PowerMatrix3DPlot" class="md-nav__link">
+  <a href="#plotter.WaterfallPlot" class="md-nav__link">
     <span class="md-ellipsis">
-      PowerMatrix3DPlot
+      WaterfallPlot
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#plotter.MatrixSquarePlot" class="md-nav__link">
+  <a href="#plotter.Waterfall3DPlot" class="md-nav__link">
     <span class="md-ellipsis">
-      MatrixSquarePlot
+      Waterfall3DPlot
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotter.WaterfallDecisionPlot" class="md-nav__link">
+    <span class="md-ellipsis">
+      WaterfallDecisionPlot
     </span>
   </a>
   
@@ -1481,7 +1490,7 @@
     <div class="doc doc-contents ">
 
 
-        <p>Classe base para plotagem de gráficos, implementando funcionalidades comuns a todos os plots.</p>
+        <p>Base class for plotting graphs, implementing common functionality for all plots.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1504,7 +1513,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Objeto <code>Axes</code> do matplotlib. </p>
+                <p>Matplotlib <code>Axes</code> object. </p>
               </div>
             </td>
             <td>
@@ -1520,7 +1529,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Título do plot. </p>
+                <p>Plot title. </p>
               </div>
             </td>
             <td>
@@ -1536,7 +1545,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de rótulos para os eixos. </p>
+                <p>List of axis labels. </p>
               </div>
             </td>
             <td>
@@ -1552,7 +1561,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x <code>x = [xlim[0], xlim[1]]</code>. </p>
+                <p>Limits of the x-axis <code>x = [xlim[0], xlim[1]]</code>. </p>
               </div>
             </td>
             <td>
@@ -1568,7 +1577,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo y <code>y = [ylim[0], ylim[1]]</code>. </p>
+                <p>Limits of the y-axis <code>y = [ylim[0], ylim[1]]</code>. </p>
               </div>
             </td>
             <td>
@@ -1584,7 +1593,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Cores do plot. </p>
+                <p>Plot colors. </p>
               </div>
             </td>
             <td>
@@ -1600,7 +1609,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Estilo do plot.</p>
+                <p>Plot style.</p>
               </div>
             </td>
             <td>
@@ -1653,7 +1662,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio do tempo, recebendo um vetor de tempo <span class="arithmatex">\(t\)</span>, e uma lista de sinais <span class="arithmatex">\(s(t)\)</span>.</p>
+        <p>Class for plotting signals in the time domain, receiving a time vector <span class="arithmatex">\(t\)</span>, and a list of signals <span class="arithmatex">\(s(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1676,7 +1685,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure object</p>
               </div>
             </td>
             <td>
@@ -1692,7 +1701,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec object</p>
               </div>
             </td>
             <td>
@@ -1708,7 +1717,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Plot position</p>
               </div>
             </td>
             <td>
@@ -1724,7 +1733,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo</p>
+                <p>Time vector</p>
               </div>
             </td>
             <td>
@@ -1740,7 +1749,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal ou lista de sinais <span class="arithmatex">\(s(t)\)</span>.</p>
+                <p>Signal or list of signals <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1756,7 +1765,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").</p>
+                <p>Time unit for plotting ("ms" by default, can be "s").</p>
               </div>
             </td>
             <td>
@@ -1772,7 +1781,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Normalização do sinal para amplitude máxima</p>
+                <p>Signal normalization for maximum amplitude</p>
               </div>
             </td>
             <td>
@@ -1783,14 +1792,12 @@
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Modulador: <img alt="pageplot" src="../assets/example_modulator_time.svg" /></li>
-<li>Demodulador: <img alt="pageplot" src="../assets/example_demodulator_time.svg" /></li>
-<li>Adição de AWGN <img alt="pageplot" src="../assets/example_noise_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Modulator Time Domain Example: <img alt="pageplot" src="../assets/example_modulator_time.svg" /></li>
+<li>AWGN addition Time Domain Example: <img alt="pageplot" src="assets/example_noise_time.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -1834,7 +1841,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio da frequência, recebendo uma frequência de amostragem <span class="arithmatex">\(f_s\)</span> e um sinal <span class="arithmatex">\(s(t)\)</span> e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. </p>
+        <p>Class for plotting signals in the frequency domain, receiving a sampling frequency <span class="arithmatex">\(f_s\)</span> and a signal <span class="arithmatex">\(s(t)\)</span> and performing the Fourier transform of the signal, according to the expression below. </p>
 <div class="arithmatex">\[
 \begin{equation}
     S(f) = \mathcal{F}\{s(t)\}
@@ -1842,12 +1849,12 @@
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(S(f)\)</span>: Sinal no domínio da frequência.</li>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal no domínio do tempo.</li>
-<li><span class="arithmatex">\(\mathcal{F}\)</span>: Transformada de Fourier.</li>
+<li><span class="arithmatex">\(S(f)\)</span>: Signal in the frequency domain.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Signal in the time domain.</li>
+<li><span class="arithmatex">\(\mathcal{F}\)</span>: Fourier transform.</li>
 </ul>
 </details>
 
@@ -1871,7 +1878,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure object</p>
               </div>
             </td>
             <td>
@@ -1887,7 +1894,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec object</p>
               </div>
             </td>
             <td>
@@ -1903,7 +1910,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Plot position</p>
               </div>
             </td>
             <td>
@@ -1919,7 +1926,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem</p>
+                <p>Sampling frequency</p>
               </div>
             </td>
             <td>
@@ -1935,7 +1942,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal a ser plotado</p>
+                <p>Signal to be plotted</p>
               </div>
             </td>
             <td>
@@ -1951,7 +1958,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência central</p>
+                <p>Central frequency</p>
               </div>
             </td>
             <td>
@@ -1962,14 +1969,12 @@
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Modulador: <img alt="pageplot" src="../assets/example_modulator_freq.svg" /></li>
-<li>Demodulador: <img alt="pageplot" src="../assets/example_demodulator_freq.svg" /></li>
-<li>Adição de AWGN <img alt="pageplot" src="../assets/example_noise_freq.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Modulator Frequency Domain Example: <img alt="pageplot" src="../assets/example_modulator_freq.svg" /></li>
+<li>AWGN addition Frequency Domain Example: <img alt="pageplot" src="assets/example_noise_freq.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -2013,20 +2018,20 @@
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar sinais no domínio da constelação, recebendo os sinais <span class="arithmatex">\(d_I\)</span> e <span class="arithmatex">\(d_Q\)</span>, realizando o plot em fase <span class="arithmatex">\(I\)</span> e quadratura <span class="arithmatex">\(Q\)</span>, conforme a expressão abaixo.</p>
+        <p>Class for plotting signals in the constellation domain, receiving the signals <span class="arithmatex">\(d_I\)</span> and <span class="arithmatex">\(d_Q\)</span>, performing the plot in phase <span class="arithmatex">\(I\)</span> and quadrature <span class="arithmatex">\(Q\)</span>, according to the expression below.</p>
 <div class="arithmatex">\[
 s(t) = d_I(t) + j d_Q(t)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal complexo.</li>
-<li><span class="arithmatex">\(d_I(t)\)</span>: Sinal em fase.</li>
-<li><span class="arithmatex">\(d_Q(t)\)</span>: Sinal em quadratura.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Complex signal.</li>
+<li><span class="arithmatex">\(d_I(t)\)</span>: In-phase signal.</li>
+<li><span class="arithmatex">\(d_Q(t)\)</span>: Quadrature signal.</li>
 </ul>
-</details>        <p>O plot de constelação pode ser normalizado por um fator de normalização dado por: </p>
+</details>        <p>The constellation plot can be normalized by a normalization factor given by: </p>
 <div class="arithmatex">\[
 \varphi = \frac{\text{A}}{
       \sqrt{
@@ -2037,13 +2042,13 @@ s(t) = d_I(t) + j d_Q(t)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(\text{A}\)</span>: Amplitude desejada, definido como <code>1</code>. </li>
-<li><span class="arithmatex">\(\varphi\)</span>: Fator de normalização.</li>
-<li><span class="arithmatex">\(N\)</span>: Número de amostras.</li>
-<li><span class="arithmatex">\(I(n)\)</span> e <span class="arithmatex">\(Q(n)\)</span>: Sinais em fase e quadratura.</li>
+<li><span class="arithmatex">\(\text{A}\)</span>: Desired amplitude, defined as <code>1</code>. </li>
+<li><span class="arithmatex">\(\varphi\)</span>: Normalization factor.</li>
+<li><span class="arithmatex">\(N\)</span>: Number of samples.</li>
+<li><span class="arithmatex">\(I(n)\)</span> and <span class="arithmatex">\(Q(n)\)</span>: In-phase and quadrature signals.</li>
 </ul>
 </details>
 
@@ -2067,7 +2072,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure object</p>
               </div>
             </td>
             <td>
@@ -2083,7 +2088,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec object</p>
               </div>
             </td>
             <td>
@@ -2099,7 +2104,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Plot position</p>
               </div>
             </td>
             <td>
@@ -2115,7 +2120,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal I</p>
+                <p>In-phase signal</p>
               </div>
             </td>
             <td>
@@ -2131,7 +2136,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal Q</p>
+                <p>Quadrature signal</p>
               </div>
             </td>
             <td>
@@ -2142,12 +2147,11 @@ s(t) = d_I(t) + j d_Q(t)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Fase e Constelação: <img alt="pageplot" src="../assets/example_modulator_constellation.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Modulator Constellation Example: <img alt="pageplot" src="../assets/example_modulator_constellation.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -2191,7 +2195,7 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar bits, recebendo uma lista de bits <span class="arithmatex">\(b_t\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
+        <p>Class for plotting bits, receiving a list of bits <span class="arithmatex">\(b_t\)</span> and performing the plot in function of time <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2214,7 +2218,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure object</p>
               </div>
             </td>
             <td>
@@ -2230,7 +2234,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec object</p>
               </div>
             </td>
             <td>
@@ -2246,7 +2250,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Plot position</p>
               </div>
             </td>
             <td>
@@ -2262,7 +2266,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de bits</p>
+                <p>List of bits</p>
               </div>
             </td>
             <td>
@@ -2278,7 +2282,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Seções do plot</p>
+                <p>Plot sections</p>
               </div>
             </td>
             <td>
@@ -2294,7 +2298,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Cores do plot</p>
+                <p>Plot colors</p>
               </div>
             </td>
             <td>
@@ -2310,7 +2314,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se <code>True</code>, exibe os valores dos bits.</p>
+                <p>If <code>True</code>, shows the bit values.</p>
               </div>
             </td>
             <td>
@@ -2326,7 +2330,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo x.</p>
+                <p>X-axis label.</p>
               </div>
             </td>
             <td>
@@ -2342,7 +2346,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo y.</p>
+                <p>Y-axis label.</p>
               </div>
             </td>
             <td>
@@ -2358,7 +2362,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do plot.</p>
+                <p>Label of the plot.</p>
               </div>
             </td>
             <td>
@@ -2374,7 +2378,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x.</p>
+                <p>X-axis limits.</p>
               </div>
             </td>
             <td>
@@ -2385,16 +2389,13 @@ s(t) = d_I(t) + j d_Q(t)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Datagrama: <img alt="pageplot" src="../assets/example_datagram_time.svg" /></li>
-<li>Codificador Convolucional: <img alt="pageplot" src="../assets/example_conv_time.svg" /></li>
-<li>Embaralhador: <img alt="pageplot" src="../assets/example_scrambler_time.svg" /></li>
-<li>Preâmbulo: <img alt="pageplot" src="../assets/example_preamble.svg" /></li>
-<li>Multiplexador: <img alt="pageplot" src="../assets/example_mux.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Datagram Bitstream Example: <img alt="pageplot" src="../assets/example_datagram_time.svg" /></li>
+<li>Convolutional Bitstream Example: <img alt="pageplot" src="../assets/example_conv_time.svg" /></li>
+<li>Scrambler Bitstream Example: <img alt="pageplot" src="../assets/example_scrambler_time.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -2438,7 +2439,7 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar simbolos codificados com codificação de linha, recebendo um vetor de simbolos <span class="arithmatex">\(s[i]\)</span> e realizando o plot em função do index de simbolo <span class="arithmatex">\(i\)</span>.</p>
+        <p>Class for plotting symbols encoded with line coding, receiving a vector of symbols <span class="arithmatex">\(s[i]\)</span> and performing the plot in function of the symbol index <span class="arithmatex">\(i\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2461,7 +2462,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -2477,7 +2478,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -2493,7 +2494,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Position of the plot</p>
               </div>
             </td>
             <td>
@@ -2509,7 +2510,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de símbolos</p>
+                <p>List of symbols</p>
               </div>
             </td>
             <td>
@@ -2525,7 +2526,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de amostras por símbolo</p>
+                <p>Number of samples per symbol</p>
               </div>
             </td>
             <td>
@@ -2541,7 +2542,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Seções do plot</p>
+                <p>Plot sections</p>
               </div>
             </td>
             <td>
@@ -2557,7 +2558,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Cores do plot</p>
+                <p>Plot colors</p>
               </div>
             </td>
             <td>
@@ -2573,7 +2574,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se <code>True</code>, exibe os valores dos símbolos.</p>
+                <p>If <code>True</code>, shows the symbol values.</p>
               </div>
             </td>
             <td>
@@ -2589,7 +2590,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo x.</p>
+                <p>X-axis label.</p>
               </div>
             </td>
             <td>
@@ -2605,7 +2606,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo y.</p>
+                <p>Y-axis label.</p>
               </div>
             </td>
             <td>
@@ -2621,7 +2622,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do plot.</p>
+                <p>Plot label.</p>
               </div>
             </td>
             <td>
@@ -2637,7 +2638,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x.</p>
+                <p>X-axis limits.</p>
               </div>
             </td>
             <td>
@@ -2648,12 +2649,11 @@ s(t) = d_I(t) + j d_Q(t)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Codificação de Canal: <img alt="pageplot" src="../assets/example_encoder_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Symbols Plot Example: <img alt="pageplot" src="../assets/example_encoder_time.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -2697,7 +2697,7 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a resposta ao impulso de um filtro, recebendo um vetor de tempo <span class="arithmatex">\(t_{imp}\)</span> e realizando o plot em função do tempo <span class="arithmatex">\(t\)</span>.</p>
+        <p>Class for plotting the impulse response of a filter, receiving a vector of time <span class="arithmatex">\(t_{imp}\)</span> and performing the plot in function of time <span class="arithmatex">\(t\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2720,7 +2720,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -2736,7 +2736,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -2752,7 +2752,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot no GridSpec</p>
+                <p>Position of the plot in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -2768,7 +2768,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo da resposta ao impulso</p>
+                <p>Vector of time <span class="arithmatex">\(t_{imp}\)</span></p>
               </div>
             </td>
             <td>
@@ -2784,7 +2784,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Amostras da resposta ao impulso</p>
+                <p>Impulse response</p>
               </div>
             </td>
             <td>
@@ -2800,7 +2800,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Unidade de tempo no eixo X ("ms" ou "s"). Default é "ms"</p>
+                <p>Unit of time on the x-axis ("ms" or "s"). Default is "ms"</p>
               </div>
             </td>
             <td>
@@ -2816,7 +2816,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do plot</p>
+                <p>Plot label</p>
               </div>
             </td>
             <td>
@@ -2832,7 +2832,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo x</p>
+                <p>x-axis label</p>
               </div>
             </td>
             <td>
@@ -2848,7 +2848,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo y</p>
+                <p>y-axis label</p>
               </div>
             </td>
             <td>
@@ -2864,7 +2864,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x</p>
+                <p>x-axis limits</p>
               </div>
             </td>
             <td>
@@ -2880,7 +2880,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Normaliza a resposta ao impulso para ter amplitude unitária. </p>
+                <p>Normalizes the impulse response to have unitary amplitude. </p>
               </div>
             </td>
             <td>
@@ -2891,14 +2891,13 @@ s(t) = d_I(t) + j d_Q(t)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Resposta ao Impulso RRC: <img alt="pageplot" src="../assets/example_formatter_impulse.svg" /></li>
-<li>Resposta ao Impulso Filtro Passa baixa: <img alt="pageplot" src="../assets/example_lpf_impulse.svg" /></li>
-<li>Resposta ao Impulso RRC Invertido: <img alt="pageplot" src="../assets/example_mf_impulse.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Impulse Response RRC: <img alt="pageplot" src="../assets/example_formatter_impulse.svg" /></li>
+<li>Impulse Response Manchester: <img alt="pageplot" src="../assets/example_formatter_impulse_man.svg" /></li>
+<li>Impulse Response LPF: <img alt="pageplot" src="../assets/example_lpf_impulse.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -2942,7 +2941,7 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar um sinal <span class="arithmatex">\(s(t)\)</span> amostrado em <span class="arithmatex">\(t_s\)</span>.</p>
+        <p>Class to plot a sampled signal <span class="arithmatex">\(s(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2965,7 +2964,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -2981,7 +2980,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -2997,7 +2996,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição no GridSpec</p>
+                <p>Position in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -3013,7 +3012,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo do sinal filtrado</p>
+                <p>Vector of time <span class="arithmatex">\(t_{signal}\)</span></p>
               </div>
             </td>
             <td>
@@ -3029,7 +3028,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal filtrado</p>
+                <p>Filtered signal</p>
               </div>
             </td>
             <td>
@@ -3045,7 +3044,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Instantes de amostragem</p>
+                <p>Vector of time <span class="arithmatex">\(t_{samples}\)</span></p>
               </div>
             </td>
             <td>
@@ -3061,7 +3060,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Amostras correspondentes</p>
+                <p>Samples</p>
               </div>
             </td>
             <td>
@@ -3077,7 +3076,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Unidade de tempo. </p>
+                <p>Time unit. </p>
               </div>
             </td>
             <td>
@@ -3093,7 +3092,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do sinal filtrado.</p>
+                <p>Label of the filtered signal.</p>
               </div>
             </td>
             <td>
@@ -3109,7 +3108,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label das amostras.</p>
+                <p>Label of the samples.</p>
               </div>
             </td>
             <td>
@@ -3125,7 +3124,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo x.</p>
+                <p>Label of the x-axis.</p>
               </div>
             </td>
             <td>
@@ -3141,7 +3140,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo y.</p>
+                <p>Label of the y-axis.</p>
               </div>
             </td>
             <td>
@@ -3157,7 +3156,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Título do plot.</p>
+                <p>Title of the plot.</p>
               </div>
             </td>
             <td>
@@ -3173,7 +3172,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x.</p>
+                <p>Limits of the x-axis.</p>
               </div>
             </td>
             <td>
@@ -3184,10 +3183,11 @@ s(t) = d_I(t) + j d_Q(t)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_sampler_time.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/example_sampler_time.svg" /></li>
+</ul>
+
 
 
 
@@ -3231,18 +3231,18 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a fase dos sinais <span class="arithmatex">\(d_I(t)\)</span> e <span class="arithmatex">\(d_Q(t)\)</span> no domínio do tempo.</p>
+        <p>Class to plot the phase of the signals <span class="arithmatex">\(d_I(t)\)</span> and <span class="arithmatex">\(d_Q(t)\)</span> in the time domain.</p>
 <div class="arithmatex">\[
     s(t) = \arctan\left(\frac{d_Q(t)}{d_I(t)}\right)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(s(t)\)</span>: Vetor de fases por intervalo de tempo.</li>
-<li><span class="arithmatex">\(d_I(t)\)</span>: Componente sinal <span class="arithmatex">\(d_I(t)\)</span>, em fase. </li>
-<li><span class="arithmatex">\(d_Q(t)\)</span>: Componente sinal <span class="arithmatex">\(d_Q(t)\)</span>, em quadratura.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Phase vector <span class="arithmatex">\(s(t)\)</span>.</li>
+<li><span class="arithmatex">\(d_I(t)\)</span>: In-phase signal component <span class="arithmatex">\(d_I(t)\)</span>.</li>
+<li><span class="arithmatex">\(d_Q(t)\)</span>: Quadrature signal component <span class="arithmatex">\(d_Q(t)\)</span>.</li>
 </ul>
 </details>
 
@@ -3266,7 +3266,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -3282,7 +3282,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -3298,7 +3298,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Position of the plot</p>
               </div>
             </td>
             <td>
@@ -3314,7 +3314,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo</p>
+                <p>Vector of time</p>
               </div>
             </td>
             <td>
@@ -3330,7 +3330,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinais IQ (I e Q)</p>
+                <p>IQ signals (I and Q)</p>
               </div>
             </td>
             <td>
@@ -3346,7 +3346,7 @@ s(t) = d_I(t) + j d_Q(t)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").</p>
+                <p>Time unit for plot ("ms" by default, can be "s").</p>
               </div>
             </td>
             <td>
@@ -3399,18 +3399,18 @@ s(t) = d_I(t) + j d_Q(t)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a densidade de probabilidade <span class="arithmatex">\(p(x)\)</span> de uma dada variância <span class="arithmatex">\(\sigma^2\)</span>, seguindo a expressão abaixo. </p>
+        <p>Class to plot the probability density <span class="arithmatex">\(p(x)\)</span> of a given variance <span class="arithmatex">\(\sigma^2\)</span>, following the expression below. </p>
 <div class="arithmatex">\[
 p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(p(x)\)</span>: Densidade de probabilidade do ruído.</li>
-<li><span class="arithmatex">\(\sigma^2\)</span>: Variância do ruído.</li>
-<li><span class="arithmatex">\(x\)</span>: Amplitude do ruído.</li>
+<li><span class="arithmatex">\(p(x)\)</span>: Probability density of the noise.</li>
+<li><span class="arithmatex">\(\sigma^2\)</span>: Variance of the noise.</li>
+<li><span class="arithmatex">\(x\)</span>: Amplitude of the noise.</li>
 </ul>
 </details>
 
@@ -3434,7 +3434,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -3450,7 +3450,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -3466,7 +3466,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot no GridSpec</p>
+                <p>Position of the plot in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -3482,7 +3482,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Variância do ruído</p>
+                <p>Variance of the noise</p>
               </div>
             </td>
             <td>
@@ -3498,7 +3498,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de pontos para a curva da gaussiana</p>
+                <p>Number of points for the gaussian curve</p>
               </div>
             </td>
             <td>
@@ -3514,11 +3514,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Legenda do plot</p>
+                <p>Legend of the plot</p>
               </div>
             </td>
             <td>
-                  <code>&#39;Ruído AWGN&#39;</code>
+                  <code>&#39;$p(x)$&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3530,11 +3530,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo x</p>
+                <p>Label of the x-axis</p>
               </div>
             </td>
             <td>
-                  <code>&#39;Amplitude&#39;</code>
+                  <code>&#39;Amplitude ($x$)&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3546,11 +3546,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo y</p>
+                <p>Label of the y-axis</p>
               </div>
             </td>
             <td>
-                  <code>&#39;Densidade de Probabilidade&#39;</code>
+                  <code>&#39;Probability Density $p(x)$&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3562,11 +3562,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo x</p>
+                <p>Limit of the x-axis</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                <em>required</em>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3578,7 +3578,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Span do plot</p>
+                <p>Span of the plot</p>
               </div>
             </td>
             <td>
@@ -3589,10 +3589,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_noise_gaussian_ebn0.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Noise Density Plot Example: <img alt="pageplot" src="../assets/example_noise_gaussian_ebn0.svg" /></li>
+</ul>
+
 
 
 
@@ -3636,7 +3637,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar o diagrama de polos e zeros de uma função de transferência discreta no plano-z.</p>
+        <p>Plot the diagram of poles and zeros of a discrete transfer function in the z-plane.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3659,7 +3660,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -3675,7 +3676,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -3691,7 +3692,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição no GridSpec</p>
+                <p>Position in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -3707,7 +3708,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Coeficientes do numerador da função de transferência</p>
+                <p>Coefficients of the numerator of the transfer function</p>
               </div>
             </td>
             <td>
@@ -3723,7 +3724,7 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Coeficientes do denominador da função de transferência</p>
+                <p>Coefficients of the denominator of the transfer function</p>
               </div>
             </td>
             <td>
@@ -3734,10 +3735,11 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_lpf_pz.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Pole-Zero Diagram Example: <img alt="pageplot" src="../assets/example_lpf_pz.svg" /></li>
+</ul>
+
 
 
 
@@ -3781,8 +3783,8 @@ p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2}\right)
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar a resposta em frequência de um filtro a partir de seus coeficientes (b, a). 
-Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>scipy.signal.freqz</code>.</p>
+        <p>Plot the frequency response of a filter from its coefficients (b, a). 
+Calculates the Discrete Fourier Transform of the impulse response using <code>scipy.signal.freqz</code>.</p>
 <div class="arithmatex">\[
     H(f) = \sum_{n=0}^{N} b_n e^{-j 2 \pi f n} \Big/ \sum_{m=0}^{M} a_m e^{-j 2 \pi f m}
 \]</div>
@@ -3808,7 +3810,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -3824,7 +3826,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -3840,7 +3842,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot no GridSpec</p>
+                <p>Position in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -3856,7 +3858,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Coeficientes do numerador do filtro</p>
+                <p>Coefficients of the numerator of the filter</p>
               </div>
             </td>
             <td>
@@ -3872,7 +3874,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Coeficientes do denominador do filtro</p>
+                <p>Coefficients of the denominator of the filter</p>
               </div>
             </td>
             <td>
@@ -3888,7 +3890,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem</p>
+                <p>Sampling frequency</p>
               </div>
             </td>
             <td>
@@ -3904,7 +3906,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de corte do filtro (Hz)</p>
+                <p>Cut-off frequency of the filter (Hz)</p>
               </div>
             </td>
             <td>
@@ -3920,7 +3922,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Limites do eixo X (Hz)</p>
+                <p>Limit of the x-axis (Hz)</p>
               </div>
             </td>
             <td>
@@ -3936,7 +3938,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de pontos para a transformada de Fourier</p>
+                <p>Number of points for the Discrete Fourier Transform</p>
               </div>
             </td>
             <td>
@@ -3952,7 +3954,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se <code>True</code>, plota a fase da resposta em frequência</p>
+                <p>If <code>True</code>, plots the phase of the frequency response</p>
               </div>
             </td>
             <td>
@@ -3968,11 +3970,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo X</p>
+                <p>Label of the x-axis</p>
               </div>
             </td>
             <td>
-                  <code>&#39;Frequência ($Hz$)&#39;</code>
+                  <code>&#39;Frequency ($Hz$)&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3984,7 +3986,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Label do eixo Y</p>
+                <p>Label of the y-axis</p>
               </div>
             </td>
             <td>
@@ -3995,10 +3997,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_lpf_freq_response.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/example_lpf_freq_response.svg" /></li>
+</ul>
+
 
 
 
@@ -4042,7 +4045,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar o espectro de uma sinal recebido, com threshold e frequências detectadas. Recebendo uma frequência de amostragem <span class="arithmatex">\(f_s\)</span> e um sinal <span class="arithmatex">\(s(t)\)</span> e realizando a transformada de Fourier do sinal, conforme a expressão abaixo. </p>
+        <p>Plot the spectrum of a received signal, with threshold and detected frequencies. Receiving a sampling frequency <span class="arithmatex">\(f_s\)</span> and a signal <span class="arithmatex">\(s(t)\)</span> and performing the Fourier transform of the signal, according to the expression below. </p>
 <div class="arithmatex">\[
 \begin{equation}
     S(f) = \mathcal{F}\{s(t)\}
@@ -4050,12 +4053,12 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(S(f)\)</span>: Sinal no domínio da frequência.</li>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal no domínio do tempo.</li>
-<li><span class="arithmatex">\(\mathcal{F}\)</span>: Transformada de Fourier.</li>
+<li><span class="arithmatex">\(S(f)\)</span>: Signal in the frequency domain.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Signal in the time domain.</li>
+<li><span class="arithmatex">\(\mathcal{F}\)</span>: Fourier transform.</li>
 </ul>
 </details>
 
@@ -4079,7 +4082,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -4095,7 +4098,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -4111,7 +4114,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição do plot</p>
+                <p>Position of the plot</p>
               </div>
             </td>
             <td>
@@ -4127,7 +4130,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem</p>
+                <p>Sampling frequency</p>
               </div>
             </td>
             <td>
@@ -4143,7 +4146,23 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal a ser plotado</p>
+                <p>Signal to be plotted</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>threshold</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Threshold of the signal</p>
               </div>
             </td>
             <td>
@@ -4159,7 +4178,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência central</p>
+                <p>Central frequency</p>
               </div>
             </td>
             <td>
@@ -4170,10 +4189,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_detector_freq.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/example_detector_freq.svg" /></li>
+</ul>
+
 
 
 
@@ -4217,7 +4237,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar curvas de BER em função de Eb/N0.</p>
+        <p>Plot BER curves as a function of Eb/N0.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -4240,7 +4260,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -4256,7 +4276,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -4272,7 +4292,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição no GridSpec</p>
+                <p>Position in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -4288,7 +4308,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de valores Eb/N0 (dB)</p>
+                <p>Array of Eb/N0 values (dB)</p>
               </div>
             </td>
             <td>
@@ -4304,7 +4324,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de curvas BER correspondentes</p>
+                <p>List of BER curves</p>
               </div>
             </td>
             <td>
@@ -4320,7 +4340,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rótulos de cada curva</p>
+                <p>Labels of each curve</p>
               </div>
             </td>
             <td>
@@ -4332,11 +4352,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
                 <code>linestyles</code>
             </td>
             <td>
-                  <code>(<span title="typing.List">List</span>[<span title="str">str</span>], <span title="opcional">opcional</span>)</code>
+                  <code><span title="typing.List">List</span>[<span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista com estilos de linha. </p>
+                <p>List of line styles</p>
               </div>
             </td>
             <td>
@@ -4348,11 +4368,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
                 <code>markers</code>
             </td>
             <td>
-                  <code>(<span title="typing.List">List</span>[<span title="str">str</span>], <span title="opcional">opcional</span>)</code>
+                  <code><span title="typing.List">List</span>[<span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista com formatos de marcadores. </p>
+                <p>List of marker styles</p>
               </div>
             </td>
             <td>
@@ -4364,15 +4384,15 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
                 <code>xlabel</code>
             </td>
             <td>
-                  <code>(<span title="str">str</span>, <span title="opcional">opcional</span>)</code>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rótulo do eixo x</p>
+                <p>Label of the x-axis</p>
               </div>
             </td>
             <td>
-                  <code>&#39;$E_b/N_0$ (dB)&#39;</code>
+                  <code>&#39;$E_b/N_0$ ($dB$)&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -4380,15 +4400,15 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
                 <code>ylabel</code>
             </td>
             <td>
-                  <code>(<span title="str">str</span>, <span title="opcional">opcional</span>)</code>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rótulo do eixo y</p>
+                <p>Label of the y-axis</p>
               </div>
             </td>
             <td>
-                  <code>&#39;Taxa de Erro de Bit (BER)&#39;</code>
+                  <code>&#39;Bit Error Rate ($BER$)&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -4396,11 +4416,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
                 <code>logy</code>
             </td>
             <td>
-                  <code>(<span title="bool">bool</span>, <span title="opcional">opcional</span>)</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se deve usar escala logarítmica no eixo y</p>
+                <p>Whether to use a log scale for the y-axis</p>
               </div>
             </td>
             <td>
@@ -4411,12 +4431,11 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li><img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>BER vs Eb/N0 Plot Example: <img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
 </ul>
-</details>
+
 
 
 
@@ -4460,7 +4479,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Classe para plotar um sinal no domínio do tempo com marcações de sincronismo.</p>
+        <p>Plot a signal in the time domain with synchronization marks.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -4483,7 +4502,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Figura do plot</p>
+                <p>Figure of the plot</p>
               </div>
             </td>
             <td>
@@ -4499,7 +4518,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>GridSpec do plot</p>
+                <p>GridSpec of the plot</p>
               </div>
             </td>
             <td>
@@ -4515,7 +4534,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Posição no GridSpec</p>
+                <p>Position in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -4531,7 +4550,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo</p>
+                <p>Array of time</p>
               </div>
             </td>
             <td>
@@ -4547,7 +4566,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal no tempo</p>
+                <p>Signal in the time domain</p>
               </div>
             </td>
             <td>
@@ -4563,7 +4582,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Instante de início da palavra de sincronismo</p>
+                <p>Start time of the synchronization word</p>
               </div>
             </td>
             <td>
@@ -4579,7 +4598,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Instante de fim da palavra de sincronismo</p>
+                <p>End time of the synchronization word</p>
               </div>
             </td>
             <td>
@@ -4595,7 +4614,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Instante do pico de correlação</p>
+                <p>Time of the peak of correlation</p>
               </div>
             </td>
             <td>
@@ -4611,7 +4630,7 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Unidade de tempo para plotagem ("ms" por padrão, pode ser "s").</p>
+                <p>Time unit for plotting ("ms" by default, can be "s").</p>
               </div>
             </td>
             <td>
@@ -4622,55 +4641,10 @@ Calcula a transformada de Fourier discreta da resposta ao impulso usando <code>s
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_synchronizer_sync.svg" /></p>
-</details>
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="plotter.PowerMatrixPlot" class="doc doc-heading">
-            <code>PowerMatrixPlot</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
-
-
-        <p>Plota a matriz de potência em dB como heatmap quadriculado.
-Eixo x = segmentos, eixo y = frequência em Hz.</p>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Synchronization Plot Example: <img alt="pageplot" src="../assets/example_synchronizer_sync.svg" /></li>
+</ul>
 
 
 
@@ -4703,8 +4677,8 @@ Eixo x = segmentos, eixo y = frequência em Hz.</p>
 
 
 
-<h2 id="plotter.PowerMatrix3DPlot" class="doc doc-heading">
-            <code>PowerMatrix3DPlot</code>
+<h2 id="plotter.CorrelationPlot" class="doc doc-heading">
+            <code>CorrelationPlot</code>
 
 
 </h2>
@@ -4715,8 +4689,124 @@ Eixo x = segmentos, eixo y = frequência em Hz.</p>
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Plota a matriz de potência em dB em 3D, limitando a frequência
-ao range definido em kHz e adicionando plano de threshold.</p>
+        <p>Plot correlation vector <span class="arithmatex">\(c[k]\)</span> as a function of the index <span class="arithmatex">\(k\)</span>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code>int ou tuple</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Position in the GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>corr_vec</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Correlation vector <span class="arithmatex">\(c[k]\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Signal sampling rate in <span class="arithmatex">\(Hz\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlim</code>
+            </td>
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Time limits in <span class="arithmatex">\(ms\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Correlation Plot Example: <img alt="pageplot" src="../assets/example_synchronizer_corr.svg" /></li>
+</ul>
 
 
 
@@ -4749,8 +4839,8 @@ ao range definido em kHz e adicionando plano de threshold.</p>
 
 
 
-<h2 id="plotter.MatrixSquarePlot" class="doc doc-heading">
-            <code>MatrixSquarePlot</code>
+<h2 id="plotter.WaterfallPlot" class="doc doc-heading">
+            <code>WaterfallPlot</code>
 
 
 </h2>
@@ -4761,8 +4851,593 @@ ao range definido em kHz e adicionando plano de threshold.</p>
               Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
 
 
-        <p>Plota matrizes categóricas (detecção/decisão) em formato quadriculado.
-Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
+        <p>Waterfall plot of the power matrix.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code>int ou tuple</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Position in the GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>power_matrix</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Power matrix</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Signal sampling rate in <span class="arithmatex">\(Hz\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>N</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of samples</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlim</code>
+            </td>
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Time limits in <span class="arithmatex">\(ms\)</span></p>
+              </div>
+            </td>
+            <td>
+                  <code>(0, 10)</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Waterfall Plot Example: <img alt="pageplot" src="../assets/example_detector_waterfall.svg" /></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="plotter.Waterfall3DPlot" class="doc doc-heading">
+            <code>Waterfall3DPlot</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
+
+
+        <p>3D waterfall plot of the power matrix.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code>int ou tuple</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Position in the GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>power_matrix</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Power matrix</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Signal sampling rate in <span class="arithmatex">\(Hz\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>N</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of samples</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>freq_window</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequency limits in <span class="arithmatex">\(kHz\)</span></p>
+              </div>
+            </td>
+            <td>
+                  <code>(0, 10)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>threshold</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Threshold value</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>smooth</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to smooth the power matrix</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sigma</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Standard deviation for the Gaussian filter</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>elev</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Elevation angle in degrees</p>
+              </div>
+            </td>
+            <td>
+                  <code>5.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>azim</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Azimuth angle in degrees</p>
+              </div>
+            </td>
+            <td>
+                  <code>-60.0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Waterfall 3D Plot Example: <img alt="pageplot" src="../assets/example_detector_waterfall_3d.svg" /></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="plotter.WaterfallDecisionPlot" class="doc doc-heading">
+            <code>WaterfallDecisionPlot</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="&lt;code&gt;BasePlot&lt;/code&gt; (&lt;code&gt;plotter.BasePlot&lt;/code&gt;)" href="#plotter.BasePlot">BasePlot</a></code></p>
+
+
+        <p>Decision waterfall plot.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fig</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.pyplot.Figure">Figure</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid</code>
+            </td>
+            <td>
+                  <code><span title="matplotlib.gridspec.GridSpec">GridSpec</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>GridSpec of the plot</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pos</code>
+            </td>
+            <td>
+                  <code>int ou tuple</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Position in the GridSpec</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>matrix</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Decision matrix</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fs</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Signal sampling rate in <span class="arithmatex">\(Hz\)</span></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>N</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of samples</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>xlim</code>
+            </td>
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Time limits in <span class="arithmatex">\(ms\)</span></p>
+              </div>
+            </td>
+            <td>
+                  <code>(0, 10)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>legend_list</code>
+            </td>
+            <td>
+                  <code><span title="typing.List">List</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of legend labels</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Waterfall Detection Plot Example: <img alt="pageplot" src="../assets/example_detector_waterfall_detection.svg" /></li>
+<li>Waterfall Decision Plot Example: <img alt="pageplot" src="../assets/example_detector_waterfall_decision.svg" /></li>
+</ul>
 
 
 
@@ -4803,18 +5478,18 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
 
     <div class="doc doc-contents ">
 
-        <p>Converte a magnitude do sinal para escala logarítmica (<span class="arithmatex">\(dB\)</span>). O processo de conversão é dado pela expressão abaixo.</p>
+        <p>Converts the signal magnitude to a logarithmic scale (<span class="arithmatex">\(dB\)</span>). The conversion process is given by the expression below.</p>
 <div class="arithmatex">\[
  dB(x) = 20 \log_{10}\left(\frac{|x|}{x_{peak} + 10^{-12}}\right)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(x\)</span>: Sinal a ser convertido para <span class="arithmatex">\(dB\)</span>.</li>
-<li><span class="arithmatex">\(x_{peak}\)</span>: Pico de maior magnitude do sinal.</li>
-<li><span class="arithmatex">\(10^{-12}\)</span>: Constante para evitar divisão por zero.</li>
+<li><span class="arithmatex">\(x\)</span>: Signal to be converted to <span class="arithmatex">\(dB\)</span>.</li>
+<li><span class="arithmatex">\(x_{peak}\)</span>: Peak magnitude of the signal.</li>
+<li><span class="arithmatex">\(10^{-12}\)</span>: Constant to avoid division by zero.</li>
 </ul>
 </details>
 
@@ -4838,7 +5513,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Array com os dados do sinal</p>
+                <p>Array with signal data</p>
               </div>
             </td>
             <td>
@@ -4864,7 +5539,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Array com o sinal convertido para <span class="arithmatex">\(dB\)</span></p>
+                <p>Array with signal converted to <span class="arithmatex">\(dB\)</span></p>
               </div>
             </td>
           </tr>
@@ -4887,7 +5562,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
 
     <div class="doc doc-contents ">
 
-        <p>Cria uma figura com <code>GridSpec</code>, retornando o objeto <code>fig</code> e <code>grid</code> para desenhar os plots.</p>
+        <p>Creates a figure with <code>GridSpec</code>, returning the <code>fig</code> and <code>grid</code> objects for plotting.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -4910,7 +5585,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de linhas do GridSpec</p>
+                <p>Number of rows in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -4926,7 +5601,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de colunas do GridSpec</p>
+                <p>Number of columns in the GridSpec</p>
               </div>
             </td>
             <td>
@@ -4942,7 +5617,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tamanho da figura</p>
+                <p>Figure size</p>
               </div>
             </td>
             <td>
@@ -4968,7 +5643,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tuple[plt.Figure, gridspec.GridSpec]: Tupla com a figura e o GridSpec</p>
+                <p>Tuple[plt.Figure, gridspec.GridSpec]: Tuple with the figure and GridSpec objects</p>
               </div>
             </td>
           </tr>
@@ -4991,7 +5666,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
 
     <div class="doc doc-contents ">
 
-        <p>Salva a figura em <code>&lt;out_dir&gt;/&lt;filename&gt;</code> a partir do diretório raiz do script. </p>
+        <p>Saves the figure in <code>&lt;out_dir&gt;/&lt;filename&gt;</code> from the script root directory. </p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -5014,7 +5689,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Objeto <code>Figure</code> do matplotlib</p>
+                <p>Matplotlib <code>Figure</code> object</p>
               </div>
             </td>
             <td>
@@ -5030,7 +5705,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Nome do arquivo de saída</p>
+                <p>Output file name</p>
               </div>
             </td>
             <td>
@@ -5046,7 +5721,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Diretório de saída</p>
+                <p>Output directory</p>
               </div>
             </td>
             <td>
@@ -5072,7 +5747,7 @@ Eixo x = frequência (kHz), eixo y = segmentos (tempo).</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se o diretório de saída for inválido</p>
+                <p>If the output directory is invalid</p>
               </div>
             </td>
           </tr>

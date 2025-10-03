@@ -22,7 +22,7 @@
     
     
       
-        <title>Channel Encoder - ARGOS-3 Simulator</title>
+        <title>Line Encoder - ARGOS-3 Simulator</title>
       
     
     
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Channel Encoder
+              Line Encoder
             
           </span>
         </div>
@@ -728,7 +728,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -741,7 +741,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1279,7 +1279,7 @@
   
 
 
-  <h1>Channel Encoder</h1>
+  <h1>Line Encoder</h1>
 
 <div class="doc doc-object doc-class">
 
@@ -1319,7 +1319,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Initializes the channel encoder with the specified encoding method, used to encode the bitstream into symbols.</p>
+        <p>Initializes the line encoder with the specified encoding method, used to encode the bitstream as <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span>, returning the symbol stream <span class="arithmatex">\(I[n]\)</span> and <span class="arithmatex">\(Q[n]\)</span>. </p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1391,18 +1391,18 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">encoder_nrz</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;NRZ&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">encoder_man</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;Manchester&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Xnrz</span> <span class="o">=</span> <span class="n">encoder_nrz</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Xn</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Yman</span> <span class="o">=</span> <span class="n">encoder_man</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Yn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">In</span> <span class="o">=</span> <span class="n">encoder_nrz</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Xn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Qn</span> <span class="o">=</span> <span class="n">encoder_man</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Yn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Xnrz</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">In</span><span class="p">)</span>
 <span class="go">[ 1 -1  1  1 -1 -1  1 -1 -1 -1 -1 -1 -1 -1  1 -1  1  1 -1 -1]</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Yman</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Qn</span><span class="p">)</span>
 <span class="go">[ 1 -1 -1  1 -1  1 -1  1 -1  1 -1  1  1 -1 -1  1  1 -1 -1  1 -1  1 -1  1</span>
 <span class="go"> -1  1  1 -1  1 -1  1 -1 -1  1  1 -1  1 -1  1 -1]</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">encoder_nrz</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Xnrz</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">encoder_man</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Yman</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Xn_prime</span> <span class="o">=</span> <span class="n">encoder_nrz</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">In</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Yn_prime</span> <span class="o">=</span> <span class="n">encoder_man</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Qn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">)</span>
 <span class="go">[1 0 1 1 0 0 1 0 0 0 0 0 0 0 1 0 1 1 0 0]</span>
@@ -1437,16 +1437,16 @@ AS3-SP-516-274-CNES (section 3.2.4)
 <div class="arithmatex">\[
 \begin{equation}
 \begin{aligned}
-X_{\text{NRZ}}[n] &amp;= 
+K[n] &amp;= 
 \begin{cases}
-+1, &amp; \text{if } X_n = 1 \\
--1, &amp; \text{if } X_n = 0 ,
++1, &amp; \text{if } k[n] = 1 \\
+-1, &amp; \text{if } k[n] = 0 ,
 \end{cases}
 &amp;\quad\quad
-X_{\text{MAN}}[n] &amp;=
+K[n] &amp;=
 \begin{cases}
-+1,-1, &amp; \text{if } X_n = 1 \\
--1, +1, &amp; \text{if } X_n = 0 .
++1,-1, &amp; \text{if } k[n] = 1 \\
+-1, +1, &amp; \text{if } k[n] = 0 .
 \end{cases}
 \end{aligned}
 \end{equation}
@@ -1456,8 +1456,8 @@ X_{\text{MAN}}[n] &amp;=
 <details class="where" open>
   <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(X_n\)</span>: Input bitstream.</li>
-<li><span class="arithmatex">\(X_{\text{NRZ}}[n]\)</span> or <span class="arithmatex">\(X_{\text{MAN}}[n]\)</span>: Output symbol stream.</li>
+<li><span class="arithmatex">\(k[n]\)</span>: Input bitstream.</li>
+<li><span class="arithmatex">\(K[n]\)</span>: Output symbol stream.</li>
 </ul>
 </details>
 
@@ -1534,16 +1534,16 @@ X_{\text{MAN}}[n] &amp;=
 <div class="arithmatex">\[
 \begin{equation}
 \begin{aligned}
-X_n &amp;= 
+k[n] &amp;= 
 \begin{cases}
-1, &amp; \text{if } X_{\text{NRZ}}[n] = +1 \\
-0, &amp; \text{if } X_{\text{NRZ}}[n] = -1
+1, &amp; \text{if } K[n] = +1 \\
+0, &amp; \text{if } K[n] = -1
 \end{cases}
 &amp;\quad\quad
-X_n &amp;=
+k[n] &amp;=
 \begin{cases}
-1, &amp; \text{if } X_{\text{MAN}}[n] = +1, -1 \\
-0, &amp; \text{if } X_{\text{MAN}}[n] = -1, +1
+1, &amp; \text{if } K[n] = +1, -1 \\
+0, &amp; \text{if } K[n] = -1, +1
 \end{cases}
 \end{aligned}
 \end{equation}
@@ -1553,8 +1553,8 @@ X_n &amp;=
 <details class="where" open>
   <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(X_{\text{NRZ}}[n]\)</span> or <span class="arithmatex">\(X_{\text{MAN}}[n]\)</span>: Input symbol stream</li>
-<li><span class="arithmatex">\(X_n\)</span>: Output bitstream.</li>
+<li><span class="arithmatex">\(K[n]\)</span>: Input symbol stream</li>
+<li><span class="arithmatex">\(k[n]\)</span>: Output bitstream.</li>
 </ul>
 </details>
 

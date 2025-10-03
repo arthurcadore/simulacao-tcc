@@ -795,7 +795,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1319,14 +1319,14 @@
 
     <div class="doc doc-contents ">
 
-        <p>Scramble the vectors <span class="arithmatex">\(v_t^{(0)}\)</span> and <span class="arithmatex">\(v_t^{(1)}\)</span>, returning the vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span> scrambled. The scrambling process is given by the expression below.</p>
+        <p>Scramble the vectors <span class="arithmatex">\(v_t^{(0)}\)</span> and <span class="arithmatex">\(v_t^{(1)}\)</span>, returning the vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span> scrambled. The scrambling process is given by the expression below.</p>
 <div class="arithmatex">\[\begin{equation}
-    X_n = \begin{cases}
+    X[n] = \begin{cases}
     A, &amp; \text{if } n = 0 \pmod{3} \\
     B, &amp; \text{if } n = 1 \pmod{3} \\
     C, &amp; \text{if } n = 2 \pmod{3}
     \end{cases} \quad
-    Y_n = \begin{cases}
+    Y[n] = \begin{cases}
     A, &amp; \text{if } n = 0 \pmod{3} \\
     B, &amp; \text{if } n = 1 \pmod{3} \\
     C, &amp; \text{if } n = 2 \pmod{3}
@@ -1337,7 +1337,7 @@
 <details class="where" open>
   <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span>: Scrambled output vectors.</li>
+<li><span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span>: Scrambled output vectors.</li>
 <li><span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>: Combination of bits of the input vectors <span class="arithmatex">\(v_t^{(0)}\)</span> and <span class="arithmatex">\(v_t^{(1)}\)</span>.</li>
 <li><span class="arithmatex">\(n\)</span>: Index of the bit to be scrambled.</li>
 </ul>
@@ -1405,7 +1405,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.5)
 
     <div class="doc doc-contents ">
 
-        <p>Receive the vectors <span class="arithmatex">\(v_t^{(0)}\)</span> and <span class="arithmatex">\(v_t^{(1)}\)</span> as input and return the vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span> scrambled.</p>
+        <p>Receive the vectors <span class="arithmatex">\(v_t^{(0)}\)</span> and <span class="arithmatex">\(v_t^{(1)}\)</span> as input and return the vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span> scrambled.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1470,7 +1470,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.5)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Scrambled vector <span class="arithmatex">\(X_n\)</span>.</p>
+                <p>Scrambled vector <span class="arithmatex">\(X[n]\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1480,7 +1480,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.5)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Scrambled vector <span class="arithmatex">\(Y_n\)</span>.</p>
+                <p>Scrambled vector <span class="arithmatex">\(Y[n]\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1526,7 +1526,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.5)
 
     <div class="doc doc-contents ">
 
-        <p>Receive the vectors <span class="arithmatex">\(X'_n\)</span> and <span class="arithmatex">\(Y'_n\)</span> scrambled and return the vectors <span class="arithmatex">\(v_t^{(0)'}\)</span> and <span class="arithmatex">\(v_t^{(1)'}\)</span> restored.</p>
+        <p>Receive the vectors <span class="arithmatex">\(X'[n]\)</span> and <span class="arithmatex">\(Y'[n]\)</span> scrambled and return the vectors <span class="arithmatex">\(v_t^{(0)'}\)</span> and <span class="arithmatex">\(v_t^{(1)'}\)</span> restored.</p>
 <div class="arithmatex">\[\begin{equation}
     v_t^{(0)'} = \begin{cases}
     A, &amp; \text{if } n = 0 \pmod{3} \\
@@ -1546,7 +1546,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.5)
   <summary>Where</summary>
   <ul>
 <li><span class="arithmatex">\(v_t^{(0)'}\)</span> and <span class="arithmatex">\(v_t^{(1)'}\)</span>: Output vectors restored.</li>
-<li><span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>: Combination of bits of the input vectors <span class="arithmatex">\(X'_n\)</span> and <span class="arithmatex">\(Y'_n\)</span> scrambled.</li>
+<li><span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>: Combination of bits of the input vectors <span class="arithmatex">\(X'[n]\)</span> and <span class="arithmatex">\(Y'[n]\)</span> scrambled.</li>
 <li><span class="arithmatex">\(n\)</span>: Index of the bit to be scrambled.</li>
 </ul>
 </details>        <p>The descrambling process is illustrated by the block diagram below.</p>

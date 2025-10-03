@@ -786,7 +786,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1310,10 +1310,10 @@
 
     <div class="doc doc-contents ">
 
-        <p>Initializes the multiplexer used on transmission. Used to concatenate the input data vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span> with the preamble vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span>, returning the concatenated vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span>. The multiplexing process is given by the expression below.</p>
+        <p>Initializes the multiplexer used on transmission. Used to concatenate the input data vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span> with the preamble vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span>, returning the concatenated vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span>. The multiplexing process is given by the expression below.</p>
 <div class="arithmatex">\[
 \begin{align}
-X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
+X[n] = S_I[n] \oplus X[n] \text{ , } \quad Y[n] = S_Q[n] \oplus Y[n]
 \end{align}
 \]</div>
 
@@ -1360,7 +1360,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
 
     <div class="doc doc-contents ">
 
-        <p>Concatenates the input data vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span> with the preamble vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span>, returning the concatenated vectors <span class="arithmatex">\(X_n\)</span> and <span class="arithmatex">\(Y_n\)</span>. </p>
+        <p>Concatenates the input data vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span> with the preamble vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span>, returning the concatenated vectors <span class="arithmatex">\(X[n]\)</span> and <span class="arithmatex">\(Y[n]\)</span>. </p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1383,7 +1383,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Input vector <span class="arithmatex">\(S_I\)</span>.</p>
+                <p>Input vector <span class="arithmatex">\(S_I[n]\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1399,7 +1399,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Input vector <span class="arithmatex">\(S_Q\)</span>.</p>
+                <p>Input vector <span class="arithmatex">\(S_Q[n]\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1415,7 +1415,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Input vector <span class="arithmatex">\(X_n\)</span>.</p>
+                <p>Input vector <span class="arithmatex">\(X[n]\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1431,7 +1431,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Input vector <span class="arithmatex">\(Y_n\)</span>.</p>
+                <p>Input vector <span class="arithmatex">\(Y[n]\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1457,7 +1457,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Concatenated vector <span class="arithmatex">\(X_n\)</span>.</p>
+                <p>Concatenated vector <span class="arithmatex">\(X[n]\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1467,7 +1467,7 @@ X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Concatenated vector <span class="arithmatex">\(Y_n\)</span>.</p>
+                <p>Concatenated vector <span class="arithmatex">\(Y[n]\)</span>.</p>
               </div>
             </td>
           </tr>

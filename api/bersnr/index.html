@@ -718,7 +718,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1324,19 +1324,19 @@
 <a id="bersnr.interpolate"></a>
     <div class="doc doc-contents first">
 
-        <p>Define o número de repetições em função do <span class="arithmatex">\(Eb/N0\)</span>, usando interpolação linear entre pontos de referência, dada pela expressão abaixo.</p>
+        <p>Defines the number of repetitions as a function of <span class="arithmatex">\(Eb/N0\)</span>, using linear interpolation between reference points, given by the expression below.</p>
 <div class="arithmatex">\[
 r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r_{i})
 \]</div>
 
 
-<details class="onde" open>
-  <summary>Onde</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(r\)</span>: Número de repetições.</li>
-<li><span class="arithmatex">\(EBN0\)</span>: Relação <span class="arithmatex">\(Eb/N_0\)</span> em decibéis.</li>
-<li><span class="arithmatex">\(r_i\)</span> e <span class="arithmatex">\(r_{i+1}\)</span>: Número de repetições nos pontos de referência próximos.</li>
-<li><span class="arithmatex">\(EBN0_i\)</span> e <span class="arithmatex">\(EBN0_{i+1}\)</span>: Relações <span class="arithmatex">\(Eb/N_0\)</span> nos pontos de referência próximos.</li>
+<li><span class="arithmatex">\(r\)</span>: Number of repetitions.</li>
+<li><span class="arithmatex">\(EBN0\)</span>: <span class="arithmatex">\(Eb/N_0\)</span> ratio in decibels.</li>
+<li><span class="arithmatex">\(r_i\)</span> and <span class="arithmatex">\(r_{i+1}\)</span>: Number of repetitions at the nearest reference points.</li>
+<li><span class="arithmatex">\(EBN0_i\)</span> and <span class="arithmatex">\(EBN0_{i+1}\)</span>: <span class="arithmatex">\(Eb/N_0\)</span> ratios at the nearest reference points.</li>
 </ul>
 </details>
 
@@ -1360,7 +1360,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>O número total de pontos a serem gerados.</p>
+                <p>Total number of points to be generated.</p>
               </div>
             </td>
             <td>
@@ -1376,7 +1376,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Pontos de referência. </p>
+                <p>Reference points. </p>
               </div>
             </td>
             <td>
@@ -1392,7 +1392,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores correspondentes aos pontos de referência.</p>
+                <p>Values corresponding to the reference points.</p>
               </div>
             </td>
             <td>
@@ -1418,7 +1418,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de valores interpolados, arredondados para inteiros.</p>
+                <p>Array of interpolated values, rounded to integers.</p>
               </div>
             </td>
           </tr>
@@ -1468,7 +1468,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
 
     <div class="doc doc-contents ">
 
-        <p>Implementa a simulação de BER vs Eb/N0 para o padrão ARGOS-3.</p>
+        <p>Simulates the BER vs Eb/N0 for the ARGOS-3 standard.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1491,7 +1491,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores de Eb/N0 para os quais a simulação será realizada.</p>
+                <p>Values of Eb/N0 for which the simulation will be performed.</p>
               </div>
             </td>
             <td>
@@ -1507,7 +1507,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de threads para paralelização.</p>
+                <p>Number of threads for parallelization.</p>
               </div>
             </td>
             <td>
@@ -1523,7 +1523,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de blocos de dados para cada datagrama.</p>
+                <p>Number of data blocks for each datagram.</p>
               </div>
             </td>
             <td>
@@ -1539,7 +1539,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número máximo de repetições para cada valor de Eb/N0.</p>
+                <p>Maximum number of repetitions for each Eb/N0 value.</p>
               </div>
             </td>
             <td>
@@ -1555,7 +1555,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número máximo de erros para cada valor de Eb/N0.</p>
+                <p>Maximum number of errors for each Eb/N0 value.</p>
               </div>
             </td>
             <td>
@@ -1581,7 +1581,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se o número de erros não for o mesmo que o número de valores de Eb/N0.</p>
+                <p>If the number of errors is not the same as the number of Eb/N0 values.</p>
               </div>
             </td>
           </tr>
@@ -1589,10 +1589,11 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>BER vs Eb/N0 Plot Example: <img alt="pageplot" src="../assets/ber_vs_ebn0.svg" /></li>
+</ul>
+
 
     </div>
 
@@ -1609,7 +1610,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
 
     <div class="doc doc-contents ">
 
-        <p>Executa a simulação de BER vs Eb/N0 para o padrão ARGOS-3.</p>
+        <p>Runs the BER vs Eb/N0 simulation for the ARGOS-3 standard.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1627,7 +1628,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.</p>
+                <p>List of tuples (Eb/N0, BER) for each Eb/N0 value.</p>
               </div>
             </td>
           </tr>
@@ -1685,7 +1686,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
 
     <div class="doc doc-contents ">
 
-        <p>Implementa a simulação de BER vs Eb/N0 para o padrão QPSK.</p>
+        <p>Implements the BER vs Eb/N0 simulation for the QPSK standard.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1708,7 +1709,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Valores de Eb/N0 para os quais a simulação será realizada.</p>
+                <p>Values of Eb/N0 for which the simulation will be performed.</p>
               </div>
             </td>
             <td>
@@ -1724,7 +1725,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de threads para paralelização.</p>
+                <p>Number of threads for parallelization.</p>
               </div>
             </td>
             <td>
@@ -1740,7 +1741,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número de bits para cada simulação.</p>
+                <p>Number of bits for each simulation.</p>
               </div>
             </td>
             <td>
@@ -1756,7 +1757,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número máximo de repetições para cada valor de Eb/N0.</p>
+                <p>Maximum number of repetitions for each Eb/N0 value.</p>
               </div>
             </td>
             <td>
@@ -1772,7 +1773,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Número máximo de erros para cada valor de Eb/N0.</p>
+                <p>Maximum number of errors for each Eb/N0 value.</p>
               </div>
             </td>
             <td>
@@ -1798,7 +1799,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se o número de erros não for o mesmo que o número de valores de Eb/N0.</p>
+                <p>If the number of errors is not the same as the number of Eb/N0 values.</p>
               </div>
             </td>
           </tr>
@@ -1821,7 +1822,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
 
     <div class="doc doc-contents ">
 
-        <p>Executa a simulação de BER vs Eb/N0 para o padrão QPSK.</p>
+        <p>Runs the BER vs Eb/N0 simulation for the QPSK standard.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1839,7 +1840,7 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Lista de tuplas (Eb/N0, BER) para cada valor de Eb/N0.</p>
+                <p>List of tuples (Eb/N0, BER) for each Eb/N0 value.</p>
               </div>
             </td>
           </tr>
@@ -1862,20 +1863,20 @@ r = r_{i} + \frac{(EBN0 - EBN0_{i})}{(EBN0_{i+1} - EBN0_{i})} \cdot (r_{i+1} - r
 
     <div class="doc doc-contents ">
 
-        <p>Calcula a curva teórica de <span class="arithmatex">\(BER\)</span> vs <span class="arithmatex">\(Eb/N_0\)</span> para QPSK, segundo a expressão abaixo.</p>
+        <p>Calculates the theoretical BER vs Eb/N0 curve for QPSK, according to the expression below.</p>
 <div class="arithmatex">\[
 P_b(x) = Q \left(x\right) \mapsto P_b(x) = Q\left(\sqrt{2 \cdot \frac{E_b}{N_0}}\right)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(P_b(x)\)</span>: Probabilidade de erro. </li>
-<li><span class="arithmatex">\(Q(x)\)</span>: Função de erro complementar.</li>
-<li><span class="arithmatex">\(x\)</span>: Argumento da função <span class="arithmatex">\(Q(x)\)</span>.</li>
-<li><span class="arithmatex">\(E_b\)</span>: Energia por bit.</li>
-<li><span class="arithmatex">\(N_0\)</span>: Potência do ruído. </li>
+<li><span class="arithmatex">\(P_b(x)\)</span>: Error probability. </li>
+<li><span class="arithmatex">\(Q(x)\)</span>: Complementary error function.</li>
+<li><span class="arithmatex">\(x\)</span>: Argument of the <span class="arithmatex">\(Q(x)\)</span> function.</li>
+<li><span class="arithmatex">\(E_b\)</span>: Energy per bit.</li>
+<li><span class="arithmatex">\(N_0\)</span>: Noise power. </li>
 </ul>
 </details>
 
@@ -1894,7 +1895,7 @@ P_b(x) = Q \left(x\right) \mapsto P_b(x) = Q\left(\sqrt{2 \cdot \frac{E_b}{N_0}}
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de valores de BER teórica para cada Eb/N0 da classe.</p>
+                <p>Array of theoretical BER values for each Eb/N0 of the class.</p>
               </div>
             </td>
           </tr>

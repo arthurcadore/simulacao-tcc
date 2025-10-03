@@ -721,7 +721,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1482,21 +1482,21 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Xn</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Yn</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formatterI</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formatterQ</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Manchester&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">formatterI</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">formatterQ</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Manchester&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dI</span> <span class="o">=</span> <span class="n">formatterI</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">Xn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dQ</span> <span class="o">=</span> <span class="n">formatterQ</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">Yn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mfI</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">MatchedFilter</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC-Inverted&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mfQ</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">MatchedFilter</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Manchester-Inverted&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mfI</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">MatchedFilter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC-Inverted&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mfQ</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">MatchedFilter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Manchester-Inverted&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dI_prime</span> <span class="o">=</span> <span class="n">mfI</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dI</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dQ_prime</span> <span class="o">=</span> <span class="n">mfQ</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">dQ</span><span class="p">)</span>
 </code></pre></div>
     <ul>
-<li>Time Domain: <img alt="pageplot" src="../assets/receiver_mf_time.svg" /> </li>
-<li>Frequency Domain: <img alt="pageplot" src="../assets/receiver_mf_freq.svg" /></li>
+<li>Time Domain: <img alt="pageplot" src="../assets/example_mf_time.svg" /> </li>
+<li>Frequency Domain: <img alt="pageplot" src="../assets/example_mf_freq.svg" /></li>
 </ul>
 
 

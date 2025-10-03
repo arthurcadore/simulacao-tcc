@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#receptor" class="md-skip">
+        <a href="#reception-chain" class="md-skip">
           Skip to content
         </a>
       
@@ -718,7 +718,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1097,9 +1097,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#detector-de-portadora" class="md-nav__link">
+  <a href="#carrier-detector" class="md-nav__link">
     <span class="md-ellipsis">
-      Detector de Portadora
+      Carrier Detector
     </span>
   </a>
   
@@ -1115,9 +1115,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cadeia-de-recepcao" class="md-nav__link">
+  <a href="#reception-chain_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Cadeia de Recepção
+      Reception Chain
     </span>
   </a>
   
@@ -1142,27 +1142,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.demodulate" class="md-nav__link">
+  <a href="#receiver.Receiver.bandpass_demodulate" class="md-nav__link">
     <span class="md-ellipsis">
-      demodulate
+      bandpass_demodulate
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.lowpassfilter" class="md-nav__link">
+  <a href="#receiver.Receiver.low_pass_filter" class="md-nav__link">
     <span class="md-ellipsis">
-      lowpassfilter
+      low_pass_filter
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.matchedfilter" class="md-nav__link">
+  <a href="#receiver.Receiver.matched_filter" class="md-nav__link">
     <span class="md-ellipsis">
-      matchedfilter
+      matched_filter
     </span>
   </a>
   
@@ -1187,18 +1187,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.decode" class="md-nav__link">
+  <a href="#receiver.Receiver.line_decoder" class="md-nav__link">
     <span class="md-ellipsis">
-      decode
+      line_decoder
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.descrambler" class="md-nav__link">
+  <a href="#receiver.Receiver.unscrewer" class="md-nav__link">
     <span class="md-ellipsis">
-      descrambler
+      unscrewer
     </span>
   </a>
   
@@ -1214,9 +1214,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#receiver.Receiver.datagram" class="md-nav__link">
+  <a href="#receiver.Receiver.datagram_parser" class="md-nav__link">
     <span class="md-ellipsis">
-      datagram
+      datagram_parser
     </span>
   </a>
   
@@ -1379,12 +1379,12 @@
   
 
 
-<h1 id="receptor">Receptor</h1>
-<p>O processo de recepção é dividido em duas etapas, a detecção de portadora, responsável por verificar o sinal recebido e identificar para cada segmento de tempo as portadoras presentes, e a cadeia de recepção, responsavel por receber um segmento de sinal e realizar o processo de recepção a fim de recuperar o vetor de dados <span class="arithmatex">\(u_t^{(0)}\)</span>, conforme o diagrama de blocos abaixo.</p>
+<h1 id="reception-chain">Reception Chain</h1>
+<p>The reception chain is divided into two steps, carrier detection, responsible for verifying the received signal and identifying for each time segment the carriers present, and the receiver chain, responsible for receiving a signal segment and performing the reception process to recover the data vector <span class="arithmatex">\(u_t^{(0)}\)</span>, as shown in the block diagram below.</p>
 <p><img alt="pageplot" src="../../assets/reception_chain_hard.svg" /></p>
 <!-- ![pageplot](../assets/reception_chain_soft.svg) -->
 
-<h2 id="detector-de-portadora">Detector de Portadora</h2>
+<h2 id="carrier-detector">Carrier Detector</h2>
 
 
 <div class="doc doc-object doc-function">
@@ -1589,8 +1589,8 @@
 <span class="go">}</span>
 </code></pre></div>
     <ul>
-<li>Frequency Domain Segment: <img alt="pageplot" src="../assets/example_detector_freq.svg" /></li>
 <li>Waterfall Diagram: <img alt="pageplot" src="../assets/example_detector_waterfall.svg" /></li>
+<li>Frequency Domain Segment: <img alt="pageplot" src="../assets/example_detector_freq.svg" /></li>
 <li>Waterfall Detection Diagram: <img alt="pageplot" src="../assets/example_detector_waterfall_detection.svg" /></li>
 <li>Waterfall Decision Diagram: <img alt="pageplot" src="../assets/example_detector_waterfall_decision.svg" /></li>
 </ul>
@@ -1602,7 +1602,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
 
     </div>
 
-</div><h2 id="cadeia-de-recepcao">Cadeia de Recepção</h2>
+</div><h2 id="reception-chain_1">Reception Chain</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1643,7 +1643,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
 
     <div class="doc doc-contents ">
 
-        <p>Classe que encapsula todo o processo de recepção no padrão ARGOS-3.</p>
+        <p>Class that encapsulates the entire reception process in the ARGOS-3 standard.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1666,7 +1666,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de amostragem em Hz.</p>
+                <p>Sampling frequency in Hz.</p>
               </div>
             </td>
             <td>
@@ -1682,7 +1682,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Taxa de bits em bps.</p>
+                <p>Bit rate in bps.</p>
               </div>
             </td>
             <td>
@@ -1698,7 +1698,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de portadora em Hz.</p>
+                <p>Carrier frequency in Hz.</p>
               </div>
             </td>
             <td>
@@ -1714,7 +1714,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Frequência de corte do filtro passa-baixa em Hz.</p>
+                <p>Cutoff frequency of the low-pass filter in Hz.</p>
               </div>
             </td>
             <td>
@@ -1730,7 +1730,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>String de preâmbulo em hex.</p>
+                <p>String of preamble in hex.</p>
               </div>
             </td>
             <td>
@@ -1746,7 +1746,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Tupla com o tipo de codificação dos canais I e Q respectivamente.</p>
+                <p>Tuple with the type of encoding of channels I and Q respectively.</p>
               </div>
             </td>
             <td>
@@ -1762,7 +1762,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Matriz de geração para codificação convolucional.</p>
+                <p>Generation matrix for convolutional encoding.</p>
               </div>
             </td>
             <td>
@@ -1778,7 +1778,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se <code>True</code>, imprime os vetores intermediários no console. </p>
+                <p>If <code>True</code>, prints the intermediate vectors to the console. </p>
               </div>
             </td>
             <td>
@@ -1794,7 +1794,7 @@ AS3-SP-516-2097-CNES (Section 3.3)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Se <code>True</code>, gera e salva os gráficos dos processos intermediários.</p>
+                <p>If <code>True</code>, generates and saves the graphs of the intermediate processes.</p>
               </div>
             </td>
             <td>
@@ -1803,9 +1803,32 @@ AS3-SP-516-2097-CNES (Section 3.3)
           </tr>
       </tbody>
     </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the encoding types are not 'nrz' or 'manchester'.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
         <div class="referencia">
-<b>Referência:</b><br>
-AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
+<b>Reference:</b><br>
+AS3-SP-516-2097-CNES (section 3.1 and 3.2)
 </div>
 
 
@@ -1816,16 +1839,15 @@ AS3-SP-516-2097-CNES (seção 3.1 e 3.2)
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.demodulate" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">demodulate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.bandpass_demodulate" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">bandpass_demodulate</span><span class="p">(</span><span class="n">s_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>normalmente
-Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, recuperando os sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>.</p>
+        <p>Demodulates the received signal <span class="arithmatex">\(s'(t)\)</span> with noise <span class="arithmatex">\(r(t)\)</span>, returning the signals <span class="arithmatex">\(dX'_{I}(t)\)</span> and <span class="arithmatex">\(dY'_{Q}(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1841,14 +1863,14 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>s</code>
+                <code>s_prime</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(s'(t)\)</span> a ser demodulado.</p>
+                <p>Received signal <span class="arithmatex">\(s'(t)\)</span> to be demodulated.</p>
               </div>
             </td>
             <td>
@@ -1864,7 +1886,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Time vector.</p>
               </div>
             </td>
             <td>
@@ -1885,22 +1907,22 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>xI_prime</code></td>            <td>
+<td><code>dX_prime</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(x'_{I}(t)\)</span> demodulado.</p>
+                <p>Demodulated signal <span class="arithmatex">\(dX'_{I}(t)\)</span>.</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
-<td><code>yQ_prime</code></td>            <td>
+<td><code>dY_prime</code></td>            <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(y'_{Q}(t)\)</span> demodulado.</p>
+                <p>Demodulated signal <span class="arithmatex">\(dY'_{Q}(t)\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -1908,13 +1930,12 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_demodulator_time.svg" /></li>
-<li>Frequência: <img alt="pageplot" src="../assets/receiver_demodulator_freq.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_demodulator_time.svg" /></li>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/receiver_demodulator_freq.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -1923,15 +1944,15 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.lowpassfilter" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">lowpassfilter</span><span class="p">(</span><span class="n">xI_prime</span><span class="p">,</span> <span class="n">yQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.low_pass_filter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">low_pass_filter</span><span class="p">(</span><span class="n">dX_prime</span><span class="p">,</span> <span class="n">dY_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro passa-baixa com resposta ao impuslo <span class="arithmatex">\(h(t)\)</span> aos sinais <span class="arithmatex">\(x'_{I}(t)\)</span> e <span class="arithmatex">\(y'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>.</p>
+        <p>Applies the low-pass filter (LPF) with impulse response <span class="arithmatex">\(h(t)\)</span> to the signals <span class="arithmatex">\(dX'(t)\)</span> and <span class="arithmatex">\(dY'(t)\)</span>, returning the filtered signals <span class="arithmatex">\(d_{I}'(t)\)</span> and <span class="arithmatex">\(d_{Q}'(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1947,14 +1968,14 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>xI_prime</code>
+                <code>dX_prime</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(x'_{I}(t)\)</span> a ser filtrado.</p>
+                <p>Signal <span class="arithmatex">\(dX'(t)\)</span> to be filtered.</p>
               </div>
             </td>
             <td>
@@ -1963,14 +1984,14 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>yQ_prime</code>
+                <code>dY_prime</code>
             </td>
             <td>
                   <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(y'_{Q}(t)\)</span> a ser filtrado.</p>
+                <p>Signal <span class="arithmatex">\(dY'(t)\)</span> to be filtered.</p>
               </div>
             </td>
             <td>
@@ -1986,7 +2007,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Time vector.</p>
               </div>
             </td>
             <td>
@@ -2012,7 +2033,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(d'_{I}(t)\)</span> filtrado.</p>
+                <p>Signal <span class="arithmatex">\(d_{I}'(t)\)</span> filtered.</p>
               </div>
             </td>
           </tr>
@@ -2022,7 +2043,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(d'_{Q}(t)\)</span> filtrado.</p>
+                <p>Signal <span class="arithmatex">\(d_{Q}'(t)\)</span> filtered.</p>
               </div>
             </td>
           </tr>
@@ -2030,13 +2051,12 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_lpf_time.svg" /></li>
-<li>Frequência: <img alt="pageplot" src="../assets/receiver_lpf_freq.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_lpf_time.svg" /></li>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/receiver_lpf_freq.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2045,15 +2065,15 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.matchedfilter" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">matchedfilter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.matched_filter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">matched_filter</span><span class="p">(</span><span class="n">dI_prime</span><span class="p">,</span> <span class="n">dQ_prime</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Aplica o filtro casado com resposta ao impuslo <span class="arithmatex">\(g(-t)\)</span> aos sinais <span class="arithmatex">\(d'_{I}(t)\)</span> e <span class="arithmatex">\(d'_{Q}(t)\)</span>, retornando os sinais filtrados <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>.</p>
+        <p>Applies the matched filter with impulse response <span class="arithmatex">\(g(-t)\)</span> to the signals <span class="arithmatex">\(d_{I}'(t)\)</span> and <span class="arithmatex">\(d_{Q}'(t)\)</span>, returning the filtered signals <span class="arithmatex">\(I'(t)\)</span> and <span class="arithmatex">\(Q'(t)\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2076,7 +2096,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(d'_{I}(t)\)</span> a ser filtrado.</p>
+                <p>Signal <span class="arithmatex">\(d'_{I}(t)\)</span> to be filtered.</p>
               </div>
             </td>
             <td>
@@ -2092,7 +2112,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(d'_{Q}(t)\)</span> a ser filtrado.</p>
+                <p>Signal <span class="arithmatex">\(d'_{Q}(t)\)</span> to be filtered.</p>
               </div>
             </td>
             <td>
@@ -2108,7 +2128,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Time vector.</p>
               </div>
             </td>
             <td>
@@ -2134,7 +2154,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> filtrado.</p>
+                <p>Signal <span class="arithmatex">\(I'(t)\)</span> filtered.</p>
               </div>
             </td>
           </tr>
@@ -2144,7 +2164,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> filtrado.</p>
+                <p>Signal <span class="arithmatex">\(Q'(t)\)</span> filtered.</p>
               </div>
             </td>
           </tr>
@@ -2152,13 +2172,12 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_mf_time.svg" /></li>
-<li>Frequência: <img alt="pageplot" src="../assets/receiver_mf_freq.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_mf_time.svg" /></li>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/receiver_mf_freq.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2175,7 +2194,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
 
     <div class="doc doc-contents ">
 
-        <p>Realiza a sincronização do sinal recebido, retornando o sinal sincronizado.</p>
+        <p>Performs the signal synchronization, returning the synchronized signal.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2198,7 +2217,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> a ser sincronizado.</p>
+                <p>Signal <span class="arithmatex">\(I'(t)\)</span> to be synchronized.</p>
               </div>
             </td>
             <td>
@@ -2214,7 +2233,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> a ser sincronizado.</p>
+                <p>Signal <span class="arithmatex">\(Q'(t)\)</span> to be synchronized.</p>
               </div>
             </td>
             <td>
@@ -2240,7 +2259,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Delay do sinal <span class="arithmatex">\(I'(t)\)</span>.</p>
+                <p>Delay of the signal <span class="arithmatex">\(I'(t)\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -2250,7 +2269,7 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Delay do sinal <span class="arithmatex">\(Q'(t)\)</span>.</p>
+                <p>Delay of the signal <span class="arithmatex">\(Q'(t)\)</span>.</p>
               </div>
             </td>
           </tr>
@@ -2258,11 +2277,12 @@ Demodula o sinal <span class="arithmatex">\(s'(t)\)</span> com ruído recebido, 
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p>Tempo: <img alt="pageplot" src="../assets/receiver_sync_time.svg" />
-Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_sync_time.svg" /></li>
+<li>Correlation Module Plot Example: <img alt="pageplot" src="../assets/receiver_sync_corr.svg" /></li>
+</ul>
+
 
     </div>
 
@@ -2279,7 +2299,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 
     <div class="doc doc-contents ">
 
-        <p>Realiza a decisão (amostragem e quantização) dos sinais <span class="arithmatex">\(I'(t)\)</span> e <span class="arithmatex">\(Q'(t)\)</span>, retornando os vetores de simbolos <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>.</p>
+        <p>Performs the decision (sampling and quantization) of the signals <span class="arithmatex">\(I'(t)\)</span> and <span class="arithmatex">\(Q'(t)\)</span>, returning the symbol vectors <span class="arithmatex">\(X'_{NRZ}[n]\)</span> and <span class="arithmatex">\(Y'_{MAN}[n]\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2302,7 +2322,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(I'(t)\)</span> a ser amostrado e quantizado.</p>
+                <p>Signal <span class="arithmatex">\(I'(t)\)</span> to be sampled and quantized.</p>
               </div>
             </td>
             <td>
@@ -2318,7 +2338,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Q'(t)\)</span> a ser amostrado e quantizado.</p>
+                <p>Signal <span class="arithmatex">\(Q'(t)\)</span> to be sampled and quantized.</p>
               </div>
             </td>
             <td>
@@ -2334,7 +2354,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de tempo.</p>
+                <p>Time vector.</p>
               </div>
             </td>
             <td>
@@ -2360,7 +2380,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> amostrado e quantizado.</p>
+                <p>Signal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> sampled and quantized.</p>
               </div>
             </td>
           </tr>
@@ -2370,7 +2390,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> amostrado e quantizado.</p>
+                <p>Signal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> sampled and quantized.</p>
               </div>
             </td>
           </tr>
@@ -2378,14 +2398,13 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_sampler_time.svg" /></li>
-<li>Constelação: <img alt="pageplot" src="../assets/receiver_sampler_const.svg" />  </li>
-<li>Fase: <img alt="pageplot" src="../assets/receiver_sampler_phase.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_sampler_time.svg" /></li>
+<li>Constellation Plot Example: <img alt="pageplot" src="../assets/receiver_sampler_const.svg" />  </li>
+<li>Phase Plot Example: <img alt="pageplot" src="../assets/receiver_sampler_phase.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2394,15 +2413,15 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.decode" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.line_decoder" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">line_decoder</span><span class="p">(</span><span class="n">Xnrz_prime</span><span class="p">,</span> <span class="n">Yman_prime</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica os vetores de simbolos codificados <span class="arithmatex">\(X'_{NRZ}[n]\)</span> e <span class="arithmatex">\(Y'_{MAN}[n]\)</span>, retornando os vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>.</p>
+        <p>Decodes the symbol vectors <span class="arithmatex">\(X'_{NRZ}[n]\)</span> and <span class="arithmatex">\(Y'_{MAN}[n]\)</span>, returning the bit vectors <span class="arithmatex">\(X'n\)</span> and <span class="arithmatex">\(Y'n\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2425,7 +2444,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> quantizado.</p>
+                <p>Signal <span class="arithmatex">\(X'_{NRZ}[n]\)</span> quantized.</p>
               </div>
             </td>
             <td>
@@ -2441,7 +2460,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> quantizado.</p>
+                <p>Signal <span class="arithmatex">\(Y'_{MAN}[n]\)</span> quantized.</p>
               </div>
             </td>
             <td>
@@ -2467,7 +2486,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(X'n\)</span> decodificado.</p>
+                <p>Signal <span class="arithmatex">\(X'n\)</span> decoded.</p>
               </div>
             </td>
           </tr>
@@ -2477,7 +2496,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(Y'n\)</span> decodificado.</p>
+                <p>Signal <span class="arithmatex">\(Y'n\)</span> decoded.</p>
               </div>
             </td>
           </tr>
@@ -2485,12 +2504,11 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_decoder_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_decoder_time.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2499,15 +2517,15 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.descrambler" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">descrambler</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.unscrewer" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">unscrewer</span><span class="p">(</span><span class="n">Xn_prime</span><span class="p">,</span> <span class="n">Yn_prime</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Desembaralha os vetores de bits <span class="arithmatex">\(X'n\)</span> e <span class="arithmatex">\(Y'n\)</span>, retornando os vetores de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> e <span class="arithmatex">\(v_{t}^{1'}\)</span>.</p>
+        <p>Unscrambles the bit vectors <span class="arithmatex">\(X'n\)</span> and <span class="arithmatex">\(Y'n\)</span>, returning the bit vectors <span class="arithmatex">\(v_{t}^{0'}\)</span> and <span class="arithmatex">\(v_{t}^{1'}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2530,7 +2548,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(X'n\)</span> embaralhados.</p>
+                <p>Bit vector <span class="arithmatex">\(X'n\)</span> shuffled.</p>
               </div>
             </td>
             <td>
@@ -2546,7 +2564,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(Y'n\)</span> embaralhados.</p>
+                <p>Bit vector <span class="arithmatex">\(Y'n\)</span> shuffled.</p>
               </div>
             </td>
             <td>
@@ -2572,7 +2590,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> desembaralhado.</p>
+                <p>Bit vector <span class="arithmatex">\(v_{t}^{0'}\)</span> unshuffled.</p>
               </div>
             </td>
           </tr>
@@ -2582,7 +2600,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{1'}\)</span> desembaralhado.</p>
+                <p>Bit vector <span class="arithmatex">\(v_{t}^{1'}\)</span> unshuffled.</p>
               </div>
             </td>
           </tr>
@@ -2590,12 +2608,11 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_descrambler_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_descrambler_time.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2612,7 +2629,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 
     <div class="doc doc-contents ">
 
-        <p>Decodifica os vetores de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> e <span class="arithmatex">\(v_{t}^{1'}\)</span>, retornando o vetor de bits <span class="arithmatex">\(u_{t}'\)</span>.</p>
+        <p>Decodes the bit vectors <span class="arithmatex">\(v_{t}^{0'}\)</span> and <span class="arithmatex">\(v_{t}^{1'}\)</span>, returning the bit vector <span class="arithmatex">\(u_{t}'\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2635,7 +2652,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{0'}\)</span> desembaralhado.</p>
+                <p>Bit vector <span class="arithmatex">\(v_{t}^{0'}\)</span> unshuffled.</p>
               </div>
             </td>
             <td>
@@ -2651,7 +2668,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(v_{t}^{1'}\)</span> desembaralhado.</p>
+                <p>Bit vector <span class="arithmatex">\(v_{t}^{1'}\)</span> unshuffled.</p>
               </div>
             </td>
             <td>
@@ -2677,7 +2694,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+                <p>Bit vector <span class="arithmatex">\(u_{t}'\)</span> decoded.</p>
               </div>
             </td>
           </tr>
@@ -2685,12 +2702,11 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_conv_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_conv_time.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2699,15 +2715,15 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 <div class="doc doc-object doc-function">
 
 
-<h2 id="receiver.Receiver.datagram" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">datagram</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span></code>
+<h2 id="receiver.Receiver.datagram_parser" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">datagram_parser</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Recebe um vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado e retorna um datagrama no padrão ARGOS-3, ou o vetor de bits <span class="arithmatex">\(u_{t}'\)</span> se houver erro.</p>
+        <p>Receives a decoded bit vector <span class="arithmatex">\(u_{t}'\)</span> and returns a datagram in the ARGOS-3 format, or the bit vector <span class="arithmatex">\(u_{t}'\)</span> if there is an error.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2730,7 +2746,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vetor de bits <span class="arithmatex">\(u_{t}'\)</span> decodificado.</p>
+                <p>Bit vector <span class="arithmatex">\(u_{t}'\)</span> decoded.</p>
               </div>
             </td>
             <td>
@@ -2756,7 +2772,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Datagrama gerado, ou o vetor de bits <span class="arithmatex">\(u_{t}'\)</span> se houver erro.</p>
+                <p>Datagram generated, or the bit vector <span class="arithmatex">\(u_{t}'\)</span> if there is an error.</p>
               </div>
             </td>
           </tr>
@@ -2766,7 +2782,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Indica se a operação foi bem-sucedida.</p>
+                <p>Indicates if the operation was successful.</p>
               </div>
             </td>
           </tr>
@@ -2774,12 +2790,11 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <ul>
-<li>Tempo: <img alt="pageplot" src="../assets/receiver_datagram_time.svg" /></li>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/receiver_datagram_time.svg" /></li>
 </ul>
-</details>
+
 
     </div>
 
@@ -2796,7 +2811,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
 
     <div class="doc doc-contents ">
 
-        <p>Executa o processo de recepção, retornando o resultado da recepção.</p>
+        <p>Receives a signal <span class="arithmatex">\(s(t)\)</span> and returns the result of the reception.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2819,7 +2834,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(s(t)\)</span> recebido.</p>
+                <p>Signal <span class="arithmatex">\(s(t)\)</span> received.</p>
               </div>
             </td>
             <td>
@@ -2845,7 +2860,7 @@ Módulo Correlação: <img alt="pageplot" src="../assets/receiver_sync_corr.svg"
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Datagrama gerado, ou vetor ut se houver erro.</p>
+                <p>Datagram generated, or the bit vector <span class="arithmatex">\(u_{t}'\)</span> if there is an error.</p>
               </div>
             </td>
           </tr>

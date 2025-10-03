@@ -786,7 +786,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1310,11 +1310,11 @@
 
     <div class="doc doc-contents ">
 
-        <p>Criate the preamble bits sequence <span class="arithmatex">\(S\)</span> from the hexadecimal string. On ARGOS-3 standard, the preamble is <span class="arithmatex">\(S = 2BEEEEBF_{16}\)</span>. The preamble bits sequence <span class="arithmatex">\(S\)</span> is intercalated to form the vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span> for each channel, as shown below.</p>
+        <p>Create the preamble bits sequence <span class="arithmatex">\(S[n]\)</span> from a hexadecimal string (Syncronization word). On ARGOS-3 standard, the preamble defined by standard is <span class="arithmatex">\(S[n] = 2BEEEEBF_{16}\)</span>. The preamble bits sequence <span class="arithmatex">\(S[n]\)</span> is intercalated to form the vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span> for each channel, as shown below.</p>
 <div class="arithmatex">\[
 \begin{align}
-S_I &amp;= [S_0,\, S_2,\, S_4,\, \dots,\, S_{28}] &amp;&amp; \mapsto \quad S_I = [1111,\, 1111,\, 1111,\, 111] \\
-S_Q &amp;= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] &amp;&amp; \mapsto \quad S_Q = [0011,\, 0101,\, 0100,\, 111]
+S_I[n] &amp;= [S_0,\, S_2,\, S_4,\, \dots,\, S_{28}] &amp;&amp; \mapsto \quad S_I[n] = [1111,\, 1111,\, 1111,\, 111] \\
+S_Q[n] &amp;= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] &amp;&amp; \mapsto \quad S_Q[n] = [0011,\, 0101,\, 0100,\, 111]
 \end{align}
 \]</div>
 
@@ -1322,8 +1322,8 @@ S_Q &amp;= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] &amp;&amp; \mapsto \quad S_Q =
 <details class="where" open>
   <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(S\)</span>: Preamble bits sequence.</li>
-<li><span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span>: Vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span> corresponding to the I and Q channels, respectively.</li>
+<li><span class="arithmatex">\(S[n]\)</span>: Preamble bits sequence.</li>
+<li><span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span>: Vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span> corresponding to the I and Q channels, respectively.</li>
 </ul>
 </details>
 
@@ -1373,7 +1373,7 @@ S_Q &amp;= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] &amp;&amp; \mapsto \quad S_Q =
             </td>
             <td>
               <div class="doc-md-description">
-                <p>If the preamble <span class="arithmatex">\(S\)</span> has a different length from 8 characters. </p>
+                <p>If the preamble <span class="arithmatex">\(S[n]\)</span> has a different length from 8 characters. </p>
               </div>
             </td>
           </tr>
@@ -1426,7 +1426,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.6)
 
     <div class="doc doc-contents ">
 
-        <p>Generate the vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span> from the preamble bits sequence <span class="arithmatex">\(S\)</span>.</p>
+        <p>Generate the vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span> from the preamble bits sequence <span class="arithmatex">\(S[n]\)</span>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1444,7 +1444,7 @@ AS3-SP-516-274-CNES (seção 3.1.4.6)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Vectors <span class="arithmatex">\(S_I\)</span> and <span class="arithmatex">\(S_Q\)</span>.</p>
+                <p>Vectors <span class="arithmatex">\(S_I[n]\)</span> and <span class="arithmatex">\(S_Q[n]\)</span>.</p>
               </div>
             </td>
           </tr>

@@ -721,7 +721,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1337,7 +1337,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Initializes a pulse modulator, with pulse response <span class="arithmatex">\(g(t)\)</span> used to prepare the symbols for modulation. The deployment of the pulse response <span class="arithmatex">\(g(t)\)</span> for each channel is illustrated in the figure below.</p>
+        <p>Initializes a pulse modulator, with pulse response <span class="arithmatex">\(g(t)\)</span> used to prepare symbols as <span class="arithmatex">\(I[n]\)</span> and <span class="arithmatex">\(Q[n]\)</span> for modulation. The deployment of the pulse response <span class="arithmatex">\(g(t)\)</span> for each channel is illustrated in the figure below.</p>
 <p><img alt="pageplot" src="../../assets/pulse_modulate.svg" /></p>
 
 
@@ -1425,7 +1425,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Type of pulse, currently only <span class="arithmatex">\(RRC\)</span> is supported.</p>
+                <p>Type of pulse.</p>
               </div>
             </td>
             <td>
@@ -1521,22 +1521,22 @@
     <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">argos3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span> 
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Xn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Xn</span><span class="p">)</span>
 <span class="go">[0 1 1 1 0 1 1 1 0 0 0 0 0 0 1 0 1 1 1 1]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Yn</span><span class="p">)</span>
 <span class="go">[0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 1 1 0 1]</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">symbols_I</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;NRZ&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">symbols_Q</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;NRZ&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">In</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;NRZ&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Xn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Qn</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;NRZ&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">Yn</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">formatter_I</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">prefix_duration</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">formatter_Q</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">Rb</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;RRC&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="n">bits_per_symbol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">prefix_duration</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dI</span> <span class="o">=</span> <span class="n">formatter_I</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">symbols_I</span><span class="p">,</span> <span class="n">add_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dQ</span> <span class="o">=</span> <span class="n">formatter_Q</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">symbols_Q</span><span class="p">,</span> <span class="n">add_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dI</span> <span class="o">=</span> <span class="n">formatter_I</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">In</span><span class="p">,</span> <span class="n">add_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dQ</span> <span class="o">=</span> <span class="n">formatter_Q</span><span class="o">.</span><span class="n">apply_format</span><span class="p">(</span><span class="n">Qn</span><span class="p">,</span> <span class="n">add_prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dI</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 <span class="go">[-0.07484442 -0.07466479 -0.07461029 -0.07454939 -0.07448207 -0.07440832</span>

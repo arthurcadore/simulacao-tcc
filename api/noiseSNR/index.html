@@ -718,7 +718,7 @@
   
   
   <span class="md-ellipsis">
-    Channel Encoder
+    Line Encoder
     
   </span>
   
@@ -1310,7 +1310,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Implementação de canal para aplicação de ruido <span class="arithmatex">\(AWGN\)</span>, com base em <span class="arithmatex">\(SNR\)</span>.</p>
+        <p>Implementation of AWGN noise <span class="arithmatex">\(r(t)\)</span>, based on <span class="arithmatex">\(SNR_{dB}\)</span>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1333,7 +1333,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Relação sinal-ruído em decibéis (dB).</p>
+                <p>Signal-to-noise ratio in decibels (dB).</p>
               </div>
             </td>
             <td>
@@ -1349,7 +1349,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Seed do gerador de números aleatórios.</p>
+                <p>Seed of the random number generator.</p>
               </div>
             </td>
             <td>
@@ -1365,7 +1365,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Multiplicador de comprimento do sinal.</p>
+                <p>Multiplier of the signal length.</p>
               </div>
             </td>
             <td>
@@ -1381,7 +1381,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Fator de posição do ruído.</p>
+                <p>Position factor of the noise.</p>
               </div>
             </td>
             <td>
@@ -1392,10 +1392,40 @@
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_noise_time.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">argos3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span> 
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transmitter</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Transmitter</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">2400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">transmitter</span><span class="o">.</span><span class="n">transmit</span><span class="p">(</span><span class="n">argos3</span><span class="o">.</span><span class="n">Datagram</span><span class="p">(</span><span class="n">pcdnum</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">numblocks</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noise</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Noise</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s_prime</span> <span class="o">=</span> <span class="n">noise</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>                  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">receiver</span> <span class="o">=</span> <span class="n">argos3</span><span class="o">.</span><span class="n">Receiver</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">2400</span><span class="p">,</span> <span class="n">output_print</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datagramRX</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">receiver</span><span class="o">.</span><span class="n">receive</span><span class="p">(</span><span class="n">s_prime</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">success</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">datagramRX</span><span class="o">.</span><span class="n">parse_datagram</span><span class="p">())</span>
+<span class="go">{</span>
+<span class="go">  &quot;msglength&quot;: 1,</span>
+<span class="go">  &quot;pcdid&quot;: 1234,</span>
+<span class="go">  &quot;data&quot;: {</span>
+<span class="go">    &quot;bloco_1&quot;: {</span>
+<span class="go">      &quot;sensor_1&quot;: 37,</span>
+<span class="go">      &quot;sensor_2&quot;: 198,</span>
+<span class="go">      &quot;sensor_3&quot;: 9</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  &quot;tail&quot;: 7</span>
+<span class="go">}</span>
+</code></pre></div>
+    <ul>
+<li>Time Domain Plot Example: <img alt="pageplot" src="../assets/example_noise_time_snr.svg" /> </li>
+<li>Frequency Domain Plot Example: <img alt="pageplot" src="../assets/example_noise_freq_snr.svg" /></li>
+</ul>
+
 
     </div>
 
@@ -1412,31 +1442,31 @@
 
     <div class="doc doc-contents ">
 
-        <p>Adiciona ruído AWGN <span class="arithmatex">\(n(t)\)</span> ao sinal de entrada <span class="arithmatex">\(s(t)\)</span>, com base na <span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span> definida na inicialização. </p>
+        <p>Adds AWGN noise <span class="arithmatex">\(n(t)\)</span> to the input signal <span class="arithmatex">\(s(t)\)</span>, based on the <span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span> defined in initialization. </p>
 <div class="arithmatex">\[
 r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(r(t)\)</span>: Sinal retornado com ruído AWGN adicionado.</li>
-<li><span class="arithmatex">\(s(t)\)</span>: Sinal de entrada sem ruído. </li>
-<li><span class="arithmatex">\(n(t)\)</span>: Ruído adicionado, com distribuição normal <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
+<li><span class="arithmatex">\(r(t)\)</span>: Signal returned with AWGN noise added.</li>
+<li><span class="arithmatex">\(s(t)\)</span>: Input signal without noise. </li>
+<li><span class="arithmatex">\(n(t)\)</span>: Noise added, with normal distribution <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span>.</li>
 </ul>
-</details>        <p>A variância do ruído <span class="arithmatex">\(\sigma^2\)</span> é dada por:</p>
+</details>        <p>The noise variance <span class="arithmatex">\(\sigma^2\)</span> is given by:</p>
 <div class="arithmatex">\[
 \sigma^2 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{10^{\frac{\mathrm{SNR}_{dB}}{10}}}
 \]</div>
 
 
-<details class="sendo" open>
-  <summary>Sendo</summary>
+<details class="where" open>
+  <summary>Where</summary>
   <ul>
-<li><span class="arithmatex">\(\sigma^2\)</span>: A variância do ruído.</li>
-<li><span class="arithmatex">\(\mathbb{E}\!\left[ |s(t)|^2 \right]\)</span>: Potência média do sinal de entrada.</li>
-<li><span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span>: Relação sinal-ruído em decibéis (dB).</li>
+<li><span class="arithmatex">\(\sigma^2\)</span>: Noise variance.</li>
+<li><span class="arithmatex">\(\mathbb{E}\!\left[ |s(t)|^2 \right]\)</span>: Input signal power.</li>
+<li><span class="arithmatex">\(\mathrm{SNR}_{dB}\)</span>: Signal-to-noise ratio in decibels (dB).</li>
 </ul>
 </details>
 
@@ -1460,7 +1490,7 @@ r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal transmitido <span class="arithmatex">\(s(t)\)</span>.</p>
+                <p>Input signal <span class="arithmatex">\(s(t)\)</span>.</p>
               </div>
             </td>
             <td>
@@ -1486,7 +1516,7 @@ r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Sinal <span class="arithmatex">\(r(t)\)</span>, com ruído AWGN adicionado.</p>
+                <p>Signal <span class="arithmatex">\(r(t)\)</span>, with AWGN noise added.</p>
               </div>
             </td>
           </tr>
@@ -1494,10 +1524,11 @@ r(t) = s(t) + n(t), \qquad n(t) \sim \mathcal{N}(0, \sigma^2)
     </table>
 
 
-<details class="example" open>
-  <summary>Example</summary>
-  <p><img alt="pageplot" src="../assets/example_noise_gaussian_snr.svg" /></p>
-</details>
+<p><span class="doc-section-title">Examples:</span></p>
+    <ul>
+<li>Noise Density Plot Example: <img alt="pageplot" src="../assets/example_noise_gaussian_snr.svg" /></li>
+</ul>
+
 
     </div>
 
