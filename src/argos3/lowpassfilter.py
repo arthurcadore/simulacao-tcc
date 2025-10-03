@@ -199,7 +199,7 @@ if __name__ == "__main__":
         title="Filtered Signal",
         xlim=(0, 8),
         amp_norm=True,
-        colors=COLOR_Q
+        colors=COLOR_I
     ).plot()
 
     fig_signal.tight_layout()
@@ -240,7 +240,7 @@ if __name__ == "__main__":
         labels=[r"$X(f)$"],
         title="Input Signal",
         xlim=(-5000, 5000),
-        colors=COLOR_AUX1
+        colors=COLOR_I
     ).plot()
 
     FrequencyPlot(
@@ -250,7 +250,7 @@ if __name__ == "__main__":
         labels=[r"$X'(f)$"],
         title="Filtered Signal",
         xlim=(-5000, 5000),
-        colors=COLOR_AUX2
+        colors=COLOR_I
     ).plot()
     
     save_figure(fig_freq, "example_lpf_freq.pdf")

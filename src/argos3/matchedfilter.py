@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, BitsPlot
+from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, BitsPlot, FrequencyPlot
 from .formatter import Formatter
 from .encoder import Encoder
 from .env_vars import * 
@@ -50,8 +50,8 @@ class MatchedFilter:
             >>> dI_prime = mfI.apply_filter(dI)
             >>> dQ_prime = mfQ.apply_filter(dQ)
 
-            - Time Domain: ![pageplot](assets/receiver_mf_time.svg) 
-            - Frequency Domain: ![pageplot](assets/receiver_mf_freq.svg)
+            - Time Domain: ![pageplot](assets/example_mf_time.svg) 
+            - Frequency Domain: ![pageplot](assets/example_mf_freq.svg)
         """
 
         # Attributes
@@ -198,8 +198,8 @@ if __name__ == "__main__":
     save_figure(fig_impulse, "example_mf_impulse_man.pdf")
 
 
-    dQ1_filtered = mfI.apply_filter(dI)
-    dQ2_filtered = mfQ.apply_filter(dQ)
+    dI_filtered = mfI.apply_filter(dI)
+    dQ_filtered = mfQ.apply_filter(dQ)
 
     fig_time, grid_time = create_figure(4, 2, figsize=(16, 16))
 
@@ -263,8 +263,8 @@ if __name__ == "__main__":
     
     TimePlot(
         fig_time, grid_time, (3,0),
-        t= np.arange(len(dQ1_filtered)) / fI.fs,
-        signals=[dQ1_filtered],
+        t= np.arange(len(dI_filtered)) / fI.fs,
+        signals=[dI_filtered],
         labels=[r"$d_I'(t)$"],
         amp_norm=True,
         colors=[COLOR_I],
@@ -272,8 +272,8 @@ if __name__ == "__main__":
 
     TimePlot(
         fig_time, grid_time, (3,1),
-        t= np.arange(len(dQ2_filtered)) / fQ.fs,
-        signals=[dQ2_filtered],
+        t= np.arange(len(dQ_filtered)) / fQ.fs,
+        signals=[dQ_filtered],
         labels=[r"$d_Q'(t)$"],
         amp_norm=True,
         colors=[COLOR_Q],
@@ -282,3 +282,67 @@ if __name__ == "__main__":
     fig_time.tight_layout()
     save_figure(fig_time, "example_mf_time.pdf")
     
+    fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
+    
+    ImpulseResponsePlot(
+        fig_freq, grid_freq, (0,0),
+        mfI.t_rc, [mfI.g, mfI.g_inverted],
+        t_unit="ms",
+        colors=[COLOR_AUX1, COLOR_AUX2],
+        label=[r"$g(t)$", r"$g(-t)$"],
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
+        amp_norm=True
+    ).plot()
+
+    ImpulseResponsePlot(
+        fig_freq, grid_freq, (0,1),
+        mfQ.t_rc, [mfQ.g, mfQ.g_inverted],
+        t_unit="ms",
+        colors=[COLOR_AUX1, COLOR_AUX2],
+        label=[r"$g(t)$", r"$g(-t)$"],
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
+        amp_norm=True
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,0),
+        fs=fI.fs,
+        signal=dI,
+        labels=[r"$S(f)$"],
+        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        colors=COLOR_I,
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,1),
+        fs=fQ.fs,
+        signal=dQ,
+        labels=[r"$S(f)$"],
+        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        colors=COLOR_Q,
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (2,0),
+        fs=fI.fs,
+        signal=dI_filtered,
+        labels=[r"$S'(f)$"],
+        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        colors=COLOR_I,
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (2,1),
+        fs=fQ.fs,
+        signal=dQ_filtered,
+        labels=[r"$S'(f)$"],
+        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        colors=COLOR_Q,
+    ).plot()
+
+    fig_freq.tight_layout()
+    save_figure(fig_freq, "example_mf_freq.pdf")

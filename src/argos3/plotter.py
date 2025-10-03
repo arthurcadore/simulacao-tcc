@@ -19,6 +19,8 @@ from scipy.ndimage import gaussian_filter
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
 
+from .env_vars import *
+
 # General plot parameters
 mpl.rcParams["pdf.fonttype"] = 42
 mpl.rcParams["ps.fonttype"] = 42
@@ -392,7 +394,7 @@ class ConstellationPlot(BasePlot):
         scatter_kwargs = {"s": 20, "alpha": 0.6}
         scatter_kwargs.update(self.style.get("scatter", {}))
         color = self.apply_color(0) or "darkgreen"
-        self.ax.scatter(dI_c, dQ_c, label="IQ samples", color=color, **scatter_kwargs)
+        self.ax.scatter(dI_c, dQ_c, label="$IQ$ samples", color=color, **scatter_kwargs)
     
         # QPSK ideal points
         qpsk_points = np.array([
@@ -403,8 +405,8 @@ class ConstellationPlot(BasePlot):
         ])
         if self.show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
-                            color="blue", s=160, marker="o",
-                            label="QPSK Ideal Points", linewidth=2)
+                            color=COLOR_AUX1, s=160, marker="o",
+                            label="$QPSK$ Ideal", linewidth=2)
     
         # Auxiliary lines
         self.ax.axhline(0, color="gray", linestyle="--", alpha=0.5)
@@ -413,8 +415,8 @@ class ConstellationPlot(BasePlot):
         self.ax.set_ylim(-lim, lim)
     
         # Labels
-        self.ax.set_xlabel("In Phase $I$")
-        self.ax.set_ylabel("Quadrature $Q$")
+        self.ax.set_xlabel("In Phase ($I$)")
+        self.ax.set_ylabel("Quadrature ($Q$)")
         self.apply_ax_style()
 
 class BitsPlot(BasePlot):
@@ -916,7 +918,7 @@ class PhasePlot(BasePlot):
             self.t *= 1e3
 
         if self.labels is None:
-            self.labels = ["Fase IQ"]
+            self.labels = ["Phase $I + jQ$"]
 
         # Ensure signals are in a tuple
         if isinstance(signals, (list, tuple)):
@@ -1129,7 +1131,7 @@ class FrequencyResponsePlot(BasePlot):
         # Plot
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
-        color = self.apply_color(0) or "darkorange"
+        color = self.apply_color(0) or COLOR_IMPULSE
         label = self.labels[0] if self.labels else "$H(f)$"
         self.ax.plot(w, magnitude, color=color, label=label, **line_kwargs)
 
@@ -1137,12 +1139,12 @@ class FrequencyResponsePlot(BasePlot):
         if self.show_phase:
             ax2 = self.ax.twinx()
             phase = np.unwrap(np.angle(h))
-            ax2.plot(w, phase, color="darkorange", linestyle="--", linewidth=1.5, label="Phase")
+            ax2.plot(w, phase, color=COLOR_AUX2, linestyle="--", linewidth=1.5, label="Phase")
             ax2.set_ylabel("Phase (rad)")
 
         # Add vertical bar at cut-off frequency
         if self.f_cut is not None:
-            self.ax.axvline(self.f_cut, color="red", linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
+            self.ax.axvline(self.f_cut, color=COLOR_AUX1, linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
 
         # Adjust axis
         if self.xlim is not None:
@@ -1228,14 +1230,14 @@ class DetectionFrequencyPlot(BasePlot):
         freqs_plot = freqs / 1000.0
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
-        color = self.apply_color(0) or "blue"
+        color = self.apply_color(0) or COLOR_AUX1
         label = self.labels[0] if self.labels else "Magnitude (dB)"
         self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
 
         # Threshold
         thr_line = self.threshold
         thr_label = f"Threshold = {thr_line:.2f} dB"
-        self.ax.axhline(thr_line, color="blue", linestyle="--", linewidth=2, label=thr_label)
+        self.ax.axhline(thr_line, color=COLOR_AUX1, linestyle="--", linewidth=2, label=thr_label)
 
         # Plot vertical lines
         detected_bins = np.where(np.asarray(self.freqs_detected) > 0)[0]
@@ -1669,10 +1671,10 @@ class WaterfallDecisionPlot(BasePlot):
 
         self.cmap = mpl.colors.ListedColormap([
             (1, 1, 1, 0),
-            "blue",
-            "red",
-            "lightblue",
-            "orange"
+            COLOR_AUX1,
+            COLOR_AUX2,
+            COLOR_AUX3,
+            COLOR_AUX4,
         ])
         self.bounds = [0, 1, 2, 3, 4, 5]
         self.norm = mpl.colors.BoundaryNorm(self.bounds, self.cmap.N)
@@ -1697,10 +1699,10 @@ class WaterfallDecisionPlot(BasePlot):
 
         # Legend
         legend_map = {
-            "Detected": "blue",
-            "Confirmed": "red",
-            "Span": "lightblue",
-            "Demodulation": "orange",
+            "Detected": COLOR_AUX1,
+            "Confirmed": COLOR_AUX2,
+            "Span": COLOR_AUX3,
+            "Demodulation": COLOR_AUX4,
         }
 
         legend_elements = [

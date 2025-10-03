@@ -59,7 +59,9 @@ class Modulator:
               4.68750e-05 5.46875e-05 6.25000e-05 7.03125e-05]
 
             - Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
+            - Constellation Example: ![pageplot](assets/example_modulator_constellation.svg)
             - Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
+            - Pure Carrier Example: ![pageplot](assets/example_modulator_carrier.svg)
 
         <div class="referencia">
         <b>Reference:</b><br>
@@ -263,7 +265,7 @@ if __name__ == "__main__":
         fig_const, grid, (0, 0),
         t=t,
         signals=[dI, dQ],
-        labels=["Fase $I + jQ$"],
+        labels=["Phase $I + jQ$"],
         xlim=PHASE_XLIM,
         colors=[COLOR_COMBINED],
     ).plot()
@@ -303,68 +305,4 @@ if __name__ == "__main__":
     ).plot()
 
     fig_portadora.tight_layout()
-    save_figure(fig_portadora, "example_modulator_portadora.pdf")
-    
-    i_signal, q_signal = modulator.demodulate(s)
-    print("i_signal:", ''.join(str(b) for b in i_signal[:5]))
-    print("q_signal:", ''.join(str(b) for b in q_signal[:5]))
-
-    fig_time, grid = create_figure(2, 1, figsize=(16, 9))
-    TimePlot(
-        fig_time, grid, (0, 0),
-        t=t,
-        signals=[i_signal, q_signal],
-        labels=["$xI'(t)$", "$yQ'(t)$"],
-        xlim=TIME_XLIM,
-        amp_norm=True,
-        colors=[COLOR_I, COLOR_Q]
-    ).plot()
-    
-    TimePlot(
-        fig_time, grid, (1, 0),
-        t=t,
-        signals=[s],
-        labels=["$s(t)$"],
-        xlim=TIME_XLIM,
-        amp_norm=True,
-        colors=COLOR_COMBINED
-    ).plot()
-    
-    fig_time.tight_layout()
-    save_figure(fig_time, "example_demodulator_time.pdf")
-    
-
-    fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
-    FrequencyPlot(
-        fig_freq, grid, (0, 0),
-        fs=fs,
-        signal=s,
-        fc=fc,
-        labels=["$S(f)$"],
-        xlim=FREQ_COMBINED_XLIM,
-        colors=COLOR_COMBINED
-    ).plot()
-    
-    FrequencyPlot(
-        fig_freq, grid, (1, 0),
-        fs=fs,
-        signal=i_signal,
-        fc=fc,
-        labels=["$X_I'(f)$"],
-        xlim=FREQ_MODULATED_XLIM,
-        colors=COLOR_I
-    ).plot()
-
-    FrequencyPlot(
-        fig_freq, grid, (2, 0),
-        fs=fs,
-        signal=q_signal,
-        fc=fc,
-        labels=["$Y_Q'(f)$"],
-        xlim=FREQ_MODULATED_XLIM,
-        colors=COLOR_Q
-    ).plot()
-    
-
-    fig_freq.tight_layout()
-    save_figure(fig_freq, "example_demodulator_freq.pdf")
+    save_figure(fig_portadora, "example_modulator_carrier.pdf")
