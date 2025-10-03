@@ -264,7 +264,7 @@ if __name__ == "__main__":
     ).plot()
     save_figure(fig_gauss, "example_noise_gaussian_snr.pdf")
 
-    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 12))
     TimePlot(
         fig_time, grid_time, (0,slice(0,2)),
         t=t,
@@ -353,7 +353,7 @@ if __name__ == "__main__":
     ).plot()
     save_figure(fig_gauss, "example_noise_gaussian_ebn0.pdf")
 
-    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 12))
     TimePlot(
         fig_time, grid_time, (0,slice(0,2)),
         t=t,

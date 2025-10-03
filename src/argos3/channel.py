@@ -200,7 +200,7 @@ if __name__ == "__main__":
     Noise = NoiseEBN0(ebn0_db=20, seed=10)
     canalT_NoiseEBN0 = Noise.add_noise(canalT)
 
-    fig_time, grid = create_figure(3, 2, figsize=(16, 9))
+    fig_time, grid = create_figure(3, 2, figsize=(16, 12))
     
     TimePlot(
         fig_time, grid, (0, slice(0,2)),

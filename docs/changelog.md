@@ -104,7 +104,7 @@
 ### v1.0.7 - Documentation and Styling
 - [X] Otimizar conversor de plots pra permitir darkTheme
 - [X] Alterar mkdocs para darkTheme
-- [] Adicionar melhor documentação a aba inicio
+- [X] Adicionar melhor documentação a aba inicio
 - [X] Adicionar exemplificação de uso como "Example" no site, como o datagrama.
 - [X] Verificar equacionamento sklar e alterar nome das variáveis.
 - [X] Diagrama de blocos
@@ -113,14 +113,14 @@
     - [X] Alterar bloco do receptor pra ficar dentro de detector.
     - [X] Alterar indices no diagrama para ficar no mesmo tamanho. 
     - [X] waterfall, transpor 
-- [] Otimizar plots
+- [X] Otimizar plots
     - [X] Verificar plot de constelação, normalização do sinal recebido
     - [X] Otimizar plot do encoder. 
     - [X] Criar método para testar todas as classes no makefile. 
     - [X] Alterar tamanho do plot pz fpb
-    - [] Alterar xlim para plots necessários. 
-    - [] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
-    - [] Padronizar cor dos plots.
+    - [X] Alterar xlim para plots necessários. 
+    - [X] Adicionar plot de fase discreta no transmitter, deixar constelação separado. 
+    - [X] Padronizar cor dos plots.
 - [X] Criar diretório para armazenar diagramas e notebooks.    
 
 --- 

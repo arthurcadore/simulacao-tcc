@@ -137,7 +137,7 @@ class Receiver:
                 fig_time, grid, (0, slice(0,2)),
                 t=t,
                 signals=[s_prime],
-                labels=[r"$s(t)$ + AWGN"],
+                labels=[r"$s'(t) + r(t)$"],
                 title=MODULATED_STREAM_TITLE,
                 xlim=TIME_XLIM_RECEIVER,
                 amp_norm=True,
@@ -177,7 +177,7 @@ class Receiver:
                 fs=self.fs,
                 signal=s_prime,
                 fc=self.fc,
-                labels=[r"$S(f)$"],
+                labels=[r"$S'(f)$"],
                 title=MODULATED_STREAM_TITLE,
                 xlim=FREQ_MODULATED_XLIM,
                 colors=COLOR_COMBINED
@@ -578,7 +578,7 @@ class Receiver:
                 fig_corr, grid_corr, (0, 0),
                 corr_vec=corr_vec_Q,  
                 fs=self.fs,
-                xlim=SYNC_XLIM,
+                xlim=CORR_XLIM_RECEIVER,
                 colors=CORR_PLOT_COLOR,
             ).plot()
             fig_corr.tight_layout()
@@ -597,7 +597,7 @@ class Receiver:
                 title=I_CHANNEL_TITLE,   
                 labels=[r"$d_I(t)$"],
                 colors=COLOR_I,
-                xlim=SYNC_XLIM,
+                xlim=SYNC_XLIM_RECEIVER,
             ).plot()
 
             SincronizationPlot(
@@ -610,7 +610,7 @@ class Receiver:
                 title=Q_CHANNEL_TITLE,
                 labels=[r"$d_Q(t)$"],
                 colors=COLOR_Q,
-                xlim=SYNC_XLIM,
+                xlim=SYNC_XLIM_RECEIVER,
             ).plot()
 
             fig_sync.tight_layout()
@@ -620,16 +620,16 @@ class Receiver:
 
     def sampler(self, It_prime, Qt_prime, t):
         r"""
-        Performs the decision (sampling and quantization) of the signals $I'(t)$ and $Q'(t)$, returning the symbol vectors $X'_{NRZ}[n]$ and $Y'_{MAN}[n]$.
+        Performs the decision (sampling and quantization) of the signals $I'(t)$ and $Q'(t)$, returning the symbol vectors $I'[n]$ and $Q'[n]$.
 
         Args:
-            It_prime (np.ndarray): Signal $I'(t)$ to be sampled and quantized.
-            Qt_prime (np.ndarray): Signal $Q'(t)$ to be sampled and quantized.
+            It_prime (np.ndarray): Signal $I'(t)$, matched filtered.
+            Qt_prime (np.ndarray): Signal $Q'(t)$, matched filtered.
             t (np.ndarray): Time vector.
 
         Returns:
-            Xnrz_prime (np.ndarray): Signal $X'_{NRZ}[n]$ sampled and quantized.
-            Yman_prime (np.ndarray): Signal $Y'_{MAN}[n]$ sampled and quantized.
+            In_prime (np.ndarray): Symbol vector $I'[n]$ sampled and quantized.
+            Qn_prime (np.ndarray): Symbol vector $Q'[n]$ sampled and quantized.
         
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_sampler_time.svg)
@@ -639,16 +639,16 @@ class Receiver:
 
         s_sampledI = self.samplerI.sample(It_prime)
         t_sampledI = self.samplerI.sample(t)
-        Xi_prime = self.samplerI.quantize(s_sampledI)
+        In_prime = self.samplerI.quantize(s_sampledI)
 
         s_sampledQ = self.samplerQ.sample(Qt_prime)
         t_sampledQ = self.samplerQ.sample(t)
-        Yq_prime = self.samplerQ.quantize(s_sampledQ)
+        Qn_prime = self.samplerQ.quantize(s_sampledQ)
 
         if self.output_print:
             print("\n ==== SAMPLER ==== \n")
-            print("X'i:", ' '.join(f"{x:+d}" for x in Xi_prime[:20]),"...")
-            print("Y'q:", ' '.join(f"{y:+d}" for y in Yq_prime[:20]),"...")
+            print("I'n:", ' '.join(f"{x:+d}" for x in In_prime[:20]),"...")
+            print("Q'n:", ' '.join(f"{y:+d}" for y in Qn_prime[:20]),"...")
 
         if self.output_plot:
             fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
@@ -659,11 +659,11 @@ class Receiver:
                 It_prime,
                 t_sampledI,
                 s_sampledI,
-                colors='darkgreen',
-                label_signal="Sinal original", 
-                label_samples="Amostras", 
-                xlim=(80, 240), 
-                title="Componente $I$ amostrado"
+                colors=COLOR_I,
+                label_signal=r"$I'(t)$", 
+                label_samples=r"Samples $I'[n]$", 
+                xlim=SYNC_XLIM_RECEIVER,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             SampledSignalPlot(
@@ -672,11 +672,11 @@ class Receiver:
                 Qt_prime,
                 t_sampledQ,
                 s_sampledQ,
-                colors='navy',
-                label_signal="Sinal original", 
-                label_samples="Amostras", 
-                xlim=(80, 240), 
-                title="Componente $Q$ amostrado"
+                colors=COLOR_Q,
+                label_signal=r"$Q'(t)$", 
+                label_samples=r"Samples $Q'[n]$", 
+                xlim=SYNC_XLIM_RECEIVER,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             fig_sampler.tight_layout()
@@ -688,22 +688,20 @@ class Receiver:
                 fig_const, grid_const, (0, 0),
                 dI=It_prime[:40000:5],
                 dQ=Qt_prime[:40000:5],
-                xlim=(-1.4, 1.4),
-                ylim=(-1.4, 1.4),
-                title="Constelação $IQ$",
-                colors=["darkred"],
-                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                xlim=CONSTELLATION_XLIM,
+                ylim=CONSTELLATION_YLIM,
+                title=IQ_CONSTELLATION_TITLE,
+                colors=COLOR_COMBINED,
             ).plot() 
 
             ConstellationPlot(
                 fig_const, grid_const, (0, 1),
                 dI=s_sampledI,
                 dQ=s_sampledQ,
-                xlim=(-1.4, 1.4),
-                ylim=(-1.4, 1.4),
-                title="Constelação $IQ - Amostrado$",
-                colors=["darkred"],
-                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                xlim=CONSTELLATION_XLIM,
+                ylim=CONSTELLATION_YLIM,
+                title=IQ_CONSTELLATION_TITLE,
+                colors=COLOR_COMBINED,
             ).plot() 
 
             fig_const.tight_layout()
@@ -715,105 +713,101 @@ class Receiver:
                 fig_phase, grid_phase, (0, 0),
                 t=t,
                 signals=[It_prime, Qt_prime],
-                labels=["Fase $I + jQ$"],
-                title="Fase $I + jQ$",
-                xlim=(40, 320),
-                colors=["darkred"],
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                labels=[r"Phase $I + jQ$"],
+                title=PHASE_TITLE,
+                xlim=PHASE_XLIM,
+                colors=COLOR_COMBINED,
             ).plot()
 
             PhasePlot(
                 fig_phase, grid_phase, (0, 1),
                 t=t_sampledI,
-                signals=[np.array(Xi_prime), np.array(Yq_prime)],
-                labels=["Fase $I + jQ$"],
-                title="Fase $I + jQ$ - Decidido",
-                xlim=(40, 320),
-                colors=["darkred"],
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                signals=[np.array(In_prime), np.array(Qn_prime)],
+                labels=[r"Phase $I + jQ$"],
+                title=PHASE_TITLE,
+                xlim=PHASE_XLIM,
+                colors=COLOR_COMBINED,
             ).plot()
 
             fig_phase.tight_layout()
             save_figure(fig_phase, "receiver_sampler_phase.pdf")
 
-        return Xi_prime, Yq_prime
+        return In_prime, Qn_prime
 
-    def line_decoder(self, Xnrz_prime, Yman_prime):
+    def line_decoder(self, In_prime, Qn_prime):
         r"""
-        Decodes the symbol vectors $X'_{NRZ}[n]$ and $Y'_{MAN}[n]$, returning the bit vectors $X'n$ and $Y'n$.
+        Decodes the symbol vectors $I'[n]$ and $Q'[n]$, returning the bit vectors $X'[n]$ and $Y'[n]$.
 
         Args:
-            Xnrz_prime (np.ndarray): Signal $X'_{NRZ}[n]$ quantized.
-            Yman_prime (np.ndarray): Signal $Y'_{MAN}[n]$ quantized.
+            In_prime (np.ndarray): Symbol vector $I'[n]$ quantized.
+            Qn_prime (np.ndarray): Symbol vector $Q'[n]$ quantized.
 
         Returns:
-            Xn_prime (np.ndarray): Signal $X'n$ decoded.
-            Yn_prime (np.ndarray): Signal $Y'n$ decoded.
+            Xn_prime (np.ndarray): Bit vector $X'[n]$ line decoded.
+            Yn_prime (np.ndarray): Bit vector $Y'[n]$ line decoded.
         
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_decoder_time.svg)
         """
 
-        i_quantized = np.array(Xnrz_prime)
-        q_quantized = np.array(Yman_prime)
+        i_quantized = np.array(In_prime)
+        q_quantized = np.array(Qn_prime)
         
         Xn_prime = self.decoderI.decode(i_quantized)
         Yn_prime = self.decoderQ.decode(q_quantized)
 
         if self.output_print:
             print("\n ==== CHANNEL DECODER ==== \n")
-            print("X'n:", ''.join(map(str, Xn_prime)))
-            print("Y'n:", ''.join(map(str, Yn_prime)))
+            print("X'[n]:", ''.join(map(str, Xn_prime)))
+            print("Y'[n]:", ''.join(map(str, Yn_prime)))
         
         if self.output_plot:
-            fig_decoder, grid_decoder = create_figure(4, 1, figsize=(16, 9))
+            fig_decoder, grid_decoder = create_figure(4, 1, figsize=(16, 12))
 
             SymbolsPlot(
                 fig_decoder, grid_decoder, (0, 0),
-                symbols_list=[Xnrz_prime],
+                symbols_list=[In_prime],
                 samples_per_symbol=1,
-                colors=["darkgreen"],
-                xlabel="Index de Simbolo",
-                xlim=(0, 60),
-                ylabel="$X_{NRZ}[n]$", 
-                label="$X_{NRZ}[n]$"
+                colors=[COLOR_I],
+                xlabel=SYMBOLS_X,
+                ylabel=SYMBOLS_Y,
+                xlim=SYMBOLS_XLIM,
+                title=I_CHANNEL_TITLE,
+                label=r"$I'[n]$"
             ).plot()
 
             BitsPlot(
                 fig_decoder, grid_decoder, (1, 0),
                 bits_list=[Xn_prime],
                 sections=[("$X_n$", len(Xn_prime))],
-                colors=["darkgreen"],
-                xlabel="Index de Bit", 
-                ylabel="$X_n$", 
-                xlim=(0, 60)
+                colors=[COLOR_I],
+                xlabel=BITSTREAM_X,
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                label=r"$X'[n]$"
             ).plot()
 
             SymbolsPlot(
                 fig_decoder, grid_decoder, (2, 0),
-                symbols_list=[Yman_prime],
+                symbols_list=[Qn_prime],
                 samples_per_symbol=1,
-                colors=["navy"],
-                xlabel="Index de Simbolo",
-                xlim=(0, 60),
-                ylabel="$Y_{MAN}[n]$", 
-                label="$Y_{MAN}[n]$"
+                colors=[COLOR_Q],
+                xlabel=SYMBOLS_X,
+                ylabel=SYMBOLS_Y,
+                xlim=SYMBOLS_XLIM,
+                title=Q_CHANNEL_TITLE,
+                label=r"$Q'[n]$"
             ).plot()
 
             BitsPlot(
                 fig_decoder, grid_decoder, (3, 0),
                 bits_list=[Yn_prime],
                 sections=[("$Y_n$", len(Yn_prime))],
-                colors=["navy"],
-                xlabel="Index de Bit", 
-                ylabel="$Y_n$", 
-                xlim=(0, 60)
+                colors=[COLOR_Q],
+                xlabel=BITSTREAM_X,
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                label=r"$Y'[n]$",
             ).plot()
 
             fig_decoder.tight_layout()
@@ -821,138 +815,142 @@ class Receiver:
                  
         return Xn_prime, Yn_prime
 
-    def unscrewer(self, Xn_prime, Yn_prime):
+    def unscramble(self, Xn_prime, Yn_prime):
         r"""
-        Unscrambles the bit vectors $X'n$ and $Y'n$, returning the bit vectors $v_{t}^{0'}$ and $v_{t}^{1'}$.
+        Unscrambles the bit vectors $X'[n]$ and $Y'[n]$, returning the bit vectors $v_{t}^{(0)} \prime$ and $v_{t}^{(1)} \prime$.
 
         Args:
-            Xn_prime (np.ndarray): Bit vector $X'n$ shuffled.
-            Yn_prime (np.ndarray): Bit vector $Y'n$ shuffled.
+            Xn_prime (np.ndarray): Bit vector $X'[n]$ line decoded.
+            Yn_prime (np.ndarray): Bit vector $Y'[n]$ line decoded.
 
         Returns:
-            vt0 (np.ndarray): Bit vector $v_{t}^{0'}$ unshuffled.
-            vt1 (np.ndarray): Bit vector $v_{t}^{1'}$ unshuffled.
+            vt0_prime (np.ndarray): Bit vector $v_{t}^{(0)} \prime$ unscrambled.
+            vt1_prime (np.ndarray): Bit vector $v_{t}^{(1)} \prime$ unscrambled.
 
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_descrambler_time.svg)
         """
 
-        vt0, vt1 = self.unscrambler.descramble(Xn_prime, Yn_prime)
+        vt0_prime, vt1_prime = self.unscrambler.unscramble(Xn_prime, Yn_prime)
 
         if self.output_print:
             print("\n ==== UNSCRAMBLER ==== \n")
-            print("vt0':", ''.join(map(str, vt0)))
-            print("vt1':", ''.join(map(str, vt1)))
+            print("vt0':", ''.join(map(str, vt0_prime)))
+            print("vt1':", ''.join(map(str, vt1_prime)))
         
         if self.output_plot:
-            fig_descrambler, grid_descrambler = create_figure(4, 1, figsize=(16, 9))
+            fig_descrambler, grid_descrambler = create_figure(4, 1, figsize=(16, 12))
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (0, 0),
                 bits_list=[Xn_prime],
-                sections=[("$X_n$", len(Xn_prime))],
-                colors=["darkgreen"],
-                ylabel="Embaralhado",
-                xlim=(0, 60)
+                sections=[(r"$X'[n]$", len(Xn_prime))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=I_CHANNEL_TITLE,
             ).plot()
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (1, 0),
-                bits_list=[vt0],
-                sections=[("$v_t^{0}$", len(vt0))],
-                colors=["darkgreen"],
-                ylabel="Restaurado", 
-                xlim=(0, 60)
+                bits_list=[vt0_prime],
+                sections=[(r"$v_t^{(0)} \prime$", len(vt0_prime))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
             ).plot()
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (2, 0),
                 bits_list=[Yn_prime],
-                sections=[("$Y_n$", len(Yn_prime))],
-                colors=["navy"],
-                ylabel="Embaralhado",
-                xlim=(0, 60)
+                sections=[(r"$Y'[n]$", len(Yn_prime))],
+                colors=[COLOR_Q],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=Q_CHANNEL_TITLE,
             ).plot()
 
             BitsPlot(
                 fig_descrambler, grid_descrambler, (3, 0),
-                bits_list=[vt1],
-                sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"],
-                ylabel="Restaurado", 
-                xlabel="Index de Bit",
-                xlim=(0, 60)
+                bits_list=[vt1_prime],
+                sections=[(r"$v_t^{(1)} \prime$", len(vt1_prime))],
+                colors=[COLOR_Q],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
             ).plot()
 
             fig_descrambler.tight_layout()
             save_figure(fig_descrambler, "receiver_descrambler_time.pdf")     
 
-        return vt0, vt1
+        return vt0_prime, vt1_prime
 
-    def conv_decoder(self, vt0, vt1):
+    def conv_decoder(self, vt0_prime, vt1_prime):
         r"""
-        Decodes the bit vectors $v_{t}^{0'}$ and $v_{t}^{1'}$, returning the bit vector $u_{t}'$.
+        Decodes the bit vectors $v_{t}^{(0)} \prime$ and $v_{t}^{(1)} \prime$, returning the bit vector $u_{t}'$.
 
         Args:
-            vt0 (np.ndarray): Bit vector $v_{t}^{0'}$ unshuffled.
-            vt1 (np.ndarray): Bit vector $v_{t}^{1'}$ unshuffled.
+            vt0_prime (np.ndarray): Bit vector $v_{t}^{(0)} \prime$ unscrambled.
+            vt1_prime (np.ndarray): Bit vector $v_{t}^{(1)} \prime$ unscrambled.
 
         Returns:
-            ut (np.ndarray): Bit vector $u_{t}'$ decoded.
+            ut_prime (np.ndarray): Bit vector $u_{t}'$ decoded.
         
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/receiver_conv_time.svg)
         """
 
-        ut = self.conv_viterbi.decode(vt0, vt1)
+        ut_prime = self.conv_viterbi.decode(vt0_prime, vt1_prime)
 
         if self.output_print:
             print("\n ==== VITERBI DECODER ==== \n")
-            print("u't:", ''.join(map(str, ut)))
+            print("ut':", ''.join(map(str, ut_prime)))
         
         if self.output_plot:
             fig_conv_decoder, grid_conv_decoder = create_figure(3, 1, figsize=(16, 9))
 
             BitsPlot(
                 fig_conv_decoder, grid_conv_decoder, (0, 0),
-                bits_list=[vt0],
-                sections=[("$v_t^{0}$", len(vt0))],
-                colors=["darkgreen"],
-                ylabel="Canal $I$",
-                xlim=(0, 60)
+                bits_list=[vt0_prime],
+                sections=[(r"$v_t^{(0)} \prime$", len(vt0_prime))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=I_CHANNEL_TITLE,
             ).plot()
 
             BitsPlot(
                 fig_conv_decoder, grid_conv_decoder, (1, 0),
-                bits_list=[vt1],
-                sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"],
-                ylabel="Canal $Q$",
-                xlim=(0, 60)
+                bits_list=[vt1_prime],
+                sections=[(r"$v_t^{(1)} \prime$", len(vt1_prime))],
+                colors=[COLOR_Q],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=Q_CHANNEL_TITLE,
             ).plot()
 
             BitsPlot(
                 fig_conv_decoder, grid_conv_decoder, (2, 0),
-                bits_list=[ut],
-                sections=[("$u_t'$", len(ut))],
-                colors=["darkred"],
-                ylabel="Decodificado", 
-                xlabel="Index de Bit",
-                xlim=(0, 60)
+                bits_list=[ut_prime],
+                sections=[(r"$u_t'$", len(ut_prime))],
+                colors=[COLOR_COMBINED],
+                ylabel=BITSTREAM_Y,
+                xlabel=BITSTREAM_X,
+                xlim=BITSTREAM_XLIM,
+                title=OUTPUT_STREAM_TITLE,
             ).plot()
 
             fig_conv_decoder.tight_layout()
             save_figure(fig_conv_decoder, "receiver_conv_time.pdf")     
 
-        return ut
+        return ut_prime
 
     
-    def datagram_parser(self, ut):
+    def datagram_parser(self, ut_prime):
         r"""
         Receives a decoded bit vector $u_{t}'$ and returns a datagram in the ARGOS-3 format, or the bit vector $u_{t}'$ if there is an error.
 
         Args:
-            ut (np.ndarray): Bit vector $u_{t}'$ decoded.
+            ut_prime (np.ndarray): Bit vector $u_{t}'$ decoded.
 
         Returns:
             datagram (np.ndarray): Datagram generated, or the bit vector $u_{t}'$ if there is an error.
@@ -962,7 +960,7 @@ class Receiver:
             - Time Domain Plot Example: ![pageplot](assets/receiver_datagram_time.svg)
         """
         try:
-            datagramRX = Datagram(streambits=ut)
+            datagramRX = Datagram(streambits=ut_prime)
 
             if self.output_print:
                 print("\n ==== DATAGRAM PARSING ==== \n")
@@ -980,9 +978,10 @@ class Receiver:
                               ("PCD ID", len(datagramRX.pcdid)),
                               ("Dados de App.", len(datagramRX.payload)),
                               ("Tail", len(datagramRX.tail))],
-                    colors=["green", "orange", "red", "blue"],
-                    xlabel="Index de Bit",
-                    xlim=(0, 60),
+                    colors=[COLOR_AUX1, COLOR_AUX2, COLOR_AUX3, COLOR_AUX4],
+                    xlabel=BITSTREAM_X,
+                    ylabel=BITSTREAM_Y,
+                    title=DATAGRAM_STREAM_TITLE,
                 ).plot()
                 fig_datagram.tight_layout()
                 save_figure(fig_datagram, "receiver_datagram_time.pdf")
@@ -991,36 +990,36 @@ class Receiver:
 
         except Exception as e:
             print("Erro ao gerar datagrama:", e)
-            return ut, False
+            return ut_prime, False
     
-    def receive(self, s):
+    def receive(self, s_prime):
         r"""
         Receives a signal $s(t)$ and returns the result of the reception.
 
         Args:
-            s (np.ndarray): Signal $s(t)$ received.
+            s_prime (np.ndarray): Signal $s(t)$ received.
 
         Returns:
             datagramRX (np.ndarray): Datagram generated, or the bit vector $u_{t}'$ if there is an error.
         """
 
-        t = np.arange(0, len(s)/self.fs, 1/self.fs)
+        t = np.arange(0, len(s_prime)/self.fs, 1/self.fs)
 
-        xI_prime, yQ_prime = self.bandpass_demodulate(s, t)
+        xI_prime, yQ_prime = self.bandpass_demodulate(s_prime, t)
         dI_prime, dQ_prime= self.low_pass_filter(xI_prime, yQ_prime, t)
         It_prime, Qt_prime = self.matched_filter(dI_prime, dQ_prime, t)
         self.delayI, self.delayQ = self.synchronizer(It_prime, Qt_prime)
 
-        # Atualiza o delay do sampler
+        # update sampler delay using the delay calculated by the synchronizer
         self.samplerI.update_sampler(self.delayI, t)
         self.samplerQ.update_sampler(self.delayQ, t)
 
-        Xnrz_prime, Yman_prime = self.sampler(It_prime, Qt_prime, t)
-        Xn_prime, Yn_prime = self.line_decoder(Xnrz_prime, Yman_prime)
-        vt0, vt1 = self.unscrewer(Xn_prime, Yn_prime)
-        ut = self.conv_decoder(vt0, vt1)
+        In_prime, Qn_prime = self.sampler(It_prime, Qt_prime, t)
+        Xn_prime, Yn_prime = self.line_decoder(In_prime, Qn_prime)
+        vt0_prime, vt1_prime = self.unscramble(Xn_prime, Yn_prime)
+        ut_prime = self.conv_decoder(vt0_prime, vt1_prime)
 
-        datagramRX, success = self.datagram_parser(ut)
+        datagramRX, success = self.datagram_parser(ut_prime)
         return datagramRX, success 
 
 

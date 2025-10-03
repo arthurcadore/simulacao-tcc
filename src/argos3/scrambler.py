@@ -131,7 +131,7 @@ class Scrambler:
 
         return X_scrambled, Y_scrambled
 
-    def descramble(self, X_prime, Y_prime):
+    def unscramble(self, X_prime, Y_prime):
         r"""
         Receive the vectors $X'[n]$ and $Y'[n]$ scrambled and return the vectors $v_t^{(0)'}$ and $v_t^{(1)'}$ restored.
 
@@ -225,8 +225,8 @@ if __name__ == "__main__":
     print("idx_Yn: ", idx_Yn[:12])
 
     # Descramble the content of the vectors and the indices
-    vt0_prime, vt1_prime = scrambler.descramble(Xn, Yn)
-    idx_vt0_prime, idx_vt1_prime = scrambler.descramble(idx_Xn, idx_Yn)
+    vt0_prime, vt1_prime = scrambler.unscramble(Xn, Yn)
+    idx_vt0_prime, idx_vt1_prime = scrambler.unscramble(idx_Xn, idx_Yn)
 
     print("\nVerification:")
     print("vt0':", ''.join(str(int(b)) for b in vt0_prime))

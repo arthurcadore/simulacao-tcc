@@ -188,7 +188,7 @@ class TimePlot(BasePlot):
 
     Examples:
         - Modulator Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
-        - AWGN addition Time Domain Example: ![pageplot](assets/example_noise_time.svg)
+        - AWGN addition Time Domain Example: ![pageplot](assets/example_noise_time_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -269,7 +269,7 @@ class FrequencyPlot(BasePlot):
 
     Examples:
         - Modulator Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
-        - AWGN addition Frequency Domain Example: ![pageplot](assets/example_noise_freq.svg)
+        - AWGN addition Frequency Domain Example: ![pageplot](assets/example_noise_freq_ebn0.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -354,7 +354,7 @@ class ConstellationPlot(BasePlot):
         dQ (np.ndarray): Quadrature signal
 
     Examples:
-        - Modulator Constellation Example: ![pageplot](assets/example_modulator_constellation.svg)
+        - Modulator Constellation/Phase Example: ![pageplot](assets/example_modulator_constellation.svg)
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -897,6 +897,10 @@ class PhasePlot(BasePlot):
         t (np.ndarray): Vector of time
         signals (Union[np.ndarray, List[np.ndarray]]): IQ signals (I and Q)
         time_unit (str): Time unit for plot ("ms" by default, can be "s").
+
+    Examples: 
+        - Modulator Constellation/Phase Example: ![pageplot](assets/example_modulator_constellation.svg)
+
     """
     def __init__(self,
                  fig: plt.Figure,
@@ -1013,7 +1017,7 @@ class GaussianNoisePlot(BasePlot):
         # plot the pdf
         label = r"$p(x)$" + "\n" + r"$\sigma^2 = " + f"{self.variance:.4f}" + "$"
         self.ax.plot(pdf, x, label=label, color=color, **line_kwargs)
-        self.ax.fill_betweenx(x, 0, pdf, color=color, alpha=1)
+ 
 
         # Adjust axis
         self.ax.set_xlabel(self.ylabel)  
