@@ -1,6 +1,6 @@
 # Axis Labels
 BITSTREAM_X = "Bit Index"
-BITSTREAM_Y = ""
+BITSTREAM_Y = "Bit Value"
 SYMBOLS_X = "Symbol Index"
 SYMBOLS_Y = "Amplitude"
 TIMEDOMAIN_X = "Time"
@@ -21,6 +21,7 @@ FREQ_COMPONENTS_XLIM = (-1.5, 1.5)
 FREQ_MODULATED_XLIM = (-10, 10)
 SYNC_XLIM = (40, 200)
 CORR_XLIM = (40, 200)
+SYMBOLS_XLIM = (0, 60)
 
 # Colors
 COLOR_I = "darkgreen"
@@ -31,3 +32,26 @@ COLOR_AUX1 = "darkgoldenrod"
 COLOR_AUX2 = "darkviolet"
 COLOR_AUX3 = "forestgreen"
 COLOR_AUX4 = "dodgerblue"
+SYNC_PLOT_V_LIMIT_COLOR = COLOR_AUX1
+SYNC_PLOT_V_CENTRAL_COLOR = COLOR_AUX2
+SYNC_PLOT_BACKGROUND_COLOR = "gray"
+CORR_PLOT_V_LIMIT_COLOR = "darkorange"
+QPSK_IDEAL_COLOR = "darkgreen"
+
+
+DETECTOR_COLOR1=COLOR_AUX1
+DETECTOR_COLOR2=COLOR_AUX2
+DETECTOR_COLOR3=COLOR_AUX3
+DETECTOR_COLOR4=COLOR_AUX4
+
+
+# Titles
+I_CHANNEL_TITLE = "$I$ Channel Stream"
+Q_CHANNEL_TITLE = "$Q$ Channel Stream"
+INPUT_STREAM_TITLE = "Input Stream"
+OUTPUT_STREAM_TITLE = "Output Stream"
+MF_IMPULSE_TITLE = "$g(t)$ Impulse Response"
+MODULATED_STREAM_TITLE = "Modulated Signal $s(t)$"
+IQ_COMPONENTS_TITLE = "$IQ$ Components Signals"
+PHASE_TITLE = "Modulated Signal $s(t)$ Phase"
+IQ_CONSTELLATION_TITLE = "$IQ$ Constellation"

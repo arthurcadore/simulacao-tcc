@@ -279,7 +279,8 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        amp_norm=True
+        amp_norm=True, 
+        title=MF_IMPULSE_TITLE
     ).plot()
 
     fig_impulse.tight_layout()
@@ -297,6 +298,7 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
+        title=MF_IMPULSE_TITLE
     ).plot()
 
     ImpulseResponsePlot(
@@ -308,7 +310,7 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        amp_norm=True
+        amp_norm=True, 
     ).plot()
 
     fig_impulse_man.tight_layout()
@@ -325,7 +327,8 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        amp_norm=True
+        amp_norm=True, 
+        title=I_CHANNEL_TITLE
     ).plot()
 
     ImpulseResponsePlot(
@@ -337,7 +340,8 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        amp_norm=True
+        amp_norm=True, 
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(

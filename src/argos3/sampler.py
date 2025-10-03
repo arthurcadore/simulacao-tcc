@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import save_figure, create_figure, SampledSignalPlot
+from .plotter import save_figure, create_figure, SampledSignalPlot, SymbolsPlot
 from .env_vars import *
 
 class Sampler:
@@ -38,6 +38,7 @@ class Sampler:
             >>> t_indexes = sampler.sample(t)
 
             - Time Domain: ![pageplot](assets/example_sampler_time.svg) 
+            - Symbols Stream Plot Example: ![pageplot](assets/example_sampler_symbols.svg)
         """
 
         # Attributes
@@ -138,10 +139,10 @@ class Sampler:
 if __name__ == "__main__":
 
     fs = 128_000
-    Rb = 2000
+    Rb = 1000
     t = np.arange(100000) / fs
-    signal = np.cos(2 * np.pi * 400 * t) + np.cos(2 * np.pi * 100 * t)
-    signal2 = np.sin(2 * np.pi * 400 * t) + np.sin(2 * np.pi * 1000 * t)
+    signal = np.cos(2 * np.pi * 80 * t) + np.cos(2 * np.pi * 100 * t)
+    signal2 = np.sin(2 * np.pi * 80 * t) + np.sin(2 * np.pi * 100 * t)
 
     sampler = Sampler(fs=fs, Rb=Rb, t=t)
     sampled_signal = sampler.sample(signal)
@@ -165,8 +166,8 @@ if __name__ == "__main__":
         sampled_time,
         sampled_signal,
         colors=COLOR_I,
-        label_signal="Original Signal", 
-        label_samples="Sampled Signal", 
+        label_signal=r"$d_I(t)'$", 
+        label_samples="Samples", 
         xlim=SYNC_XLIM,
     ).plot()
 
@@ -177,10 +178,41 @@ if __name__ == "__main__":
         sampled_time2,
         sampled_signal2,
         colors=COLOR_Q,
-        label_signal="Original Signal", 
-        label_samples="Sampled Signal", 
+        label_signal=r"$d_Q(t)'$", 
+        label_samples="Samples", 
         xlim=SYNC_XLIM, 
     ).plot()
 
     fig_sampler.tight_layout()
     save_figure(fig_sampler, "example_sampler_time.pdf")
+
+    fig_symbols, grid_symbols = create_figure(2, 1, figsize=(16, 9))
+
+    SymbolsPlot(
+        fig_symbols, grid_symbols, (0, 0),
+        symbols_list=[symbols],
+        samples_per_symbol=1,
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
+        label=r"$I[n]'$", 
+        show_symbol_values=False,
+        ylim=[min(symbols)*1.1, max(symbols)*1.1],
+        xlim=SYMBOLS_XLIM,
+    ).plot()
+
+    SymbolsPlot(
+        fig_symbols, grid_symbols, (1, 0),
+        symbols_list=[symbols2],
+        samples_per_symbol=1,
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
+        label=r"$Q[n]'$", 
+        show_symbol_values=False,
+        ylim=[min(symbols2)*1.1, max(symbols2)*1.1],
+        xlim=SYMBOLS_XLIM,
+    ).plot()
+
+    fig_symbols.tight_layout()
+    save_figure(fig_symbols, "example_sampler_symbols.pdf")

@@ -38,14 +38,14 @@ class MatchedFilter:
             >>> Xn = argos3.Encoder().encode(X)
             >>> Yn = argos3.Encoder().encode(Y)
             >>> 
-            >>> formatterI = argos3.Formatter(type="RRC", channel="I", bits_per_symbol=1)
-            >>> formatterQ = argos3.Formatter(type="Manchester", channel="Q", bits_per_symbol=2)
+            >>> formatterI = argos3.Formatter(Rb=1000, type="RRC", channel="I", bits_per_symbol=1)
+            >>> formatterQ = argos3.Formatter(Rb=1000, type="Manchester", channel="Q", bits_per_symbol=2)
             >>> 
             >>> dI = formatterI.apply_format(Xn)
             >>> dQ = formatterQ.apply_format(Yn)
             >>> 
-            >>> mfI = argos3.MatchedFilter(type="RRC-Inverted", channel="I", bits_per_symbol=1)
-            >>> mfQ = argos3.MatchedFilter(type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+            >>> mfI = argos3.MatchedFilter(Rb=1000, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+            >>> mfQ = argos3.MatchedFilter(Rb=1000, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
             >>> 
             >>> dI_prime = mfI.apply_filter(dI)
             >>> dQ_prime = mfQ.apply_filter(dQ)
@@ -162,6 +162,10 @@ if __name__ == "__main__":
     dI = fI.apply_format(In, add_prefix=True)
     dQ = fQ.apply_format(Qn, add_prefix=True)
 
+    r = np.random.normal(0, 1, len(dI)) * 0.01
+    dI += r
+    dQ += r
+
     mfI = MatchedFilter(alpha=0.8, fs=128_000, Rb=1000, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
     mfQ = MatchedFilter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
@@ -230,7 +234,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_time, grid_time, (1,0),
         bits_list=[bit1],
-        sections=[("Bits", len(bit1))],
+        sections=[("I[n]", len(bit1))],
         xlabel=BITSTREAM_X,
         colors=[COLOR_I],
     ).plot()
@@ -238,7 +242,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_time, grid_time, (1,1),
         bits_list=[bit2],
-        sections=[("Bits", len(bit2))],
+        sections=[("Q[n]", len(bit2))],
         xlabel=BITSTREAM_X,
         colors=[COLOR_Q],
     ).plot()

@@ -97,7 +97,8 @@ if __name__ == "__main__":
         bits_list=[Si],
         sections=[(r"$S_I[n]$", len(Si))],
         colors=[COLOR_I],
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=I_CHANNEL_TITLE
     ).plot()
     
     BitsPlot(
@@ -106,7 +107,8 @@ if __name__ == "__main__":
         sections=[(r"$S_Q[n]$", len(Sq))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=Q_CHANNEL_TITLE
     ).plot()
     
     fig_preamble.tight_layout()

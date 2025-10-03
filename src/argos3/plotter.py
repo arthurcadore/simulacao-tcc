@@ -405,7 +405,7 @@ class ConstellationPlot(BasePlot):
         ])
         if self.show_ideal_points:
             self.ax.scatter(qpsk_points[:, 0], qpsk_points[:, 1],
-                            color=COLOR_AUX1, s=160, marker="o",
+                            color=QPSK_IDEAL_COLOR, s=160, marker="D",
                             label="$QPSK$ Ideal", linewidth=2)
     
         # Auxiliary lines
@@ -1397,12 +1397,12 @@ class SincronizationPlot(BasePlot):
 
         # Synchronization word period
         self.ax.axvspan(self.sync_start, self.sync_end,
-                        color="gray", alpha=0.2, label=r"$\Delta \tau$")
+                        color=SYNC_PLOT_BACKGROUND_COLOR, alpha=0.2, label=r"$\Delta \tau$")
 
         # Vertical lines of synchronization
-        self.ax.axvline(self.max_corr, color="darkorange", linestyle="--", linewidth=2, label=r"$\tau$")
-        self.ax.axvline(self.sync_start, color="red", linestyle="--", linewidth=2, label=r"$\tau +/- (\Delta \tau)/2$")
-        self.ax.axvline(self.sync_end, color="red", linestyle="--", linewidth=2)
+        self.ax.axvline(self.max_corr, color=SYNC_PLOT_V_CENTRAL_COLOR, linestyle="--", linewidth=2, label=r"$\tau$")
+        self.ax.axvline(self.sync_start, color=SYNC_PLOT_V_LIMIT_COLOR, linestyle="--", linewidth=2, label=r"$\tau +/- (\Delta \tau)/2$")
+        self.ax.axvline(self.sync_end, color=SYNC_PLOT_V_LIMIT_COLOR, linestyle="--", linewidth=2)
     
         # Labels
         xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
@@ -1459,8 +1459,8 @@ class CorrelationPlot(BasePlot):
         self.ax.plot(self.sample_indices, self.corr_vec, label=self.labels[0], color=color, **line_kwargs)
 
         # Maximum correlation
-        self.ax.axvline(self.max_corr_index, color='red', linestyle='--', label=f"$k_{{max}}$ = {self.max_corr_index}")
-        self.ax.scatter(self.max_corr_index, self.max_corr_value, color='red', zorder=5)
+        self.ax.axvline(self.max_corr_index, color=CORR_PLOT_V_LIMIT_COLOR, linestyle='--', label=f"$k_{{max}}$ = {self.max_corr_index}")
+        self.ax.scatter(self.max_corr_index, self.max_corr_value, color=CORR_PLOT_V_LIMIT_COLOR, zorder=5)
 
         # Set limits
         self.ax.set_xlim(self.index_low, self.index_high)
@@ -1671,10 +1671,10 @@ class WaterfallDecisionPlot(BasePlot):
 
         self.cmap = mpl.colors.ListedColormap([
             (1, 1, 1, 0),
-            COLOR_AUX1,
-            COLOR_AUX2,
-            COLOR_AUX3,
-            COLOR_AUX4,
+            DETECTOR_COLOR1,
+            DETECTOR_COLOR2,
+            DETECTOR_COLOR3,
+            DETECTOR_COLOR4,
         ])
         self.bounds = [0, 1, 2, 3, 4, 5]
         self.norm = mpl.colors.BoundaryNorm(self.bounds, self.cmap.N)
@@ -1699,10 +1699,10 @@ class WaterfallDecisionPlot(BasePlot):
 
         # Legend
         legend_map = {
-            "Detected": COLOR_AUX1,
-            "Confirmed": COLOR_AUX2,
-            "Span": COLOR_AUX3,
-            "Demodulation": COLOR_AUX4,
+            "Detected": DETECTOR_COLOR1,
+            "Confirmed": DETECTOR_COLOR2,
+            "Span": DETECTOR_COLOR3,
+            "Demodulation": DETECTOR_COLOR4,
         }
 
         legend_elements = [

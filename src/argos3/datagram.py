@@ -396,6 +396,8 @@ if __name__ == "__main__":
                   ("Tail", len(datagram_tx.tail))],
         colors=[COLOR_AUX1, COLOR_AUX2, COLOR_AUX3, COLOR_AUX4],
         xlabel=BITSTREAM_X,
+        ylabel=BITSTREAM_Y,
+        title="Datagram Stream"
     ).plot()
 
     fig_datagram.tight_layout()

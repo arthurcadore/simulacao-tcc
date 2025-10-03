@@ -203,7 +203,7 @@ if __name__ == "__main__":
     print("line X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in In[:10]))
     print("line Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Qn[:10]))
 
-    fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
+    fig_encoder, grid = create_figure(4, 1, figsize=(16, 16))
 
     BitsPlot(
         fig_encoder, grid, (0, 0),
@@ -211,7 +211,8 @@ if __name__ == "__main__":
         sections=[(r"$X[n]$", len(Xn))],
         colors=[COLOR_I],
         xlabel=BITSTREAM_X,
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=I_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(
@@ -230,7 +231,8 @@ if __name__ == "__main__":
         sections=[(r"$Y[n]$", len(Yn))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(

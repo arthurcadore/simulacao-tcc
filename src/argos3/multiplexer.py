@@ -93,18 +93,20 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (0,0),
         bits_list=[SI, X],
-        sections=[(r"$S_I[n][n]$", len(SI)),(r"$X[n]$", len(X))],
+        sections=[(r"$S_I[n]$", len(SI)),(r"$X[n]$", len(X))],
         colors=[COLOR_AUX1, COLOR_I],
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=I_CHANNEL_TITLE
     ).plot()
     
     BitsPlot(
         fig_mux, grid_mux, (1,0),
         bits_list=[SQ, Y],
-        sections=[(r"$S_Q[n][n]$", len(SQ)),(r"$Y[n]$", len(Y))],
+        sections=[(r"$S_Q[n]$", len(SQ)),(r"$Y[n]$", len(Y))],
         colors=[COLOR_AUX1, COLOR_Q],
         xlabel=BITSTREAM_X, 
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     fig_mux.tight_layout()

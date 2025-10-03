@@ -59,7 +59,7 @@ class Modulator:
               4.68750e-05 5.46875e-05 6.25000e-05 7.03125e-05]
 
             - Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
-            - Constellation Example: ![pageplot](assets/example_modulator_constellation.svg)
+            - Constellation/Phase Example: ![pageplot](assets/example_modulator_constellation.svg)
             - Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
             - Pure Carrier Example: ![pageplot](assets/example_modulator_carrier.svg)
 
@@ -176,6 +176,7 @@ if __name__ == "__main__":
     Rb = 400
     alpha = 0.8
     span = 8
+    carrier_duration = 0.082
 
     Xnrz = np.random.randint(0, 2, 200)
     Yman = np.random.randint(0, 2, 200)
@@ -189,8 +190,8 @@ if __name__ == "__main__":
     print("Xnrz:", ''.join(str(b) for b in Xnrz[:20]))
     print("Yman:", ''.join(str(b) for b in Yman[:20]))
 
-    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="RRC", span=span, channel="I", bits_per_symbol=1)
-    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="Manchester", span=span, channel="Q", bits_per_symbol=2)
+    formatterI = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="RRC", span=span, channel="I", bits_per_symbol=1, prefix_duration=carrier_duration)
+    formatterQ = Formatter(alpha=alpha, fs=fs, Rb=Rb, type="Manchester", span=span, channel="Q", bits_per_symbol=2, prefix_duration=carrier_duration)
     
     dI = formatterI.apply_format(Xnrz)
     dQ = formatterQ.apply_format(Yman)
@@ -211,6 +212,7 @@ if __name__ == "__main__":
         xlim=TIME_XLIM,
         amp_norm=True,
         colors=[COLOR_I, COLOR_Q],
+        title=IQ_COMPONENTS_TITLE,
     ).plot()
     
     TimePlot(
@@ -221,6 +223,7 @@ if __name__ == "__main__":
         xlim=TIME_XLIM,
         amp_norm=True,
         colors=COLOR_COMBINED,
+        title=MODULATED_STREAM_TITLE,
     ).plot()
     
     fig_time.tight_layout()
@@ -235,6 +238,7 @@ if __name__ == "__main__":
         labels=["$D_I(f)$"],
         xlim=FREQ_COMPONENTS_XLIM,
         colors=COLOR_I,
+        title=I_CHANNEL_TITLE,
     ).plot()
 
     FrequencyPlot(
@@ -245,6 +249,7 @@ if __name__ == "__main__":
         labels=["$D_Q(f)$"],
         xlim=FREQ_COMPONENTS_XLIM,
         colors=COLOR_Q,
+        title=Q_CHANNEL_TITLE,
     ).plot()
 
     FrequencyPlot(
@@ -255,6 +260,7 @@ if __name__ == "__main__":
         labels=["$S(f)$"],
         xlim=FREQ_COMBINED_XLIM,
         colors=COLOR_COMBINED,
+        title=MODULATED_STREAM_TITLE,
     ).plot()
 
     fig_freq.tight_layout()
@@ -268,6 +274,7 @@ if __name__ == "__main__":
         labels=["Phase $I + jQ$"],
         xlim=PHASE_XLIM,
         colors=[COLOR_COMBINED],
+        title=PHASE_TITLE,
     ).plot()
 
     ConstellationPlot(
@@ -278,6 +285,7 @@ if __name__ == "__main__":
         ylim=CONSTELLATION_YLIM,
         colors=[COLOR_COMBINED],
         rms_norm=True,
+        title=IQ_CONSTELLATION_TITLE,
     ).plot()
 
     fig_const.tight_layout()
@@ -287,21 +295,23 @@ if __name__ == "__main__":
     FrequencyPlot(
         fig_portadora, grid, (0, 0),
         fs=fs,
-        signal=s[0:(int(round(0.082 * fs)))],
+        signal=s[0:(int(round(carrier_duration * fs)))],
         fc=fc,
         labels=["$S(f)$"],
         xlim=FREQ_MODULATED_XLIM,
         colors=COLOR_COMBINED,
+        title=(MODULATED_STREAM_TITLE + " - (0 to " + str(carrier_duration*1000) + " ms)"),
     ).plot()
 
     FrequencyPlot(
         fig_portadora, grid, (0, 1),
         fs=fs,
-        signal=s[(int(round(0.082 * fs))):],
+        signal=s[(int(round(carrier_duration * fs))):],
         fc=fc,
         labels=["$S(f)$"],
         xlim=FREQ_MODULATED_XLIM,
         colors=COLOR_COMBINED,
+        title=MODULATED_STREAM_TITLE,
     ).plot()
 
     fig_portadora.tight_layout()

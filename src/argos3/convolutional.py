@@ -292,9 +292,11 @@ class DecoderViterbi:
             - $s_i$: Expected trellis output symbol.
 
         Examples:
-            - Soft Decision Example: 
-            ![pageplot](assets/example_conv_time_soft.svg)
-            ![pageplot](assets/example_conv_time_soft_quantized.svg)
+            Soft Decision Example: 
+
+            - Stream: ![pageplot](assets/example_conv_time_soft.svg)
+            - Sampling: ![pageplot](assets/example_conv_time_soft_sampled.svg)
+            - Decoding: ![pageplot](assets/example_conv_time_soft_quantized.svg)
             
     
         Args:
@@ -423,6 +425,8 @@ if __name__ == "__main__":
         bits_list=[ut],
         sections=[("$u_t$", len(ut))],
         colors=[COLOR_COMBINED],
+        title=INPUT_STREAM_TITLE,
+        ylabel=BITSTREAM_Y
     ).plot()
 
     BitsPlot(
@@ -430,6 +434,8 @@ if __name__ == "__main__":
         bits_list=[vt0],
         sections=[("$v_t^{(0)}$", len(vt0))],
         colors=[COLOR_I],
+        title=I_CHANNEL_TITLE,
+        ylabel=BITSTREAM_Y
     ).plot()
 
     BitsPlot(
@@ -437,7 +443,9 @@ if __name__ == "__main__":
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
         colors=[COLOR_Q],
-        xlabel=BITSTREAM_X, 
+        title=Q_CHANNEL_TITLE,
+        xlabel=BITSTREAM_X,
+        ylabel=BITSTREAM_Y 
     ).plot()
 
     fig_conv.tight_layout()
@@ -489,6 +497,8 @@ if __name__ == "__main__":
         sections=[("$v_t^{(0)}$", len(vt0))],
         colors=[COLOR_I],
         xlabel=BITSTREAM_X,
+        ylabel=BITSTREAM_Y,
+        title=I_CHANNEL_TITLE,
     ).plot()
 
     BitsPlot(
@@ -496,7 +506,8 @@ if __name__ == "__main__":
         bits_list=[vt1],
         sections=[("$v_t^{(1)}$", len(vt1))],
         colors=[COLOR_Q],
-        xlabel=BITSTREAM_X, 
+        xlabel=BITSTREAM_X,
+        title=Q_CHANNEL_TITLE, 
     ).plot()
 
     TimePlot(
@@ -569,7 +580,8 @@ if __name__ == "__main__":
         X_prime,
         colors=COLOR_I,
         label_signal=r"$d_I'(t)$", 
-        label_samples="Samples"
+        label_samples=r"Samples $I[n]'$",
+        title=I_CHANNEL_TITLE
     ).plot()
         
     SampledSignalPlot(
@@ -580,7 +592,8 @@ if __name__ == "__main__":
         Y_prime,
         colors=COLOR_Q,
         label_signal=r"$d_Q'(t)$", 
-        label_samples="Samples"
+        label_samples=r"Samples $Q[n]'$",
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(
@@ -590,7 +603,9 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$X'[n]$",
+        label=r"$I'[n]$",
+        ylim=[min(X_prime)*1.1, max(X_prime)*1.1],
+        x_axis_label=(min(X_prime), max(X_prime)),
         show_symbol_values=False
     ).plot()
 
@@ -601,7 +616,9 @@ if __name__ == "__main__":
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$Y'[n]$",
+        label=r"$Q'[n]$",
+        ylim=[min(Y_prime)*1.1, max(Y_prime)*1.1],
+        x_axis_label=(min(Y_prime), max(Y_prime)),
         show_symbol_values=False
     ).plot()
 
@@ -623,10 +640,11 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$X'[n]$",
+        label=r"$I'[n]$",
         show_symbol_values=False,
         ylim=[min(X_prime)*1.1, max(X_prime)*1.1],
-        x_axis_label=(min(X_prime), max(X_prime))
+        x_axis_label=(min(X_prime), max(X_prime)),
+        title=I_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(
@@ -636,10 +654,11 @@ if __name__ == "__main__":
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$Y'[n]$",
+        label=r"$Q'[n]$",
         show_symbol_values=False,
         ylim=[min(Y_prime)*1.1, max(Y_prime)*1.1],
-        x_axis_label=(min(Y_prime), max(Y_prime))
+        x_axis_label=(min(Y_prime), max(Y_prime)),
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     SymbolsPlot(
@@ -652,15 +671,17 @@ if __name__ == "__main__":
         label=r"$U'[n]$",
         show_symbol_values=False,
         ylim=[min(ut_prime)*1.1, max(ut_prime)*1.1],
-        x_axis_label=(min(ut_prime), max(ut_prime))
+        x_axis_label=(min(ut_prime), max(ut_prime)),
+        title=OUTPUT_STREAM_TITLE
     ).plot()
 
     BitsPlot(
         fig_time, grid_time, (2, slice(0, 2)),
         bits_list=[ut_nrz],
-        sections=[("$u_t^{(0)}$", len(ut_nrz))],
+        sections=[(r"$u_t^{(0)}$", len(ut_nrz))],
         colors=[COLOR_COMBINED],
-        xlabel=BITSTREAM_X, 
+        xlabel=BITSTREAM_X,
+        ylabel=BITSTREAM_Y,
     ).plot()
 
     fig_time.tight_layout()
