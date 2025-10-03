@@ -16,6 +16,7 @@ from .multiplexer import Multiplexer
 from .encoder import Encoder
 from .data import ExportData
 from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot
+from .env_vars import *
 
 class Transmitter:
     def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
@@ -126,7 +127,7 @@ class Transmitter:
         self.formatterQ = Formatter(fs=self.fs, Rb=self.cQ_Rb, type=self.cQ_format, channel="Q", bits_per_symbol=self.cQ_bits_per_symbol, prefix_duration=self.prefix_duration, alpha=self.alpha, span=self.span)
         self.modulator = Modulator(fc=self.fc, fs=self.fs)
 
-    def prepare_datagram(self, datagram: Datagram):
+    def datagram_build(self, datagram: Datagram):
         r"""
         Prepares the datagram for transmission, returning the bit vector $u_t$.
 
@@ -157,8 +158,10 @@ class Transmitter:
                           ("PCD ID", len(datagram.pcdid)),
                           ("Payload", len(datagram.payload)),
                           ("Tail", len(datagram.tail))],
-                colors=["green", "orange", "red", "blue"],
-                xlabel="Bit Index"
+                colors=[COLOR_AUX1, COLOR_AUX2, COLOR_AUX3, COLOR_AUX4],
+                xlabel=BITSTREAM_X,
+                ylabel=BITSTREAM_Y,
+                title="Datagram Stream"
             ).plot()
 
             fig_datagram.tight_layout()
@@ -166,7 +169,7 @@ class Transmitter:
 
         return ut
 
-    def encode_convolutional(self, ut):
+    def conv_encoder(self, ut):
         r"""
         Encodes the bit vector $u_t$ using convolutional encoding, returning the bit vectors $v_t^{(0)}$ and $v_t^{(1)}$.
 
@@ -194,29 +197,32 @@ class Transmitter:
             BitsPlot(
                 fig_conv, grid_conv, (0, 0),
                 bits_list=[ut],
-                sections=[("$u_t$", len(ut))],
-                colors=["darkred"],
-                ylabel="$u_t$",
-                xlim=(0, 60)
+                sections=[(r"$u_t$", len(ut))],
+                colors=[COLOR_COMBINED],
+                title=INPUT_STREAM_TITLE,
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM
             ).plot()
 
             BitsPlot(
                 fig_conv, grid_conv, (1, 0),
                 bits_list=[vt0],
-                sections=[("$v_t^{(0)}$", len(vt0))],
-                colors=["darkgreen"],
-                ylabel="$v_t^{(0)}$",
-                xlim=(0, 60)
+                sections=[(r"$v_t^{(0)}$", len(vt0))],
+                colors=[COLOR_I],
+                title=I_CHANNEL_TITLE,
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM
             ).plot()
 
             BitsPlot(
                 fig_conv, grid_conv, (2, 0),
                 bits_list=[vt1],
-                sections=[("$v_t^{(1)}$", len(vt1))],
-                colors=["navy"],
-                ylabel="$v_t^{(1)}$", 
-                xlim=(0, 60),
-                xlabel="Bit Index"
+                sections=[(r"$v_t^{(1)}$", len(vt1))],
+                colors=[COLOR_Q],
+                title=Q_CHANNEL_TITLE,
+                xlabel=BITSTREAM_X,
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM
             ).plot()
 
             fig_conv.tight_layout()
@@ -225,7 +231,7 @@ class Transmitter:
 
     def scramble(self, vt0, vt1):
         r"""
-        Scrambles the bit vectors $v_t^{(0)}$ and $v_t^{(1)}$, creating the shuffled vectors $X_n$ and $Y_n$.
+        Scrambles the bit vectors $v_t^{(0)}$ and $v_t^{(1)}$, creating the shuffled vectors $X[n]$ and $Y[n]$.
 
         Args:
             vt0 (np.ndarray): Bit vector of channel I.
@@ -252,38 +258,40 @@ class Transmitter:
             BitsPlot(
                 fig_scrambler, grid_scrambler, (0, 0),
                 bits_list=[vt0],
-                sections=[("$v_t^{0}$", len(vt0))],
-                colors=["darkgreen"],
-                xlim=(0, 60),
-                ylabel="Original"
+                sections=[(r"$v_t^{(0)}$", len(vt0))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                title=I_CHANNEL_TITLE,
+                xlim=BITSTREAM_XLIM
             ).plot()
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (1, 0),
                 bits_list=[X],
-                sections=[("$X_n$", len(X))],
-                colors=["darkgreen"],
-                ylabel="Scrambled", 
-                xlim=(0, 60),
+                sections=[(r"$X[n]$", len(X))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM
             ).plot()
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (2, 0),
                 bits_list=[vt1],
-                sections=[("$v_t^{1}$", len(vt1))],
-                colors=["navy"],
-                xlim=(0, 60),
-                ylabel="Original"
+                sections=[(r"$v_t^{(1)}$", len(vt1))],
+                colors=[COLOR_Q],
+                xlim=BITSTREAM_XLIM,
+                ylabel=BITSTREAM_Y,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             BitsPlot(
                 fig_scrambler, grid_scrambler, (3, 0),
                 bits_list=[Y],
-                sections=[("$Y_n$", len(Y))],
-                colors=["navy"], 
-                ylabel="Scrambled", 
-                xlabel="Bit Index",
-                xlim=(0, 60),
+                sections=[(r"$Y[n]$", len(Y))],
+                colors=[COLOR_Q], 
+                ylabel=BITSTREAM_Y, 
+                xlabel=BITSTREAM_X,
+                xlim=BITSTREAM_XLIM,
             ).plot()
 
             fig_scrambler.tight_layout()
@@ -291,9 +299,9 @@ class Transmitter:
 
         return X, Y
 
-    def generate_preamble(self):
+    def preamble_build(self):
         r"""
-        Generates the preamble vectors $S_I$ and $S_Q$.
+        Generates the preamble vectors $S_I[n]$ and $S_Q[n]$.
 
         Returns:
             sI (np.ndarray): Preamble vector of channel I.
@@ -316,18 +324,20 @@ class Transmitter:
             BitsPlot(
                 fig_preamble, grid_preamble, (0,0),
                 bits_list=[sI],
-                sections=[("$S_I$", len(sI))],
-                colors=["darkgreen"],
-                ylabel="Canal $I$"
+                sections=[(r"$S_I[n]$", len(sI))],
+                colors=[COLOR_I],
+                ylabel=BITSTREAM_Y,
+                title=I_CHANNEL_TITLE
             ).plot()
             
             BitsPlot(
                 fig_preamble, grid_preamble, (1,0),
                 bits_list=[sQ],
-                sections=[("$S_Q$", len(sQ))],
-                colors=["navy"], 
-                xlabel="Bit Index", 
-                ylabel="Canal $Q$"
+                sections=[(r"$S_Q[n]$", len(sQ))],
+                colors=[COLOR_Q], 
+                xlabel=BITSTREAM_X, 
+                ylabel=BITSTREAM_Y,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             fig_preamble.tight_layout()
@@ -335,15 +345,15 @@ class Transmitter:
 
         return sI, sQ
 
-    def multiplex(self, sI, sQ, X, Y):
+    def mux(self, sI, sQ, X, Y):
         r"""
-        Multiplexes the preamble vectors $S_I$ and $S_Q$ with the data vectors $X$ and $Y$, returning the multiplexed vectors $X_n$ and $Y_n$.
+        Multiplexes the preamble vectors $S_I[n]$ and $S_Q[n]$ with the data vectors $X[n]$ and $Y[n]$, returning the multiplexed vectors $X[n]$ and $Y[n]$.
 
         Args:
             sI (np.ndarray): Preamble vector of channel I.
             sQ (np.ndarray): Preamble vector of channel Q.
-            X (np.ndarray): Data vector of channel I.
-            Y (np.ndarray): Data vector of channel Q.
+            Xn (np.ndarray): Data vector of channel I.
+            Yn (np.ndarray): Data vector of channel Q.
         
         Returns:
             Xn (np.ndarray): Multiplexed vector of channel I.
@@ -357,7 +367,7 @@ class Transmitter:
 
         if self.output_print:
             print("\n ==== MULTIPLEXER ==== \n")
-            print("Xn:", ''.join(map(str, Xn)))
+            print("X[n]:", ''.join(map(str, Xn)))
             print("Yn:", ''.join(map(str, Yn)))
 
         if self.output_plot:
@@ -366,51 +376,51 @@ class Transmitter:
             BitsPlot(
                 fig_mux, grid_mux, (0,0),
                 bits_list=[sI, X],
-                sections=[("Preambulo $S_I$", len(sI)),
-                          ("Canal I $(X_n)$", len(X))],
-                colors=["darkred", "darkgreen"],
-                ylabel="Canal $I$",
-                xlim=(0, 60),
+                sections=[(r"$S_I[n]$", len(sI)),(r"$X[n]$", len(X))],
+                colors=[COLOR_AUX1, COLOR_I],
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             BitsPlot(
                 fig_mux, grid_mux, (1,0),
                 bits_list=[sQ, Y],
-                sections=[("Preambulo $S_Q$", len(sQ)),
-                          ("Canal Q $(Y_n)$", len(Y))],
-                colors=["darkred", "navy"],
-                xlabel="Index de Bit", 
-                ylabel="Canal $Q$",
-                xlim=(0, 60),
+                sections=[(r"$S_Q[n]$", len(sQ)),(r"$Y[n]$", len(Y))],
+                colors=[COLOR_AUX1, COLOR_Q],
+                xlabel=BITSTREAM_X, 
+                ylabel=BITSTREAM_Y,
+                xlim=BITSTREAM_XLIM,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             fig_mux.tight_layout()
             save_figure(fig_mux, "transmitter_mux_time.pdf")   
         return Xn, Yn
 
-    def encode_channels(self, Xn, Yn):
+    def line_encoder(self, Xn, Yn):
         r"""
-        Encodes the bit vectors $X_n$ and $Y_n$ using $NRZ$ and $Manchester$, respectively, returning the encoded signal vectors $X_{NRZ}$ and $Y_{MAN}$.
+        Encodes the bit vectors $X[n]$ and $Y[n]$ using line coding ($NRZ$), returning the encoded symbol vectors $I[n]$ and $Q[n]$.
 
         Args:
-            Xn (np.ndarray): Bit vector of channel $X_n$ to be encoded.
-            Yn (np.ndarray): Bit vector of channel $Y_n$ to be encoded.
+            Xn (np.ndarray): Bit vector of channel I to be encoded.
+            Yn (np.ndarray): Bit vector of channel Q to be encoded.
         
         Returns:
-            Xnrz (np.ndarray): Encoded signal vector of channel I $NRZ$. 
-            Yman (np.ndarray): Encoded signal vector of channel Q $Manchester$. 
+            In (np.ndarray): Encoded symbol vector of channel I. 
+            Qn (np.ndarray): Encoded symbol vector of channel Q. 
 
         Examples:
             - Signal Plot Example: ![pageplot](assets/transmitter_encoder_time.svg)
         """
 
-        Xi = self.c_encoderI.encode(Xn)
-        Yq = self.c_encoderQ.encode(Yn)
+        In = self.c_encoderI.encode(Xn)
+        Qn = self.c_encoderQ.encode(Yn)
 
         if self.output_print:
             print("\n ==== CODING CHANNELS ==== \n")
-            print("Xi:", ' '.join(f"{x:+d}" for x in Xi[:40]),"...")
-            print("Yq:", ' '.join(f"{y:+d}" for y in Yq[:40]),"...")
+            print("In:", ' '.join(f"{x:+d}" for x in In[:40]),"...")
+            print("Qn:", ' '.join(f"{y:+d}" for y in Qn[:40]),"...")
 
         if self.output_plot:
             fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
@@ -418,73 +428,77 @@ class Transmitter:
             BitsPlot(
                 fig_encoder, grid, (0, 0),
                 bits_list=[Xn],
-                sections=[("$X_n$", len(Xn))],
-                colors=["darkgreen"],
-                xlabel="Index de Bit", 
-                ylabel="$X_n$", 
-                xlim=(0, 60)
+                sections=[(r"$X[n]$", len(Xn))],
+                colors=[COLOR_I],
+                xlabel=BITSTREAM_X, 
+                ylabel=BITSTREAM_Y, 
+                xlim=BITSTREAM_XLIM,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             SymbolsPlot(
                 fig_encoder, grid, (1, 0),
-                symbols_list=[Xi],
+                symbols_list=[In],
                 samples_per_symbol=1,
-                colors=["darkgreen"],
-                xlabel="Index de Simbolo",
-                xlim=(0, 60),
-                ylabel="$X_{NRZ}[n]$"
+                colors=[COLOR_I],
+                xlabel=SYMBOLS_X,
+                ylabel=SYMBOLS_Y,
+                xlim=SYMBOLS_XLIM,
+                label=r"$I[n]$"
             ).plot()
 
             BitsPlot(
                 fig_encoder, grid, (2, 0),
                 bits_list=[Yn],
-                sections=[("$Y_n$", len(Yn))],
-                colors=["navy"],
-                xlabel="Index de Bit", 
-                ylabel="$Y_n$", 
-                xlim=(0, 60),
+                sections=[(r"$Y[n]$", len(Yn))],
+                colors=[COLOR_Q],
+                xlabel=BITSTREAM_X, 
+                ylabel=BITSTREAM_Y, 
+                xlim=BITSTREAM_XLIM,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             SymbolsPlot(
                 fig_encoder, grid, (3, 0),
-                symbols_list=[Yq],
+                symbols_list=[Qn],
                 samples_per_symbol=1,
-                colors=["navy"],
-                xlabel="Index de Simbolo",
-                xlim=(0, 60),
-                ylabel="$Y_{MAN}[n]$"
+                colors=[COLOR_Q],
+                xlabel=SYMBOLS_X,
+                ylabel=SYMBOLS_Y,
+                xlim=SYMBOLS_XLIM,
+                label=r"$Q[n]$"
             ).plot()
 
             fig_encoder.tight_layout()
             save_figure(fig_encoder, "transmitter_encoder_time.pdf")
 
-        return Xi, Yq
+        return In, Qn
 
-    def format_signals(self, Xi, Yq):
+    def pulse_modulate(self, In, Qn):
         r"""
-        Formats the encoded signal vectors $X_{NRZ}$ and $Y_{MAN}$ using RRC filter, returning the formatted vectors $d_I$ and $d_Q$.
+        Formats the line coded $NRZ$ symbol vectors $I[n]$ and $Q[n]$ using RRC/Manchester filters, returning the formatted vectors $d_I(t)$ and $d_Q(t)$.
 
         Args:
-            Xnrz (np.ndarray): Signal vector of channel $X_{NRZ}$ to be formatted.
-            Yman (np.ndarray): Signal vector of channel $Y_{MAN}$ to be formatted.
+            In (np.ndarray): Signal vector of channel $I[n]$ to be formatted.
+            Qn (np.ndarray): Signal vector of channel $Q[n]$ to be formatted.
         
         Returns:
-            dI (np.ndarray): Formatted vector of channel I, $d_I$.
-            dQ (np.ndarray): Formatted vector of channel Q, $d_Q$.
+            dI (np.ndarray): Formatted vector of channel I.
+            dQ (np.ndarray): Formatted vector of channel Q.
 
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/transmitter_formatter_time.svg)
             - Frequency Domain Plot Example: ![pageplot](assets/transmitter_formatter_freq.svg)
         """
 
-        dI = self.formatterI.apply_format(Xi)
-        dQ = self.formatterQ.apply_format(Yq)
+        dI = self.formatterI.apply_format(In)
+        dQ = self.formatterQ.apply_format(Qn)
         
         if self.output_print:
             print("\n ==== PULSE MODULATE ==== \n")
-            print("dI:", ''.join(map(str, dI[:5])),"...")
-            print("dQ:", ''.join(map(str, dQ[:5])),"...")
-            print("Prefix Duration:", self.prefix_duration)
+            print("dI(t):", ''.join(map(str, dI[:5])),"...")
+            print("dQ(t):", ''.join(map(str, dQ[:5])),"...")
+            print("Pd:", self.prefix_duration)
             
         if self.output_plot:
             fig_format, grid_format = create_figure(2, 2, figsize=(16, 9))
@@ -493,54 +507,46 @@ class Transmitter:
                 fig_format, grid_format, (0, 0),
                 self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
-                colors="darkorange",
-                label="$g(t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             ImpulseResponsePlot(
                 fig_format, grid_format, (0, 1),
                 self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
-                colors="darkorange",
-                label="$g(t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15),
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400,
                 amp_norm=True,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             TimePlot(
                 fig_format, grid_format, (1,0),
                 t= np.arange(len(dI)) / self.formatterI.fs,
                 signals=[dI],
-                labels=["$d_I(t)$"],
-                title="Canal $I$",
-                xlim=(40, 200),
+                labels=[r"$d_I(t)$"],
                 amp_norm=True,
-                colors="darkgreen",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                xlim=TIME_XLIM,
+                colors=COLOR_I
             ).plot()
 
             TimePlot(
                 fig_format, grid_format, (1,1),
                 t= np.arange(len(dQ)) / self.formatterQ.fs,
                 signals=[dQ],
-                labels=["$d_Q(t)$"],
-                title="Canal $Q$",
-                xlim=(40, 200),
+                labels=[r"$d_Q(t)$"],
+                xlim=TIME_XLIM,
                 amp_norm=True,
-                colors="darkblue",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                colors=COLOR_Q,
             ).plot()
 
             fig_format.tight_layout()
@@ -552,24 +558,26 @@ class Transmitter:
                 fig_format_freq, grid_format_freq, (0, 0),
                 self.formatterI.t_rc, self.formatterI.g,
                 t_unit="ms",
-                colors="darkorange",
-                label="$g(t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15), 
-                amp_norm=True
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400, 
+                amp_norm=True,
+                title=I_CHANNEL_TITLE
             ).plot()
 
             ImpulseResponsePlot(
                 fig_format_freq, grid_format_freq, (0, 1),
                 self.formatterQ.t_rc, self.formatterQ.g,
                 t_unit="ms",
-                colors="darkorange",
-                label="$g(t)$", 
-                xlabel=r"Tempo ($ms$)", 
-                ylabel="Amplitude", 
-                xlim=(-15, 15), 
-                amp_norm=True
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400, 
+                amp_norm=True,
+                title=Q_CHANNEL_TITLE
             ).plot()
 
             FrequencyPlot(
@@ -577,11 +585,10 @@ class Transmitter:
                 fs=self.fs,
                 signal=dI,
                 fc=self.fc,
-                labels=["$D_I(f)$"],
-                title="Canal $I$",
-                xlim=(-1.5, 1.5),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_I(f)$"],
+                title=I_CHANNEL_TITLE,
+                xlim=FREQ_COMPONENTS_XLIM,
+                colors=COLOR_I,
             ).plot()
 
             FrequencyPlot(
@@ -589,11 +596,10 @@ class Transmitter:
                 fs=self.fs,
                 signal=dQ,
                 fc=self.fc,
-                labels=["$D_Q(f)$"],
-                title="Canal $Q$",
-                xlim=(-1.5, 1.5),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_Q(f)$"],
+                title=Q_CHANNEL_TITLE,
+                xlim=FREQ_COMPONENTS_XLIM,
+                colors=COLOR_Q,
             ).plot()
 
             fig_format_freq.tight_layout()
@@ -601,23 +607,23 @@ class Transmitter:
 
         return dI, dQ
 
-    def modulate(self, dI, dQ):
+    def bandpass_modulate(self, dI, dQ):
         r"""
         Modulates the signal vectors $d_I(t)$ and $d_Q(t)$ using QPSK modulation, returning the modulated signal $s(t)$.
 
         Args:
-            dI (np.ndarray): Formatted vector of channel I, $d_I(t)$.
-            dQ (np.ndarray): Formatted vector of channel Q, $d_Q(t)$.
+            dI (np.ndarray): Formatted vector of channel I.
+            dQ (np.ndarray): Formatted vector of channel Q.
         
         Returns:
-            t (np.ndarray): Time vector, $t$.
-            s (np.ndarray): Modulated signal, $s(t)$.
+            t (np.ndarray): Time vector $t$.
+            s (np.ndarray): Modulated signal $s(t)$.
 
         Examples:
             - Time Domain Plot Example: ![pageplot](assets/transmitter_modulator_time.svg)
+            - Phase/Constellation Plot Example: ![pageplot](assets/transmitter_modulator_constellation.svg)
             - Frequency Domain Plot Example: ![pageplot](assets/transmitter_modulator_freq.svg)
             - Pure Carrier Plot Example: ![pageplot](assets/transmitter_modulator_portadora.svg)
-            - Phase/Constellation Plot Example: ![pageplot](assets/transmitter_modulator_constellation.svg)
         """
 
         t, s = self.modulator.modulate(dI, dQ)
@@ -634,15 +640,11 @@ class Transmitter:
                 fig_time, grid, (0, 0),
                 t=t,
                 signals=[dI, dQ],
-                labels=["$d_I(t)$", "$d_Q(t)$"],
-                title="Componentes $IQ$ - Demoduladas",
-                xlim=(40, 200),
+                labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+                title=IQ_COMPONENTS_TITLE,
+                xlim=TIME_XLIM,
                 amp_norm=True,
-                colors=["darkgreen", "navy"],
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                colors=[COLOR_I, COLOR_Q],
             ).plot()
 
             TimePlot(
@@ -650,14 +652,10 @@ class Transmitter:
                 t=t,
                 signals=[s],
                 labels=["$s(t)$"],
-                title="Sinal Modulado $IQ$",
-                xlim=(40, 200),
+                title=MODULATED_STREAM_TITLE,
+                xlim=TIME_XLIM,
                 amp_norm=True,
-                colors="darkred",
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                colors=COLOR_COMBINED,
             ).plot()
 
             fig_time.tight_layout()
@@ -669,11 +667,10 @@ class Transmitter:
                 fs=self.fs,
                 signal=dI,
                 fc=self.fc,
-                labels=["$D_I(f)$"],
-                title="Componente I",
-                xlim=(-1.5, 1.5),
-                colors="darkgreen",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_I(f)$"],
+                title=I_CHANNEL_TITLE,
+                xlim=FREQ_COMPONENTS_XLIM,
+                colors=COLOR_I,
             ).plot()
         
             FrequencyPlot(
@@ -681,11 +678,10 @@ class Transmitter:
                 fs=self.fs,
                 signal=dQ,
                 fc=self.fc,
-                labels=["$D_Q(f)$"],
-                title="Componente Q",
-                xlim=(-1.5, 1.5),
-                colors="navy",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$D_Q(f)$"],
+                title=Q_CHANNEL_TITLE,
+                xlim=FREQ_COMPONENTS_XLIM,
+                colors=COLOR_Q,
             ).plot()
         
             FrequencyPlot(
@@ -693,11 +689,10 @@ class Transmitter:
                 fs=self.fs,
                 signal=s,
                 fc=self.fc,
-                labels=["$S(f)$"],
-                title="Sinal Modulado $IQ$",
-                xlim=(0, 8),
-                colors="darkred",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$S(f)$"],
+                title=MODULATED_STREAM_TITLE,
+                xlim=FREQ_COMBINED_XLIM,
+                colors=COLOR_COMBINED,
             ).plot()
         
             fig_freq.tight_layout()
@@ -708,27 +703,22 @@ class Transmitter:
                 fig_const, grid, (0, 0),
                 t=t,
                 signals=[dI, dQ],
-                labels=["Fase $I + jQ$"],
-                title="Fase $I + jQ$",
-                xlim=(40, 320),
-                colors=["darkred"],
-                style={
-                    "line": {"linewidth": 2, "alpha": 1},
-                    "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}
-                }
+                labels=[r"Phase $I + jQ$"],
+                title=PHASE_TITLE,
+                xlim=PHASE_XLIM,
+                colors=[COLOR_COMBINED],
             ).plot()
 
             ConstellationPlot(
                 fig_const, grid, (0, 1),
                 dI=dI[:40000:5],
                 dQ=dQ[:40000:5],
-                xlim=(-1.4, 1.4),
-                ylim=(-1.4, 1.4),
+                xlim=CONSTELLATION_XLIM,
+                ylim=CONSTELLATION_YLIM,
                 rms_norm=True,
                 show_ideal_points=False,
-                title="Constelação $IQ$",
-                colors=["darkred"],
-                style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                title=IQ_CONSTELLATION_TITLE,
+                colors=COLOR_COMBINED,
             ).plot()
 
             fig_const.tight_layout()
@@ -738,25 +728,23 @@ class Transmitter:
             FrequencyPlot(
                 fig_portadora, grid, (0, 0),
                 fs=self.fs,
-                signal=s[0:(int(round(0.082 * self.fs)))],
+                signal=s[0:(int(round(self.prefix_duration * self.fs)))],
                 fc=self.fc,
-                labels=["$S(f)$"],
-                title="Portadora Pura - $0$ a $80$ms",
-                xlim=(-10, 10),
-                colors="darkred",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$S(f)$"],
+                title=(MODULATED_STREAM_TITLE + " - (0 to " + str(self.prefix_duration*1000) + " ms)"),
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_COMBINED,
             ).plot()
 
             FrequencyPlot(
                 fig_portadora, grid, (0, 1),
                 fs=self.fs,
-                signal=s[(int(round(0.082 * self.fs))):],
+                signal=s[(int(round(self.prefix_duration * self.fs))):],
                 fc=self.fc,
-                labels=["$S(f)$"],
-                title="Sinal Modulado - $80$ms em diante",
-                xlim=(-10, 10),
-                colors="darkred",
-                style={"line": {"linewidth": 1, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+                labels=[r"$S(f)$"],
+                title=MODULATED_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_COMBINED,
             ).plot()
 
             fig_portadora.tight_layout()
@@ -772,17 +760,17 @@ class Transmitter:
             datagram (Datagram): Instance of the datagram to be transmitted.
 
         Returns:
-            t (np.ndarray): Time vector, $t$.
-            s (np.ndarray): Modulated signal, $s(t)$.
+            t (np.ndarray): Time vector $t$.
+            s (np.ndarray): Modulated signal $s(t)$.
         """
-        ut = self.prepare_datagram(datagram)
-        vt0, vt1 = self.encode_convolutional(ut)
+        ut = self.datagram_build(datagram)
+        vt0, vt1 = self.conv_encoder(ut)
         X, Y = self.scramble(vt0, vt1)
-        sI, sQ = self.generate_preamble()
-        Xn, Yn = self.multiplex(sI, sQ, X, Y)
-        Xnrz, Yman = self.encode_channels(Xn, Yn)
-        dI, dQ = self.format_signals(Xnrz, Yman)
-        t, s = self.modulate(dI, dQ)
+        sI, sQ = self.preamble_build()
+        Xn, Yn = self.mux(sI, sQ, X, Y)
+        In, Qn = self.line_encoder(Xn, Yn)
+        dI, dQ = self.pulse_modulate(In, Qn)
+        t, s = self.bandpass_modulate(dI, dQ)
         return t, s
 
 
