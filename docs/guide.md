@@ -17,7 +17,7 @@
 First, clone the repository, containing the project: 
 
 ```bash
-git clone https://github.com/arthurcadore/simulacao-tcc.git
+git clone https://github.com/arthurcadore/argos3.git
 ```
 
 Next, access the project directory: 
@@ -90,11 +90,11 @@ make deploy-docs
 
 ## Support
 
-To report issues or request features, please [open an issue](https://github.com/arthurcadore/simulacao-tcc/issues) on GitHub.
+To report issues or request features, please [open an issue](https://github.com/arthurcadore/argos3/issues) on GitHub.
 
 ## License
 
-This project is part of the IFSC - Federal Institute of Santa Catarina. Consult the [LICENSE](https://github.com/arthurcadore/simulacao-tcc/blob/main/LICENSE) file for more details about the terms of use.
+This project is part of the IFSC - Federal Institute of Santa Catarina. Consult the [LICENSE](https://github.com/arthurcadore/argos3/blob/main/LICENSE) file for more details about the terms of use.
 
 ## Contact
 

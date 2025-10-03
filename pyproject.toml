@@ -1,7 +1,7 @@
 [project]
 name = "argos3"
-version = "1.0.6"
-description = "An open-source tool for analysis and simulation of ARGOS-3 standard"
+version = "1.0.7"
+description = "An open-source tool for analysis and simulation of ARGOS-3 communication standard"
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "Arthur Cadore", email = "arthurbarcella.ifsc@gmail.com" }]
 license = "MIT"
@@ -16,8 +16,8 @@ dependencies = [
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://arthurcadore.github.io/simulacao-tcc/"
-Repository = "https://github.com/arthurcadore/simulacao-tcc"
+Homepage = "https://arthurcadore.github.io/argos3/"
+Repository = "https://github.com/arthurcadore/argos3"
 
 [build-system]
 requires = ["build", "setuptools>=61.0.0", "wheel", "twine"]

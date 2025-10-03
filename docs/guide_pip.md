@@ -8,7 +8,7 @@
 
 ## Installation
 
-To know the available versions for installation, and their changelog, check the releases at [Repository](https://github.com/arthurcadore/simulacao-tcc/releases).
+To know the available versions for installation, and their changelog, check the releases at [Repository](https://github.com/arthurcadore/argos3/releases).
 
 ### Create virtual environment
 
@@ -42,11 +42,11 @@ pip install argos3==1.0.1
 
 ## Support
 
-To report issues or request features, please [open an issue](https://github.com/arthurcadore/simulacao-tcc/issues) on GitHub.
+To report issues or request features, please [open an issue](https://github.com/arthurcadore/argos3/issues) on GitHub.
 
 ## License
 
-This project is part of the IFSC - Federal Institute of Santa Catarina. Consult the [LICENSE](https://github.com/arthurcadore/simulacao-tcc/blob/main/LICENSE) file for more details about the terms of use.
+This project is part of the IFSC - Federal Institute of Santa Catarina. Consult the [LICENSE](https://github.com/arthurcadore/argos3/blob/main/LICENSE) file for more details about the terms of use.
 
 ## Contact
 

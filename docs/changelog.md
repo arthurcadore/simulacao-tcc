@@ -124,7 +124,7 @@
 - [X] Criar diretório para armazenar diagramas e notebooks.    
 
 --- 
-### v1.0.8 - Soft Decision and Performance
+### v1.0.8 - Soft Decision and Performance Test
 - [] Implementar argumento "soft" no receiver
     - [] Alterar receiver para apenas amostrar os valores após filtro casado.
     - [] Alterar ordem do conv. decoder para receber valores após desembaralhamento.

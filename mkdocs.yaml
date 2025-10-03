@@ -1,8 +1,8 @@
 site_name: ARGOS-3 Simulator
-site_url: "https://github.com/arthurcadore/simulacao-tcc"
+site_url: "https://github.com/arthurcadore/argos3"
 
-repo_name: simulacao-tcc
-repo_url: https://github.com/arthurcadore/simulacao-tcc
+repo_name: argos3
+repo_url: https://github.com/arthurcadore/argos3
 edit_uri: edit/main/docs/
 
 theme:
@@ -88,13 +88,13 @@ plugins:
 badges: 
   - name: Stars 
     image: https://img.shields.io/github/stars/arthurcadore/simulacao-tcc?style=social 
-    link: https://github.com/arthurcadore/simulacao-tcc/stargazers 
+    link: https://github.com/arthurcadore/argos3/stargazers 
   - name: Forks 
     image: https://img.shields.io/github/forks/arthurcadore/simulacao-tcc?style=social 
-    link: https://github.com/arthurcadore/simulacao-tcc/network/members 
+    link: https://github.com/arthurcadore/argos3/network/members 
   - name: Release
     image: https://img.shields.io/github/v/release/arthurcadore/simulacao-tcc?style=flat
-    link: https://github.com/arthurcadore/simulacao-tcc/releases/latest
+    link: https://github.com/arthurcadore/argos3/releases/latest
     
 markdown_extensions:
   - pymdownx.arithmatex:  

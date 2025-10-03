@@ -26,7 +26,7 @@ import argos3
 
 ## Documentação
 
-A documentação completa está disponível em https://arthurcadore.github.io/simulacao-tcc/.
+A documentação completa está disponível em https://arthurcadore.github.io/argos3/.
 
 ## Licença
 
