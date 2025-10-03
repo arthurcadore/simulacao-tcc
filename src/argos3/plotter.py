@@ -983,10 +983,10 @@ class GaussianNoisePlot(BasePlot):
                  pos,
                  variance: float,
                  num_points: int = 5000,
-                 legend: str = "Ruído AWGN",
-                 xlabel: str = "Amplitude",
-                 ylabel: str = "Densidade de Probabilidade",
-                 xlim: Optional[Tuple[float, float]] = None,
+                 legend: str = "$p(x)$",
+                 xlabel: str = "Amplitude ($x$)",
+                 ylabel: str = "Probability Density $p(x)$",
+                 ylim: Optional[Tuple[float, float]] = None,
                  span: int = 100,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
@@ -996,7 +996,7 @@ class GaussianNoisePlot(BasePlot):
         self.legend = legend
         self.xlabel = xlabel
         self.ylabel = ylabel
-        self.xlim = xlim
+        self.ylim = ylim
         self.span = span
 
     def plot(self) -> None:
@@ -1009,13 +1009,17 @@ class GaussianNoisePlot(BasePlot):
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkgreen"
-        self.ax.plot(x, pdf, label=self.legend, color=color, **line_kwargs)
+        self.ax.plot(pdf, x, label=self.legend, color=color, **line_kwargs)
+        self.ax.fill_betweenx(x, 0, pdf, color=color, alpha=1)
+
        
         # Adjust axis
-        self.ax.set_xlabel(self.xlabel)
-        self.ax.set_ylabel(self.ylabel)
-        if self.xlim is not None:
-            self.ax.set_xlim(self.xlim)
+        self.ax.set_xlabel(self.ylabel)  
+        self.ax.set_ylabel(self.xlabel) 
+        if self.ylim is not None:
+            self.ax.set_ylim(self.ylim)
+        else:
+            self.ax.set_ylim([-1, 1])
         self.apply_ax_style()
 
 class PoleZeroPlot(BasePlot):

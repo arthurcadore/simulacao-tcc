@@ -22,6 +22,7 @@ FREQ_MODULATED_XLIM = (-10, 10)
 SYNC_XLIM = (40, 200)
 CORR_XLIM = (40, 200)
 SYMBOLS_XLIM = (0, 60)
+NOISE_DENSITY_YLIM = (-1, 1)
 
 # Colors
 COLOR_I = "darkgreen"
@@ -44,6 +45,7 @@ DETECTOR_COLOR1=COLOR_AUX1
 DETECTOR_COLOR2=COLOR_AUX2
 DETECTOR_COLOR3=COLOR_AUX3
 DETECTOR_COLOR4=COLOR_AUX4
+NOISE_DENSITY_COLOR = "darkorange"
 
 
 # Titles
@@ -60,7 +62,9 @@ MODULATED_STREAM_TITLE = "Modulated Signal $s(t)$"
 IQ_COMPONENTS_TITLE = "$IQ$ Components Signals"
 PHASE_TITLE = "Modulated Signal $s(t)$ Phase"
 IQ_CONSTELLATION_TITLE = "$IQ$ Constellation"
-WATERFALL_TITLE = "Received Signal $s(t) + r(t)$ Waterfall Plot"
-WATERFALL_DETECTION_TITLE = "Detection of $s(t)$ Waterfall Plot"
-WATERFALL_DECISION_TITLE = "Decision of $s(t)$ Waterfall Plot"
+WATERFALL_TITLE = "Received Signal $s(t) + r(t)$ Waterfall"
+WATERFALL_DETECTION_TITLE = "Detection of $s(t)$ Waterfall"
+WATERFALL_DECISION_TITLE = "Decision of $s(t)$ Waterfall"
 SYNC_CORR_TITLE = "Correlation of $s(t)$ with Sync Signal"
+NOISE_DENSITY_TITLE = "Noise Density"
+NOISE_TITLE = "Noise Signal $r(t)$"

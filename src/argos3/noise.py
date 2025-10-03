@@ -9,11 +9,12 @@ import numpy as np
 from .datagram import Datagram
 from .transmitter import Transmitter
 from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, GaussianNoisePlot
+from .env_vars import *
 
 class Noise:
     def __init__(self, snr=15, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
-        Implementation of AWGN noise, based on $SNR$.
+        Implementation of AWGN noise $r(t)$, based on $SNR_{dB}$.
 
         Args:
             snr (float): Signal-to-noise ratio in decibels (dB).
@@ -50,7 +51,8 @@ class Noise:
               "tail": 7
             }
 
-            - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg) 
+            - Time Domain Plot Example: ![pageplot](assets/example_noise_time_snr.svg) 
+            - Frequency Domain Plot Example: ![pageplot](assets/example_noise_freq_snr.svg)
         """
         self.snr = snr
         self.rng = np.random.default_rng(seed)
@@ -100,22 +102,21 @@ class Noise:
         noise_len = int(sig_len * self.length_multiplier)
 
         # generate a noise vector
-        noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
+        noisy_signal = self.rng.normal(0, np.sqrt(self.variance), noise_len)
+        self.noise = noisy_signal.copy()
 
         # calculate the position of the signal
         start_idx = int((noise_len - sig_len) * self.position_factor)
         end_idx = start_idx + sig_len
 
         # insert the signal into the noise
-        noisy_signal = noise.copy()
         noisy_signal[start_idx:end_idx] += signal
-
         return noisy_signal
 
 class NoiseEBN0:
     def __init__(self, ebn0_db=10, fs=128_000, Rb=400, seed=None, length_multiplier=1, position_factor=0.5):
         r"""
-        Implementation of AWGN noise, based on $Eb/N_{0}$.
+        Implementation of AWGN noise $r(t)$, based on $\left(Eb/N_{0}\right)_{dB}$.
 
         Args:
             ebn0_db (float): Target value of $Eb/N_{0}$ in $dB$
@@ -154,7 +155,8 @@ class NoiseEBN0:
               "tail": 7
             }
 
-            - Time Domain Plot Example: ![pageplot](assets/example_noise_time.svg)
+            - Time Domain Plot Example: ![pageplot](assets/example_noise_time_ebn0.svg)
+            - Frequency Domain Plot Example: ![pageplot](assets/example_noise_freq_ebn0.svg)
         """
         self.ebn0_db = ebn0_db
         self.ebn0_lin = 10 ** (ebn0_db / 10)
@@ -229,95 +231,85 @@ class NoiseEBN0:
         noise_len = int(sig_len * self.length_multiplier)
 
         # generate a noise vector
-        noise = self.rng.normal(0, np.sqrt(self.variance), noise_len)
+        noisy_signal = self.rng.normal(0, np.sqrt(self.variance), noise_len)
+        self.noise = noisy_signal.copy()
 
         # calculate the position of the signal
         start_idx = int((noise_len - sig_len) * self.position_factor)
         end_idx = start_idx + sig_len
 
         # insert the signal into the noise
-        noisy_signal = noise.copy()
         noisy_signal[start_idx:end_idx] += signal
-
         return noisy_signal
-
-def check_ebn0(s, s_noisy, add_noise:NoiseEBN0):
-    n_est = s_noisy - s
-    P = np.mean(s**2)
-    Eb = P / add_noise.Rb
-    # from sigma^2 -> N0 estimated:
-    sigma2_meas = np.var(n_est)
-    N0_meas = 2 * sigma2_meas / add_noise.fs
-    ebn0_meas_db = 10*np.log10(Eb / N0_meas)
-    print("Eb/N0 alvo:", add_noise.ebn0_db, "dB | medido:", ebn0_meas_db, "dB")
-    
 
 if __name__ == "__main__":
     datagram = Datagram(pcdnum=1234, numblocks=1)
     transmitter = Transmitter(output_print=False, output_plot=False)
     t, s = transmitter.transmit(datagram)
 
-    # ADIÇÃO DE RUIDO USANDO SNR
-    snr_db = 15
-    add_noise = Noise(snr=snr_db, seed=0)
-    s_noisy = add_noise.add_noise(s)
+    snr_db = 3
+    add_noise_snr = Noise(snr=snr_db, seed=0)
+    s_noisy_snr = add_noise_snr.add_noise(s.copy())
 
     fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
+    
     GaussianNoisePlot(
         fig_gauss, grid_gauss, (0,0),
-        variance=add_noise.variance,
-        colors="darkorange",
-        legend=f"Ruído AWGN SNR - {snr_db} dB",
-        xlim=(-1, 1),
+        variance=add_noise_snr.variance,
+        colors=NOISE_DENSITY_COLOR,
+        title=(NOISE_DENSITY_TITLE + f" - $SNR$ {snr_db} $dB$"),
+        legend=[r"$p(x)$"],
+        ylim=NOISE_DENSITY_YLIM,
         span=200
     ).plot()
     save_figure(fig_gauss, "example_noise_gaussian_snr.pdf")
 
-    # ADIÇÃO DE RUIDO USANDO EBN0
-    eb_n0 = 10
-    add_noise = NoiseEBN0(ebn0_db=eb_n0, seed=0)
-    s_noisy = add_noise.add_noise(s)
-    check_ebn0(s, s_noisy, add_noise)
-
-    fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
-    GaussianNoisePlot(
-        fig_gauss, grid_gauss, (0,0),
-        variance=add_noise.variance,
-        colors="darkorange",
-        legend=f"Ruído AWGN Eb/N0 - {eb_n0} dB",
-        xlim=(-1, 1)
-    ).plot()
-    save_figure(fig_gauss, "example_noise_gaussian_ebn0.pdf")
-
-
-    fig_time, grid_time = create_figure(2, 1, figsize=(16, 9))
-
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
     TimePlot(
-        fig_time, grid_time, (0,0),
+        fig_time, grid_time, (0,slice(0,2)),
         t=t,
         signals=[s],
-        labels=["$s(t)$"],
-        title="Domínio do Tempo - Sem Ruído",
-        xlim=(40, 200),
+        labels=[r"$s(t)$"],
+        title=MODULATED_STREAM_TITLE,
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors="darkblue",
-        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        colors=COLOR_COMBINED,
     ).plot()
-    
+
     TimePlot(
         fig_time, grid_time, (1,0),
         t=t,
-        signals=[s_noisy],
-        labels=["$s(t) + AWGN$"],
-        title="Domínio do Tempo - Com Ruído",
-        xlim=(40, 200),
+        signals=[add_noise_snr.noise],
+        labels=[r"$r(t)$"],
+        title=NOISE_TITLE,
+        xlim=TIME_XLIM,
+        ylim=NOISE_DENSITY_YLIM,
+        colors=COLOR_COMBINED,
+    ).plot()
+    
+    GaussianNoisePlot(
+        fig_time, grid_time, (1,1),
+        variance=add_noise_snr.variance,
+        colors=NOISE_DENSITY_COLOR,
+        title=(NOISE_DENSITY_TITLE + f" - $SNR$ {snr_db} $dB$"),
+        legend=[r"$p(x)$"],
+        ylim=NOISE_DENSITY_YLIM,
+        span=200
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (2,slice(0,2)),
+        t=t,
+        signals=[s_noisy_snr],
+        labels=[r"$s(t) + r(t)$"],
+        title=MODULATED_STREAM_TITLE + f" + $r(t)$",
+        xlim=TIME_XLIM,
         amp_norm=True,
-        colors="darkred",
-        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        colors=COLOR_COMBINED,
     ).plot()
     
     fig_time.tight_layout()
-    save_figure(fig_time, "example_noise_time.pdf")
+    save_figure(fig_time, "example_noise_time_snr.pdf")
 
     fig_freq, grid_freq = create_figure(2, 1, figsize=(16, 9))
 
@@ -326,24 +318,110 @@ if __name__ == "__main__":
         fs=transmitter.fs,
         signal=s,
         fc=transmitter.fc,
-        labels=["$S(f)$"],
-        title="Domínio da Frequência - Sem Ruído",
-        xlim=(-8, 8),
-        colors="darkblue",
-        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        labels=[r"$S(f)$"],
+        title=MODULATED_STREAM_TITLE,
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
     ).plot()
     
     FrequencyPlot(
         fig_freq, grid_freq, (1,0),
         fs=transmitter.fs,
-        signal=s_noisy,
+        signal=s_noisy_snr,
         fc=transmitter.fc,
-        labels=["$S(f)$ + AWGN"],
-        title="Domínio da Frequência - Com Ruído",
-        xlim=(-8, 8),
-        colors="darkred",
-        style={"line": {"linewidth": 2, "alpha": 1}, "grid": {"color": "gray", "linestyle": "--", "linewidth": 0.5}}
+        labels=[r"$S(f)$ + $r(t)$"],
+        title=MODULATED_STREAM_TITLE + f" + $r(t)$",
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
     ).plot()
     
     fig_freq.tight_layout()
-    save_figure(fig_freq, "example_noise_freq.pdf")
+    save_figure(fig_freq, "example_noise_freq_snr.pdf")
+
+    eb_n0 = 10
+    add_noise_ebn0 = NoiseEBN0(ebn0_db=eb_n0, seed=0)
+    s_noisy_ebn0 = add_noise_ebn0.add_noise(s.copy())
+
+    fig_gauss, grid_gauss = create_figure(1, 1, figsize=(16, 9))
+    GaussianNoisePlot(
+        fig_gauss, grid_gauss, (0,0),
+        variance=add_noise_ebn0.variance,
+        colors=NOISE_DENSITY_COLOR,
+        title=(NOISE_DENSITY_TITLE + f" - $Eb/N_0$ {eb_n0} $dB$"),
+        legend=[r"$p(x)$"],
+        ylim=NOISE_DENSITY_YLIM,
+    ).plot()
+    save_figure(fig_gauss, "example_noise_gaussian_ebn0.pdf")
+
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+    TimePlot(
+        fig_time, grid_time, (0,slice(0,2)),
+        t=t,
+        signals=[s],
+        labels=[r"$s(t)$"],
+        title=MODULATED_STREAM_TITLE,
+        xlim=TIME_XLIM,
+        amp_norm=True,
+        colors=COLOR_COMBINED,
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (1,0),
+        t=t,
+        signals=[add_noise_ebn0.noise],
+        labels=[r"$r(t)$"],
+        title=NOISE_TITLE,
+        xlim=TIME_XLIM,
+        ylim=NOISE_DENSITY_YLIM,
+        colors=COLOR_COMBINED,
+    ).plot()
+    
+    GaussianNoisePlot(
+        fig_time, grid_time, (1,1),
+        variance=add_noise_ebn0.variance,
+        colors=NOISE_DENSITY_COLOR,
+        title=(NOISE_DENSITY_TITLE + f" - $Eb/N_0$ {eb_n0} $dB$"),
+        legend=[r"$p(x)$"],
+        ylim=NOISE_DENSITY_YLIM,
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (2,slice(0,2)),
+        t=t,
+        signals=[s_noisy_ebn0],
+        labels=[r"$s(t) + r(t)$"],
+        title=MODULATED_STREAM_TITLE + f" + $r(t)$",
+        xlim=TIME_XLIM,
+        amp_norm=True,
+        colors=COLOR_COMBINED,
+    ).plot()
+    
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_noise_time_ebn0.pdf")
+
+    fig_freq, grid_freq = create_figure(2, 1, figsize=(16, 9))
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,0),
+        fs=transmitter.fs,
+        signal=s,
+        fc=transmitter.fc,
+        labels=[r"$S(f)$"],
+        title=MODULATED_STREAM_TITLE,
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
+    ).plot()
+    
+    FrequencyPlot(
+        fig_freq, grid_freq, (1,0),
+        fs=transmitter.fs,
+        signal=s_noisy_ebn0,
+        fc=transmitter.fc,
+        labels=[r"$S(f)$ + $r(t)$"],
+        title=MODULATED_STREAM_TITLE + f" + $r(t)$",
+        xlim=FREQ_MODULATED_XLIM,
+        colors=COLOR_COMBINED,
+    ).plot()
+    
+    fig_freq.tight_layout()
+    save_figure(fig_freq, "example_noise_freq_ebn0.pdf")

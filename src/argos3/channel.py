@@ -9,7 +9,7 @@ import numpy as np
 
 from .transmitter import Transmitter
 from .datagram import Datagram
-from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot
+from .plotter import save_figure, create_figure, TimePlot, GaussianNoisePlot
 from .noise import Noise, NoiseEBN0
 from .env_vars import *
 
@@ -64,6 +64,9 @@ class Channel:
               },
               "tail": 7
             }
+
+            - Time Domain Plot Example: ![pageplot](assets/example_channel_time_channel.svg)
+            
 
         """
         self.fs = fs
@@ -127,6 +130,7 @@ class Channel:
             noise = Noise(snr=self.noise_db, seed=self.seed)
         
         self.channel = noise.add_noise(self.channel)
+        self.noise = noise.noise
     
 
 if __name__ == "__main__":
@@ -146,42 +150,46 @@ if __name__ == "__main__":
     canal2.add_signal(s, position_factor=0.5)
     canal3.add_signal(s, position_factor=0.9)
 
-    fig_time, grid = create_figure(4, 1, figsize=(16, 9))
+    fig_time, grid = create_figure(4, 1, figsize=(16, 16))
 
     TimePlot(
         fig_time, grid, (0, 0),
         t=np.arange(0, len(s)/tx.fs, 1/tx.fs),
         signals=[s],
         labels=["$s(t)$"],
-        title="Modulated Signal $s(t)$",
+        title=MODULATED_STREAM_TITLE,
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()    
     
     TimePlot(
         fig_time, grid, (1, 0),
         t=canal1.t,
         signals=[canal1.channel],
-        labels=["$s(t)$"], 
-        title="Modulated Signal - Channel 1",
+        labels=["$s_1(t)$"], 
+        title=(MODULATED_STREAM_TITLE + " - Channel 1"),
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()
 
     TimePlot(
         fig_time, grid, (2, 0),
         t=canal2.t,
         signals=[canal2.channel],
-        labels=["$s(t)$"], 
-        title="Modulated Signal - Channel 2",
+        labels=["$s_2(t)$"], 
+        title=(MODULATED_STREAM_TITLE + " - Channel 2"),
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()
 
     TimePlot(
         fig_time, grid, (3, 0),
         t=canal3.t,
         signals=[canal3.channel],
-        labels=["$s(t)$"], 
-        title="Modulated Signal - Channel 3",
+        labels=["$s_3(t)$"], 
+        title=(MODULATED_STREAM_TITLE + " - Channel 3"),
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()
 
     fig_time.tight_layout()
@@ -189,26 +197,47 @@ if __name__ == "__main__":
     
     canalT = canal1.channel + canal2.channel + canal3.channel
 
-    canalT_NoiseEBN0 = NoiseEBN0(ebn0_db=20, seed=10).add_noise(canalT)
+    Noise = NoiseEBN0(ebn0_db=20, seed=10)
+    canalT_NoiseEBN0 = Noise.add_noise(canalT)
 
-    fig_time, grid = create_figure(2, 1, figsize=(16, 9))
+    fig_time, grid = create_figure(3, 2, figsize=(16, 9))
     
     TimePlot(
-        fig_time, grid, (0, 0),
+        fig_time, grid, (0, slice(0,2)),
         t=np.arange(0, len(canalT)/tx.fs, 1/tx.fs),
         signals=[canalT],
         labels=["$s(t)$"], 
-        title="Modulated Signal - Channel Total",
+        title=MODULATED_STREAM_TITLE,
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()
 
     TimePlot(
-        fig_time, grid, (1, 0),
+        fig_time, grid, (1,0),
+        t=np.arange(0, len(canalT_NoiseEBN0)/tx.fs, 1/tx.fs),
+        signals=[Noise.noise],
+        labels=[r"$r(t)$"],
+        title=NOISE_TITLE,
+        xlim=TIME_XLIM,
+        ylim=NOISE_DENSITY_YLIM,
+        colors=COLOR_COMBINED,
+    ).plot()
+
+    GaussianNoisePlot(
+        fig_time, grid, (1,1),
+        variance=Noise.variance,
+        colors=NOISE_DENSITY_COLOR,
+        title=(NOISE_DENSITY_TITLE + f" - $EB/N_0$ {Noise.ebn0_db} $dB$")
+    ).plot()
+
+    TimePlot(
+        fig_time, grid, (2, slice(0,2)),
         t=np.arange(0, len(canalT_NoiseEBN0)/tx.fs, 1/tx.fs),
         signals=[canalT_NoiseEBN0],
-        labels=["$s(t)$"], 
-        title="Modulated Signal - Channel Total + Noise",
+        labels=["$s(t) + r(t)$"], 
+        title=(MODULATED_STREAM_TITLE + " + r(t)"),
         colors=[COLOR_COMBINED],
+        amp_norm=True,
     ).plot()
     
     fig_time.tight_layout()
