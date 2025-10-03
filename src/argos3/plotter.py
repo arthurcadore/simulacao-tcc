@@ -1291,8 +1291,8 @@ class BersnrPlot(BasePlot):
                  ber_curves: List[np.ndarray],
                  linestyles: List[str] = None,
                  markers: List[str] = None,
-                 xlabel: str = r"$E_b/N_0$ (dB)",
-                 ylabel: str = r"Taxa de Erro de Bit (BER)",
+                 xlabel: str = r"$E_b/N_0$ ($dB$)",
+                 ylabel: str = r"Bit Error Rate ($BER$)",
                  logy: bool = True,
                  **kwargs) -> None:
 

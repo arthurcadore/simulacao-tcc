@@ -195,14 +195,14 @@ class NoiseEBN0:
         The noise density $N_0$ is given by:
 
         $$
-        N_0 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b \cdot 10^{\frac{Eb/N_0}{10}}}
+        N_0 = \frac{\mathbb{E}\!\left[ |s(t)|^2 \right]}{R_b \cdot 10^{\frac{E_b/N_0}{10}}}
         $$
 
         Where: 
             - $N_0$: Noise density.
             - $\mathbb{E}\!\left[ |s(t)|^2 \right]$: Signal power.
             - $R_b$: Bit rate in bits/s.
-            - $Eb/N_0$: Target value of $Eb/N_{0}$ in $dB$.
+            - $E_b/N_0$: Target value of $Eb/N_{0}$ in $dB$.
 
         Args:
             signal (np.ndarray): Sinal transmitido $s(t)$.
@@ -347,7 +347,7 @@ if __name__ == "__main__":
         fig_gauss, grid_gauss, (0,0),
         variance=add_noise_ebn0.variance,
         colors=NOISE_DENSITY_COLOR,
-        title=(NOISE_DENSITY_TITLE + f" - $Eb/N_0$ {eb_n0} $dB$"),
+        title=(NOISE_DENSITY_TITLE + f" - $E_b/N_0$ {eb_n0} $dB$"),
         legend=[r"$p(x)$"],
         ylim=NOISE_DENSITY_YLIM,
     ).plot()
@@ -380,7 +380,7 @@ if __name__ == "__main__":
         fig_time, grid_time, (1,1),
         variance=add_noise_ebn0.variance,
         colors=NOISE_DENSITY_COLOR,
-        title=(NOISE_DENSITY_TITLE + f" - $Eb/N_0$ {eb_n0} $dB$"),
+        title=(NOISE_DENSITY_TITLE + f" - $E_b/N_0$ {eb_n0} $dB$"),
         legend=[r"$p(x)$"],
         ylim=NOISE_DENSITY_YLIM,
     ).plot()

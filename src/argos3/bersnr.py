@@ -413,14 +413,14 @@ class BERSNR_QPSK_CONV:
 
 if __name__ == "__main__":
 
-    # Define os valores de Eb/N0 para a simulação
+    # Define the Eb/N0 values for the simulation
     EbN0_vec = np.arange(0, 9.5, 0.5)
 
     ref_values = [10000, 5000, 800, 200]
     ref_points = [0, 3, 6, 12]
     error_values = interpolate(len(EbN0_vec), ref_points, ref_values)
 
-    # Imprime os valores de erro máximo para cada Eb/N0
+    # Print the maximum number of bits for each Eb/N0
     for ebn0, error in zip(EbN0_vec, error_values):
         print(f"Eb/N0 = {ebn0} dB: {error} erros")
 
@@ -434,7 +434,7 @@ if __name__ == "__main__":
     bersnr_qpsk_hard = BERSNR_QPSK_CONV(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=1000, max_repetitions=2000, decision="hard")
     bersnr_qpsk_soft = BERSNR_QPSK_CONV(EbN0_values=EbN0_vec, error_values=error_values, num_workers=56, num_bits=1000, max_repetitions=2000, decision="soft")
 
-    # Simulação
+    # Simulation
     # ###############################################
 
     results = bersnr_argos.run()
@@ -442,26 +442,20 @@ if __name__ == "__main__":
 
     results_qpsk = bersnr_qpsk.run()
     ExportData(results_qpsk, "bersnr_qpsk").save()
-
-    results_conv_hard = bersnr_qpsk_hard.run()
-    ExportData(results_conv_hard, "bersnr_conv_hard").save()
-
-    results_conv_soft = bersnr_qpsk_soft.run()
-    ExportData(results_conv_soft, "bersnr_conv_soft").save()
     
     # PLOT
     # ###############################################
 
-    # extrair os valores de Eb/N0 e BER
+    # ARGOS-3
     bersnr_argos = ImportData("bersnr_argos").load()
     ber_values_argos = bersnr_argos[:, 1]
 
     print(ber_values_argos)
 
-    # QPSK Teorico
+    # QPSK Ideal
     bersnr_qpsk_teorico = bersnr_qpsk.teorical_qpsk()
     
-    # extrair os valores de Eb/N0 e BER
+    # QPSK Simulated
     bersnr_qpsk = ImportData("bersnr_qpsk").load()
     ber_values_qpsk = bersnr_qpsk[:, 1]
 
@@ -469,15 +463,15 @@ if __name__ == "__main__":
     print(bersnr_qpsk_teorico)
 
 
-    # extrair os valores de Eb/N0 e BER teórico
+    # BER vs Eb/N0
     fig, grid = create_figure(1, 1)
     BersnrPlot(fig, grid, 0,
                EbN0=EbN0_vec,
                ber_curves=[ber_values_argos, ber_values_qpsk, bersnr_qpsk_teorico],
-               labels=["ARGOS-3", "QPSK Simulado", "QPSK Ideal"],
+               labels=["ARGOS-3", "QPSK Simulated", "QPSK Ideal"],
                linestyles=["-", "-", ":"],
                markers=["o", "s", "x"],
-               title="Curva BER vs Eb/N0",
+               title="BER vs $E_b/N_0$",
                ylim=(1e-5, 1),
                xlim=(-1, 10)
     ).plot()

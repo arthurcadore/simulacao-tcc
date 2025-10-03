@@ -227,7 +227,7 @@ if __name__ == "__main__":
         fig_time, grid, (1,1),
         variance=Noise.variance,
         colors=NOISE_DENSITY_COLOR,
-        title=(NOISE_DENSITY_TITLE + f" - $EB/N_0$ {Noise.ebn0_db} $dB$")
+        title=(NOISE_DENSITY_TITLE + f" - $E_B/N_0$ {Noise.ebn0_db} $dB$")
     ).plot()
 
     TimePlot(
