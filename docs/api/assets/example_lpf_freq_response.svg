@@ -289,9 +289,9 @@
  <path transform="matrix(2,0,0,-2,0,809.28)" d="m1082.222 47.148809v1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,809.28)" d="m1082.222 401.04v-1.5" />
  <path transform="matrix(2,0,0,-2,0,809.28)" d="m1082.222 401.04v-1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
- <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="509.6768 521.15377 528.91268 537.8113 548.4195 559.0251 559.58407 568.48269 579.66079 588.5594 594.0169 610.67196" y="-9.061119" class="fill">Frequ&#710;encia(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="618.5583 638.0269" y="-9.061119" class="fill">Hz</tspan></text>
- <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="648.9792" y="-9.061119" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="512.12637 523.6033 531.3622 540.2608 550.869 562.0471 570.94577 582.12387 591.02249 608.2474" y="-9.061119" class="fill">Frequency(</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="616.10879 635.5774" y="-9.061119" class="fill">Hz</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="646.52969" y="-9.061119" class="fill">)</tspan></text>
  <g clip-path="url(#q)">
   <path transform="matrix(2,0,0,-2,0,809.28)" d="M60.985715 47.148809H1105.432" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </g>
@@ -465,7 +465,7 @@
   <path transform="matrix(2,0,0,-2,0,809.28)" d="m60.985715 373.8176h101.54338l14.50621-2e-5 14.50619-1.8e-4 14.5062-4.3e-4 14.5062-0.00138 14.5062-0.00372 14.5062-0.00928 14.5062-0.02151 14.5062-0.04708 14.5062-0.0974 14.5062-0.19222 14.5062-0.36243 14.5062-0.65286 14.50619-1.12104 14.5062-1.82431 14.50621-2.79171 14.5062-3.98474 14.5062-5.27921 14.5062-6.50048 14.50619-7.49934 14.5062-8.20739 14.50619-8.63578 14.5062-8.83939 14.50622-8.88204 14.5062-8.81846 14.5062-8.68887 14.50617-8.52105 14.50623-8.33289 14.5062-8.1358 14.50619-7.93674 14.50621-7.74001 14.50618-7.54804 14.50622-7.36221 14.50617-7.18321 14.50622-7.01128 14.50617-6.84645 14.50622-6.68854 14.50622-6.53731 14.50617-6.39248 14.50623-6.25376 14.50616-6.12077 14.50623-5.99327 14.50611-5.87093 14.50628-5.75346 14.50622-5.64063 14.50617-5.53211 14.50623-5.42775 14.50616-5.32727 14.50623-5.23047 14.50611-5.13716 14.50628-5.047161 14.50612-4.960299 14.50627-4.87642 14.50622-4.79537 14.50617-4.717001 14.50622-4.641219 14.50612-4.56784 14.50627-4.49681 14.50613-4.42798 14.50626-4.36127 14.50614-4.29659 14.5062-4.23382 14.5063-4.172912 14.5062-4.113768 14.5061-4.0563 14.5062-4.000466 14.5062-3.946184" fill="none" stroke="#ff8c00" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" />
  </g>
  <g clip-path="url(#i)">
-  <path transform="matrix(2,0,0,-2,0,809.28)" d="M409.1345 47.148809V401.04" fill="none" stroke="#f00" stroke-dasharray="7.4,3.2" stroke-linejoin="round" stroke-width="2" />
+  <path transform="matrix(2,0,0,-2,0,809.28)" d="M409.1345 47.148809V401.04" fill="none" stroke="#b8860b" stroke-dasharray="7.4,3.2" stroke-linejoin="round" stroke-width="2" />
  </g>
  <path transform="matrix(2,0,0,-2,0,809.28)" d="M60.985715 47.148809V401.04" fill="none" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,809.28)" d="M1105.432 47.148809V401.04" fill="none" stroke-linecap="square" stroke-miterlimit="10" stroke-width=".5" class="stroke" />
@@ -478,7 +478,7 @@
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1037.118" y="-381.27363" >(</tspan></text>
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1041.6704" y="-381.27363" >f</tspan></text>
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1048.7168" y="-381.27363" >)</tspan></text>
- <path transform="matrix(2,0,0,-2,0,809.28)" d="m992.89559 368.08485h24" fill="none" stroke="#f00" stroke-dasharray="7.4,3.2" stroke-linejoin="round" stroke-width="2" />
+ <path transform="matrix(2,0,0,-2,0,809.28)" d="m992.89559 368.08485h24" fill="none" stroke="#b8860b" stroke-dasharray="7.4,3.2" stroke-linejoin="round" stroke-width="2" />
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMMI12" font-size="11.955168" font-style="italic" xml:space="preserve" ><tspan x="1026.4955" y="-363.88484" >f</tspan></text>
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMMI8" font-size="7.970112" font-style="italic" xml:space="preserve" ><tspan x="1032.2655" y="-362.09156" >c</tspan></text>
  <text transform="matrix(2 0 -0 2 0 809.28)" font-family="CMR12" font-size="11.955168" xml:space="preserve" ><tspan x="1040.3334 1053.3333 1059.1793 1065.0254 1070.8715 1080.6195 1089.3947" y="-363.88484" >=1500Hz</tspan></text>

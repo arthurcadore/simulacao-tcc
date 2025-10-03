@@ -245,14 +245,16 @@ if __name__ == "__main__":
         bits_list=[vt0],
         sections=[(r"$v_t^{0}$", len(vt0))],
         colors=[COLOR_I],
-        ylabel=BITSTREAM_Y
+        ylabel=BITSTREAM_Y,
+        title=I_CHANNEL_TITLE
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (0, 1),
         bits_list=[vt1],
         sections=[(r"$v_t^{1}$", len(vt1))],
-        colors=[COLOR_Q]
+        colors=[COLOR_Q],
+        title=Q_CHANNEL_TITLE
     ).plot()
 
     BitsPlot(
@@ -273,7 +275,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 0),
         bits_list=[vt0_prime],
-        sections=[(r"$v_t^{0}$'", len(vt0_prime))],
+        sections=[(r"$v_t^{0} \prime$", len(vt0_prime))],
         colors=[COLOR_I],
         ylabel=BITSTREAM_Y, xlabel=BITSTREAM_X
     ).plot()
@@ -281,7 +283,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 1),
         bits_list=[vt1_prime],
-        sections=[(r"$v_t^{1}$'", len(vt1_prime))],
+        sections=[(r"$v_t^{1} \prime$", len(vt1_prime))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X
     ).plot()

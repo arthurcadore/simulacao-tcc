@@ -104,8 +104,9 @@
   <path transform="matrix(1.4113183,0,0,1.4113183,-9114.259,7408.631)" d="m8556.65-4729.74-9 4.5v-9l9 4.5z" />
   <path transform="matrix(1.4113183,0,0,1.4113183,-9114.259,7408.631)" d="m8556.65-4729.74-9 4.5v-9l9 4.5z" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
   <path transform="matrix(1.4113183,0,0,1.4113183,-9114.259,7408.631)" d="m8200-4819.74h241.25v120h-241.25z" fill="none" stroke-width="3" class="stroke" />
-  <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8258.391 8275.732 8294.505 8313.277 8332.05 8350.822 8366.708" y="-4767" class="fill">CHANNEL</tspan></text>
-  <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8259.109 8277.882 8293.768 8311.109 8329.882 8348.654 8364.54" y="-4735" class="fill">DECODER</tspan></text>
+  <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8290.891 8306.776 8315.435 8334.207" y="-4767" class="fill">LINE</tspan></text>
+  <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8255.859" y="-4735" class="fill"> </tspan></text>
+  <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8262.359 8281.132 8297.018 8314.359 8333.132 8351.904 8367.79" y="-4735" class="fill">DECODER</tspan></text>
   <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8118.6564 8127.3146 8131.9948 8140.653 8153.653" y="-4808" class="fill">I'[n]</tspan></text>
   <text transform="matrix(1.4113183 0 0 1.4113183 -9114.965 7407.926)" font-family="Tinos" font-size="26" xml:space="preserve" class="fill"><tspan x="8113.6096 8132.3815 8137.0617 8145.7199 8158.7199" y="-4693" class="fill">Q'[n]</tspan></text>
   <path transform="matrix(1.4113183,0,0,1.4113183,-9114.259,7408.631)" d="m8840-4789.74h107.65" fill="none" stroke-miterlimit="10" stroke-width="3" class="stroke" />
