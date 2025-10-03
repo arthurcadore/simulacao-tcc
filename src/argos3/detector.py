@@ -79,8 +79,8 @@ class CarrierDetector:
               "tail": 7
             }
             
-            - Frequency Domain Segment: ![pageplot](assets/example_detector_freq.svg)
             - Waterfall Diagram: ![pageplot](assets/example_detector_waterfall.svg)
+            - Frequency Domain Segment: ![pageplot](assets/example_detector_freq.svg)
             - Waterfall Detection Diagram: ![pageplot](assets/example_detector_waterfall_detection.svg)
             - Waterfall Decision Diagram: ![pageplot](assets/example_detector_waterfall_decision.svg)
 
@@ -450,7 +450,9 @@ if __name__ == "__main__":
 
     WaterfallPlot(fig, grid, 0,
                 detector.power_matrix,
-                fs=detector.fs, N=detector.N).plot()
+                fs=detector.fs, N=detector.N,
+                title=WATERFALL_TITLE
+    ).plot()
     save_figure(fig, "example_detector_waterfall.pdf")
 
     fig, grid = create_figure(1, 1, figsize=(12, 12))
@@ -460,7 +462,8 @@ if __name__ == "__main__":
                       N=detector.N,
                       freq_window=detector.freq_window,
                       threshold=detector.threshold,
-                      elev=2, azim=-10
+                      elev=2, azim=-10,
+                      title=WATERFALL_TITLE
     ).plot()
     
     save_figure(fig, "example_detector_waterfall_3d.pdf")
@@ -470,7 +473,9 @@ if __name__ == "__main__":
                  detector.detected_matrix,
                  fs=detector.fs, 
                  legend_list=["Detected", "Confirmed"],
-                 N=detector.N).plot()
+                 N=detector.N,
+                 title=WATERFALL_DETECTION_TITLE
+    ).plot()
 
     save_figure(fig, "example_detector_waterfall_detection.pdf")
 
@@ -479,7 +484,9 @@ if __name__ == "__main__":
                  detector.decision_matrix,
                  fs=detector.fs, 
                  legend_list=["Detected", "Confirmed", "Span", "Demodulation"],
-                 N=detector.N).plot()
+                 N=detector.N,
+                 title=WATERFALL_DECISION_TITLE
+    ).plot()
     save_figure(fig, "example_detector_waterfall_decision.pdf")
 
     seg_index = 1

@@ -169,6 +169,7 @@ if __name__ == "__main__":
         label_signal=r"$d_I(t)'$", 
         label_samples="Samples", 
         xlim=SYNC_XLIM,
+        title=I_CHANNEL_TITLE,
     ).plot()
 
     SampledSignalPlot(
@@ -181,6 +182,7 @@ if __name__ == "__main__":
         label_signal=r"$d_Q(t)'$", 
         label_samples="Samples", 
         xlim=SYNC_XLIM, 
+        title=Q_CHANNEL_TITLE,
     ).plot()
 
     fig_sampler.tight_layout()
@@ -199,6 +201,7 @@ if __name__ == "__main__":
         show_symbol_values=False,
         ylim=[min(symbols)*1.1, max(symbols)*1.1],
         xlim=SYMBOLS_XLIM,
+        title=I_CHANNEL_TITLE,
     ).plot()
 
     SymbolsPlot(
@@ -212,6 +215,7 @@ if __name__ == "__main__":
         show_symbol_values=False,
         ylim=[min(symbols2)*1.1, max(symbols2)*1.1],
         xlim=SYMBOLS_XLIM,
+        title=Q_CHANNEL_TITLE,
     ).plot()
 
     fig_symbols.tight_layout()

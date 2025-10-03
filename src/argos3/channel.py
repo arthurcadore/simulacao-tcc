@@ -17,7 +17,9 @@ from .env_vars import *
 class Channel:
     def __init__(self, fs=128_000, duration=1, noise_mode="snr", noise_db=20, seed=10):
         r"""
-        Implementation of a channel for aggregation of multiple signals.
+        Implementation of a channel for aggregation of multiple signals, as displayed on block diagram below. 
+
+        ![pageplot](../assets/channel.svg)
         
         Args:
             fs (int): sampling rate of the signal.

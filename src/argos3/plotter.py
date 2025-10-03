@@ -188,7 +188,6 @@ class TimePlot(BasePlot):
 
     Examples:
         - Modulator Time Domain Example: ![pageplot](assets/example_modulator_time.svg)
-        - Demodulator Time Domain Example: ![pageplot](assets/example_demodulator_time.svg)
         - AWGN addition Time Domain Example: ![pageplot](assets/example_noise_time.svg)
     """
     def __init__(self,
@@ -270,7 +269,6 @@ class FrequencyPlot(BasePlot):
 
     Examples:
         - Modulator Frequency Domain Example: ![pageplot](assets/example_modulator_freq.svg)
-        - Demodulator Frequency Domain Example: ![pageplot](assets/example_demodulator_freq.svg)
         - AWGN addition Frequency Domain Example: ![pageplot](assets/example_noise_freq.svg)
     """
     def __init__(self,
@@ -1139,12 +1137,12 @@ class FrequencyResponsePlot(BasePlot):
         if self.show_phase:
             ax2 = self.ax.twinx()
             phase = np.unwrap(np.angle(h))
-            ax2.plot(w, phase, color=COLOR_AUX2, linestyle="--", linewidth=1.5, label="Phase")
-            ax2.set_ylabel("Phase (rad)")
+            ax2.plot(w, phase, color=LPF_PHASE_COLOR, linestyle="--", linewidth=1.5, label="Phase ($rad$)")
+            ax2.set_ylabel("Phase ($rad$)")
 
         # Add vertical bar at cut-off frequency
         if self.f_cut is not None:
-            self.ax.axvline(self.f_cut, color=COLOR_AUX1, linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
+            self.ax.axvline(self.f_cut, color=LPF_CUT_OFF_COLOR, linestyle="--", linewidth=2, label=f"$f_c$ = {self.f_cut} Hz")
 
         # Adjust axis
         if self.xlim is not None:
@@ -1230,14 +1228,14 @@ class DetectionFrequencyPlot(BasePlot):
         freqs_plot = freqs / 1000.0
         line_kwargs = {"linewidth": 1.5, "alpha": 0.9}
         line_kwargs.update(self.style.get("line", {}))
-        color = self.apply_color(0) or COLOR_AUX1
+        color = self.apply_color(0) or DETECTION_THRESHOLD_COLOR
         label = self.labels[0] if self.labels else "Magnitude (dB)"
         self.ax.plot(freqs_plot, P_db, label=label, color=color, **line_kwargs)
 
         # Threshold
         thr_line = self.threshold
         thr_label = f"Threshold = {thr_line:.2f} dB"
-        self.ax.axhline(thr_line, color=COLOR_AUX1, linestyle="--", linewidth=2, label=thr_label)
+        self.ax.axhline(thr_line, color=DETECTION_THRESHOLD_COLOR, linestyle="--", linewidth=2, label=thr_label)
 
         # Plot vertical lines
         detected_bins = np.where(np.asarray(self.freqs_detected) > 0)[0]

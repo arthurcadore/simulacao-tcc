@@ -227,6 +227,7 @@ if __name__ == "__main__":
         labels=[r"$S_I(t)$"],
         amp_norm=True,
         colors=[COLOR_I],
+        title=I_CHANNEL_TITLE,
     ).plot()
     
     TimePlot(
@@ -236,6 +237,7 @@ if __name__ == "__main__":
         labels=[r"$S_Q(t)$"],
         amp_norm=True,
         colors=[COLOR_Q],
+        title=Q_CHANNEL_TITLE,
     ).plot()
     
     fig_format.tight_layout()
@@ -285,6 +287,7 @@ if __name__ == "__main__":
         labels=[r"$d_I(t)$"],
         colors=[COLOR_I],
         xlim=SYNC_XLIM,
+        title=I_CHANNEL_TITLE,  
     ).plot()
 
     SincronizationPlot(
@@ -297,6 +300,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q(t)$"],
         colors=[COLOR_Q],
         xlim=SYNC_XLIM,
+        title=Q_CHANNEL_TITLE,
     ).plot()
 
     fig_sync.tight_layout()
@@ -309,6 +313,7 @@ if __name__ == "__main__":
         fs=formatterQ.fs,
         xlim_ms=SYNC_XLIM,
         colors=[COLOR_Q],
+        title=SYNC_CORR_TITLE,
     ).plot()
 
     fig_corr.tight_layout()

@@ -162,7 +162,8 @@ if __name__ == "__main__":
         colors=COLOR_IMPULSE,
         label=r"$h(t)$", 
         xlim=(0, 5), 
-        amp_norm=True
+        amp_norm=True, 
+        title=LPF_IMPULSE_TITLE
     ).plot()
 
     fig_impulse.tight_layout()
@@ -177,7 +178,8 @@ if __name__ == "__main__":
         colors=COLOR_IMPULSE,
         label=r"$h(t)$", 
         xlim=(0, 5), 
-        amp_norm=True
+        amp_norm=True,
+        title=LPF_IMPULSE_TITLE
     ).plot()
     
     TimePlot(
@@ -185,10 +187,10 @@ if __name__ == "__main__":
         t, 
         signal,
         labels=[r"$x(t)$"],
-        title="Input Signal",
         xlim=(0, 8),
         amp_norm=True,
-        colors=COLOR_I
+        colors=COLOR_I,
+        title=INPUT_STREAM_TITLE
     ).plot()
 
     TimePlot(
@@ -196,10 +198,10 @@ if __name__ == "__main__":
         t, 
         signal_filtered,
         labels=[r"$x'(t)$"],
-        title="Filtered Signal",
         xlim=(0, 8),
         amp_norm=True,
-        colors=COLOR_I
+        colors=COLOR_I,
+        title=OUTPUT_STREAM_TITLE
     ).plot()
 
     fig_signal.tight_layout()
@@ -210,7 +212,7 @@ if __name__ == "__main__":
             fig_pz, grid_pz, (0,0), 
             filtro.b, filtro.a,
             colors=COLOR_AUX1,
-            title="Poles and Zeros",
+            title=LPF_PZ_TITLE,
         ).plot()
     save_figure(fig_pz, "example_lpf_pz.pdf")
 
@@ -220,7 +222,8 @@ if __name__ == "__main__":
             filtro.b, filtro.a, 
             fs=filtro.fs, 
             f_cut=filtro.cut_off, 
-            xlim=(0, 3*filtro.cut_off)
+            xlim=(0, 3*filtro.cut_off),
+            title=LPF_FREQ_TITLE    
         ).plot()
     save_figure(freq_response, "example_lpf_freq_response.pdf")
 
@@ -230,7 +233,8 @@ if __name__ == "__main__":
             filtro.b, filtro.a, 
             fs=filtro.fs, 
             f_cut=filtro.cut_off, 
-            xlim=(0, 3*filtro.cut_off)
+            xlim=(0, 3*filtro.cut_off),
+            title=LPF_FREQ_TITLE
         ).plot()
 
     FrequencyPlot(
@@ -238,7 +242,7 @@ if __name__ == "__main__":
         fs=filtro.fs,
         signal=signal,
         labels=[r"$X(f)$"],
-        title="Input Signal",
+        title=INPUT_STREAM_TITLE,
         xlim=(-5000, 5000),
         colors=COLOR_I
     ).plot()
@@ -248,7 +252,7 @@ if __name__ == "__main__":
         fs=filtro.fs,
         signal=signal_filtered,
         labels=[r"$X'(f)$"],
-        title="Filtered Signal",
+        title=OUTPUT_STREAM_TITLE,
         xlim=(-5000, 5000),
         colors=COLOR_I
     ).plot()

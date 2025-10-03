@@ -20,7 +20,7 @@ from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, 
 class Transmitter:
     def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
-        Encapsulates the entire transmission process in the PTT-A3 standard. The transmitter structure is represented by the block diagram below.
+        Encapsulates the entire transmission process in the PTT-A3 standard.
     
         Args:
             fc (float): Carrier frequency in Hz. 

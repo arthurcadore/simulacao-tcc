@@ -280,7 +280,7 @@ if __name__ == "__main__":
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
         amp_norm=True, 
-        title=MF_IMPULSE_TITLE
+        title=IMPULSE_TITLE
     ).plot()
 
     fig_impulse.tight_layout()
@@ -298,7 +298,7 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        title=MF_IMPULSE_TITLE
+        title=IMPULSE_TITLE
     ).plot()
 
     ImpulseResponsePlot(
