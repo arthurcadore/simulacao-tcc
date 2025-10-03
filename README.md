@@ -1,33 +1,27 @@
-# Simulador ARGOS-3
+# ARGOS-3 Simulator
 
-Biblioteca Python para simulação de sistemas de comunicação digital no padrão ARGOS-3, desenvolvida como parte de um trabalho de conclusão de curso em Engenharia de Telecomunicações.
+ARGOS-3 Simulator is a Python library for simulating communication systems based on the ARGOS-3 standard, developed as part of a final project in Telecommunications Engineering.
 
-## Instalação
+## Installation
 
-Você pode instalar o pacote diretamente do PyPI usando pip:
+You can install the package directly from PyPI using pip:
 
 ```bash
 pip install argos3
 ```
 
-## Uso Básico
+## Requirements
 
-```python
-import argos3
-```
-
-## Requisitos
-
-- Python 3.8 ou superior
+- Python 3.8 or higher
 - NumPy
 - Matplotlib
 - SciPy
 - komm
 
-## Documentação
+## Documentation
 
-A documentação completa está disponível em https://arthurcadore.github.io/argos3/.
+The complete documentation is available at [ARGOS-3 Simulator Documentation Website](https://arthurcadore.github.io/argos3/).
 
-## Licença
+## License
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT license - see the [LICENSE](LICENSE) file for details.
