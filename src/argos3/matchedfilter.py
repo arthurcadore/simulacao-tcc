@@ -150,27 +150,25 @@ class MatchedFilter:
 if __name__ == "__main__":
 
     bit1 = np.random.randint(0, 2, 10)
-    bit2 = bit1
+    bit2 = np.random.randint(0, 2, 10)
 
-    encoder_1 = Encoder(method="Manchester")
-    encoder_2 = Encoder(method="NRZ")
+    encoder = Encoder(method="NRZ")
+    In = encoder.encode(bit1)
+    Qn = encoder.encode(bit2)
 
-    Yman1 = encoder_1.encode(bit1)
-    Yman2 = encoder_2.encode(bit2)
+    fI = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=6, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    fQ = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.005)
 
-    formatterQ1 = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="RRC", channel="Q", bits_per_symbol=1)
-    formatterQ2 = Formatter(alpha=0.8, fs=128_000, Rb=400, span=6, type="Manchester", channel="Q", bits_per_symbol=2)
+    dI = fI.apply_format(In, add_prefix=True)
+    dQ = fQ.apply_format(Qn, add_prefix=True)
 
-    dQ1 = formatterQ1.apply_format(Yman1, add_prefix=False)
-    dQ2 = formatterQ2.apply_format(Yman2, add_prefix=False)
-
-    filtroQ1 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
-    filtroQ2 = MatchedFilter(alpha=0.8, fs=128_000, Rb=400, span=12, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+    mfI = MatchedFilter(alpha=0.8, fs=128_000, Rb=1000, span=6, type="RRC-Inverted", channel="I", bits_per_symbol=1)
+    mfQ = MatchedFilter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
-        filtroQ1.t_rc, [filtroQ1.g, filtroQ1.g_inverted],
+        mfI.t_rc, [mfI.g, mfI.g_inverted],
         t_unit="ms",
         colors=[COLOR_AUX1, COLOR_AUX2],
         label=[r"$g(t)$", r"$g(-t)$"],
@@ -186,7 +184,7 @@ if __name__ == "__main__":
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))
     ImpulseResponsePlot(
         fig_impulse, grid_impulse, (0,0),
-        filtroQ2.t_rc, [filtroQ2.g, filtroQ2.g_inverted],
+        mfQ.t_rc, [mfQ.g, mfQ.g_inverted],
         t_unit="ms",
         colors=[COLOR_AUX1, COLOR_AUX2],
         label=[r"$g(t)$", r"$g(-t)$"],
@@ -195,69 +193,90 @@ if __name__ == "__main__":
         xlim=IMPULSE_XLIM,
         amp_norm=True
     ).plot()
+
     fig_impulse.tight_layout()
     save_figure(fig_impulse, "example_mf_impulse_man.pdf")
 
 
-    dQ1_filtered = filtroQ1.apply_filter(dQ1)
-    dQ2_filtered = filtroQ2.apply_filter(dQ2)
+    dQ1_filtered = mfI.apply_filter(dI)
+    dQ2_filtered = mfQ.apply_filter(dQ)
 
-    fig_time, grid_time = create_figure(3, 2, figsize=(16, 9))
+    fig_time, grid_time = create_figure(4, 2, figsize=(16, 16))
+
+    ImpulseResponsePlot(
+        fig_time, grid_time, (0,0),
+        mfI.t_rc, [mfI.g, mfI.g_inverted],
+        t_unit="ms",
+        colors=[COLOR_AUX1, COLOR_AUX2],
+        label=[r"$g(t)$", r"$g(-t)$"],
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
+        amp_norm=True
+    ).plot()
+
+    ImpulseResponsePlot(
+        fig_time, grid_time, (0,1),
+        mfQ.t_rc, [mfQ.g, mfQ.g_inverted],
+        t_unit="ms",
+        colors=[COLOR_AUX1, COLOR_AUX2],
+        label=[r"$g(t)$", r"$g(-t)$"],
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=IMPULSE_XLIM,
+        amp_norm=True
+    ).plot()
 
     BitsPlot(
-        fig_time, grid_time, (0,0),
+        fig_time, grid_time, (1,0),
         bits_list=[bit1],
         sections=[("Bits", len(bit1))],
-        title=BITSTREAM_X,
-        colors=[COLOR_AUX1],
+        xlabel=BITSTREAM_X,
+        colors=[COLOR_I],
     ).plot()
 
     BitsPlot(
-        fig_time, grid_time, (0,1),
+        fig_time, grid_time, (1,1),
         bits_list=[bit2],
         sections=[("Bits", len(bit2))],
-        title=BITSTREAM_X,
-        colors=[COLOR_AUX2],
+        xlabel=BITSTREAM_X,
+        colors=[COLOR_Q],
     ).plot()
 
-    TimePlot(
-        fig_time, grid_time, (1,0),
-        t= np.arange(len(dQ1)) / formatterQ1.fs,
-        signals=[dQ1],
-        labels=[r"$d_Q1(t)$"],
-        title=r"Canal $Q1$",
-        amp_norm=True,
-        colors=[COLOR_AUX1],
-    ).plot()
-
-    TimePlot(
-        fig_time, grid_time, (1,1),
-        t= np.arange(len(dQ2)) / formatterQ2.fs,
-        signals=[dQ2],
-        labels=[r"$d_Q2(t)$"],
-        title=r"Canal $Q2$",
-        amp_norm=True,
-        colors=[COLOR_AUX2],
-    ).plot()
-    
     TimePlot(
         fig_time, grid_time, (2,0),
-        t= np.arange(len(dQ1_filtered)) / formatterQ1.fs,
-        signals=[dQ1_filtered],
-        labels=[r"$d_Q1(t)$"],
-        title=r"Canal $Q1$",
+        t= np.arange(len(dI)) / fI.fs,
+        signals=[dI],
+        labels=[r"$d_I(t)$"],
         amp_norm=True,
-        colors=[COLOR_AUX1],
+        colors=[COLOR_I],
     ).plot()
 
     TimePlot(
         fig_time, grid_time, (2,1),
-        t= np.arange(len(dQ2_filtered)) / formatterQ2.fs,
-        signals=[dQ2_filtered],
-        labels=[r"$d_Q2(t)$"],
-        title=r"Canal $Q2$",
+        t= np.arange(len(dQ)) / fQ.fs,
+        signals=[dQ],
+        labels=[r"$d_Q(t)$"],
         amp_norm=True,
-        colors=[COLOR_AUX2],
+        colors=[COLOR_Q],
+    ).plot()
+    
+    TimePlot(
+        fig_time, grid_time, (3,0),
+        t= np.arange(len(dQ1_filtered)) / fI.fs,
+        signals=[dQ1_filtered],
+        labels=[r"$d_I'(t)$"],
+        amp_norm=True,
+        colors=[COLOR_I],
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (3,1),
+        t= np.arange(len(dQ2_filtered)) / fQ.fs,
+        signals=[dQ2_filtered],
+        labels=[r"$d_Q'(t)$"],
+        amp_norm=True,
+        colors=[COLOR_Q],
     ).plot()
 
     fig_time.tight_layout()

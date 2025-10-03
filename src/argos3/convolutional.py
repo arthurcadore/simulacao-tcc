@@ -423,7 +423,6 @@ if __name__ == "__main__":
         bits_list=[ut],
         sections=[("$u_t$", len(ut))],
         colors=[COLOR_COMBINED],
-        ylabel="$u_t$"
     ).plot()
 
     BitsPlot(
@@ -431,7 +430,6 @@ if __name__ == "__main__":
         bits_list=[vt0],
         sections=[("$v_t^{(0)}$", len(vt0))],
         colors=[COLOR_I],
-        ylabel="$v_t^{(0)}$"
     ).plot()
 
     BitsPlot(
@@ -440,7 +438,6 @@ if __name__ == "__main__":
         sections=[("$v_t^{(1)}$", len(vt1))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
-        ylabel="$v_t^{(1)}$"
     ).plot()
 
     fig_conv.tight_layout()
@@ -492,7 +489,6 @@ if __name__ == "__main__":
         sections=[("$v_t^{(0)}$", len(vt0))],
         colors=[COLOR_I],
         xlabel=BITSTREAM_X,
-        ylabel="$v_t^{(0)}$"
     ).plot()
 
     BitsPlot(
@@ -501,7 +497,6 @@ if __name__ == "__main__":
         sections=[("$v_t^{(1)}$", len(vt1))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
-        ylabel="$v_t^{(1)}$"
     ).plot()
 
     TimePlot(
@@ -666,7 +661,6 @@ if __name__ == "__main__":
         sections=[("$u_t^{(0)}$", len(ut_nrz))],
         colors=[COLOR_COMBINED],
         xlabel=BITSTREAM_X, 
-        ylabel=BITSTREAM_Y
     ).plot()
 
     fig_time.tight_layout()

@@ -225,7 +225,6 @@ if __name__ == "__main__":
         t= np.arange(len(synchronizer.sincronized_word_I)) / synchronizer.formatterI.fs,
         signals=[synchronizer.sincronized_word_I],
         labels=[r"$S_I(t)$"],
-        title=r"Canal $I$",
         amp_norm=True,
         colors=[COLOR_I],
     ).plot()
@@ -235,7 +234,6 @@ if __name__ == "__main__":
         t= np.arange(len(synchronizer.sincronized_word_Q)) / synchronizer.formatterQ.fs,
         signals=[synchronizer.sincronized_word_Q],
         labels=[r"$S_Q(t)$"],
-        title=r"Canal $Q$",
         amp_norm=True,
         colors=[COLOR_Q],
     ).plot()
@@ -284,7 +282,6 @@ if __name__ == "__main__":
         sync_start=delayI_min,
         sync_end=delayI_max,
         max_corr=delayI,
-        title=r"Canal $I$",
         labels=[r"$d_I(t)$"],
         colors=[COLOR_I],
         xlim=SYNC_XLIM,
@@ -297,7 +294,6 @@ if __name__ == "__main__":
         sync_start=delayQ_min,
         sync_end=delayQ_max,
         max_corr=delayQ,
-        title=r"Canal $Q$",
         labels=[r"$d_Q(t)$"],
         colors=[COLOR_Q],
         xlim=SYNC_XLIM,

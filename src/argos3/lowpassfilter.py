@@ -239,7 +239,7 @@ if __name__ == "__main__":
         signal=signal,
         labels=[r"$X(f)$"],
         title="Input Signal",
-        xlim=FREQ_MODULATED_XLIM,
+        xlim=(-5000, 5000),
         colors=COLOR_AUX1
     ).plot()
 
@@ -249,7 +249,7 @@ if __name__ == "__main__":
         signal=signal_filtered,
         labels=[r"$X'(f)$"],
         title="Filtered Signal",
-        xlim=FREQ_MODULATED_XLIM,
+        xlim=(-5000, 5000),
         colors=COLOR_AUX2
     ).plot()
     

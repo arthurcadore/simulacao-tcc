@@ -1,13 +1,13 @@
-# Labels
+# Axis Labels
 BITSTREAM_X = "Bit Index"
-BITSTREAM_Y = "Bit Value"
+BITSTREAM_Y = ""
 SYMBOLS_X = "Symbol Index"
 SYMBOLS_Y = "Amplitude"
 TIMEDOMAIN_X = "Time"
 TIMEDOMAIN_Y = "Amplitude"
 FREQUENCY_X = "Frequency"
 FREQUENCY_Y = "Magnitude (dB)"
-IMPULSE_X = "Time"
+IMPULSE_X = "Time ($ms$)"
 IMPULSE_Y = "Amplitude"
 
 # Axis
@@ -24,11 +24,10 @@ CORR_XLIM = (40, 200)
 
 # Colors
 COLOR_I = "darkgreen"
-COLOR_Q = "navy"
+COLOR_Q = "firebrick"
 COLOR_COMBINED = "purple"
-COLOR_IMPULSE = "black"
-COLOR_AUX1 = "orange"
-COLOR_AUX2 = "blue"
-COLOR_AUX3 = "green"
-COLOR_AUX4 = "red"
-
+COLOR_IMPULSE = "darkorange"
+COLOR_AUX1 = "darkgoldenrod"
+COLOR_AUX2 = "darkviolet"
+COLOR_AUX3 = "forestgreen"
+COLOR_AUX4 = "dodgerblue"

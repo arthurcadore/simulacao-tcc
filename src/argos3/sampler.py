@@ -168,7 +168,6 @@ if __name__ == "__main__":
         label_signal="Original Signal", 
         label_samples="Sampled Signal", 
         xlim=SYNC_XLIM,
-        title="Cos(t) sampled"
     ).plot()
 
     SampledSignalPlot(
@@ -181,7 +180,6 @@ if __name__ == "__main__":
         label_signal="Original Signal", 
         label_samples="Sampled Signal", 
         xlim=SYNC_XLIM, 
-        title="Sin(t) sampled"
     ).plot()
 
     fig_sampler.tight_layout()

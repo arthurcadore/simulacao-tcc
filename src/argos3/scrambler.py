@@ -15,15 +15,15 @@ from .env_vars import *
 class Scrambler:
     def __init__(self):
         r"""
-        Scramble the vectors $v_t^{(0)}$ and $v_t^{(1)}$, returning the vectors $X_n$ and $Y_n$ scrambled. The scrambling process is given by the expression below.
+        Scramble the vectors $v_t^{(0)}$ and $v_t^{(1)}$, returning the vectors $X[n]$ and $Y[n]$ scrambled. The scrambling process is given by the expression below.
 
         \begin{equation}
-            X_n = \begin{cases}
+            X[n] = \begin{cases}
             A, & \text{if } n = 0 \pmod{3} \\
             B, & \text{if } n = 1 \pmod{3} \\
             C, & \text{if } n = 2 \pmod{3}
             \end{cases} \quad
-            Y_n = \begin{cases}
+            Y[n] = \begin{cases}
             A, & \text{if } n = 0 \pmod{3} \\
             B, & \text{if } n = 1 \pmod{3} \\
             C, & \text{if } n = 2 \pmod{3}
@@ -31,7 +31,7 @@ class Scrambler:
         \end{equation}
 
         Where: 
-            - $X_n$ and $Y_n$: Scrambled output vectors.
+            - $X[n]$ and $Y[n]$: Scrambled output vectors.
             - $A$, $B$ and $C$: Combination of bits of the input vectors $v_t^{(0)}$ and $v_t^{(1)}$.
             - $n$: Index of the bit to be scrambled.
 
@@ -88,15 +88,15 @@ class Scrambler:
 
     def scramble(self, vt0, vt1):
         r"""
-        Receive the vectors $v_t^{(0)}$ and $v_t^{(1)}$ as input and return the vectors $X_n$ and $Y_n$ scrambled.
+        Receive the vectors $v_t^{(0)}$ and $v_t^{(1)}$ as input and return the vectors $X[n]$ and $Y[n]$ scrambled.
 
         Args:
             vt0 (np.ndarray): Input vector $v_t^{(0)}$.
             vt1 (np.ndarray): Input vector $v_t^{(1)}$.
 
         Returns:
-            X_scrambled (np.ndarray): Scrambled vector $X_n$.
-            Y_scrambled (np.ndarray): Scrambled vector $Y_n$.
+            X_scrambled (np.ndarray): Scrambled vector $X[n]$.
+            Y_scrambled (np.ndarray): Scrambled vector $Y[n]$.
 
         Raises:
             AssertionError: If the vectors X and Y do not have the same length.
@@ -133,7 +133,7 @@ class Scrambler:
 
     def descramble(self, X_prime, Y_prime):
         r"""
-        Receive the vectors $X'_n$ and $Y'_n$ scrambled and return the vectors $v_t^{(0)'}$ and $v_t^{(1)'}$ restored.
+        Receive the vectors $X'[n]$ and $Y'[n]$ scrambled and return the vectors $v_t^{(0)'}$ and $v_t^{(1)'}$ restored.
 
         \begin{equation}
             v_t^{(0)'} = \begin{cases}
@@ -151,7 +151,7 @@ class Scrambler:
 
         Where: 
             - $v_t^{(0)'}$ and $v_t^{(1)'}$: Output vectors restored.
-            - $A$, $B$ and $C$: Combination of bits of the input vectors $X'_n$ and $Y'_n$ scrambled.
+            - $A$, $B$ and $C$: Combination of bits of the input vectors $X'[n]$ and $Y'[n]$ scrambled.
             - $n$: Index of the bit to be scrambled.
 
         The descrambling process is illustrated by the block diagram below.
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (0, 0),
         bits_list=[vt0],
-        sections=[("$v_t^{0}$", len(vt0))],
+        sections=[(r"$v_t^{0}$", len(vt0))],
         colors=[COLOR_I],
         ylabel=BITSTREAM_Y
     ).plot()
@@ -251,14 +251,14 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (0, 1),
         bits_list=[vt1],
-        sections=[("$v_t^{1}$", len(vt1))],
+        sections=[(r"$v_t^{1}$", len(vt1))],
         colors=[COLOR_Q]
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (1, 0),
         bits_list=[Xn],
-        sections=[("$X_n$", len(Xn))],
+        sections=[(r"$X[n]$", len(Xn))],
         colors=[COLOR_I],
         ylabel=BITSTREAM_Y
     ).plot()
@@ -266,14 +266,14 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (1, 1),
         bits_list=[Yn],
-        sections=[("$Y_n$", len(Yn))],
+        sections=[(r"$Y[n]$", len(Yn))],
         colors=[COLOR_Q]
     ).plot()
 
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 0),
         bits_list=[vt0_prime],
-        sections=[("$v_t^{0}$", len(vt0_prime))],
+        sections=[(r"$v_t^{0}$'", len(vt0_prime))],
         colors=[COLOR_I],
         ylabel=BITSTREAM_Y, xlabel=BITSTREAM_X
     ).plot()
@@ -281,7 +281,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_scrambler, grid_scrambler, (2, 1),
         bits_list=[vt1_prime],
-        sections=[("$v_t^{1}$", len(vt1_prime))],
+        sections=[(r"$v_t^{1}$'", len(vt1_prime))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X
     ).plot()
