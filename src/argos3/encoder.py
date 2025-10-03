@@ -1,5 +1,5 @@
 # """
-# Channel encoder for I and Q channels using NRZ and Manchester encoding according to the PPT-A3 standard.
+# line encoder for I and Q lines using NRZ and Manchester encoding according to the PPT-A3 standard.
 #
 # Author: Arthur Cadore
 # Date: 28-07-2025
@@ -12,7 +12,7 @@ from .env_vars import *
 class Encoder:
     def __init__(self, method="NRZ"):
         r"""
-        Initializes the channel encoder with the specified encoding method, used to encode the bitstream into symbols.
+        Initializes the line encoder with the specified encoding method, used to encode the bitstream as $X[n]$ and $Y[n]$, returning the symbol stream $I[n]$ and $Q[n]$. 
 
         Args:
             method (str): Encoding method, 'NRZ' or 'Manchester'.
@@ -35,18 +35,18 @@ class Encoder:
             >>> encoder_nrz = argos3.Encoder(method="NRZ")
             >>> encoder_man = argos3.Encoder(method="Manchester")
             >>> 
-            >>> Xnrz = encoder_nrz.encode(Xn)
-            >>> Yman = encoder_man.encode(Yn)
+            >>> In = encoder_nrz.encode(Xn)
+            >>> Qn = encoder_man.encode(Yn)
             >>> 
-            >>> print(Xnrz)
+            >>> print(In)
             [ 1 -1  1  1 -1 -1  1 -1 -1 -1 -1 -1 -1 -1  1 -1  1  1 -1 -1]
             >>> 
-            >>> print(Yman)
+            >>> print(Qn)
             [ 1 -1 -1  1 -1  1 -1  1 -1  1 -1  1  1 -1 -1  1  1 -1 -1  1 -1  1 -1  1
              -1  1  1 -1  1 -1  1 -1 -1  1  1 -1  1 -1  1 -1]
             >>> 
-            >>> Xn_prime = encoder_nrz.decode(Xnrz)
-            >>> Yn_prime = encoder_man.decode(Yman)
+            >>> Xn_prime = encoder_nrz.decode(In)
+            >>> Yn_prime = encoder_man.decode(Qn)
             >>> 
             >>> print(Xn_prime)
             [1 0 1 1 0 0 1 0 0 0 0 0 0 0 1 0 1 1 0 0]
@@ -78,24 +78,24 @@ class Encoder:
         $$
         \begin{equation}
         \begin{aligned}
-        X_{\text{NRZ}}[n] &= 
+        K[n] &= 
         \begin{cases}
-        +1, & \text{if } X_n = 1 \\
-        -1, & \text{if } X_n = 0 ,
+        +1, & \text{if } k[n] = 1 \\
+        -1, & \text{if } k[n] = 0 ,
         \end{cases}
         &\quad\quad
-        X_{\text{MAN}}[n] &=
+        K[n] &=
         \begin{cases}
-        +1,-1, & \text{if } X_n = 1 \\
-        -1, +1, & \text{if } X_n = 0 .
+        +1,-1, & \text{if } k[n] = 1 \\
+        -1, +1, & \text{if } k[n] = 0 .
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
 
         Where:
-            - $X_n$: Input bitstream.
-            - $X_{\text{NRZ}}[n]$ or $X_{\text{MAN}}[n]$: Output symbol stream.
+            - $k[n]$: Input bitstream.
+            - $K[n]$: Output symbol stream.
 
         Args:
             bitstream (np.ndarray): Input bitstream.
@@ -135,24 +135,24 @@ class Encoder:
         $$
         \begin{equation}
         \begin{aligned}
-        X_n &= 
+        k[n] &= 
         \begin{cases}
-        1, & \text{if } X_{\text{NRZ}}[n] = +1 \\
-        0, & \text{if } X_{\text{NRZ}}[n] = -1
+        1, & \text{if } K[n] = +1 \\
+        0, & \text{if } K[n] = -1
         \end{cases}
         &\quad\quad
-        X_n &=
+        k[n] &=
         \begin{cases}
-        1, & \text{if } X_{\text{MAN}}[n] = +1, -1 \\
-        0, & \text{if } X_{\text{MAN}}[n] = -1, +1
+        1, & \text{if } K[n] = +1, -1 \\
+        0, & \text{if } K[n] = -1, +1
         \end{cases}
         \end{aligned}
         \end{equation}
         $$
         
         Where: 
-            - $X_{\text{NRZ}}[n]$ or $X_{\text{MAN}}[n]$: Input symbol stream
-            - $X_n$: Output bitstream.
+            - $K[n]$: Input symbol stream
+            - $k[n]$: Output bitstream.
 
         Args:
             encoded_stream (np.ndarray): Input symbol stream.
@@ -191,24 +191,24 @@ if __name__ == "__main__":
 
     Xn = np.random.randint(0, 2, 20)
     Yn = np.random.randint(0, 2, 20)
-    print("Channel Xn: ", ''.join(str(int(b)) for b in Xn))
-    print("Channel Yn: ", ''.join(str(int(b)) for b in Yn))
+    print("line Xn: ", ''.join(str(int(b)) for b in Xn))
+    print("line Yn: ", ''.join(str(int(b)) for b in Yn))
 
     encoder_nrz = Encoder(method="NRZ")
     encoder_man = Encoder(method="Manchester")
 
-    Xnrz = encoder_nrz.encode(Xn)
-    Yman = encoder_man.encode(Yn)
+    In = encoder_nrz.encode(Xn)
+    Qn = encoder_man.encode(Yn)
 
-    print("Channel X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in Xnrz[:10]))
-    print("Channel Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Yman[:10]))
+    print("line X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in In[:10]))
+    print("line Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Qn[:10]))
 
     fig_encoder, grid = create_figure(4, 1, figsize=(16, 9))
 
     BitsPlot(
         fig_encoder, grid, (0, 0),
         bits_list=[Xn],
-        sections=[("$X_n$", len(Xn))],
+        sections=[(r"$X[n]$", len(Xn))],
         colors=[COLOR_I],
         xlabel=BITSTREAM_X,
         ylabel=BITSTREAM_Y
@@ -216,18 +216,18 @@ if __name__ == "__main__":
 
     SymbolsPlot(
         fig_encoder, grid, (1, 0),
-        symbols_list=[Xnrz],
+        symbols_list=[In],
         samples_per_symbol=1,
         colors=[COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$X_{NRZ}[n]$"
+        label=r"$I[n]$"
     ).plot()
 
     BitsPlot(
         fig_encoder, grid, (2, 0),
         bits_list=[Yn],
-        sections=[("$Y_n$", len(Yn))],
+        sections=[(r"$Y[n]$", len(Yn))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
         ylabel=BITSTREAM_Y
@@ -235,22 +235,22 @@ if __name__ == "__main__":
 
     SymbolsPlot(
         fig_encoder, grid, (3, 0),
-        symbols_list=[Yman],
+        symbols_list=[Qn],
         samples_per_symbol=2,
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label="$Y_{MAN}[n]$"
+        label=r"$Q[n]$"
     ).plot()
 
 
     fig_encoder.tight_layout()
     save_figure(fig_encoder, "example_encoder_time.pdf")
 
-    Xn_prime = encoder_nrz.decode(Xnrz)
-    print("Channel X'n:", ''.join(str(int(b)) for b in Xn_prime))
-    Yn_prime = encoder_man.decode(Yman)
-    print("Channel Y'n:", ''.join(str(int(b)) for b in Yn_prime))
+    Xn_prime = encoder_nrz.decode(In)
+    print("line X'n:", ''.join(str(int(b)) for b in Xn_prime))
+    Yn_prime = encoder_man.decode(Qn)
+    print("line Y'n:", ''.join(str(int(b)) for b in Yn_prime))
 
     print("Xn = X'n: ", np.array_equal(Xn, Xn_prime))
     print("Yn = Y'n: ", np.array_equal(Yn, Yn_prime))

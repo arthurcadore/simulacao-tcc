@@ -12,11 +12,11 @@ from .env_vars import *
 class Multiplexer:
     def __init__(self):
         r"""
-        Initializes the multiplexer used on transmission. Used to concatenate the input data vectors $X_n$ and $Y_n$ with the preamble vectors $S_I$ and $S_Q$, returning the concatenated vectors $X_n$ and $Y_n$. The multiplexing process is given by the expression below.
+        Initializes the multiplexer used on transmission. Used to concatenate the input data vectors $X[n]$ and $Y[n]$ with the preamble vectors $S_I[n]$ and $S_Q[n]$, returning the concatenated vectors $X[n]$ and $Y[n]$. The multiplexing process is given by the expression below.
 
         $$
         \begin{align}
-        X_n = S_I \oplus X_n \text{ , } \quad Y_n = S_Q \oplus Y_n
+        X[n] = S_I[n] \oplus X[n] \text{ , } \quad Y[n] = S_Q[n] \oplus Y[n]
         \end{align}
         $$
         
@@ -48,17 +48,17 @@ class Multiplexer:
 
     def concatenate(self, SI, SQ, Xn, Yn):
         r"""
-        Concatenates the input data vectors $X_n$ and $Y_n$ with the preamble vectors $S_I$ and $S_Q$, returning the concatenated vectors $X_n$ and $Y_n$. 
+        Concatenates the input data vectors $X[n]$ and $Y[n]$ with the preamble vectors $S_I[n]$ and $S_Q[n]$, returning the concatenated vectors $X[n]$ and $Y[n]$. 
 
         Args:
-            SI (np.ndarray): Input vector $S_I$.
-            SQ (np.ndarray): Input vector $S_Q$.
-            Xn (np.ndarray): Input vector $X_n$.
-            Yn (np.ndarray): Input vector $Y_n$.
+            SI (np.ndarray): Input vector $S_I[n]$.
+            SQ (np.ndarray): Input vector $S_Q[n]$.
+            Xn (np.ndarray): Input vector $X[n]$.
+            Yn (np.ndarray): Input vector $Y[n]$.
 
         Returns:
-            Xn (np.ndarray): Concatenated vector $X_n$.
-            Yn (np.ndarray): Concatenated vector $Y_n$.
+            Xn (np.ndarray): Concatenated vector $X[n]$.
+            Yn (np.ndarray): Concatenated vector $Y[n]$.
         
         Raises:
             AssertionError: If the vectors I and Q do not have the same length in both channels.
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (0,0),
         bits_list=[SI, X],
-        sections=[("$S_I$", len(SI)),("$X_n$", len(X))],
+        sections=[(r"$S_I[n][n]$", len(SI)),(r"$X[n]$", len(X))],
         colors=[COLOR_AUX1, COLOR_I],
         ylabel=BITSTREAM_Y
     ).plot()
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_mux, grid_mux, (1,0),
         bits_list=[SQ, Y],
-        sections=[("$S_Q$", len(SQ)),("$Y_n$", len(Y))],
+        sections=[(r"$S_Q[n][n]$", len(SQ)),(r"$Y[n]$", len(Y))],
         colors=[COLOR_AUX1, COLOR_Q],
         xlabel=BITSTREAM_X, 
         ylabel=BITSTREAM_Y

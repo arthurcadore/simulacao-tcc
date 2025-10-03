@@ -12,24 +12,24 @@ from .env_vars import *
 class Preamble:
     def __init__(self, preamble_hex="2BEEEEBF"):
         r"""
-        Criate the preamble bits sequence $S$ from the hexadecimal string. On ARGOS-3 standard, the preamble is $S = 2BEEEEBF_{16}$. The preamble bits sequence $S$ is intercalated to form the vectors $S_I$ and $S_Q$ for each channel, as shown below.
+        Create the preamble bits sequence $S[n]$ from a hexadecimal string (Syncronization word). On ARGOS-3 standard, the preamble defined by standard is $S[n] = 2BEEEEBF_{16}$. The preamble bits sequence $S[n]$ is intercalated to form the vectors $S_I[n]$ and $S_Q[n]$ for each channel, as shown below.
 
         $$
         \begin{align}
-        S_I &= [S_0,\, S_2,\, S_4,\, \dots,\, S_{28}] && \mapsto \quad S_I = [1111,\, 1111,\, 1111,\, 111] \\
-        S_Q &= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] && \mapsto \quad S_Q = [0011,\, 0101,\, 0100,\, 111]
+        S_I[n] &= [S_0,\, S_2,\, S_4,\, \dots,\, S_{28}] && \mapsto \quad S_I[n] = [1111,\, 1111,\, 1111,\, 111] \\
+        S_Q[n] &= [S_1,\, S_3,\, S_5,\, \dots,\, S_{29}] && \mapsto \quad S_Q[n] = [0011,\, 0101,\, 0100,\, 111]
         \end{align}
         $$
 
         Where:
-            - $S$: Preamble bits sequence.
-            - $S_I$ and $S_Q$: Vectors $S_I$ and $S_Q$ corresponding to the I and Q channels, respectively.
+            - $S[n]$: Preamble bits sequence.
+            - $S_I[n]$ and $S_Q[n]$: Vectors $S_I[n]$ and $S_Q[n]$ corresponding to the I and Q channels, respectively.
 
         Args:
             preamble_hex (str, opcional): Hexadecimal of the preamble.
         
         Raises:
-            ValueError: If the preamble $S$ has a different length from 8 characters. 
+            ValueError: If the preamble $S[n]$ has a different length from 8 characters. 
             ValueError: If the hexadecimal is not valid or cannot be converted.
 
         Examples:
@@ -53,14 +53,14 @@ class Preamble:
 
         # Validate the preamble
         if not isinstance(preamble_hex, str) or len(preamble_hex) != 8:
-            raise ValueError("The preamble S must be a string of 8 characters.")
+            raise ValueError("The preamble Sn must be a string of 8 characters.")
 
         # Attributes
         self.preamble_hex = preamble_hex
         self.preamble_bits = self.hex_to_bits(self.preamble_hex)
 
         if len(self.preamble_bits) != 30:
-            raise ValueError("The preamble S must contain 30 bits.")
+            raise ValueError("The preamble Sn must contain 30 bits.")
 
         # Generate the preamble
         self.preamble_sI, self.preamble_sQ = self.generate_preamble()
@@ -70,10 +70,10 @@ class Preamble:
     
     def generate_preamble(self):
         r"""
-        Generate the vectors $S_I$ and $S_Q$ from the preamble bits sequence $S$.
+        Generate the vectors $S_I[n]$ and $S_Q[n]$ from the preamble bits sequence $S[n]$.
 
         Returns:
-            tuple (np.ndarray, np.ndarray): Vectors $S_I$ and $S_Q$.
+            tuple (np.ndarray, np.ndarray): Vectors $S_I[n]$ and $S_Q[n]$.
         """
 
         # Generate the preamble
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_preamble, grid_preamble, (0,0),
         bits_list=[Si],
-        sections=[("$S_I$", len(Si))],
+        sections=[(r"$S_I[n]$", len(Si))],
         colors=[COLOR_I],
         ylabel=BITSTREAM_Y
     ).plot()
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     BitsPlot(
         fig_preamble, grid_preamble, (1,0),
         bits_list=[Sq],
-        sections=[("$S_Q$", len(Sq))],
+        sections=[(r"$S_Q[n]$", len(Sq))],
         colors=[COLOR_Q],
         xlabel=BITSTREAM_X, 
         ylabel=BITSTREAM_Y
