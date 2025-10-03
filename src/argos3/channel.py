@@ -235,7 +235,7 @@ if __name__ == "__main__":
         t=np.arange(0, len(canalT_NoiseEBN0)/tx.fs, 1/tx.fs),
         signals=[canalT_NoiseEBN0],
         labels=["$s(t) + r(t)$"], 
-        title=(MODULATED_STREAM_TITLE + " + r(t)"),
+        title=(MODULATED_STREAM_TITLE + " + $r(t)$"),
         colors=[COLOR_COMBINED],
         amp_norm=True,
     ).plot()

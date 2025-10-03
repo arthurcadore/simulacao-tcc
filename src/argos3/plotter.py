@@ -1009,10 +1009,12 @@ class GaussianNoisePlot(BasePlot):
         line_kwargs = {"linewidth": 2, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0) or "darkgreen"
-        self.ax.plot(pdf, x, label=self.legend, color=color, **line_kwargs)
+
+        # plot the pdf
+        label = r"$p(x)$" + "\n" + r"$\sigma^2 = " + f"{self.variance:.4f}" + "$"
+        self.ax.plot(pdf, x, label=label, color=color, **line_kwargs)
         self.ax.fill_betweenx(x, 0, pdf, color=color, alpha=1)
 
-       
         # Adjust axis
         self.ax.set_xlabel(self.ylabel)  
         self.ax.set_ylabel(self.xlabel) 
