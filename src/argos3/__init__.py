@@ -31,5 +31,6 @@ from .receiver import *
 from .bersnr import *
 from .data import * 
 from .plotter import *
+from .animations import *
 from .env_vars import *
 

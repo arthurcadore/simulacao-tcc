@@ -73,6 +73,7 @@ nav:
       - BER vs SNR: api/bersnr.md
       - Plotter: api/plots.md
       - Data Import/Export: api/data.md
+      - Animations: api/animations.md
 
 plugins:
   - search

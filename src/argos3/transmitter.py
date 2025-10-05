@@ -16,6 +16,7 @@ from .multiplexer import Multiplexer
 from .encoder import Encoder
 from .data import ExportData
 from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot
+from .animations import create_animation, save_animation, ConstellationAnimatedPlot
 from .env_vars import *
 
 class Transmitter:
@@ -721,6 +722,35 @@ class Transmitter:
 
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
+
+
+            fig_const, grid = create_animation(1, 2, figsize=(16, 8))
+            ConstellationPlot(
+                fig_const, grid, (0, 0),
+                dI=dI[:40000:5],
+                dQ=dQ[:40000:5],
+                xlim=CONSTELLATION_XLIM,
+                ylim=CONSTELLATION_YLIM,
+                rms_norm=True,
+                show_ideal_points=False,
+                title=IQ_CONSTELLATION_TITLE,
+                colors=COLOR_COMBINED,
+            ).plot()
+
+            ConstellationAnimatedPlot(
+                fig_const, grid, (0, 1),
+                dI=dI[4000:40000:5],
+                dQ=dQ[4000:40000:5],
+                rms_norm=True,
+                show_ideal_points=False,
+                title=r"Animated $IQ$ Constellation",
+                duration=30,
+                fps=30,
+                colors=COLOR_COMBINED,
+            ).build()
+
+            fig_const.tight_layout()
+            save_animation(fig_const, "transmitter_modulator_constellation_animated.gif")
 
             fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
             FrequencyPlot(
