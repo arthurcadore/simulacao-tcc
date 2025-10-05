@@ -12,11 +12,12 @@ pip install argos3
 
 ## Requirements
 
-- Python 3.8 or higher
-- NumPy
-- Matplotlib
-- SciPy
-- komm
+- Python>=3.8
+- numpy>=1.21.0
+- matplotlib>=3.4.0
+- scipy>=1.7.0
+- komm>=0.7.0
+- scienceplots>=2.1.1
 
 ## Documentation
 
