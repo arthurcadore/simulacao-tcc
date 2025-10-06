@@ -36,3 +36,16 @@
   font-weight: bold;
   color: #e0e0e0; /* Cor do texto de antes em tema escuro */
 }
+
+/* Oculta GIF escuro por padrão */
+.dark-image {
+  display: none;
+}
+
+/* Mostra GIF escuro quando o tema for "slate" */
+[data-md-color-scheme="slate"] .light-image {
+  display: none;
+}
+[data-md-color-scheme="slate"] .dark-image {
+  display: block;
+}

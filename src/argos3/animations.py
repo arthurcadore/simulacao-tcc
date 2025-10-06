@@ -231,8 +231,12 @@ class ConstellationAnimatedPlot(BaseAnimatedPlot):
         dI (np.ndarray): In-phase signal
         dQ (np.ndarray): Quadrature signal
 
-    Examples:
-        - Modulator Constellation/Phase Example: ![pageplot](../media/transmitter_modulator_constellation_animated.gif)
+    <div class="image-container">
+      <img src="../media/transmitter_modulator_constellation_animated_light.gif"
+           alt="Constellation light" class="responsive-image light-image">
+      <img src="../media/transmitter_modulator_constellation_animated_dark.gif"
+           alt="Constellation dark" class="responsive-image dark-image">
+    </div>
     """
     def __init__(self,
                  fig: plt.Figure,
