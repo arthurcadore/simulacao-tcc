@@ -151,13 +151,18 @@
         - [] Máximo desvio de frequência inicial 50Hz
 - [] Montar classe PLL (Phased Locked Loop) para corrigir o desvio de frequência do sinal recebido
     - [] Testar aplicação do PLL ao sinal distorcido em frequência.
-
-
----
-### v1.0.10 - AGC and Preamble
 - [] Adicionar palavra de sincronismo direto no formatter, remover multiplexador.
     - [] Adicionar vetor de simbolos de preâmbulo 
     - [] Aproveitar esse novo vetor no synchornizer pra fazer a filtragem casada e correlação.
 
-
+---
+### v1.0.10 - Animations and Tests with pytest 
+- [] Otimizar a classe de animação
+    - [] Adicionar Timeplot
+    - [] Adicionar DectionPlot
+    - [X] Adicionar ConstellationPlot
+    - [] Adicionar WaterfallPlot
+- [] Implementar testes com pytest
+- [] Mover exemplificação de cada classe para arquivo de teste individual
+- [] alterar workflow do github para realizar os testes antes de deploy de nova versão. 
 
