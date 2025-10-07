@@ -18,6 +18,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.ndimage import gaussian_filter
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from scipy.signal import freqz
+from scipy.signal import welch
 
 from .env_vars import *
 
@@ -1744,4 +1745,76 @@ class WaterfallDecisionPlot(BasePlot):
         self.apply_ax_style()
 
 
+class PowerSpectralDensityPlot(BasePlot):
+    r"""
+    Class for plotting the Power Spectral Density (PSD) of one or more signals.
 
+    The PSD is estimated using Welch's method and mirrored to show
+    the spectrum from $-f_s/2$ to $+f_s/2$.
+
+    $$
+        P_{xx}(f) = \frac{1}{U} | \text{STFT}\{x(t)\} |^2
+    $$
+
+    Args:
+        fig (plt.Figure): Figure object
+        grid (gridspec.GridSpec): GridSpec object
+        pos (int): Plot position
+        fs (float): Sampling frequency (Hz)
+        signals (Union[np.ndarray, List[np.ndarray]]): Input signal or list of signals
+        nperseg (int, optional): Segment length for Welch method
+        scaling (str, optional): 'density' or 'spectrum'
+        xlim (Tuple[float, float], optional): Frequency limits
+        **kwargs: Additional BasePlot parameters
+    """
+    def __init__(self,
+                 fig: plt.Figure,
+                 grid: gridspec.GridSpec,
+                 pos: int,
+                 fs: float,
+                 signals: Union[np.ndarray, List[np.ndarray]],
+                 nperseg: int = 4096,
+                 scaling: str = "density",
+                 xlim: Tuple[float, float] = (-10, 10),
+                 **kwargs) -> None:
+        ax = fig.add_subplot(grid[pos])
+        super().__init__(ax, **kwargs)
+        self.fs = fs
+
+        if isinstance(signals, np.ndarray):
+            self.signals = [signals]
+        elif isinstance(signals, (list, tuple)):
+            self.signals = [np.asarray(sig) for sig in signals]
+
+        self.nperseg = nperseg
+        self.scaling = scaling
+        self.xlim = xlim
+
+        if self.labels is None:
+            self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
+
+    def plot(self) -> None:
+        freqs, _ = welch(self.signals[0], fs=self.fs, nperseg=self.nperseg, scaling=self.scaling)
+        freqs_mirror = np.concatenate((-freqs[::-1], freqs[1:]))
+        freqs_plot = freqs_mirror / 1000 if self.fs > 2000 else freqs_mirror
+        xlabel = r"Frequency ($kHz$)" if self.fs > 2000 else r"Frequency ($Hz$)"
+
+        for i, sig in enumerate(self.signals):
+            f, psd = welch(sig, fs=self.fs, nperseg=self.nperseg, scaling=self.scaling)
+            psd_db = 10 * np.log10(psd + 1e-20)
+
+            psd_mirror = np.concatenate((psd_db[::-1], psd_db[1:]))
+            color = self.apply_color(i)
+            label = self.labels[i] if self.labels and i < len(self.labels) else f"Signal {i+1}"
+
+            line_kwargs = {"linewidth": 2, "alpha": 1.0}
+            line_kwargs.update(self.style.get("line", {}))
+
+            self.ax.plot(freqs_plot, psd_mirror, label=label,
+                         color=color or None, **line_kwargs)
+
+        self.ax.set_xlim(self.xlim)
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(r"Power Spectral Density ($dB/Hz$)")
+        self.ax.set_title(self.title or "Power Spectral Density")
+        self.apply_ax_style()

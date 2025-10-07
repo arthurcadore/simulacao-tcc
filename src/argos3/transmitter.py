@@ -15,12 +15,12 @@ from .scrambler import Scrambler
 from .multiplexer import Multiplexer
 from .encoder import Encoder
 from .data import ExportData
-from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot
+from .plotter import create_figure, save_figure, BitsPlot, ImpulseResponsePlot, TimePlot, FrequencyPlot, ConstellationPlot, PhasePlot, SymbolsPlot, PowerSpectralDensityPlot
 from .animations import create_animation, save_animation, ConstellationAnimatedPlot
 from .env_vars import *
 
 class Transmitter:
-    def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
+    def __init__(self, fc=4000, fs=128_000, Rb=400, carrier_length=0.082, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True, output_anim=False):
         r"""
         Encapsulates the entire transmission process in the PTT-A3 standard.
     
@@ -89,6 +89,7 @@ class Transmitter:
         self.Rb = Rb
         self.output_print = output_print
         self.output_plot = output_plot
+        self.output_anim = output_anim
         self.prefix_duration = carrier_length
 
         # Fixed parameters
@@ -723,6 +724,56 @@ class Transmitter:
             fig_const.tight_layout()
             save_figure(fig_const, "transmitter_modulator_constellation.pdf") 
 
+            fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
+            FrequencyPlot(
+                fig_portadora, grid, (0, 0),
+                fs=self.fs,
+                signal=s[0:(int(round(self.prefix_duration * self.fs)))],
+                fc=self.fc,
+                labels=[r"$S(f)$"],
+                title=(MODULATED_STREAM_TITLE + " - (0 to " + str(self.prefix_duration*1000) + " ms)"),
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_COMBINED,
+            ).plot()
+
+            FrequencyPlot(
+                fig_portadora, grid, (0, 1),
+                fs=self.fs,
+                signal=s[(int(round(self.prefix_duration * self.fs))):],
+                fc=self.fc,
+                labels=[r"$S(f)$"],
+                title=MODULATED_STREAM_TITLE,
+                xlim=FREQ_MODULATED_XLIM,
+                colors=COLOR_COMBINED,
+            ).plot()
+
+            fig_portadora.tight_layout()
+            save_figure(fig_portadora, "transmitter_modulator_portadora.pdf")
+
+            fig_power, grid = create_figure(1, 2, figsize=(16, 9))
+            PowerSpectralDensityPlot(
+                fig_power, grid, (0, 0),
+                fs=self.fs,
+                signals=[s],
+                labels=[r"$S(f)$"], 
+                colors=COLOR_COMBINED,
+                title=MODULATED_STREAM_TITLE,
+            ).plot()
+
+            PowerSpectralDensityPlot(
+                fig_power, grid, (0, 1),
+                fs=self.fs,
+                signals=[dI, dQ],
+                labels=[r"$D_I(f)$", r"$D_Q(f)$"],
+                xlim=(-2, 2),
+                colors=[COLOR_I, COLOR_Q],
+                title=IQ_COMPONENTS_TITLE,
+            ).plot()
+
+            fig_power.tight_layout()
+            save_figure(fig_power, "transmitter_modulator_power.pdf")
+
+        if self.output_anim:
 
             fig_const, grid = create_animation(1, 2, figsize=(16, 8))
             ConstellationPlot(
@@ -752,32 +803,6 @@ class Transmitter:
             fig_const.tight_layout()
             save_animation(fig_const, "transmitter_modulator_constellation_animated.gif")
 
-            fig_portadora, grid = create_figure(1, 2, figsize=(16, 8))
-            FrequencyPlot(
-                fig_portadora, grid, (0, 0),
-                fs=self.fs,
-                signal=s[0:(int(round(self.prefix_duration * self.fs)))],
-                fc=self.fc,
-                labels=[r"$S(f)$"],
-                title=(MODULATED_STREAM_TITLE + " - (0 to " + str(self.prefix_duration*1000) + " ms)"),
-                xlim=FREQ_MODULATED_XLIM,
-                colors=COLOR_COMBINED,
-            ).plot()
-
-            FrequencyPlot(
-                fig_portadora, grid, (0, 1),
-                fs=self.fs,
-                signal=s[(int(round(self.prefix_duration * self.fs))):],
-                fc=self.fc,
-                labels=[r"$S(f)$"],
-                title=MODULATED_STREAM_TITLE,
-                xlim=FREQ_MODULATED_XLIM,
-                colors=COLOR_COMBINED,
-            ).plot()
-
-            fig_portadora.tight_layout()
-            save_figure(fig_portadora, "transmitter_modulator_portadora.pdf")
-
         return t, s
 
     def transmit(self, datagram: Datagram):
@@ -805,7 +830,7 @@ class Transmitter:
 if __name__ == "__main__":
 
     # Creates a transmitter instance
-    transmitter = Transmitter(output_print=True, output_plot=True)
+    transmitter = Transmitter(output_print=True, output_plot=True, output_anim=False)
 
     datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=10)
     datagram2 = Datagram(pcdnum=1234, numblocks=1, seed=10)

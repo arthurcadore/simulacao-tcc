@@ -6,7 +6,7 @@
 # """
 
 import numpy as np
-from .plotter import ImpulseResponsePlot, TimePlot, SymbolsPlot, create_figure, save_figure
+from .plotter import ImpulseResponsePlot, TimePlot, SymbolsPlot, FrequencyPlot, PowerSpectralDensityPlot, create_figure, save_figure
 from .encoder import Encoder
 from .env_vars import *
 
@@ -206,9 +206,9 @@ class Formatter:
         # samples per symbol (bits per symbol)
         sps = int(self.fs / (self.Rb / self.bits_per_symbol))
 
-        upsampled = np.zeros(len(symbols) * sps)
-        upsampled[::sps] = symbols
-        out_sys = np.convolve(upsampled, pulse, mode='same')
+        self.symbolsup = np.zeros(len(symbols) * sps)
+        self.symbolsup[::sps] = symbols
+        out_sys = np.convolve(self.symbolsup, pulse, mode='same')
 
         return out_sys
 
@@ -257,11 +257,11 @@ if __name__ == "__main__":
     In = encoder_I.encode(X)
     Qn = encoded_Q.encode(Y)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.01)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.01)
+    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.005)
     
-    dI1 = formatterI.apply_format(In, add_prefix=True)
-    dQ1 = formatterQ.apply_format(Qn, add_prefix=True)
+    dI1 = formatterI.apply_format(In, add_prefix=False)
+    dQ1 = formatterQ.apply_format(Qn, add_prefix=False)
     
     print("Xn:",  ' '.join(f"{x:+d}" for x in In[:10]))
     print("Yn:",  ' '.join(f"{y:+d}" for y in Qn[:10]))
@@ -316,10 +316,49 @@ if __name__ == "__main__":
     fig_impulse_man.tight_layout()
     save_figure(fig_impulse_man, "example_formatter_impulse_man.pdf")
 
-    fig_format, grid_format = create_figure(3, 2, figsize=(16, 12))
+    fig_format, grid_format = create_figure(4, 2, figsize=(16, 12))
+
+    SymbolsPlot(
+        fig_format, grid_format, (0,0),
+        symbols_list=[In],
+        sections=[(r"$X[n]$", len(In))],
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title=I_CHANNEL_TITLE
+    ).plot()
+
+    SymbolsPlot(
+        fig_format, grid_format, (0,1),
+        symbols_list=[Qn],
+        sections=[(r"$Y[n]$", len(Qn))],
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title=Q_CHANNEL_TITLE
+    ).plot()
+        
+    TimePlot(
+        fig_format, grid_format, (1,0),
+        t= np.arange(len(formatterI.symbolsup)) / formatterI.fs,
+        signals=[formatterI.symbolsup],
+        labels=[r"$d_I(t)$"],
+        amp_norm=True,
+        colors=COLOR_I,
+    ).plot()
+    
+    TimePlot(
+        fig_format, grid_format, (1,1),
+        t= np.arange(len(formatterQ.symbolsup)) / formatterQ.fs,
+        signals=[formatterQ.symbolsup],
+        labels=[r"$d_Q(t)$"],
+        amp_norm=True,
+        colors=COLOR_Q,
+    ).plot()
+    
 
     ImpulseResponsePlot(
-        fig_format, grid_format, (0,0),
+        fig_format, grid_format, (2,0),
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors=COLOR_IMPULSE,
@@ -328,11 +367,10 @@ if __name__ == "__main__":
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
         amp_norm=True, 
-        title=I_CHANNEL_TITLE
     ).plot()
 
     ImpulseResponsePlot(
-        fig_format, grid_format, (0,1),
+        fig_format, grid_format, (2,1),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors=COLOR_IMPULSE,
@@ -341,29 +379,11 @@ if __name__ == "__main__":
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
         amp_norm=True, 
-        title=Q_CHANNEL_TITLE
     ).plot()
 
-    SymbolsPlot(
-        fig_format, grid_format, (1,0),
-        symbols_list=[In],
-        sections=[(r"$X[n]$", len(In))],
-        colors=[COLOR_I],
-        xlabel=SYMBOLS_X, 
-        ylabel=SYMBOLS_Y, 
-    ).plot()
 
-    SymbolsPlot(
-        fig_format, grid_format, (1,1),
-        symbols_list=[Qn],
-        sections=[(r"$Y[n]$", len(Qn))],
-        colors=[COLOR_Q],
-        xlabel=SYMBOLS_X, 
-        ylabel=SYMBOLS_Y, 
-    ).plot()
-        
     TimePlot(
-        fig_format, grid_format, (2,0),
+        fig_format, grid_format, (3,0),
         t= np.arange(len(dI1)) / formatterI.fs,
         signals=[dI1],
         labels=[r"$d_I(t)$"],
@@ -372,7 +392,7 @@ if __name__ == "__main__":
     ).plot()
     
     TimePlot(
-        fig_format, grid_format, (2,1),
+        fig_format, grid_format, (3,1),
         t= np.arange(len(dQ1)) / formatterQ.fs,
         signals=[dQ1],
         labels=[r"$d_Q(t)$"],
@@ -382,3 +402,121 @@ if __name__ == "__main__":
     
     fig_format.tight_layout()
     save_figure(fig_format, "example_formatter_time.pdf")
+
+
+    fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 12))
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,0),
+        formatterI.fs,
+        formatterI.symbolsup,
+        labels=[r"$d_I(t)$"],
+        title=I_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_I,
+        fc=2000
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,1),
+        formatterQ.fs,
+        formatterQ.symbolsup,
+        labels=[r"$d_Q(t)$"],
+        title=Q_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_Q,
+        fc=2000
+    ).plot()
+
+    ImpulseResponsePlot(
+        fig_freq, grid_freq, (1,0),
+        formatterI.t_rc, formatterI.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=IMPULSE_XLIM, 
+        amp_norm=True, 
+    ).plot()
+
+    ImpulseResponsePlot(
+        fig_freq, grid_freq, (1,1),
+        formatterQ.t_rc, formatterQ.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=IMPULSE_XLIM, 
+        amp_norm=True, 
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (2,0),
+        formatterI.fs,
+        dI1,
+        labels=[r"$d_I(t)$"],
+        xlim=(-10, 10),
+        colors=COLOR_I,
+        fc=2000
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (2,1),
+        formatterQ.fs,
+        dQ1,
+        labels=[r"$d_Q(t)$"],
+        xlim=(-10, 10),
+        colors=COLOR_Q,
+        fc=2000
+    ).plot()
+
+    fig_freq.tight_layout()
+    save_figure(fig_freq, "example_formatter_freq.pdf")
+
+
+    fig_power, grid_power = create_figure(3, 2, figsize=(16, 16))
+
+    PowerSpectralDensityPlot(
+        fig_power, grid_power, (0,0),
+        formatterI.fs,
+        formatterI.symbolsup,
+        labels=[r"$d_I(t)$"],
+        title=I_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_I,
+    ).plot()
+
+    PowerSpectralDensityPlot(
+        fig_power, grid_power, (0,1),
+        formatterQ.fs,
+        formatterQ.symbolsup,
+        labels=[r"$d_Q(t)$"],
+        title=Q_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_Q,
+    ).plot()
+
+    PowerSpectralDensityPlot(
+        fig_power, grid_power, (1,0),
+        formatterI.fs,
+        dI1,
+        labels=[r"$d_I(t)$"],
+        title=I_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_I,
+    ).plot()
+
+    PowerSpectralDensityPlot(
+        fig_power, grid_power, (1,1),
+        formatterQ.fs,
+        dQ1,
+        labels=[r"$d_Q(t)$"],
+        title=Q_CHANNEL_TITLE,
+        xlim=(-10, 10),
+        colors=COLOR_Q,
+    ).plot()
+
+    fig_power.tight_layout()
+    save_figure(fig_power, "example_formatter_power.pdf")
