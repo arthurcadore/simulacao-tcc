@@ -1765,6 +1765,8 @@ class PowerSpectralDensityPlot(BasePlot):
         nperseg (int, optional): Segment length for Welch method
         scaling (str, optional): 'density' or 'spectrum'
         xlim (Tuple[float, float], optional): Frequency limits
+        ylim (Tuple[float, float], optional): Power limits
+        amp_norm (bool, optional): Normalize signal power to 0 dB before PSD (default: False)
         **kwargs: Additional BasePlot parameters
     """
     def __init__(self,
@@ -1776,19 +1778,28 @@ class PowerSpectralDensityPlot(BasePlot):
                  nperseg: int = 4096,
                  scaling: str = "density",
                  xlim: Tuple[float, float] = (-10, 10),
+                 ylim: Tuple[float, float] = None,
+                 amp_norm: bool = False,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.fs = fs
+        self.amp_norm = amp_norm
 
+        # Garantir que signals seja uma lista de arrays numpy
         if isinstance(signals, np.ndarray):
             self.signals = [signals]
         elif isinstance(signals, (list, tuple)):
             self.signals = [np.asarray(sig) for sig in signals]
 
+        # Normalizar potência para 0 dB, se solicitado
+        if self.amp_norm:
+            self.signals = [sig / np.sqrt(np.mean(np.abs(sig) ** 2)) for sig in self.signals]
+
         self.nperseg = nperseg
         self.scaling = scaling
         self.xlim = xlim
+        self.ylim = ylim
 
         if self.labels is None:
             self.labels = [f"Signal {i+1}" for i in range(len(self.signals))]
@@ -1814,7 +1825,11 @@ class PowerSpectralDensityPlot(BasePlot):
                          color=color or None, **line_kwargs)
 
         self.ax.set_xlim(self.xlim)
+        
+        if self.ylim is not None:
+            self.ax.set_ylim(self.ylim)
+
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Power Spectral Density ($dB/Hz$)")
-        self.ax.set_title(self.title or "Power Spectral Density")
+        self.ax.set_title(self.title)
         self.apply_ax_style()

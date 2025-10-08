@@ -5,6 +5,7 @@
 # Date: 28-07-2025
 # """
 
+from matplotlib.pyplot import xlabel
 import numpy as np
 from .plotter import ImpulseResponsePlot, TimePlot, SymbolsPlot, FrequencyPlot, PowerSpectralDensityPlot, create_figure, save_figure
 from .encoder import Encoder
@@ -248,6 +249,9 @@ class Formatter:
 
 if __name__ == "__main__":
 
+    fs=128_000
+    Rb=1000
+
     X = np.random.randint(0, 2, 20)
     Y = np.random.randint(0, 2, 20)
 
@@ -257,8 +261,8 @@ if __name__ == "__main__":
     In = encoder_I.encode(X)
     Qn = encoded_Q.encode(Y)
     
-    formatterI = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
-    formatterQ = Formatter(alpha=0.8, fs=128_000, Rb=1000, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.005)
+    formatterI = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    formatterQ = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.005)
     
     dI1 = formatterI.apply_format(In, add_prefix=False)
     dQ1 = formatterQ.apply_format(Qn, add_prefix=False)
@@ -321,7 +325,7 @@ if __name__ == "__main__":
     SymbolsPlot(
         fig_format, grid_format, (0,0),
         symbols_list=[In],
-        sections=[(r"$X[n]$", len(In))],
+        sections=[(r"$I[n]$", len(In))],
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
@@ -331,7 +335,7 @@ if __name__ == "__main__":
     SymbolsPlot(
         fig_format, grid_format, (0,1),
         symbols_list=[Qn],
-        sections=[(r"$Y[n]$", len(Qn))],
+        sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
@@ -520,3 +524,94 @@ if __name__ == "__main__":
 
     fig_power.tight_layout()
     save_figure(fig_power, "example_formatter_power.pdf")
+
+    # COMPARAÇÃO SEM MODULAÇÃO DE PULSO
+
+    # superamostra X (com repetição) para gerar uma sequência similar no tempo (para comparação)
+    sps = int(fs / Rb)
+    InUp = np.repeat(In, sps)
+    QnUp = np.repeat(Qn, sps)
+
+    fig_comp, grid_comp = create_figure(3, 4, figsize=(16, 12))
+
+    SymbolsPlot(
+        fig_comp, grid_comp, (0,0),
+        symbols_list=[In],
+        sections=[(r"$I[n]$", len(In))],
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title="With Pulse Modulation"
+    ).plot()
+
+    SymbolsPlot(
+        fig_comp, grid_comp, (0,1),
+        symbols_list=[Qn],
+        sections=[(r"$Q[n]$", len(Qn))],
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X, 
+        title="With Pulse Modulation"
+    ).plot()
+
+    SymbolsPlot(
+        fig_comp, grid_comp, (0,2),
+        symbols_list=[In],
+        sections=[(r"$I[n]$", len(In))],
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title="Without Pulse Modulation"
+    ).plot()
+
+    SymbolsPlot(
+        fig_comp, grid_comp, (0,3),
+        symbols_list=[Qn],
+        sections=[(r"$Q[n]$", len(Qn))],
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X, 
+        title="Without Pulse Modulation"
+    ).plot()
+
+    TimePlot(
+        fig_comp, grid_comp, (1, slice(0,2)),
+        signals=[dI1, dQ1],
+        t=np.arange(len(dI1)) / fs,
+        colors=[COLOR_I,  COLOR_Q],
+        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        amp_norm=True
+    ).plot()
+
+    PowerSpectralDensityPlot(
+        fig_comp, grid_comp, (2,slice(0,2)),
+        fs,
+        signals=[dI1, dQ1],
+        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        colors=[COLOR_I,  COLOR_Q],
+        xlim=(-10, 10),
+        nperseg=1024,
+        ylim=(-120, -20),
+        amp_norm=True
+    ).plot()
+
+    TimePlot(
+        fig_comp, grid_comp, (1, slice(2,4)),
+        signals=[InUp, QnUp],
+        t=np.arange(len(InUp)) / fs,
+        colors=[COLOR_I,  COLOR_Q],
+        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+    ).plot()
+
+    PowerSpectralDensityPlot(
+        fig_comp, grid_comp, (2, slice(2,4)),
+        fs,
+        signals=[InUp, QnUp],
+        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        colors=[COLOR_I,  COLOR_Q],
+        xlim=(-10, 10),
+        nperseg=1024,
+        ylim=(-120, -20),
+        amp_norm=True
+    ).plot()
+
+    fig_comp.tight_layout()
+    save_figure(fig_comp, "example_formatter_comp.pdf")
