@@ -100,14 +100,17 @@ class Formatter:
         # generate pulse response for each type
         if self.type == 0:  # RRC
             self.g = self.rrc_pulse()
+            self.w = self.calculate_bandwidth()
         elif self.type == 1:  # Manchester
             self.g, self.g_left, self.g_right = self.manchester_pulse()
+            self.w = self.calculate_bandwidth()
         elif self.type == 2:  # Rect
             self.g = self.rect_pulse()
+            self.w = self.calculate_bandwidth()
 
     def rect_pulse(self):
         r"""
-        Generates a rectangular (NRZ) pulse of duration $T_b$.
+        Generates a rectangular (NRZ) pulse of duration $T_b$. The pulse response $g(t)$ is defined by the expression below.
         
         $$
             g_{rect}(t) =
@@ -116,13 +119,19 @@ class Formatter:
                 0, & \text{otherwise}
             \end{cases}
         $$
-        
-        Normalized to unit energy.
+
+        Args:
+            None
+
+        Returns:
+            np.ndarray: Rectangular pulse response $g(t)$.
+
+        Examples: 
+            - Impulse Response Example: ![pageplot](assets/example_formatter_impulse_rect.svg)
         """
         g = np.where(np.abs(self.t_rc) <= self.Tb/2, 1.0, 0.0)
         g = g / np.sqrt(np.sum(g**2))
         return g
-
 
     def rrc_pulse(self, shift=0.0):
         r"""
@@ -198,6 +207,49 @@ class Formatter:
         g = g / np.sqrt(np.sum(g**2))
 
         return g, g_left, g_right
+
+    def calculate_bandwidth(self):
+        r"""
+        Calculates the bandwidth (bilateral) of the pulse response.
+
+        For RRC pulse, the bandwidth is calculated as 
+        $$
+            W = 2 \cdot \frac{1+\alpha}{2 \cdot T_b}
+        $$
+        
+        where: 
+            - $W$: Bandwidth of the pulse response.
+            - $\alpha$: Roll-off factor of the pulse.
+            - $T_b$: Bit period.
+
+        For Manchester pulse, the bandwidth is calculated as 
+        $$
+            W = 2 \cdot \frac{1+\alpha}{T_b}
+        $$
+
+        where: 
+            - $W$: Bandwidth of the pulse response.
+            - $\alpha$: Roll-off factor of the pulse.
+            - $T_b$: Bit period.
+
+        For Rect pulse, the bandwidth is calculated as 
+        $$
+            W = 2 \cdot \frac{1}{T_b}
+        $$
+
+        where: 
+            - $W$: Bandwidth of the pulse response.
+            - $T_b$: Bit period.
+
+        Returns:
+            float: Bandwidth of the pulse response.
+        """
+        if self.type == 0:  # RRC
+            return 2 * ((1+self.alpha)/(2*self.Tb))
+        elif self.type == 1:  # Manchester
+            return 2 * ((1+self.alpha)/(self.Tb))
+        elif self.type == 2:  # Rect
+            return 2 * self.Rb
 
     def apply_format(self, symbols, add_prefix=True):
         r"""
