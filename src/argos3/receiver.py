@@ -22,7 +22,7 @@ from .plotter import save_figure, create_figure, TimePlot, FrequencyPlot, Impuls
 from .env_vars import *
 
 class Receiver:
-    def __init__(self, fs=128_000, Rb=400, fc=None, lpf_cutoff=600, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
+    def __init__(self, fs=128_000, Rb=400, fc=None, lpf_cutoff=720, preamble="2BEEEEBF", channel_encode=("nrz", "man"), G=np.array([[0b1111001, 0b1011011]]), output_print=True, output_plot=True):
         r"""
         Class that encapsulates the entire reception process in the ARGOS-3 standard.
 

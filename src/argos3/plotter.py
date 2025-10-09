@@ -593,7 +593,8 @@ class SymbolsPlot(BasePlot):
                  show_symbol_values: bool = True,
                  xlabel: Optional[str] = None,
                  ylabel: Optional[str] = None,
-                 label: Optional[str] = None,
+                 label: Optional[List[str]] = None,
+                 linestyles: Optional[Union[str, List[str]]] = None,
                  xlim: Optional[Tuple[float, float]] = None,
                  x_axis_label: Optional[Tuple[int, int]] = (-1, 1),
                  **kwargs) -> None:
@@ -612,9 +613,9 @@ class SymbolsPlot(BasePlot):
         self.ylabel = ylabel
         self.label = label
         self.x_axis_label = x_axis_label
+        self.linestyles = linestyles
 
     def plot(self) -> None:
-
         # concatenate and oversample the symbol vectors
         all_symbols = np.concatenate(self.symbols_list)
         symbols_up = np.repeat(all_symbols, self.samples_per_symbol)
@@ -645,20 +646,28 @@ class SymbolsPlot(BasePlot):
                 sym_start = start_symbol * self.samples_per_symbol
                 sym_end = (start_symbol + sec_len) * self.samples_per_symbol
                 color = self.colors[i] if self.colors and i < len(self.colors) else 'black'
+                linestyle = (self.linestyles[i] if isinstance(self.linestyles, list) else self.linestyles or '-')
+
                 if i > 0:
                     sym_start -= 1
 
-                # draw the plot section
+                if isinstance(self.label, list):
+                    sec_label = self.label[i] if i < len(self.label) else None
+                elif isinstance(self.label, str):
+                    sec_label = self.label
+                else:
+                    sec_label = sec_name
+
                 self.ax.step(
                     x[sym_start:sym_end],
                     symbols_up[sym_start:sym_end],
                     where='post',
                     color=color,
                     linewidth=2.0,
-                    label=sec_name if self.label is None else self.label
+                    linestyle=linestyle,
+                    label=sec_label
                 )
 
-                # show symbol values above the plot line
                 if self.show_symbol_values:
                     xmin, xmax = self.ax.get_xlim()
                     section_symbols = all_symbols[start_symbol:start_symbol + sec_len]
@@ -677,38 +686,52 @@ class SymbolsPlot(BasePlot):
                             color='black'
                         )
                 start_symbol += sec_len
+
         else:
+            # mesmo eixo x para todos os sinais
+            num_samples = len(self.symbols_list[0]) * self.samples_per_symbol
+            x = np.arange(num_samples)
+        
+            for i, symbols in enumerate(self.symbols_list):
+                symbols_up = np.repeat(symbols, self.samples_per_symbol)
+                color = self.colors[i] if self.colors and i < len(self.colors) else 'black'
+                linestyle = (self.linestyles[i] if isinstance(self.linestyles, list) else self.linestyles or '-')
+        
+                # label para este vetor
+                if isinstance(self.label, list):
+                    label = self.label[i] if i < len(self.label) else None
+                else:
+                    label = self.label
+        
+                self.ax.step(
+                    x[:len(symbols_up)], symbols_up, where='post',
+                    color=color, linestyle=linestyle, linewidth=2.0, label=label
+                )
+        
+                # desenhar valores acima (somente para o primeiro ou todos, se quiser)
+                if self.show_symbol_values and i == 0:
+                    xmin, xmax = self.ax.get_xlim()
+                    for j, sym in enumerate(symbols):
+                        xpos = j * self.samples_per_symbol + 0.5 * self.samples_per_symbol
+                        if xpos < xmin or xpos > xmax:
+                            continue
+                        self.ax.text(
+                            xpos,
+                            1.0 + self.symbol_value_offset,
+                            str(int(sym)),
+                            ha='center',
+                            va='bottom',
+                            fontsize=self.symbol_value_size,
+                            fontweight=self.symbol_value_weight
+                        )
 
-            # draw the plot section
-            color = self.colors[0] if self.colors else 'black'
-            self.ax.step(
-                x, symbols_up, where='post',
-                color=color, linewidth=2.0,
-                label=self.label if self.label else None
-            )
-            # show symbol values above the plot line
-            if self.show_symbol_values:
-                xmin, xmax = self.ax.get_xlim()
-                for i, sym in enumerate(all_symbols):
-                    xpos = i * self.samples_per_symbol + 0.5 * self.samples_per_symbol
-                    if xpos < xmin or xpos > xmax:
-                        continue
-                    self.ax.text(
-                        xpos,
-                        1.0 + self.symbol_value_offset,
-                        str(int(sym)),
-                        ha='center',
-                        va='bottom',
-                        fontsize=self.symbol_value_size,
-                        fontweight=self.symbol_value_weight
-                    )
-
-        # labels
+        # labels e estilo
         if self.xlabel:
             self.ax.set_xlabel(self.xlabel)
         if self.ylabel:
             self.ax.set_ylabel(self.ylabel)
         self.apply_ax_style()
+
 
 class ImpulseResponsePlot(BasePlot):
     r"""

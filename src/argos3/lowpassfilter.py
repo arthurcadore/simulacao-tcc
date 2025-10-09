@@ -11,7 +11,7 @@ from .plotter import create_figure, save_figure, ImpulseResponsePlot, TimePlot, 
 from .env_vars import *
 
 class LPF:
-    def __init__(self, cut_off=600, order=6, fs=128_000, type="butter"):
+    def __init__(self, cut_off=720, order=6, fs=128_000, type="butter"):
         r"""
         Initializes a low-pass filter with a cutoff frequency $f_{cut}$ and an order $N$, used to remove high frequency components from the received signal.
 
@@ -146,11 +146,11 @@ if __name__ == "__main__":
     t = np.arange(10000) / fs
 
     # create two cossine signals with different frequencies
-    f1 = 1000
+    f1 = 500
     f2 = 4000
     signal = np.cos(2 * np.pi * f1 * t) + np.cos(2 * np.pi * f2 * t)
 
-    filtro = LPF(cut_off=1500, order=6, fs=fs, type="butter")
+    filtro = LPF(cut_off=720, order=6, fs=fs, type="butter")
     signal_filtered = filtro.apply_filter(signal)
 
     fig_impulse, grid_impulse = create_figure(1, 1, figsize=(16, 5))

@@ -8,6 +8,10 @@
 import numpy as np
 from .plotter import save_figure, create_figure, SampledSignalPlot, SymbolsPlot
 from .env_vars import *
+from .lowpassfilter import LPF
+from .matchedfilter import MatchedFilter
+from .formatter import Formatter
+from .encoder import Encoder
 
 class Sampler:
     def __init__(self, fs=128_000, Rb=400, t=None, delay=0.08):
@@ -138,24 +142,40 @@ class Sampler:
 
 if __name__ == "__main__":
 
-    fs = 128_000
-    Rb = 1000
-    t = np.arange(100000) / fs
-    signal = np.cos(2 * np.pi * 80 * t) + np.cos(2 * np.pi * 100 * t)
-    signal2 = np.sin(2 * np.pi * 80 * t) + np.sin(2 * np.pi * 100 * t)
+    Rb=400
 
-    sampler = Sampler(fs=fs, Rb=Rb, t=t)
-    sampled_signal = sampler.sample(signal)
-    sampled_time = sampler.sample(t)
+    bit1 = np.random.randint(0, 2, 500)
+    bit2 = np.random.randint(0, 2, 500)
 
-    sampler2 = Sampler(fs=fs, Rb=Rb, t=t)
-    sampled_signal2 = sampler2.sample(signal2)
-    sampled_time2 = sampler2.sample(t)
+    encoder = Encoder(method="NRZ")
+    In = encoder.encode(bit1)
+    Qn = encoder.encode(bit2)
 
-    symbols = sampler.quantize(sampled_signal)
-    symbols2 = sampler2.quantize(sampled_signal2)
-    print(symbols[:20], "...")
-    print(symbols2[:20], "...")
+    fI = Formatter(alpha=0.8, fs=128_000, Rb=Rb, span=6, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    fQ = Formatter(alpha=0.8, fs=128_000, Rb=Rb, span=10, type="Manchester", channel="Q", bits_per_symbol=2, prefix_duration=0.005)
+    
+    dI = fI.apply_format(In, add_prefix=True)
+    dQ = fQ.apply_format(Qn, add_prefix=True)
+
+    mfI = MatchedFilter(fs=128_000, Rb=Rb, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
+    mfQ = MatchedFilter(fs=128_000, Rb=Rb, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
+    
+    signal = mfI.apply_filter(dI)
+    signal2 = mfQ.apply_filter(dQ)
+    
+    t = np.arange(len(signal)) / 128_000
+    sampler_I = Sampler(fs=128_000, Rb=Rb, t=t, delay=0.005)
+    s_I = sampler_I.sample(signal)
+    t_I = sampler_I.sample(t)
+
+    sampler_Q = Sampler(fs=128_000, Rb=Rb, t=t, delay=0.005)
+    s_Q = sampler_Q.sample(signal2)
+    t_Q = sampler_Q.sample(t)
+
+    In_prime = sampler_I.quantize(s_I)
+    Qn_prime = sampler_Q.quantize(s_Q)
+    print(In_prime[:20], "...")
+    print(Qn_prime[:20], "...")
 
     fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
 
@@ -163,8 +183,8 @@ if __name__ == "__main__":
         fig_sampler, grid_sampler, (0, 0),
         t,
         signal,
-        sampled_time,
-        sampled_signal,
+        t_I,
+        s_I,
         colors=COLOR_I,
         label_signal=r"$I'(t)$", 
         label_samples=r"Samples $I'[n]$", 
@@ -176,8 +196,8 @@ if __name__ == "__main__":
         fig_sampler, grid_sampler, (1, 0),
         t,
         signal2,
-        sampled_time2,
-        sampled_signal2,
+        t_Q,
+        s_Q,
         colors=COLOR_Q,
         label_signal=r"$Q'(t)$", 
         label_samples=r"Samples $Q'[n]$", 
@@ -192,28 +212,26 @@ if __name__ == "__main__":
 
     SymbolsPlot(
         fig_symbols, grid_symbols, (0, 0),
-        symbols_list=[symbols],
+        symbols_list=[In, In_prime],
         samples_per_symbol=1,
-        colors=[COLOR_I],
+        colors=[COLOR_AUX1, COLOR_I],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$I'[n]$", 
-        show_symbol_values=False,
-        ylim=[min(symbols)*1.1, max(symbols)*1.1],
+        label=[r"$I[n]$", r"$I \prime[n]$"], 
+        linestyles=["-", ":"],
         xlim=SYMBOLS_XLIM,
         title=I_CHANNEL_TITLE,
     ).plot()
 
     SymbolsPlot(
         fig_symbols, grid_symbols, (1, 0),
-        symbols_list=[symbols2],
+        symbols_list=[Qn, Qn_prime],
         samples_per_symbol=1,
-        colors=[COLOR_Q],
+        colors=[COLOR_AUX1, COLOR_Q],
         xlabel=SYMBOLS_X,
         ylabel=SYMBOLS_Y,
-        label=r"$Q'[n]$", 
-        show_symbol_values=False,
-        ylim=[min(symbols2)*1.1, max(symbols2)*1.1],
+        label=[r"$Q[n]$", r"$Q \prime[n]$"], 
+        linestyles=["-", ":"],
         xlim=SYMBOLS_XLIM,
         title=Q_CHANNEL_TITLE,
     ).plot()
