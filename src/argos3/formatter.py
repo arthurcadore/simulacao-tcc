@@ -547,7 +547,6 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title="With $RRC$ Pulse Modulation",
         xlim=[0,20]
     ).plot()
 
@@ -557,7 +556,6 @@ if __name__ == "__main__":
         sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
-        title="With $RRC$ Pulse Modulation",
         xlim=[0,20]
     ).plot()
 
@@ -568,7 +566,6 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title="With $Rect$ Pulse Modulation",
         xlim=[0,20]
     ).plot()
 
@@ -578,7 +575,6 @@ if __name__ == "__main__":
         sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
-        title="With $Rect$ Pulse Modulation",
         xlim=[0,20]
     ).plot()
 
@@ -589,7 +585,8 @@ if __name__ == "__main__":
         colors=[COLOR_I,  COLOR_Q],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
         amp_norm=True,
-        xlim=[0,20]
+        xlim=[0,20],
+        title="$RRC$ Pulse Modulation"
     ).plot()
 
     PowerSpectralDensityPlot(
@@ -610,7 +607,8 @@ if __name__ == "__main__":
         t=np.arange(len(InUp)) / fs,
         colors=[COLOR_I,  COLOR_Q],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
-        xlim=[0,20]
+        xlim=[0,20],
+        title="$Rect$ Pulse Modulation"
     ).plot()
 
     PowerSpectralDensityPlot(
