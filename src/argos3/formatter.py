@@ -120,6 +120,11 @@ class Formatter:
             \end{cases}
         $$
 
+        Where: 
+            - $g_{rect}(t)$: Rectangular pulse in the time domain.
+            - $T_b$: Bit period.
+            - $t$: Time vector.
+
         Args:
             None
 
@@ -138,11 +143,11 @@ class Formatter:
         Generates the Root Raised Cosine ($RRC$) pulse. The $RRC$ pulse in the time domain is defined by the expression below.
 
         $$
-            g(t) = \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
+            g_{RRC}(t) = \frac{(1 - \alpha) sinc((1- \alpha) t / T_b) + \alpha (4/\pi) \cos(\pi (1 + \alpha) t / T_b)}{1 - (4 \alpha t / T_b)^2}
         $$
 
         Where: 
-            - $g(t)$: $RRC$ pulse in the time domain.
+            - $g_{RRC}(t)$: $RRC$ pulse in the time domain.
             - $\alpha$: Roll-off factor of the pulse.
             - $T_b$: Bit period.
             - $t$: Time vector.
@@ -216,7 +221,7 @@ class Formatter:
         $$
             W = 2 \cdot \frac{1+\alpha}{2 \cdot T_b}
         $$
-        
+
         where: 
             - $W$: Bandwidth of the pulse response.
             - $\alpha$: Roll-off factor of the pulse.
