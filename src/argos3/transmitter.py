@@ -942,7 +942,7 @@ class Transmitter:
 if __name__ == "__main__":
 
     # Creates a transmitter instance
-    transmitter = Transmitter(output_print=True, output_plot=True, output_anim=False)
+    transmitter = Transmitter(fc=2000, output_print=True, output_plot=True, output_anim=False)
 
     datagram1 = Datagram(pcdnum=1234, numblocks=1, seed=10)
     datagram2 = Datagram(pcdnum=1234, numblocks=1, seed=10)

@@ -1025,7 +1025,7 @@ class Receiver:
 
 if __name__ == "__main__":
 
-    fc = np.random.randint(10, 90)*100
+    fc = np.random.randint(18, 22)*100
     print("\n\n==== SIMULATING TRANSMISSION/RECEPTION WITH FC =", fc)
 
     datagramTX = Datagram(pcdnum=1234, numblocks=1)
