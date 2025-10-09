@@ -170,7 +170,7 @@ class Receiver:
             fig_time.tight_layout()
             save_figure(fig_time, "receiver_demodulator_time.pdf")
 
-            fig_freq, grid = create_figure(3, 1, figsize=(16, 12))
+            fig_freq, grid = create_figure(3, 1, figsize=(16, 9))
 
             FrequencyPlot(
                 fig_freq, grid, (0, 0),

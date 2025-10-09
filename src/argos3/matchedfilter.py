@@ -356,3 +356,60 @@ if __name__ == "__main__":
 
     fig_freq.tight_layout()
     save_figure(fig_freq, "example_mf_freq.pdf")
+
+
+    fig_time, grid_time = create_figure(3, 2, figsize=(16, 12))
+
+    ImpulseResponsePlot(
+        fig_time, grid_time, (0,slice(0,2)),
+        mfI.t_rc, [mfI.g, mfI.g_inverted],
+        t_unit="ms",
+        colors=[COLOR_AUX1, COLOR_AUX2],
+        label=[r"$g(t)$", r"$g(-t)$"],
+        xlabel=IMPULSE_X,
+        ylabel=IMPULSE_Y,
+        xlim=(-5,5),
+        amp_norm=True,
+        title=I_CHANNEL_TITLE
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (1,0),
+        t= np.arange(len(dI)) / fI.fs,
+        signals=[dI],
+        labels=[r"$d_I(t)$"],
+        amp_norm=True,
+        colors=[COLOR_I],
+        title=I_CHANNEL_TITLE
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (1,1),
+        t= np.arange(len(dQ)) / fQ.fs,
+        signals=[dQ],
+        labels=[r"$d_Q(t)$"],
+        amp_norm=True,
+        colors=[COLOR_Q],
+        title=Q_CHANNEL_TITLE
+    ).plot()
+    
+    TimePlot(
+        fig_time, grid_time, (2,0),
+        t= np.arange(len(dI_filtered)) / fI.fs,
+        signals=[dI_filtered],
+        labels=[r"$d_I'(t)$"],
+        amp_norm=True,
+        colors=[COLOR_I],
+    ).plot()
+
+    TimePlot(
+        fig_time, grid_time, (2,1),
+        t= np.arange(len(dQ_filtered)) / fQ.fs,
+        signals=[dQ_filtered],
+        labels=[r"$d_Q'(t)$"],
+        amp_norm=True,
+        colors=[COLOR_Q],
+    ).plot()
+
+    fig_time.tight_layout()
+    save_figure(fig_time, "example_mf_time_comp.pdf")

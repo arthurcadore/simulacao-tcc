@@ -252,8 +252,8 @@ if __name__ == "__main__":
     fs=128_000
     Rb=1000
 
-    X = np.random.randint(0, 2, 20)
-    Y = np.random.randint(0, 2, 20)
+    X = np.random.randint(0, 2, 2000)
+    Y = np.random.randint(0, 2, 2000)
 
     encoder_I = Encoder(method="NRZ")
     encoded_Q = Encoder(method="NRZ")
@@ -329,7 +329,8 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title=I_CHANNEL_TITLE
+        title=I_CHANNEL_TITLE,
+        xlim=[0,20]
     ).plot()
 
     SymbolsPlot(
@@ -339,7 +340,8 @@ if __name__ == "__main__":
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title=Q_CHANNEL_TITLE
+        title=Q_CHANNEL_TITLE,
+        xlim=[0,20]
     ).plot()
         
     TimePlot(
@@ -349,6 +351,7 @@ if __name__ == "__main__":
         labels=[r"$d_I(t)$"],
         amp_norm=True,
         colors=COLOR_I,
+        xlim=[0,20]
     ).plot()
     
     TimePlot(
@@ -358,6 +361,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q(t)$"],
         amp_norm=True,
         colors=COLOR_Q,
+        xlim=[0,20]
     ).plot()
     
 
@@ -370,7 +374,7 @@ if __name__ == "__main__":
         xlabel=IMPULSE_X, 
         ylabel=IMPULSE_Y, 
         xlim=IMPULSE_XLIM, 
-        amp_norm=True, 
+        amp_norm=True,
     ).plot()
 
     ImpulseResponsePlot(
@@ -393,6 +397,7 @@ if __name__ == "__main__":
         labels=[r"$d_I(t)$"],
         amp_norm=True,
         colors=COLOR_I,
+        xlim=[0,20]
     ).plot()
     
     TimePlot(
@@ -402,6 +407,7 @@ if __name__ == "__main__":
         labels=[r"$d_Q(t)$"],
         amp_norm=True,
         colors=COLOR_Q,
+        xlim=[0,20]
     ).plot()
     
     fig_format.tight_layout()
@@ -541,7 +547,8 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title="With Pulse Modulation"
+        title="With $RRC$ Pulse Modulation",
+        xlim=[0,20]
     ).plot()
 
     SymbolsPlot(
@@ -550,7 +557,8 @@ if __name__ == "__main__":
         sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
-        title="With Pulse Modulation"
+        title="With $RRC$ Pulse Modulation",
+        xlim=[0,20]
     ).plot()
 
     SymbolsPlot(
@@ -560,7 +568,8 @@ if __name__ == "__main__":
         colors=[COLOR_I],
         xlabel=SYMBOLS_X, 
         ylabel=SYMBOLS_Y, 
-        title="Without Pulse Modulation"
+        title="With $Rect$ Pulse Modulation",
+        xlim=[0,20]
     ).plot()
 
     SymbolsPlot(
@@ -569,7 +578,8 @@ if __name__ == "__main__":
         sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
-        title="Without Pulse Modulation"
+        title="Without Pulse Modulation",
+        xlim=[0,20]
     ).plot()
 
     TimePlot(
@@ -578,7 +588,8 @@ if __name__ == "__main__":
         t=np.arange(len(dI1)) / fs,
         colors=[COLOR_I,  COLOR_Q],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
-        amp_norm=True
+        amp_norm=True,
+        xlim=[0,20]
     ).plot()
 
     PowerSpectralDensityPlot(
@@ -590,7 +601,7 @@ if __name__ == "__main__":
         xlim=(-10, 10),
         nperseg=1024,
         ylim=(-120, -20),
-        amp_norm=True
+        amp_norm=True,
     ).plot()
 
     TimePlot(
@@ -599,6 +610,7 @@ if __name__ == "__main__":
         t=np.arange(len(InUp)) / fs,
         colors=[COLOR_I,  COLOR_Q],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        xlim=[0,20]
     ).plot()
 
     PowerSpectralDensityPlot(
@@ -610,8 +622,85 @@ if __name__ == "__main__":
         xlim=(-10, 10),
         nperseg=1024,
         ylim=(-120, -20),
-        amp_norm=True
+        amp_norm=True,
     ).plot()
 
     fig_comp.tight_layout()
     save_figure(fig_comp, "example_formatter_comp.pdf")
+
+
+    # Codificado NRZ-Man Formatado
+
+    fs=128_000
+    Rb=1000
+
+    X = np.random.randint(0, 2, 20)
+    Y = np.random.randint(0, 2, 20)
+
+    encoder_I = Encoder(method="NRZ")
+    encoded_Q = Encoder(method="Manchester")
+
+    In = encoder_I.encode(X)
+    Qn = encoded_Q.encode(Y)
+    
+    formatterI = Formatter(alpha=0.8, fs=fs, Rb=Rb/2, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    formatterQ = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=10, type="RRC", channel="Q", bits_per_symbol=1, prefix_duration=0.005)
+    
+    dI2 = formatterI.apply_format(In, add_prefix=False)
+    dQ2 = formatterQ.apply_format(Qn, add_prefix=False)
+
+    fig_format, grid_format = create_figure(3, 2, figsize=(16, 12))
+
+    ImpulseResponsePlot(
+        fig_format, grid_format, (0,slice(0,2)),
+        formatterI.t_rc, formatterI.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=(-10,10), 
+        amp_norm=True, 
+        title="RRC Impulse Response"
+    ).plot()
+
+    SymbolsPlot(
+        fig_format, grid_format, (1,0),
+        symbols_list=[In],
+        sections=[(r"$I[n]$", len(In))],
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title=I_CHANNEL_TITLE
+    ).plot()
+
+    SymbolsPlot(
+        fig_format, grid_format, (1,1),
+        symbols_list=[Qn],
+        sections=[(r"$Q[n]$", len(Qn))],
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X, 
+        ylabel=SYMBOLS_Y, 
+        title=Q_CHANNEL_TITLE
+    ).plot()
+        
+    TimePlot(
+        fig_format, grid_format, (2,0),
+        t= np.arange(len(dI2)) / formatterI.fs,
+        signals=[dI2],
+        labels=[r"$d_I(t)$"],
+        amp_norm=True,
+        colors=COLOR_I,
+    ).plot()
+    
+    TimePlot(
+        fig_format, grid_format, (2,1),
+        t= np.arange(len(dQ2)) / formatterQ.fs,
+        signals=[dQ2],
+        labels=[r"$d_Q(t)$"],
+        amp_norm=True,
+        colors=COLOR_Q,
+    ).plot()
+
+    fig_format.tight_layout()
+    save_figure(fig_format, "example_formatter_comp_rrc.pdf")

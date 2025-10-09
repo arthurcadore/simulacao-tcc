@@ -554,6 +554,77 @@ class Transmitter:
             fig_format.tight_layout()
             save_figure(fig_format, "transmitter_formatter_time.pdf")
 
+            fig_format, grid_format = create_figure(3, 2, figsize=(16, 12))
+
+            ImpulseResponsePlot(
+                fig_format, grid_format, (0, 0),
+                self.formatterI.t_rc, self.formatterI.g,
+                t_unit="ms",
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400,
+                amp_norm=True,
+                title=I_CHANNEL_TITLE
+            ).plot()
+
+            ImpulseResponsePlot(
+                fig_format, grid_format, (0, 1),
+                self.formatterQ.t_rc, self.formatterQ.g,
+                t_unit="ms",
+                colors=COLOR_IMPULSE,
+                label=r"$g(t)$", 
+                xlabel=IMPULSE_X, 
+                ylabel=IMPULSE_Y, 
+                xlim=IMPULSE_XLIM_400,
+                amp_norm=True,
+                title=Q_CHANNEL_TITLE
+            ).plot()
+
+            TimePlot(
+                fig_format, grid_format, (1,0),
+                t= np.arange(len(self.formatterI.symbolsup)) / self.formatterI.fs,
+                signals=[self.formatterI.symbolsup],
+                labels=[r"$I[n]$ UpSampled"],
+                amp_norm=True,
+                xlim=TIME_XLIM,
+                colors=COLOR_I
+            ).plot()
+
+            TimePlot(
+                fig_format, grid_format, (1,1),
+                t= np.arange(len(self.formatterQ.symbolsup)) / self.formatterQ.fs,
+                signals=[self.formatterQ.symbolsup],
+                labels=[r"$Q[n]$ UpSampled"],
+                xlim=TIME_XLIM,
+                amp_norm=True,
+                colors=COLOR_Q,
+            ).plot()
+
+            TimePlot(
+                fig_format, grid_format, (2,0),
+                t= np.arange(len(dI)) / self.formatterI.fs,
+                signals=[dI],
+                labels=[r"$d_I(t)$"],
+                amp_norm=True,
+                xlim=TIME_XLIM,
+                colors=COLOR_I
+            ).plot()
+
+            TimePlot(
+                fig_format, grid_format, (2,1),
+                t= np.arange(len(dQ)) / self.formatterQ.fs,
+                signals=[dQ],
+                labels=[r"$d_Q(t)$"],
+                xlim=TIME_XLIM,
+                amp_norm=True,
+                colors=COLOR_Q,
+            ).plot()
+
+            fig_format.tight_layout()
+            save_figure(fig_format, "transmitter_formatter_time_comp.pdf")
+
             fig_format_freq, grid_format_freq = create_figure(2, 2, figsize=(16, 9))
 
             ImpulseResponsePlot(
@@ -661,6 +732,47 @@ class Transmitter:
             fig_time.tight_layout()
             save_figure(fig_time, "transmitter_modulator_time.pdf")
 
+
+            fig_time, grid = create_figure(2, 2, figsize=(16, 9))
+
+            TimePlot(
+                fig_time, grid, (0, 0),
+                t=t,
+                signals=[dI, dQ],
+                labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+                title=IQ_COMPONENTS_TITLE,
+                xlim=TIME_XLIM,
+                amp_norm=True,
+                colors=[COLOR_I, COLOR_Q],
+            ).plot()
+
+            TimePlot(
+                fig_time, grid, (1, 0),
+                t=t,
+                signals=[s],
+                labels=["$s(t)$"],
+                title=MODULATED_STREAM_TITLE,
+                xlim=TIME_XLIM,
+                amp_norm=True,
+                colors=COLOR_COMBINED,
+            ).plot()
+
+            ConstellationPlot(
+                fig_time, grid, (slice(0,2), 1),
+                dI=dI[:40000:5],
+                dQ=dQ[:40000:5],
+                xlim=CONSTELLATION_XLIM,
+                ylim=CONSTELLATION_YLIM,
+                rms_norm=True,
+                show_ideal_points=False,
+                title=IQ_CONSTELLATION_TITLE,
+                colors=COLOR_COMBINED,
+            ).plot()
+
+            fig_time.tight_layout()
+            save_figure(fig_time, "transmitter_modulator_time_comp.pdf")
+
+
             fig_freq, grid = create_figure(2, 2, figsize=(16, 9))
             FrequencyPlot(
                 fig_freq, grid, (0, 0),
@@ -731,7 +843,7 @@ class Transmitter:
                 signal=s[0:(int(round(self.prefix_duration * self.fs)))],
                 fc=self.fc,
                 labels=[r"$S(f)$"],
-                title=(MODULATED_STREAM_TITLE + " - (0 to " + str(self.prefix_duration*1000) + " ms)"),
+                title=("Pure Carrier" + " - (0 to " + str(self.prefix_duration*1000) + " ms)"),
                 xlim=FREQ_MODULATED_XLIM,
                 colors=COLOR_COMBINED,
             ).plot()

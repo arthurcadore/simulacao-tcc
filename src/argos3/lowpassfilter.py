@@ -207,7 +207,7 @@ if __name__ == "__main__":
     fig_signal.tight_layout()
     save_figure(fig_signal, "example_lpf_signals.pdf")
 
-    fig_pz, grid_pz = create_figure(1, 1, figsize=(10,10))
+    fig_pz, grid_pz = create_figure(1, 1, figsize=(8,8))
     PoleZeroPlot(
             fig_pz, grid_pz, (0,0), 
             filtro.b, filtro.a,

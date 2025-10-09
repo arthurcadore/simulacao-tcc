@@ -203,7 +203,7 @@ if __name__ == "__main__":
     print("line X(NRZ)[n]:", ' '.join(f"{x:+d}" for x in In[:10]))
     print("line Y(MAN)[n]:", ' '.join(f"{y:+d}" for y in Qn[:10]))
 
-    fig_encoder, grid = create_figure(4, 1, figsize=(16, 16))
+    fig_encoder, grid = create_figure(4, 1, figsize=(16, 12))
 
     BitsPlot(
         fig_encoder, grid, (0, 0),
