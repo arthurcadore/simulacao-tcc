@@ -578,7 +578,7 @@ if __name__ == "__main__":
         sections=[(r"$Q[n]$", len(Qn))],
         colors=[COLOR_Q],
         xlabel=SYMBOLS_X, 
-        title="Without Pulse Modulation",
+        title="With $Rect$ Pulse Modulation",
         xlim=[0,20]
     ).plot()
 
