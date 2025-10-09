@@ -88,11 +88,12 @@ class Formatter:
         # type mapping
         type_map = {
             "rrc": 0,
-            "manchester": 1
+            "manchester": 1,
+            "rect": 2
         }
         type = type.lower()
         if type not in type_map:
-            raise ValueError("Tipo de pulso inválido. Use 'RRC' ou 'Manchester'.")
+            raise ValueError("Tipo de pulso inválido. Use 'RRC', 'Manchester' ou 'Rect'.")
         
         self.type = type_map[type]
 
@@ -101,6 +102,27 @@ class Formatter:
             self.g = self.rrc_pulse()
         elif self.type == 1:  # Manchester
             self.g, self.g_left, self.g_right = self.manchester_pulse()
+        elif self.type == 2:  # Rect
+            self.g = self.rect_pulse()
+
+    def rect_pulse(self):
+        r"""
+        Generates a rectangular (NRZ) pulse of duration $T_b$.
+        
+        $$
+            g_{rect}(t) =
+            \begin{cases}
+                1, & |t| \leq T_b/2 \\
+                0, & \text{otherwise}
+            \end{cases}
+        $$
+        
+        Normalized to unit energy.
+        """
+        g = np.where(np.abs(self.t_rc) <= self.Tb/2, 1.0, 0.0)
+        g = g / np.sqrt(np.sum(g**2))
+        return g
+
 
     def rrc_pulse(self, shift=0.0):
         r"""
@@ -320,6 +342,25 @@ if __name__ == "__main__":
     fig_impulse_man.tight_layout()
     save_figure(fig_impulse_man, "example_formatter_impulse_man.pdf")
 
+    formatterRect = Formatter(fs=fs, Rb=Rb, type="Rect", channel="I", bits_per_symbol=1, prefix_duration=0)
+
+    fig_impulse_rect, grid_impulse_rect = create_figure(1, 1, figsize=(16, 5))
+    ImpulseResponsePlot(
+        fig_impulse_rect, grid_impulse_rect, (0, 0),
+        formatterRect.t_rc, formatterRect.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=IMPULSE_XLIM, 
+        amp_norm=True, 
+        title=IMPULSE_TITLE
+    ).plot()
+
+    fig_impulse_rect.tight_layout()
+    save_figure(fig_impulse_rect, "example_formatter_impulse_rect.pdf")
+
     fig_format, grid_format = create_figure(4, 2, figsize=(16, 12))
 
     SymbolsPlot(
@@ -531,55 +572,40 @@ if __name__ == "__main__":
     fig_power.tight_layout()
     save_figure(fig_power, "example_formatter_power.pdf")
 
-    # COMPARAÇÃO SEM MODULAÇÃO DE PULSO
+    # COMPARAÇÃO RRC e RECT
+    InUp = formatterRect.apply_format(In)
+    QnUp = formatterRect.apply_format(Qn)
 
-    # superamostra X (com repetição) para gerar uma sequência similar no tempo (para comparação)
-    sps = int(fs / Rb)
-    InUp = np.repeat(In, sps)
-    QnUp = np.repeat(Qn, sps)
+    fig_comp, grid_comp = create_figure(3, 2, figsize=(16, 12))
 
-    fig_comp, grid_comp = create_figure(3, 4, figsize=(16, 12))
-
-    SymbolsPlot(
-        fig_comp, grid_comp, (0,0),
-        symbols_list=[In],
-        sections=[(r"$I[n]$", len(In))],
-        colors=[COLOR_I],
-        xlabel=SYMBOLS_X, 
-        ylabel=SYMBOLS_Y, 
-        xlim=[0,20]
+    ImpulseResponsePlot(
+        fig_comp, grid_comp, (0, 0),
+        formatterI.t_rc, formatterI.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=IMPULSE_XLIM, 
+        amp_norm=True, 
+        title=IMPULSE_TITLE
     ).plot()
 
-    SymbolsPlot(
-        fig_comp, grid_comp, (0,1),
-        symbols_list=[Qn],
-        sections=[(r"$Q[n]$", len(Qn))],
-        colors=[COLOR_Q],
-        xlabel=SYMBOLS_X, 
-        xlim=[0,20]
-    ).plot()
-
-    SymbolsPlot(
-        fig_comp, grid_comp, (0,2),
-        symbols_list=[In],
-        sections=[(r"$I[n]$", len(In))],
-        colors=[COLOR_I],
-        xlabel=SYMBOLS_X, 
-        ylabel=SYMBOLS_Y, 
-        xlim=[0,20]
-    ).plot()
-
-    SymbolsPlot(
-        fig_comp, grid_comp, (0,3),
-        symbols_list=[Qn],
-        sections=[(r"$Q[n]$", len(Qn))],
-        colors=[COLOR_Q],
-        xlabel=SYMBOLS_X, 
-        xlim=[0,20]
+    ImpulseResponsePlot(
+        fig_comp, grid_comp, (0, 1),
+        formatterRect.t_rc, formatterRect.g,
+        t_unit="ms",
+        colors=COLOR_IMPULSE,
+        label=r"$g(t)$", 
+        xlabel=IMPULSE_X, 
+        ylabel=IMPULSE_Y, 
+        xlim=IMPULSE_XLIM, 
+        amp_norm=True, 
+        title=IMPULSE_TITLE
     ).plot()
 
     TimePlot(
-        fig_comp, grid_comp, (1, slice(0,2)),
+        fig_comp, grid_comp, (1, 0),
         signals=[dI1, dQ1],
         t=np.arange(len(dI1)) / fs,
         colors=[COLOR_I,  COLOR_Q],
@@ -589,8 +615,18 @@ if __name__ == "__main__":
         title="$RRC$ Pulse Modulation"
     ).plot()
 
+    TimePlot(
+        fig_comp, grid_comp, (1, 1),
+        signals=[InUp, QnUp],
+        t=np.arange(len(InUp)) / fs,
+        colors=[COLOR_I,  COLOR_Q],
+        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        xlim=[0,20],
+        title="$Rect$ Pulse Modulation"
+    ).plot()
+
     PowerSpectralDensityPlot(
-        fig_comp, grid_comp, (2,slice(0,2)),
+        fig_comp, grid_comp, (2, 0),
         fs,
         signals=[dI1, dQ1],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
@@ -601,18 +637,8 @@ if __name__ == "__main__":
         amp_norm=True,
     ).plot()
 
-    TimePlot(
-        fig_comp, grid_comp, (1, slice(2,4)),
-        signals=[InUp, QnUp],
-        t=np.arange(len(InUp)) / fs,
-        colors=[COLOR_I,  COLOR_Q],
-        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
-        xlim=[0,20],
-        title="$Rect$ Pulse Modulation"
-    ).plot()
-
     PowerSpectralDensityPlot(
-        fig_comp, grid_comp, (2, slice(2,4)),
+        fig_comp, grid_comp, (2, 1),
         fs,
         signals=[InUp, QnUp],
         labels=[r"$d_I(t)$", r"$d_Q(t)$"],
