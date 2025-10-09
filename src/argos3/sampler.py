@@ -157,6 +157,10 @@ if __name__ == "__main__":
     dI = fI.apply_format(In, add_prefix=True)
     dQ = fQ.apply_format(Qn, add_prefix=True)
 
+    r = np.random.normal(0, 1, len(dI))*0.05
+    dI += r
+    dQ += r
+
     mfI = MatchedFilter(fs=128_000, Rb=Rb, type="RRC-Inverted", channel="Q", bits_per_symbol=1)
     mfQ = MatchedFilter(fs=128_000, Rb=Rb, type="Manchester-Inverted", channel="Q", bits_per_symbol=2)
     
@@ -177,7 +181,7 @@ if __name__ == "__main__":
     print(In_prime[:20], "...")
     print(Qn_prime[:20], "...")
 
-    fig_sampler, grid_sampler = create_figure(2, 1, figsize=(16, 9))
+    fig_sampler, grid_sampler = create_figure(2, 2, figsize=(16, 9))
 
     SampledSignalPlot(
         fig_sampler, grid_sampler, (0, 0),
@@ -188,12 +192,12 @@ if __name__ == "__main__":
         colors=COLOR_I,
         label_signal=r"$I'(t)$", 
         label_samples=r"Samples $I'[n]$", 
-        xlim=SYNC_XLIM,
+        xlim=(0,100),
         title=I_CHANNEL_TITLE,
     ).plot()
 
     SampledSignalPlot(
-        fig_sampler, grid_sampler, (1, 0),
+        fig_sampler, grid_sampler, (0, 1),
         t,
         signal2,
         t_Q,
@@ -201,8 +205,36 @@ if __name__ == "__main__":
         colors=COLOR_Q,
         label_signal=r"$Q'(t)$", 
         label_samples=r"Samples $Q'[n]$", 
-        xlim=SYNC_XLIM, 
+        xlim=(0,100), 
         title=Q_CHANNEL_TITLE,
+    ).plot()
+
+    SymbolsPlot(
+        fig_sampler, grid_sampler, (1, 0),
+        symbols_list=[s_I],
+        samples_per_symbol=1,
+        colors=[COLOR_I],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
+        label=r"$I'[n]$",
+        ylim=[min(s_I)*1.1, max(s_I)*1.1],
+        x_axis_label=(min(s_I), max(s_I)),
+        show_symbol_values=False,
+        xlim=(0,40), 
+    ).plot()
+
+    SymbolsPlot(
+        fig_sampler, grid_sampler, (1, 1),
+        symbols_list=[s_Q],
+        samples_per_symbol=1,
+        colors=[COLOR_Q],
+        xlabel=SYMBOLS_X,
+        ylabel=SYMBOLS_Y,
+        label=r"$Q'[n]$",
+        ylim=[min(s_Q)*1.1, max(s_Q)*1.1],
+        x_axis_label=(min(s_Q), max(s_Q)),
+        show_symbol_values=False,
+        xlim=(0,40), 
     ).plot()
 
     fig_sampler.tight_layout()
@@ -219,7 +251,7 @@ if __name__ == "__main__":
         ylabel=SYMBOLS_Y,
         label=[r"$I[n]$", r"$I \prime[n]$"], 
         linestyles=["-", ":"],
-        xlim=SYMBOLS_XLIM,
+        xlim=(0,100),
         title=I_CHANNEL_TITLE,
     ).plot()
 
@@ -232,7 +264,7 @@ if __name__ == "__main__":
         ylabel=SYMBOLS_Y,
         label=[r"$Q[n]$", r"$Q \prime[n]$"], 
         linestyles=["-", ":"],
-        xlim=SYMBOLS_XLIM,
+        xlim=(0,100),
         title=Q_CHANNEL_TITLE,
     ).plot()
 
