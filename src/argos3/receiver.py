@@ -299,7 +299,7 @@ class Receiver:
             fig_signal.tight_layout()
             save_figure(fig_signal, "receiver_lpf_time.pdf")
 
-            fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 12))
+            fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 9))
 
             FrequencyResponsePlot(
                 fig_freq, grid_freq, (0, slice(0, 2)),

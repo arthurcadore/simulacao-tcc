@@ -279,12 +279,14 @@ class FrequencyPlot(BasePlot):
                  fs: float,
                  signal: np.ndarray,
                  fc: float = 0.0,
+                 bandwidth: float | None = None,
                  **kwargs) -> None:
         ax = fig.add_subplot(grid[pos])
         super().__init__(ax, **kwargs)
         self.fs = fs
         self.fc = fc
         self.signal = signal
+        self.bandwidth = bandwidth
 
     def plot(self) -> None:
         # Fourier transform
@@ -293,21 +295,29 @@ class FrequencyPlot(BasePlot):
         y = mag2db(fft_signal)
 
         # Frequency scale
-        if self.fc > 1000:
-            freqs = freqs / 1000
-            self.ax.set_xlabel(r"Frequency ($kHz$)")
-        else:
-            self.ax.set_xlabel(r"Frequency ($Hz$)")
+        freqs = freqs / 1000
+        fc = self.fc / 1000
+        bw = self.bandwidth / 1000 if self.bandwidth is not None else None
+        self.ax.set_xlabel(r"Frequency ($kHz$)")
+        scale_khz = True
 
-        # Plot
+        # Plot main curve
         line_kwargs = {"linewidth": 1, "alpha": 1.0}
         line_kwargs.update(self.style.get("line", {}))
         color = self.apply_color(0)
         label = self.labels[0] if self.labels else None
+
         if color is not None:
             self.ax.plot(freqs, y, label=label, color=color, **line_kwargs)
         else:
             self.ax.plot(freqs, y, label=label, **line_kwargs)
+
+        # Plot bandwidth markers (if provided)
+        if bw is not None and bw > 0:
+            for f in [fc - bw, fc + bw]:
+                self.ax.axvline(f, color=COLOR_AUX2, linestyle="--", linewidth=2, alpha=0.8)
+            unit = "kHz" if scale_khz else "Hz"
+            self.ax.plot([], [], color=COLOR_AUX2, linestyle="--", label=f"$W$ = {self.bandwidth/1000:.3f} {unit}")
 
         # Labels
         self.ax.set_ylabel(r"Magnitude ($dB$)")

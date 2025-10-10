@@ -149,8 +149,8 @@ class MatchedFilter:
 
 if __name__ == "__main__":
 
-    bit1 = np.random.randint(0, 2, 10)
-    bit2 = np.random.randint(0, 2, 10)
+    bit1 = np.random.randint(0, 2, 20)
+    bit2 = np.random.randint(0, 2, 20)
 
     encoder = Encoder(method="NRZ")
     In = encoder.encode(bit1)
@@ -323,7 +323,7 @@ if __name__ == "__main__":
         fs=fI.fs,
         signal=dI,
         labels=[r"$S(f)$"],
-        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        xlim=(FREQ_MODULATED_XLIM[0], FREQ_MODULATED_XLIM[1]),
         colors=COLOR_I,
     ).plot()
 
@@ -332,7 +332,7 @@ if __name__ == "__main__":
         fs=fQ.fs,
         signal=dQ,
         labels=[r"$S(f)$"],
-        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        xlim=(FREQ_MODULATED_XLIM[0], FREQ_MODULATED_XLIM[1]),
         colors=COLOR_Q,
     ).plot()
 
@@ -341,7 +341,7 @@ if __name__ == "__main__":
         fs=fI.fs,
         signal=dI_filtered,
         labels=[r"$S'(f)$"],
-        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        xlim=(FREQ_MODULATED_XLIM[0], FREQ_MODULATED_XLIM[1]),
         colors=COLOR_I,
     ).plot()
 
@@ -350,7 +350,7 @@ if __name__ == "__main__":
         fs=fQ.fs,
         signal=dQ_filtered,
         labels=[r"$S'(f)$"],
-        xlim=(FREQ_MODULATED_XLIM[0]*400, FREQ_MODULATED_XLIM[1]*400),
+        xlim=(FREQ_MODULATED_XLIM[0], FREQ_MODULATED_XLIM[1]),
         colors=COLOR_Q,
     ).plot()
 

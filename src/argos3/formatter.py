@@ -248,13 +248,16 @@ class Formatter:
 
         Returns:
             float: Bandwidth of the pulse response.
+
+        Examples: 
+            - Frequency Domain Bandwidth Example: ![pageplot](assets/example_formatter_freq_band.svg)
         """
         if self.type == 0:  # RRC
-            return 2 * ((1+self.alpha)/(2*self.Tb))
+            return  ((1+self.alpha)/(2*self.Tb))
         elif self.type == 1:  # Manchester
-            return 2 * ((1+self.alpha)/(self.Tb))
+            return  ((1+self.alpha)/(2*self.Tb))
         elif self.type == 2:  # Rect
-            return 2 * self.Rb
+            return  self.Rb
 
     def apply_format(self, symbols, add_prefix=True):
         r"""
@@ -512,32 +515,10 @@ if __name__ == "__main__":
     save_figure(fig_format, "example_formatter_time.pdf")
 
 
-    fig_freq, grid_freq = create_figure(3, 2, figsize=(16, 12))
-
-    FrequencyPlot(
-        fig_freq, grid_freq, (0,0),
-        formatterI.fs,
-        formatterI.symbolsup,
-        labels=[r"$d_I(t)$"],
-        title=I_CHANNEL_TITLE,
-        xlim=(-10, 10),
-        colors=COLOR_I,
-        fc=2000
-    ).plot()
-
-    FrequencyPlot(
-        fig_freq, grid_freq, (0,1),
-        formatterQ.fs,
-        formatterQ.symbolsup,
-        labels=[r"$d_Q(t)$"],
-        title=Q_CHANNEL_TITLE,
-        xlim=(-10, 10),
-        colors=COLOR_Q,
-        fc=2000
-    ).plot()
+    fig_freq, grid_freq = create_figure(2, 2, figsize=(16, 12))
 
     ImpulseResponsePlot(
-        fig_freq, grid_freq, (1,0),
+        fig_freq, grid_freq, (0,0),
         formatterI.t_rc, formatterI.g,
         t_unit="ms",
         colors=COLOR_IMPULSE,
@@ -549,7 +530,7 @@ if __name__ == "__main__":
     ).plot()
 
     ImpulseResponsePlot(
-        fig_freq, grid_freq, (1,1),
+        fig_freq, grid_freq, (0,1),
         formatterQ.t_rc, formatterQ.g,
         t_unit="ms",
         colors=COLOR_IMPULSE,
@@ -561,27 +542,56 @@ if __name__ == "__main__":
     ).plot()
 
     FrequencyPlot(
-        fig_freq, grid_freq, (2,0),
+        fig_freq, grid_freq, (1,0),
         formatterI.fs,
         dI1,
-        labels=[r"$d_I(t)$"],
-        xlim=(-10, 10),
+        labels=[r"$D_I(f)$"],
+        xlim=(-formatterI.w*1.5/1000, formatterI.w*1.5/1000),
         colors=COLOR_I,
-        fc=2000
+        fc=0,
+        bandwidth=formatterI.w
     ).plot()
 
     FrequencyPlot(
-        fig_freq, grid_freq, (2,1),
+        fig_freq, grid_freq, (1,1),
         formatterQ.fs,
         dQ1,
-        labels=[r"$d_Q(t)$"],
-        xlim=(-10, 10),
+        labels=[r"$D_Q(f)$"],
+        xlim=(-formatterQ.w*1.5/1000, formatterQ.w*1.5/1000),
         colors=COLOR_Q,
-        fc=2000
+        fc=0,
+        bandwidth=formatterQ.w
     ).plot()
 
     fig_freq.tight_layout()
     save_figure(fig_freq, "example_formatter_freq.pdf")
+
+    fig_freq, grid_freq = create_figure(1, 2, figsize=(16, 6))
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,0),
+        formatterI.fs,
+        dI1,
+        labels=[r"$D_I(f)$"],
+        xlim=(-formatterI.w*1.5/1000, formatterI.w*1.5/1000),
+        colors=COLOR_I,
+        fc=0,
+        bandwidth=formatterI.w
+    ).plot()
+
+    FrequencyPlot(
+        fig_freq, grid_freq, (0,1),
+        formatterQ.fs,
+        dQ1,
+        labels=[r"$D_Q(f)$"],
+        xlim=(-formatterQ.w*1.5/1000, formatterQ.w*1.5/1000),
+        colors=COLOR_Q,
+        fc=0,
+        bandwidth=formatterQ.w
+    ).plot()
+
+    fig_freq.tight_layout()
+    save_figure(fig_freq, "example_formatter_freq_band.pdf")
 
 
     fig_power, grid_power = create_figure(3, 2, figsize=(16, 16))
