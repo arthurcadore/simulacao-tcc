@@ -6,8 +6,8 @@ SYMBOLS_Y = "Amplitude"
 TIMEDOMAIN_X = "Time"
 TIMEDOMAIN_Y = "Amplitude"
 FREQUENCY_X = "Frequency"
-FREQUENCY_Y = "Magnitude ($dB$)"
-IMPULSE_X = "Time ($ms$)"
+FREQUENCY_Y = "Magnitude (dB)"
+IMPULSE_X = "Time (ms)"
 IMPULSE_Y = "Amplitude"
 
 # Axis

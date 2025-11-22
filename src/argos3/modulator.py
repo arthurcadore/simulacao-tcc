@@ -154,12 +154,12 @@ class Modulator:
         modulated_signal_corrected = modulated_signal * np.exp(-1j * phase_estimate)
 
         # Calculates the demodulation components
-        carrier_cos = 2 * np.cos(2 * np.pi * self.fc * t)
-        carrier_sin = 2 * np.sin(2 * np.pi * self.fc * t)
+        self.demod_cos = 2 * np.cos(2 * np.pi * self.fc * t)
+        self.demod_sin = 2 * np.sin(2 * np.pi * self.fc * t)
 
         # Demodulates the signal
-        i_signal = modulated_signal_corrected * carrier_cos
-        q_signal = -modulated_signal_corrected * carrier_sin
+        i_signal = modulated_signal_corrected * self.demod_cos
+        q_signal = -modulated_signal_corrected * self.demod_sin
 
         # Polarity correction
         if np.mean(i_signal) < 0:

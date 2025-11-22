@@ -240,7 +240,7 @@ class TimePlot(BasePlot):
                 self.ax.plot(self.t, sig, label=self.labels[i], **line_kwargs)
 
         # Labels
-        xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
+        xlabel = r"Time (ms)" if self.time_unit == "ms" else r"Time ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
@@ -298,7 +298,7 @@ class FrequencyPlot(BasePlot):
         freqs = freqs / 1000
         fc = self.fc / 1000
         bw = self.bandwidth / 1000 if self.bandwidth is not None else None
-        self.ax.set_xlabel(r"Frequency ($kHz$)")
+        self.ax.set_xlabel(r"Frequency (kHz)")
         scale_khz = True
 
         # Plot main curve
@@ -320,7 +320,7 @@ class FrequencyPlot(BasePlot):
             self.ax.plot([], [], color=COLOR_AUX2, linestyle="--", label=f"$W$ = {self.bandwidth/1000:.3f} {unit}")
 
         # Labels
-        self.ax.set_ylabel(r"Magnitude ($dB$)")
+        self.ax.set_ylabel(r"Magnitude (dB)")
         if self.ylim is None:
             self.ax.set_ylim(-60, 5)
 
@@ -800,7 +800,7 @@ class ImpulseResponsePlot(BasePlot):
         # time unit
         if self.t_unit == "ms":
             t_plot = self.t_imp * 1000
-            default_xlabel = r"Time ($ms$)"
+            default_xlabel = r"Time (ms)"
         else:
             t_plot = self.t_imp
             default_xlabel = r"Time ($s$)"
@@ -875,7 +875,7 @@ class SampledSignalPlot(BasePlot):
         self.label_signal = label_signal
         self.label_samples = label_samples
         if xlabel is None:
-            xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
+            xlabel = r"Time (ms)" if self.time_unit == "ms" else r"Time ($s$)"
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.title = title
@@ -982,7 +982,7 @@ class PhasePlot(BasePlot):
         self.ax.set_yticklabels(labels)
 
         # Adjust axis
-        self.ax.set_xlabel(r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)")
+        self.ax.set_xlabel(r"Time (ms)" if self.time_unit == "ms" else r"Time ($s$)")
         self.ax.set_ylabel(r"Phase ($rad$)")
         self.ax.legend()
         self.apply_ax_style()
@@ -1149,8 +1149,8 @@ class FrequencyResponsePlot(BasePlot):
                  xlim: tuple = None,
                  worN: int = 1024,
                  show_phase: bool = False,
-                 xlabel: str = r"Frequency ($Hz$)",
-                 ylabel: str = r"Magnitude ($dB$)",
+                 xlabel: str = r"Frequency (Hz)",
+                 ylabel: str = r"Magnitude (dB)",
                  **kwargs) -> None:
 
         ax = fig.add_subplot(grid[pos])
@@ -1299,8 +1299,8 @@ class DetectionFrequencyPlot(BasePlot):
         handles, labels = self.ax.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         self.ax.legend(by_label.values(), by_label.keys())
-        self.ax.set_xlabel(r"Frequency ($kHz$)")
-        self.ax.set_ylabel(r"Magnitude ($dB$)")
+        self.ax.set_xlabel(r"Frequency (kHz)")
+        self.ax.set_ylabel(r"Magnitude (dB)")
         self.apply_ax_style()
 
 class BersnrPlot(BasePlot):
@@ -1331,7 +1331,7 @@ class BersnrPlot(BasePlot):
                  ber_curves: List[np.ndarray],
                  linestyles: List[str] = None,
                  markers: List[str] = None,
-                 xlabel: str = r"$E_b/N_0$ ($dB$)",
+                 xlabel: str = r"$E_b/N_0$ (dB)",
                  ylabel: str = r"Bit Error Rate ($BER$)",
                  logy: bool = True,
                  **kwargs) -> None:
@@ -1447,7 +1447,7 @@ class SincronizationPlot(BasePlot):
         self.ax.axvline(self.sync_end, color=SYNC_PLOT_V_LIMIT_COLOR, linestyle="--", linewidth=2)
     
         # Labels
-        xlabel = r"Time ($ms$)" if self.time_unit == "ms" else r"Time ($s$)"
+        xlabel = r"Time (ms)" if self.time_unit == "ms" else r"Time ($s$)"
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(r"Amplitude")
         self.apply_ax_style()
@@ -1565,14 +1565,14 @@ class WaterfallPlot(BasePlot):
 
         # Colorbar    
         cbar = self.ax.figure.colorbar(im, ax=self.ax)
-        cbar.set_label("Magnitude ($dB$)")
+        cbar.set_label("Magnitude (dB)")
 
         # Set limits
         self.ax.set_xlim(self.xlim[0], self.xlim[1])
 
         # Labels
-        self.ax.set_xlabel("Frequency ($kHz$)")
-        self.ax.set_ylabel("Segment Index ($10 ms$)")
+        self.ax.set_xlabel("Frequency (kHz)")
+        self.ax.set_ylabel("Segment Index (10 ms)")
         self.ax.grid(False)
         self.apply_ax_style()
 
@@ -1589,7 +1589,7 @@ class Waterfall3DPlot(BasePlot):
         power_matrix (np.ndarray): Power matrix
         fs (float): Signal sampling rate in $Hz$
         N (int): Number of samples
-        freq_window (tuple[float, float]): Frequency limits in $kHz$
+        freq_window (tuple[float, float]): Frequency limits in kHz
         threshold (float): Threshold value
         smooth (bool): Whether to smooth the power matrix
         sigma (float): Standard deviation for the Gaussian filter
@@ -1662,9 +1662,9 @@ class Waterfall3DPlot(BasePlot):
                 color="blue", alpha=0.5, rstride=1, cstride=1, linewidth=0
             )
 
-        self.ax.set_xlabel("Segment Index ($10 ms$)", labelpad=15)
-        self.ax.set_ylabel("Frequency ($kHz$)", labelpad=15)
-        self.ax.set_zlabel("Magnitude ($dB$)", labelpad=15)
+        self.ax.set_xlabel("Segment Index (10 ms)", labelpad=15)
+        self.ax.set_ylabel("Frequency (kHz)", labelpad=15)
+        self.ax.set_zlabel("Magnitude (dB)", labelpad=15)
 
         # reduce the number of ticks on the x axis
         self.ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(3))
@@ -1765,8 +1765,8 @@ class WaterfallDecisionPlot(BasePlot):
             frame.set_alpha(1)
 
         # Labels and limits
-        self.ax.set_xlabel("Frequency ($kHz$)")
-        self.ax.set_ylabel("Segment Index ($10 ms$)")
+        self.ax.set_xlabel("Frequency (kHz)")
+        self.ax.set_ylabel("Segment Index (10 ms)")
         self.ax.grid(False)
 
         # Limit frequency on X axis (already in kHz)
@@ -1841,7 +1841,7 @@ class PowerSpectralDensityPlot(BasePlot):
         freqs, _ = welch(self.signals[0], fs=self.fs, nperseg=self.nperseg, scaling=self.scaling)
         freqs_mirror = np.concatenate((-freqs[::-1], freqs[1:]))
         freqs_plot = freqs_mirror / 1000 if self.fs > 2000 else freqs_mirror
-        xlabel = r"Frequency ($kHz$)" if self.fs > 2000 else r"Frequency ($Hz$)"
+        xlabel = r"Frequency (kHz)" if self.fs > 2000 else r"Frequency (Hz)"
 
         for i, sig in enumerate(self.signals):
             f, psd = welch(sig, fs=self.fs, nperseg=self.nperseg, scaling=self.scaling)
@@ -1863,6 +1863,6 @@ class PowerSpectralDensityPlot(BasePlot):
             self.ax.set_ylim(self.ylim)
 
         self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(r"Power Spectral Density ($dB/Hz$)")
+        self.ax.set_ylabel(r"P. S. D. (dB/Hz)")
         self.ax.set_title(self.title)
         self.apply_ax_style()

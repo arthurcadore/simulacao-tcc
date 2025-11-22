@@ -640,10 +640,21 @@ if __name__ == "__main__":
     save_figure(fig_power, "example_formatter_power.pdf")
 
     # COMPARAÇÃO RRC e RECT
-    InUp = formatterRect.apply_format(In)
-    QnUp = formatterRect.apply_format(Qn)
+    encoder_I = Encoder(method="NRZ")
+    encoder_Q = Encoder(method="Manchester")
 
-    fig_comp, grid_comp = create_figure(3, 2, figsize=(16, 12))
+    InUp = np.random.randint(0, 2, 2000)
+    InUp = encoder_I.encode(InUp)
+    InUp = np.repeat(InUp, 2)
+    InUp = formatterRect.apply_format(InUp)
+    print("len InUp:", len(InUp))
+
+    QnUp = np.random.randint(0, 2, 2000)
+    QnUp = encoder_Q.encode(QnUp)
+    QnUp = formatterRect.apply_format(QnUp)
+    print("len QnUp:", len(QnUp))
+
+    fig_comp, grid_comp = create_figure(3, 2, figsize=(16, 8))
 
     ImpulseResponsePlot(
         fig_comp, grid_comp, (0, 0),
@@ -696,7 +707,7 @@ if __name__ == "__main__":
         fig_comp, grid_comp, (2, 0),
         fs,
         signals=[dI1, dQ1],
-        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        labels=[r"$D_I(f)$", r"$D_Q(f)$"],
         colors=[COLOR_I,  COLOR_Q],
         xlim=(-10, 10),
         nperseg=1024,
@@ -708,7 +719,7 @@ if __name__ == "__main__":
         fig_comp, grid_comp, (2, 1),
         fs,
         signals=[InUp, QnUp],
-        labels=[r"$d_I(t)$", r"$d_Q(t)$"],
+        labels=[r"$D_I(f)$", r"$D_Q(f)$"],
         colors=[COLOR_I,  COLOR_Q],
         xlim=(-10, 10),
         nperseg=1024,
@@ -725,7 +736,11 @@ if __name__ == "__main__":
     fs=128_000
     Rb=1000
 
-    X = np.random.randint(0, 2, 20)
+    X = np.random.randint(0, 2, 10)
+
+    # repete cada bit 2 vezes
+    X = np.repeat(X, 2)
+
     Y = np.random.randint(0, 2, 20)
 
     encoder_I = Encoder(method="NRZ")
@@ -734,7 +749,7 @@ if __name__ == "__main__":
     In = encoder_I.encode(X)
     Qn = encoded_Q.encode(Y)
     
-    formatterI = Formatter(alpha=0.8, fs=fs, Rb=Rb/2, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
+    formatterI = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=10, type="RRC", channel="I", bits_per_symbol=1, prefix_duration=0.005)
     formatterQ = Formatter(alpha=0.8, fs=fs, Rb=Rb, span=10, type="RRC", channel="Q", bits_per_symbol=1, prefix_duration=0.005)
     
     dI2 = formatterI.apply_format(In, add_prefix=False)
