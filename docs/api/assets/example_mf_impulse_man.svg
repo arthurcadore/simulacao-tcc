@@ -150,9 +150,7 @@
  <path transform="matrix(2,0,0,-2,0,665.28)" d="m1121.04 47.148809v1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
  <path transform="matrix(2,0,0,-2,0,665.28)" d="m1121.04 306.62138v-1.5" />
  <path transform="matrix(2,0,0,-2,0,665.28)" d="m1121.04 306.62138v-1.5" fill="none" stroke-linejoin="round" stroke-width=".5" class="stroke" />
- <text transform="matrix(2 0 -0 2 0 665.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="543.5056 558.1248 563.58236 580.50289 596.0182" y="-9.061119" class="fill">Time(</tspan></text>
- <text transform="matrix(2 0 -0 2 0 665.28)" font-family="CMMI12" font-size="21.917809" font-style="italic" xml:space="preserve" class="fill"><tspan x="603.817 622.5787" y="-9.061119" class="fill">ms</tspan></text>
- <text transform="matrix(2 0 -0 2 0 665.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="632.698" y="-9.061119" class="fill">)</tspan></text>
+ <text transform="matrix(2 0 -0 2 0 665.28)" font-family="CMR17" font-size="21.917809" xml:space="preserve" class="fill"><tspan x="545.5468 560.166 565.62356 582.54409 598.0594 605.8183 622.73886 630.6073" y="-9.061119" class="fill">Time(ms)</tspan></text>
  <g clip-path="url(#d)">
   <path transform="matrix(2,0,0,-2,0,665.28)" d="M62.9254 58.943017H1121.04" fill="none" stroke="#b0b0b0" stroke-dasharray="1.85,.8" stroke-linejoin="round" stroke-opacity=".6" stroke-width=".5" />
  </g>
